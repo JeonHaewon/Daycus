@@ -1,8 +1,11 @@
+import 'package:daycus/screen/MissionCheckPageCustom.dart';
+import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/missionbutton.dart';
 import 'package:daycus/widget/nowingmission.dart';
+import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
 
 
@@ -126,7 +129,8 @@ class HomePage extends StatelessWidget {
 
                   SizedBox(height: 20.h,),
 
-                  NowMissionButton(image: 'nowmission', title: '매일 물 3잔 마시기', totalUser: 1250, rank: 120, reward: 1200,onTap: (){},)
+                  NowMissionButton(image: 'nowmission', title: '매일 물 3잔 마시기', totalUser: 1250, rank: 120, reward: 1200,
+                    onTap: MissionCheckStatusPage(title: "매일 아침 조깅하기", duration: "4월 11일(월) ~ 4월 24일(일)", totaluser: 10000, certifiuser: 2000,),)
 
 
 
@@ -165,7 +169,7 @@ class HomePage extends StatelessWidget {
                           image: 'missionbackground',
 
                           onTap: SpecificMissionPage(topimage:'topimage1' ,progress:'ingbutton' , title:'매일 아침 조깅하기'
-                              , duration: '4월 11일(월) ~ 4월 24일(일)',totaluser: 1250, certifiuser: 1131,),
+                              , duration: '4월 11일(월) ~ 4월 24일(일)',totaluser: 1250, certifiuser: 1131, downimage: 'downimage1',),
                         ),
 
                         MissionButton(

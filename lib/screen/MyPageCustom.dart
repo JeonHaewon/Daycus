@@ -120,7 +120,7 @@ class MyPage extends StatelessWidget {
 
                   Container(
                     width: 365.w,
-                    height:250.h,
+                    height:260.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
@@ -140,7 +140,10 @@ class MyPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Image.asset('assets/image/graph2.png' , height: 200.h)
+                        SizedBox(height: 10.h,),
+
+                        Image.asset('assets/image/graph2.png' , height: 180.h),
+
                       ],
                     ),
                   ), //주간랭킹

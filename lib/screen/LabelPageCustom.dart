@@ -11,7 +11,7 @@ class LabelPage extends StatelessWidget {
       backgroundColor: AppColor.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('미션인증',
+        title: Text('라벨링',
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(icon: Icon(Icons.search), onPressed: null),
