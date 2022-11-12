@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
@@ -97,7 +99,7 @@ class MissionCheckStatusPage extends StatelessWidget {
                                     height: 35.h,
                                     width: 35.w,
                                     child:TextButton(
-                                        onPressed: (){},
+                                        onPressed: (){showAlertDialog(context);},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
                                         child: Text('1',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
                                   ),
@@ -243,7 +245,7 @@ class MissionCheckStatusPage extends StatelessWidget {
                                     height: 35.h,
                                     width: 35.w,
                                     child:TextButton(
-                                        onPressed: (){},
+                                        onPressed: () {},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
                                         child: Text('14',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
                                   ),
@@ -251,17 +253,9 @@ class MissionCheckStatusPage extends StatelessWidget {
                                 ],
                               ),
 
-
-
                             ],
                           ),
                         ),
-
-
-
-
-
-
 
                       ],
                     ),
@@ -294,8 +288,6 @@ class MissionCheckStatusPage extends StatelessWidget {
                   ),
                   
 
-
-
                   
                 ],
               ),
@@ -317,8 +309,47 @@ class MissionCheckStatusPage extends StatelessWidget {
         ),
       ),
 
-
-
     );
   }
+
+  void showAlertDialog(BuildContext context) async {
+    String result = await showDialog(
+      context: context, // user must tap button!
+      builder: (BuildContext context) {
+        return BackdropFilter(
+          child: AlertDialog(
+            title: Text("내가 인증한 사진",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+            content: InkWell(
+              onTap: (){Navigator.of(context).pop();},
+              child:Image.asset('assets/image/specificmissionpage/downimage1.png', fit: BoxFit.fill),
+            ),
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          filter: ImageFilter.blur(
+            sigmaX : 6,
+            sigmaY : 6,
+          ),
+        );
+      },
+    );
+  }
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
