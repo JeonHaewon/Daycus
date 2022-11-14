@@ -3,18 +3,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 
-class MissionButton extends StatelessWidget {
-  MissionButton({
+class MissionFeedButton extends StatelessWidget {
+  MissionFeedButton({
     Key? key,
     required this.title,
-    required this.totalUser,
     required this.image,
+    required this.duration,
+    required this.percent,
+    required this.reward,
     this.onTap,
   }) : super(key: key);
 
   final String title;
-  final int totalUser;
   final String image;
+  final String duration;
+  final int percent;
+  final int reward;
   final onTap;
 
   var f = NumberFormat('###,###,###,###');
@@ -29,40 +33,127 @@ class MissionButton extends StatelessWidget {
         );
       },
       child:Container(
-        width: 170.w,
-        height: 100.h,
+        width: 150.w,
+        height: 195.h,
         decoration: BoxDecoration(
-          color: Colors.white60,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-              image: AssetImage('assets/image/$image.png') ,
-              fit: BoxFit.cover
+          color: Colors.white,
+          border: Border.all(
+              color: Colors.grey,
+              style: BorderStyle.solid,
+              width: 1.w
           ),
+
+
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
 
             Padding(
-              padding: EdgeInsets.only(left:15.w, top: 52.h),
+              padding: EdgeInsets.only( top: 5.h),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean') ),
+                  Text(title,style: TextStyle(color: Colors.black,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  SizedBox(height: 5.h,),
+                ],
+              ),
+            ),
+
+            Image.asset('assets/image/$image.png' ,width: 200.w, fit: BoxFit.fill,),
+
+            SizedBox(height: 8.h,),
+
+            Padding(
+              padding: EdgeInsets.only( left:8.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+
                   Container(
                     child: Row(
                       children: [
-                        Text(f.format(totalUser),style: TextStyle(color: Colors.white,fontSize: 12.sp, fontFamily: 'korean') ),
-                        Text("명 참여중",style: TextStyle(color: Colors.white,fontSize: 12.sp, fontFamily: 'korean') ),
+                        Container(
+                          width: 55.w,
+                          height: 15.h,
+                          decoration: BoxDecoration(
+                            color: Colors.indigo[300],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 2.h,),
+                              Text("참여기간",style: TextStyle(color: Colors.white, fontSize: 8.sp, fontFamily: 'korean') ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 2.w),
 
+                        Text(duration,style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),
 
+                  SizedBox(height: 2.h,),
+
+                  Container(
+                    child: Row(
+                      children: [
+
+                        Container(
+                          width: 55.w,
+                          height: 15.h,
+                          decoration: BoxDecoration(
+                            color: Colors.indigo[300],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 2.h,),
+                              Text("성공률",style: TextStyle(color: Colors.white, fontSize: 8.sp, fontFamily: 'korean') ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 2.w),
+
+                        Text("$percent%",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 2.h,),
+
+
+                  Container(
+                    child: Row(
+                      children: [
+
+                        Container(
+                          width:55.w,
+                          height: 15.h,
+                          decoration: BoxDecoration(
+                            color: Colors.indigo[300],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 2.h,),
+                              Text("획득 리워드",style: TextStyle(color: Colors.white, fontSize: 8.sp, fontFamily: 'korean') ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 2.w),
+
+                        Text("${f.format(reward)}원",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
+
+
 
 
 
