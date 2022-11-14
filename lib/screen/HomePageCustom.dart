@@ -6,7 +6,6 @@ import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/missionbutton.dart';
 import 'package:daycus/widget/nowingmission.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
-import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
 
 
 

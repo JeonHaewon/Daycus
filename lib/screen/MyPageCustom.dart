@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
+import 'package:daycus/screen/myPage/settings/Settings.dart';
+import 'package:daycus/screen/myPage/feed/MissionFeed.dart';
+
 
 
 class MyPage extends StatelessWidget {
@@ -27,7 +31,7 @@ class MyPage extends StatelessWidget {
           children: [
 
             Padding(
-              padding: EdgeInsets.fromLTRB(30.w, 30.h, 40.w, 0),
+              padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 0),
               child: Column(
                 children: [
                   Container(
@@ -163,12 +167,15 @@ class MyPage extends StatelessWidget {
                     ),
 
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => MissionFeed()),
+                      );
                     },
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width: 6.w,),
-                        Text("미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        SizedBox(width: 210.w,),
+                        Text(" 미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),
@@ -189,12 +196,43 @@ class MyPage extends StatelessWidget {
                     ),
 
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => PrivateSettings()),
+                      );
                     },
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width: 6.w,),
-                        Text("설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        SizedBox(width: 243.w,),
+                        Text(" 개인정보 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Image.asset('assets/image/arrow-right1.png' )
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 15.h,),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                      minimumSize: Size(365.w, 50.h),
+                      textStyle: TextStyle(fontSize: 18.sp),
+                    ),
+
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => Settings()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(" 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),
