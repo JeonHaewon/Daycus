@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:daycus/screen/specificMissionPage/MissionParticipatePage.dart';
+
 
 final TextStyle _hintStyleGray = TextStyle(color: Colors.grey[400], fontSize: 17);
 final TextStyle _hintStyleBlack = TextStyle(color: Colors.black, fontSize: 17);
@@ -346,7 +348,12 @@ class SpecificMissionPage extends StatelessWidget {
             SizedBox(
               height: 70.h,
               width: 412.w,
-              child:TextButton(onPressed: (){}, child: Text('미션 참여하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
+              child:TextButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => MissionParticipatePage(topimage: 'missionparticipate_image', title: '매일 아침 조깅하기', duration: "7월 20일(수) ~ 7월 20일 (수)", totaluser: 125, avgreward: 3000)),
+                );
+              }, child: Text('미션 참여하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
         ),

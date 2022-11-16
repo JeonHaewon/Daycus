@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/myPage/settings/NoticeSetting.dart';
+import 'package:daycus/screen/myPage/settings/PictureSetting.dart';
+import 'package:daycus/screen/myPage/settings/PublicSetting.dart';
 
 
 class Settings extends StatelessWidget {
@@ -70,7 +72,12 @@ class Settings extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => PictureSetting()),
+                      );
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -92,7 +99,12 @@ class Settings extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => PublicSetting()),
+                      );
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
