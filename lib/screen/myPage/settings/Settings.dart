@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:daycus/screen/myPage/settings/NoticeSetting.dart';
 
 
 class Settings extends StatelessWidget {
@@ -42,11 +43,16 @@ class Settings extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => NoticeSetting()),
+                      );
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(" 계정 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text(" 알림 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),
@@ -68,7 +74,7 @@ class Settings extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(" 비밀번호 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text(" 사진 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),
@@ -90,7 +96,7 @@ class Settings extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(" 로그아웃",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text(" 공개범위",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),
@@ -112,7 +118,7 @@ class Settings extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(" 회원탈퇴",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text(" 언어 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),
@@ -134,7 +140,7 @@ class Settings extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(" 비밀번호 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text(" 이용약관 및 운영정책",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),
@@ -156,7 +162,7 @@ class Settings extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(" 비밀번호 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text(" 공지사항",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Image.asset('assets/image/arrow-right1.png' )
                       ],
                     ),

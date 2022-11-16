@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:daycus/screen/myPage/privatesettings/AccountSetting.dart';
+import 'package:daycus/screen/myPage/privatesettings/PasswordSetting.dart';
+
 
 
 class PrivateSettings extends StatelessWidget {
@@ -46,7 +49,12 @@ class PrivateSettings extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => AccountSetting()),
+                      );
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -68,7 +76,12 @@ class PrivateSettings extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => PasswordSetting()),
+                      );
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
