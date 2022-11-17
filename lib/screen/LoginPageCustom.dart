@@ -1,7 +1,11 @@
+import 'package:daycus/core/app_color.dart';
 import 'package:daycus/screen/HomePageCustom.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:daycus/screen/startPage/FindPasswordPage.dart';
+import 'package:daycus/screen/startPage/SignupPage.dart';
+
 
 
 class LoginPageCustom extends StatefulWidget {
@@ -98,29 +102,41 @@ class KeepLoginPage extends State<LoginPageCustom> {
             ),
 
 
-            TextButton(onPressed: (){}, child:
+            TextButton(onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => FindPasswordPage()),
+              );
+            }, child:
             Text('비밀번호를 잊으셨나요?',
               style: TextStyle(color: Colors.grey[400], fontSize: 15),
             )),
 
             SizedBox(height: 150.h,),
 
-            Container(
-              width: 330.w,
-              height: 40.h,
-              color: Colors.white70,
-              margin: EdgeInsets.symmetric(horizontal: 45.w),
-              child: const Center(
-                child: Text(
-                  '회원가입',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.indigo,
-                  ),
-                ),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => SignupPage()),
+                );
+              },
+
+              child: Text('회원가입'),
+
+              style: ElevatedButton.styleFrom(
+                foregroundColor: AppColor.happyblue,
+                backgroundColor: Colors.white,
+                minimumSize: Size(330.w, 40.h),
+                textStyle: TextStyle(color : Colors.indigo, fontWeight: FontWeight.bold),
               ),
             ),
+
+
+
+
+
 
           ],
         ),
