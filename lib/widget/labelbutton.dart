@@ -4,22 +4,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 
-class BigMissionButton extends StatelessWidget {
-  BigMissionButton({
+class LabelButton extends StatelessWidget {
+  LabelButton({
     Key? key,
+    required this.image,
     required this.title,
     required this.duration,
     required this.totalUser,
-    required this.certifiUser,
-    required this.image,
+    required this.myparticipation,
     this.onTap,
   }) : super(key: key);
 
+  final String image;
   final String title;
   final int duration;
   final int totalUser;
-  final int certifiUser;
-  final String image;
+  final int myparticipation;
   final onTap;
 
   var f = NumberFormat('###,###,###,###');
@@ -58,6 +58,22 @@ class BigMissionButton extends StatelessWidget {
             Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
             Text('$duration주 동안',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
 
+            SizedBox(height: 10.h,),
+
+
+            Container(
+              width: 170.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("나의 참여 현황",style: TextStyle(color: AppColor.happyblue,fontSize: 12.sp, fontFamily: 'korean') ),
+                  Text("${f.format(totalUser)}/${f.format(myparticipation)}",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
+                ],
+              ),
+            ),
+
+
+
             SizedBox(height: 5.h,),
 
             Container(
@@ -66,25 +82,6 @@ class BigMissionButton extends StatelessWidget {
               color: AppColor.happyblue,
 
             ),
-
-            SizedBox(height: 5.h,),
-
-            Container(
-              width: 170.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("${f.format(totalUser)}명 참여중",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
-                  Text("${f.format(certifiUser)}명 인증",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
-
-
-                ],
-              ),
-            ),
-
-
-
-
 
 
           ],
