@@ -145,6 +145,79 @@ class LabelingMission extends StatelessWidget {
               ),
             ),
 
+            SizedBox(height: 20.h,),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 85.h,
+                    width: 40.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/image/labelingmission/arrow_left.png' ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Image.asset('assets/image/labelingmission/labeling_image.png' ,width: 320.w,),
+
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 85.h,
+                    width: 40.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/image/labelingmission/arrow_right.png' ),
+                      ],
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('예'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.indigo[800],
+                    minimumSize: Size(120.w, 35.h),
+                    textStyle: TextStyle(color : Colors.indigo),
+                  ),
+                ),
+
+
+                SizedBox(width: 20.w,),
+
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('아니오'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.indigo[300],
+                    minimumSize: Size(120.w, 35.h),
+                    textStyle: TextStyle(color : Colors.indigo),
+                  ),
+                ),
+
+
+              ],
+            ),
+
+
 
 
 

@@ -63,6 +63,7 @@ flutter:
     - assets/image/
     - assets/image/specificmissionpage/
     - assets/image/settings/
+    - assets/image/labelingmission/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
