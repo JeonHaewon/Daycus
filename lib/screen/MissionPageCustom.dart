@@ -8,6 +8,7 @@ import 'package:daycus/screen/eachMission/StudyMission.dart';
 import 'package:daycus/screen/eachMission/ExerciseMission.dart';
 import 'package:daycus/screen/eachMission/LifeMission.dart';
 import 'package:daycus/screen/eachMission/HobbyMission.dart';
+import 'package:daycus/screen/NoticePage.dart';
 
 
 class MissionPage extends StatelessWidget {
@@ -25,8 +26,14 @@ class MissionPage extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
           actions: [
             IconButton(icon: Icon(Icons.search), onPressed: null),
-            IconButton(icon: Icon(Icons.notifications), onPressed: null),
-            IconButton(icon: Icon(Icons.account_circle), onPressed: null)
+            IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => NoticePage()),
+                  );
+                }),
+
           ],
           automaticallyImplyLeading: false,
           bottom: TabBar(

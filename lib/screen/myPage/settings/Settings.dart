@@ -114,27 +114,6 @@ class Settings extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 20.h,),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(365.w, 50.h),
-                      textStyle: TextStyle(fontSize: 18.sp),
-                    ),
-
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(" 언어 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Image.asset('assets/image/arrow-right1.png' )
-                      ],
-                    ),
-                  ),
 
                   SizedBox(height: 20.h,),
                   ElevatedButton(
@@ -158,27 +137,6 @@ class Settings extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 20.h,),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(365.w, 50.h),
-                      textStyle: TextStyle(fontSize: 18.sp),
-                    ),
-
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(" 공지사항",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Image.asset('assets/image/arrow-right1.png' )
-                      ],
-                    ),
-                  ),
 
                   SizedBox(height: 20.h,),
                   Container(

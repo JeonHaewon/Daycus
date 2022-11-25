@@ -31,12 +31,10 @@ class PasswordSetting extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
 
-                  SizedBox(height: 30.h,),
-
                   TextField(
                     decoration: InputDecoration(
                       filled: true,
-                      labelText: '닉네임',
+                      labelText: '현재 비밀번호 입력',
                     ),
                   ),
 
@@ -45,7 +43,16 @@ class PasswordSetting extends StatelessWidget {
                   TextField(
                     decoration: InputDecoration(
                       filled: true,
-                      labelText: '이메일',
+                      labelText: '새로운 비밀번호 입력',
+                    ),
+                  ),
+
+                  SizedBox(height: 20.h,),
+                  
+                  TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: '새로운 비밀번호 재입력',
                     ),
                   ),
 
@@ -63,6 +70,19 @@ class PasswordSetting extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        color: AppColor.happyblue,
+        child: Row(
+          children: [
+            SizedBox(
+              height: 70.h,
+              width: 412.w,
+              child:TextButton(onPressed: (){}, child: Text('완료',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
+            ),
+          ],
+        ),
+      ),
+      
     );
   }
 }

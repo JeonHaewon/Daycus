@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:daycus/screen/myPage/settings/Settings.dart';
 import 'package:daycus/screen/myPage/feed/MissionFeed.dart';
+import 'package:daycus/screen/NoticePage.dart';
 
 
 
@@ -20,8 +21,13 @@ class MyPage extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(icon: Icon(Icons.search), onPressed: null),
-          IconButton(icon: Icon(Icons.notifications), onPressed: null),
-          IconButton(icon: Icon(Icons.account_circle), onPressed: null)
+          IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => NoticePage()),
+                );
+              }),
         ],
         automaticallyImplyLeading: false,
       ),

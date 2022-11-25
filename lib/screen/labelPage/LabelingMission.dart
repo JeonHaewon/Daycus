@@ -139,7 +139,7 @@ class LabelingMission extends StatelessWidget {
             ),
 
             Container(
-              height: 8.h,
+              height: 5.h,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),

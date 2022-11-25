@@ -6,6 +6,7 @@ import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/missionbutton.dart';
 import 'package:daycus/widget/nowingmission.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
+import 'package:daycus/screen/NoticePage.dart';
 
 
 
@@ -23,8 +24,15 @@ class HomePage extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 25.sp)),
         actions: [
           IconButton(icon: Icon(Icons.search), onPressed: null),
-          IconButton(icon: Icon(Icons.notifications), onPressed: null),
-          IconButton(icon: Icon(Icons.account_circle), onPressed: null)
+          IconButton(icon: Icon(Icons.notifications),color: Colors.grey,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => NoticePage()),
+                );
+              }
+          ),
+
         ],
         automaticallyImplyLeading: false,
       ),
