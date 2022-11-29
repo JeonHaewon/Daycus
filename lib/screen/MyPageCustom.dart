@@ -1,3 +1,4 @@
+import 'package:daycus/backend/Missions.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +21,13 @@ class MyPage extends StatelessWidget {
         title: Text('마이페이지',
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(icon: Icon(Icons.search), onPressed: null),
+          IconButton(icon: Icon(Icons.search), color: Colors.grey,
+              onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => Missions()),
+            );
+              }),
           IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
               onPressed: () {
                 Navigator.push(

@@ -9,7 +9,7 @@ import 'package:daycus/screen/eachMission/ExerciseMission.dart';
 import 'package:daycus/screen/eachMission/LifeMission.dart';
 import 'package:daycus/screen/eachMission/HobbyMission.dart';
 import 'package:daycus/screen/NoticePage.dart';
-
+import 'package:daycus/screen/eachMission/AllMission.dart';
 
 class MissionPage extends StatelessWidget {
   const MissionPage({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class MissionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child:Scaffold(
         backgroundColor: AppColor.background,
         appBar: AppBar(
@@ -41,6 +41,7 @@ class MissionPage extends StatelessWidget {
               labelColor: AppColor.happyblue,
               unselectedLabelColor: Colors.grey,
               tabs: <Widget>[
+                Tab(text: "전체"),
                 Tab(text: "건강"),
                 Tab(text: "공부"),
                 Tab(text: "운동"),
@@ -53,12 +54,12 @@ class MissionPage extends StatelessWidget {
         body:TabBarView(
 
           children: [
+            AllMission(),
             HealthMission(),
             StudyMission(),
             ExerciseMission(),
             LifeMission(),
             HobbyMission(),
-
           ],
         ),
       ),
