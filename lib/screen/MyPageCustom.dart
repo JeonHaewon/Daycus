@@ -1,4 +1,5 @@
 import 'package:daycus/backend/Missions.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,7 +59,7 @@ class MyPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Text("현재등급 ",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
-                        Text("Lv18",style: TextStyle(color: AppColor.happyblue, fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         Text("입니다",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
 
                       ],
@@ -97,7 +98,8 @@ class MyPage extends StatelessWidget {
                         ),
 
                         SizedBox(width: 30.w,),
-                        Text("4,324,000,530원",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        // 가운데 정렬?
+                        Text("${user_data['reward']}원",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
                       ],
                     ),
                   ), //주간랭킹

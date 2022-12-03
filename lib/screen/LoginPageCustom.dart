@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:daycus/screen/HomePageCustom.dart';
 import 'package:daycus/screen/temHomePage.dart';
@@ -31,20 +32,22 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
   userLogin() async{
     try {
-      var res = await http.post(
+      var user_res = await http.post(
           Uri.parse(API.login),
           body: {
             'user_email' : emailCtrl.text.trim(),
             'user_password' : passwordCtrl.text.trim(),
           });
 
-      if (res.statusCode == 200) {
-        print("출력 : ${res.body}");
-        var resLogin = jsonDecode(res.body);
+      if (user_res.statusCode == 200) {
+        print("출력 : ${user_res.body}");
+        var resLogin = jsonDecode(user_res.body);
         if (resLogin['success'] == true) {
           // 나중에 멘트 "~님 환영합니다" 이런걸로 바꾸기 (또는 논의해서 바꾸기)
           print("로그인에 성공하였습니다.");
-          // Fluttertoast.showToast(msg: "안녕하세요, ${userInfo.user_name}님 :)");
+          user_data = resLogin['userData'];
+          print("{$user_data}");
+          Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
 
           // 사용자 정보 지우기
           setState(() {
@@ -77,7 +80,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
   @override
   void dispose() {
     // TODO: implement dispose
-    print("페이지가 없어졌습니다");
+    //print("페이지가 없어졌습니다");
     super.dispose();
     emailCtrl.dispose();
     passwordCtrl.dispose();
@@ -198,8 +201,8 @@ class KeepLoginPage extends State<LoginPageCustom> {
               child: Text('회원가입'),
 
               style: ElevatedButton.styleFrom(
-                foregroundColor: AppColor.happyblue,
-                backgroundColor: Colors.white,
+                onPrimary: AppColor.happyblue,
+                primary: Colors.white,
                 minimumSize: Size(330.w, 40.h),
                 textStyle: TextStyle(color : Colors.indigo, fontWeight: FontWeight.bold),
               ),

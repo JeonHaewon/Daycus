@@ -4,6 +4,7 @@ import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/myPage/privatesettings/AccountSetting.dart';
 import 'package:daycus/screen/myPage/privatesettings/PasswordSetting.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 
 
 
@@ -105,6 +106,8 @@ class PrivateSettings extends StatelessWidget {
                     ),
 
                     onPressed: () {
+                      // 유저 정보 삭제
+                      user_data = null;
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
                           LoginPageCustom()),
                               (route) => false);

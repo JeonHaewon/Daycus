@@ -1,0 +1,1 @@
+var user_data = null;

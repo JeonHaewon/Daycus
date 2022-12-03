@@ -25,16 +25,6 @@ class SignupPage extends StatefulWidget {
 
 class _signupPage extends State<SignupPage> {
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController emailCtrl = TextEditingController();
-  final TextEditingController passwordCtrl = TextEditingController();
-  final TextEditingController passwordCheckCtrl = TextEditingController();
-
-  var agree_all = Icons.check_box_outline_blank;
-  var agree_1 = Icons.check_box_outline_blank;
-  var agree_2 = Icons.check_box_outline_blank;
-  var agree_3 = Icons.check_box_outline_blank;
-
   checkUserEmail() async {
     try{
       var response = await http.post(Uri.parse(API.validateEmail),
@@ -48,7 +38,12 @@ class _signupPage extends State<SignupPage> {
 
         if (responseBody["existEmail"] == true) {
           Fluttertoast.showToast(msg: "이미 사용하고 있는 이메일입니다.");
-          print("이미 사용하고 있는 이메일입니다.");
+          // 데이터들 삭제
+          passwordCtrl.clear();
+          emailCtrl.clear();
+          passwordCheckCtrl.clear();
+
+          // 이용약관 초기화
         } else{
           saveInfo();
         }
@@ -64,6 +59,10 @@ class _signupPage extends State<SignupPage> {
       1,
       emailCtrl.text.trim(),
       passwordCtrl.text.trim(),
+      
+      agree['이용약관'],
+      agree['개인정보 취급방침'],
+      agree['마케팅 정보'],
     );
 
     try {
@@ -76,13 +75,14 @@ class _signupPage extends State<SignupPage> {
         print("출력 : ${res.body}");
         var resSignUp = jsonDecode(res.body);
         if (resSignUp['success'] == true) {
-          print("성공적으로 가입 되었습니다.");
+          print("$agree");
           Fluttertoast.showToast(msg: "성공적으로 가입 되었습니다.");
 
           // 사용자 정보 지우기
           setState(() {
             emailCtrl.clear();
             passwordCtrl.clear();
+            passwordCheckCtrl.clear();
 
           });
 
@@ -91,16 +91,31 @@ class _signupPage extends State<SignupPage> {
               TemHomePage()),
                   (route) => false);
 
+
+
         }
       }
 
     }
     catch (e) {
-      print("Error : ${e.toString()}");
+      print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
 
     }
   }
+
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController passwordCheckCtrl = TextEditingController();
+
+  var agree_all = Icons.check_box_outline_blank;
+  var agree_1 = Icons.check_box_outline_blank;
+  var agree_2 = Icons.check_box_outline_blank;
+  var agree_3 = Icons.check_box_outline_blank;
+
+
 
   @override
   void dispose() {
@@ -189,7 +204,7 @@ class _signupPage extends State<SignupPage> {
                       },
                       decoration: InputDecoration(
                         labelText: '비밀번호',
-                        hintText: '영문, 숫자 조합 8~16자 입력',
+                        hintText: '영문/숫자/특수문자 중 2가지 이상, 8~16자 입력',
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
