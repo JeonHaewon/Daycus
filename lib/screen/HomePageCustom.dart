@@ -1,21 +1,26 @@
-import 'package:daycus/screen/MissionCheckPageCustom.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
+import 'package:daycus/screen/temHomePage.dart';
+import 'package:daycus/widget/NowNoMission.dart';
+import 'package:daycus/widget/SpecificMissionToPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
-import 'package:daycus/widget/missionbutton.dart';
 import 'package:daycus/widget/nowingmission.dart';
-import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
 import 'package:daycus/screen/NoticePage.dart';
-
-
 
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    int extraindex = -2;
+    int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
@@ -52,7 +57,7 @@ class HomePage extends StatelessWidget {
                             children: [
                               SizedBox(height: 25.h,),
                               Text("안녕하세요",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean') ),
-                              Text("TODAY 님",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                               SizedBox(height: 60.h,),
                               Text("현재 등급",style: TextStyle(color: Colors. grey, fontSize: 20.sp, fontFamily: 'korean') ),
                               SizedBox(height: 10.h,),
@@ -60,7 +65,7 @@ class HomePage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Image.asset('assets/image/Medal.png' , fit: BoxFit.fill),
-                                    Text("Lv18",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean') ),
+                                    Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean') ),
                                   ],
                                 ),
                               ),
@@ -92,9 +97,10 @@ class HomePage extends StatelessWidget {
               child: Row(
                 children: [
                   SizedBox(width: 15.w,),
-                  Text("주간 랭킹",style: TextStyle(color: AppColor.happyblue, fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  // 하임 : 주간 > 전체로 변경
+                  Text("전체 랭킹",style: TextStyle(color: AppColor.happyblue, fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   SizedBox(width: 130.w,),
-                  Text("6위",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  Text("1위",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   SizedBox(width: 20.w,),
 
                   Container(
@@ -108,7 +114,7 @@ class HomePage extends StatelessWidget {
                       children: [
 
                         SizedBox(height: 7.h,),
-                        Text("주간랭킹",style: TextStyle(color: Colors.white, fontSize: 14.sp, fontFamily: 'korean') ),
+                        Text("전체랭킹",style: TextStyle(color: Colors.white, fontSize: 14.sp, fontFamily: 'korean') ),
 
                       ],
                     ),
@@ -136,8 +142,45 @@ class HomePage extends StatelessWidget {
 
                   SizedBox(height: 20.h,),
 
-                  NowMissionButton(image: 'nowmission', title: '매일 물 3잔 마시기', totalUser: 1250, rank: 120, reward: 1200,
-                    onTap: MissionCheckStatusPage(title: "매일 아침 조깅하기", duration: "4월 11일(월) ~ 4월 24일(일)", totaluser: 10000, certifiuser: 2000,),)
+                  // 진행중인 미션이 없을 때
+                  if(do_mission==null)
+                  // 미션란으로 이동 !
+                    NowNoMissionButton(onTap: (){
+                      controller.currentBottomNavItemIndex.value = 3;
+                    },),
+                  
+                  // 진행중인 미션이 있을 때
+                  if(do_mission!=null)
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: do_mission_cnt,
+                      itemBuilder: (_, index) {
+                        //id가 1부터 시작한다.
+                        int _index = int.parse(do_mission[index]['mission_id'])-1;
+                        //print("${_index}, ${_index.runtimeType}");
+                        //print(all_missions[_index]);
+                        return Column(
+                          children: [
+                            NowMissionButton(image: 'nowmission',
+                              title: all_missions[_index]['title'],
+                              totalUser: int.parse(all_missions[_index]['total_user']),
+                              rank: 1,
+                              reward: int.parse(do_mission[index]['get_reward']),
+                              onTap: MissionCheckStatusPage(
+                                title: all_missions[_index]['title'],
+                                duration: '${all_missions[_index]['start_date']} ~ ${all_missions[_index]['end_date']}',
+                                totaluser: int.parse(all_missions[_index]['total_user']),
+                                certifiuser: int.parse(all_missions[_index]['certifi_user']),
+                              ),),
+
+                            SizedBox(height: 7.h,),
+                          ],
+                        );
+                      },
+                    ),
+                  )
 
 
 
@@ -167,56 +210,30 @@ class HomePage extends StatelessWidget {
 
                   Container(
                     width: 360.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        MissionButton(
-                          title: "매일 물 3잔 마시기",
-                          totalUser: 1200,
-                          image: 'missionbackground',
-
-                          onTap: SpecificMissionPage(topimage:'topimage1' ,progress:'ingbutton' , title:'매일 아침 조깅하기'
-                              , duration: '4월 11일(월) ~ 4월 24일(일)',totaluser: 1250, certifiuser: 1131, downimage: 'downimage1',),
-                        ),
-
-                        MissionButton(
-                          title: "매일 물 3잔 마시기",
-                          totalUser: 1200,
-                          image: 'missionbackground2',
-
-                          onTap: (){},
-                        ),
-
-                      ],
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount:
+                      (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
+                      itemBuilder: (_, index) {
+                        extraindex += 2;
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SpecificMissionToPage(i: extraindex),
+                                if (extraindex + 1 < missions_cnt)
+                                  SpecificMissionToPage(i: extraindex+1),
+                              ],
+                            ),
+                            SizedBox(height: 15.h,),
+                          ],
+                        );
+                      },
                     ),
                   ),
 
-                  SizedBox(height: 15.h,),
-
-
-                  Container(
-                    width: 360.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        MissionButton(
-                          title: "매일 물 3잔 마시기",
-                          totalUser: 1200,
-                          image: 'missionbackground2',
-                          onTap: (){},
-                        ),
-
-                        MissionButton(
-                          title: "매일 물 3잔 마시기",
-                          totalUser: 1200,
-                          image: 'missionbackground',
-
-                          onTap: (){},
-                        ),
-
-                      ],
-                    ),
-                  ),
 
                   SizedBox(height: 30.h,),
 

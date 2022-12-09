@@ -1,8 +1,12 @@
+import 'package:daycus/screen/temHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/nowingmission.dart';
 import 'package:daycus/screen/NoticePage.dart';
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/widget/NowNoMission.dart';
+import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 
 
 
@@ -10,8 +14,13 @@ import 'package:daycus/screen/NoticePage.dart';
 class MissionCheckPage extends StatelessWidget {
   const MissionCheckPage({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
@@ -47,19 +56,53 @@ class MissionCheckPage extends StatelessWidget {
 
             SizedBox(height: 20.h,),
 
-            Container(
-              child: Column(
-                children: [
-                  NowMissionButton(image: 'nowmission', title: '매일 물 3잔 마시기', totalUser: 1250, rank: 120, reward: 1200, onTap: (){},),
-                  SizedBox(height: 15.h,),
-                  NowMissionButton(image: 'nowmission', title: '매일 물 3잔 마시기', totalUser: 1250, rank: 120, reward: 1200, onTap: (){},),
+            // 진행중인 미션이 없을 때
+            if(do_mission==null)
+            // 미션란으로 이동 !
+              NowNoMissionButton(onTap: (){
+                controller.currentBottomNavItemIndex.value = 3;
+              },),
 
-                ],
-              ),
-            )
+            // 진행중인 미션이 있을 때
+            if(do_mission!=null)
+              Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: do_mission_cnt,
+                  itemBuilder: (_, index) {
+                    //id가 1부터 시작한다.
+                    int _index = int.parse(do_mission[index]['mission_id'])-1;
+                    //print("${_index}, ${_index.runtimeType}");
+                    //print(all_missions[_index]);
+                    return Column(
+                      children: [
+                        NowMissionButton(image: 'nowmission',
+                          title: all_missions[_index]['title'],
+                          totalUser: int.parse(all_missions[_index]['total_user']),
+                          rank: 1,
+                          reward: int.parse(do_mission[index]['get_reward']),
+                          onTap: MissionCheckStatusPage(
+                            title: all_missions[_index]['title'],
+                            duration: '${all_missions[_index]['start_date']} ~ ${all_missions[_index]['end_date']}',
+                            totaluser: int.parse(all_missions[_index]['total_user']),
+                            certifiuser: int.parse(all_missions[_index]['certifi_user']),
+                          ),),
+
+                        SizedBox(height: 7.h,),
+                      ],
+                    );
+                  },
+                ),
+              )
+
+
+
           ],
         ),
-      ),
-    );
+
+      ), //진행중인 미션
+
+        );
   }
 }

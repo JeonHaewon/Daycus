@@ -49,12 +49,12 @@ class MissionButton extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean') ),
+                  Text(title,style: TextStyle(color: Colors.white,fontSize: 14.sp, fontFamily: 'korean') ),
                   Container(
                     child: Row(
                       children: [
-                        Text(f.format(totalUser),style: TextStyle(color: Colors.white,fontSize: 12.sp, fontFamily: 'korean') ),
-                        Text("명 참여중",style: TextStyle(color: Colors.white,fontSize: 12.sp, fontFamily: 'korean') ),
+                        Text(f.format(totalUser),style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean') ),
+                        Text("명 참여중",style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean') ),
 
                       ],
                     ),

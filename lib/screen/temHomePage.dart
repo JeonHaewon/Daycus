@@ -28,6 +28,7 @@ class TemHomePage extends StatelessWidget {
     MyPage()
   ];
 
+  // 항상 첫 화면 홈페이지가 되도록 바꾸어야할 듯
   @override
   Widget build(BuildContext context) {
     return Scaffold(

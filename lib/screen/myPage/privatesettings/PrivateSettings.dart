@@ -37,7 +37,7 @@ class PrivateSettings extends StatelessWidget {
                 children: [
                   Image.asset('assets/image/settings/Profile.png',),
                   SizedBox(height: 10.h,),
-                  Text("닉네임",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
+                  Text("${user_data['user_name']}",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
 
                   SizedBox(height: 30.h,),
                   ElevatedButton(
@@ -106,8 +106,11 @@ class PrivateSettings extends StatelessWidget {
                     ),
 
                     onPressed: () {
-                      // 유저 정보 삭제
+                      // 유저 정보 삭제 - 어플 내
                       user_data = null;
+                      all_missions = null;
+                      do_mission = null;
+                      // 화면 이동
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
                           LoginPageCustom()),
                               (route) => false);
@@ -133,7 +136,9 @@ class PrivateSettings extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

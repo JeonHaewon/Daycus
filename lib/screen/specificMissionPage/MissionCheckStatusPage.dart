@@ -27,6 +27,13 @@ class MissionCheckStatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // 크기 안맞아서 변경
+    // height 35.h > 35.w, sp 15.sp > 14.sp
+    double _height = 35.w;
+    double _sp = 14.sp;
+    double _width = 35.w;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -48,7 +55,7 @@ class MissionCheckStatusPage extends StatelessWidget {
           children: [
             
             
-            Padding(
+            Container(
               padding: EdgeInsets.fromLTRB(30.w, 40.h, 30.w, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,9 +69,10 @@ class MissionCheckStatusPage extends StatelessWidget {
                   SizedBox(height: 15.h,),
 
 
+                  // 하임 : height 175.h > 155.w
                   Container(
                     width: 500.w,
-                    height: 175.h,
+                    height: 155.w,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -80,7 +88,9 @@ class MissionCheckStatusPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
-                        Padding(
+
+
+                        Container(
                           padding: EdgeInsets.fromLTRB(20.w, 18.h, 20.w, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,76 +105,81 @@ class MissionCheckStatusPage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
 
+                                  // build list, row로 구현 !
+                                  // null일 경우 회식, 사진이 있을 경우 파란색.
+
+
+
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){showAlertDialog(context);},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('1',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('1',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('2',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('2',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('3',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('3',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('4',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('4',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('5',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('5',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('6',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('6',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.pink[50])),
-                                        child: Text('X',style: TextStyle(color: Colors.red, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('X',style: TextStyle(color: Colors.red, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.pink[50])),
-                                        child: Text('X',style: TextStyle(color: Colors.red, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('X',style: TextStyle(color: Colors.red, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                 ],
@@ -179,75 +194,75 @@ class MissionCheckStatusPage extends StatelessWidget {
                                 children: [
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('7',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('7',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('8',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('8',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('9',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('9',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('10',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('10',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('11',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('11',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-                                        child: Text('12',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('12',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: (){},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-                                        child: Text('13',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('13',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                   SizedBox(
-                                    height: 35.h,
-                                    width: 35.w,
+                                    height: _height,
+                                    width: _width,
                                     child:TextButton(
                                         onPressed: () {},
                                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-                                        child: Text('14',style: TextStyle(color: Colors.white, fontSize: 15.sp, fontFamily: 'korean', ) ) ),
+                                        child: Text('14',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
                                   ),
 
                                 ],

@@ -1,16 +1,20 @@
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:daycus/screen/specificMissionPage/MissionParticipatePage.dart';
+import 'package:daycus/core/app_text.dart';
 
 
-final TextStyle _hintStyleGray = TextStyle(color: Colors.grey[400], fontSize: 17);
-final TextStyle _hintStyleBlack = TextStyle(color: Colors.black, fontSize: 17);
+
+TextStyle _hintStyleGray = TextStyle(color: Colors.grey, fontSize: 17);
+TextStyle _hintStyleBlack = TextStyle(color: Colors.grey, fontSize: 17);
 
 TextStyle _hintStyle = _hintStyleGray;
 
-class SpecificMissionPage extends StatelessWidget {
+class SpecificMissionPage extends StatefulWidget {
   SpecificMissionPage({
     Key? key,
     required this.topimage,
@@ -18,25 +22,48 @@ class SpecificMissionPage extends StatelessWidget {
     required this.title,
     required this.duration,
     required this.totaluser,
-    required this.certifiuser,
+    required this.certifi_user,
     required this.downimage,
+    required this.content,
+    required this.rules,
+    required this.mission_id,
     this.onTap,
 
   }) : super(key: key);
 
+  final String mission_id;
   final String topimage;
   final String progress;
   final String title;
   final String duration;
   final int totaluser;
-  final int certifiuser;
+  final int certifi_user;
   final String downimage;
+  final String content;
+  final String rules;
   final onTap;
 
+  @override
+  State<SpecificMissionPage> createState() => _SpecificMissionPageState();
+}
+
+class _SpecificMissionPageState extends State<SpecificMissionPage> {
   var f = NumberFormat('###,###,###,###');
 
   @override
+  dispose() async {
+    super.dispose();
+    _basicMoney = 10000;
+    _basicText = "${_basicMoney*(_rewardPercent+100)/100} 원";
+    _rewardCalculResert = _basicText;
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    List rules_list = widget.rules.split("\\n");
+    int rules_list_cnt = rules_list.length;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -63,7 +90,7 @@ class SpecificMissionPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white60,
                       image: DecorationImage(
-                          image: AssetImage('assets/image/specificmissionpage/$topimage.png') ,
+                          image: AssetImage('assets/image/specificmissionpage/${widget.topimage}.png') ,
                           fit: BoxFit.cover
                       ),
                     ),
@@ -78,15 +105,15 @@ class SpecificMissionPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
-                  Image.asset('assets/image/specificmissionpage/$progress.png' ),
+
+                  Image.asset('assets/image/specificmissionpage/${widget.progress}.png' ),
                   SizedBox(height: 10.h,),
 
                   Container(
                     child: Row(
                       children: [
                         SizedBox(width: 8.w,),
-                        Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text(widget.title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                       ],
                     ),
                   ),
@@ -97,7 +124,8 @@ class SpecificMissionPage extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(width: 8.w,),
-                        Text("모집기간",style: TextStyle(color: Colors. grey, fontSize: 15.sp, fontFamily: 'korean') ),
+                        // 모집기간 > 미션기간
+                        Text("미션기간",style: TextStyle(color: Colors. grey, fontSize: 15.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),
@@ -108,7 +136,7 @@ class SpecificMissionPage extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(width: 8.w,),
-                        Text(duration,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
+                        Text(widget.duration,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),
@@ -146,14 +174,14 @@ class SpecificMissionPage extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(width: 24.w,),
-                      Text("${f.format(totaluser)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      Text("${f.format(widget.totaluser)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                       Text(' 참여중',style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean',) ),
                     ],
                   ),
 
                   Row(
                     children: [
-                      Text("${f.format(certifiuser)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      Text("${f.format(widget.certifi_user)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                       Text(' 인증',style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean',) ),
                       SizedBox(width: 24.w,),
                     ],
@@ -197,7 +225,7 @@ class SpecificMissionPage extends StatelessWidget {
 
 
 
-
+            // 예상 리워드
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -212,7 +240,12 @@ class SpecificMissionPage extends StatelessWidget {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         onChanged: (text){
-                          _rewardCalculResert = _rewardCalcul(text, _rewardPercent);
+                          setState(() {
+                            _rewardCalculResert = _rewardCalcul(text, _rewardPercent);
+                            if (_rewardCalculResert != _basicText){
+                              _hintStyle = _hintStyleBlack;}
+                            else { _hintStyle = _hintStyleGray;}
+                          });
                         },
                         textAlignVertical: TextAlignVertical.bottom, textAlign: TextAlign.center,
                         textInputAction: TextInputAction.done,
@@ -270,7 +303,7 @@ class SpecificMissionPage extends StatelessWidget {
             ),
 
             Padding(
-              padding: EdgeInsets.fromLTRB(28.w, 20.h, 0, 0),
+              padding: EdgeInsets.fromLTRB(26.w, 20.h, 26.w, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -283,7 +316,7 @@ class SpecificMissionPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 12.h,),
-                  Text('미션 내용에 대한 설명 노출영역',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
+                  Text('${widget.content}',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
                 ],
               ),
             ),
@@ -298,7 +331,7 @@ class SpecificMissionPage extends StatelessWidget {
                     height: 280.h,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('assets/image/specificmissionpage/$downimage.png') ,
+                          image: AssetImage('assets/image/specificmissionpage/${widget.downimage}.png') ,
                           fit: BoxFit.cover
                       ),
                     ),
@@ -324,9 +357,28 @@ class SpecificMissionPage extends StatelessWidget {
                 children: [
                   Text('미션 참여방법',style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   SizedBox(height: 20.h,),
-                  Text('- 미션 참여 기간 동안 매일 사진과 함께 인증해주세요.',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean',) ),
-                  SizedBox(height: 8.h,),
-                  Text('- 미션 인증 규정 ~~~',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean',) ),
+                  // 역슬레쉬 n 적용
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: rules_list_cnt,
+
+                    itemBuilder: (_, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              widget.rules.split("\\n")[index],
+                              style: TextStyle(fontSize: 16.sp, fontFamily: 'korean',) ),
+                          
+                          // 맨 마지막 SizedBox는 빼기
+                          if (index < rules_list_cnt-1)
+                            SizedBox(height: 5.h,),
+                        ],
+                      );
+                    },
+
+                  ),
 
                 ],
               ),
@@ -349,10 +401,19 @@ class SpecificMissionPage extends StatelessWidget {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => MissionParticipatePage(topimage: 'missionparticipate_image', title: '매일 아침 조깅하기', duration: "7월 20일(수) ~ 7월 20일 (수)", totaluser: 125, avgreward: 3000)),
-                );
+                if (widget.progress == "donebutton"){
+                  Fluttertoast.showToast(msg: "미션 모집기간이 아닙니다.");
+                }
+                else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => MissionParticipatePage(
+                        topimage: 'missionparticipate_image',
+                        //average reward도 데이터베이스에서 끌고오기
+                        mission_id: widget.mission_id,
+                        title: widget.title, duration: widget.duration, totaluser: widget.totaluser, avgreward: 3000)),
+                  );
+                }
               }, child: Text('미션 참여하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],

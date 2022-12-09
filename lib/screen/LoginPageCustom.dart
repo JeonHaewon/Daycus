@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daycus/backend/DoMissionImport.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:daycus/screen/HomePageCustom.dart';
@@ -11,6 +12,8 @@ import 'package:daycus/screen/startPage/SignupPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/Api.dart';
+
+import '../backend/importMissions.dart';
 
 
 
@@ -30,6 +33,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
 
+  // 리소스 분리 필요
   userLogin() async{
     try {
       var user_res = await http.post(
@@ -55,6 +59,19 @@ class KeepLoginPage extends State<LoginPageCustom> {
             passwordCtrl.clear();
           } );
 
+          // 미션 불러오기
+          await missionImport();
+          // 카테고리별 미션 불러오기
+          await importMissionByCategory();
+          // 하고있는 미션 불러오기
+          await doMissionImport();
+
+          missions_cnt = all_missions?.length;
+          print("미션 개수 : $missions_cnt");
+
+          // 홈페이지로 만들어놓기
+          controller.currentBottomNavItemIndex.value = 2;
+          
           // 페이지 이동 - 모든 창을 다 닫고
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
               TemHomePage()),
@@ -92,7 +109,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
       resizeToAvoidBottomInset: false,
 
       body: Form(
-
+        // key는 왜필요한거지?
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

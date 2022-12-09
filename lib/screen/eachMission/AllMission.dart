@@ -1,122 +1,57 @@
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/widget/BigMissionButtonToPage.dart';
 import 'package:flutter/material.dart';
-import 'package:daycus/widget/bigmissionbutton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 
 
 class AllMission extends StatelessWidget {
-  const AllMission({Key? key}) : super(key: key);
+  AllMission({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    int extraindex = -2;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       body:SingleChildScrollView(
-        child:Center(
+        child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 30.h,), //맨 위 간격
+                width: 370.w,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount:
+                  (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
+                  itemBuilder: (_, index) {
+                    extraindex += 2;
+                    return Column(
+                      children: [
 
+                        SizedBox(height: 20.h,),
 
-                    Container(
-                      width: 370.w,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            BigMissionButtonToPage(i: extraindex, data: all_missions,),
+                            if (extraindex + 1 < missions_cnt)
+                              BigMissionButtonToPage(i: extraindex+1, data: all_missions,),
+                          ],
+                        ),
 
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          BigMissionButton(
-                            title: "매일 물 3잔 마시기",
-                            totalUser: 1200,
-                            image: 'mission1',
-                            certifiUser:2000,
-                            duration:2,
-                            onTap: (){},
-                          ),
-
-                          BigMissionButton(
-                            title: "매일 물 3잔 마시기",
-                            totalUser: 1200,
-                            image: 'mission1',
-                            certifiUser:2000,
-                            duration:2,
-                            onTap: (){},
-                          ),
-
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 30.h,),
-
-                    Container(
-                      width: 370.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          BigMissionButton(
-                            title: "매일 물 3잔 마시기",
-                            totalUser: 1200,
-                            image: 'mission1',
-                            certifiUser:2000,
-                            duration:2,
-                            onTap: (){},
-                          ),
-
-                          BigMissionButton(
-                            title: "매일 물 3잔 마시기",
-                            totalUser: 1200,
-                            image: 'mission1',
-                            certifiUser:2000,
-                            duration:2,
-                            onTap: (){},
-                          ),
-
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 30.h,),
-
-
-                    Container(
-                      width: 370.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          BigMissionButton(
-                            title: "매일 물 3잔 마시기",
-                            totalUser: 1200,
-                            image: 'mission1',
-                            certifiUser:2000,
-                            duration:2,
-                            onTap: (){},
-                          ),
-
-                          Container(
-                            width: 170.w,
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30.h,),
-
-
-
-
-                  ],
+                      ],
+                    );
+                  },
                 ),
+              ),
+              SizedBox(height: 20.h,),
 
-              ), //금주의 추천 미션
             ],
           ),
-        ),
+        )
       ),
     );
   }

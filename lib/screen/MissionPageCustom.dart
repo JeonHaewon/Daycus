@@ -1,13 +1,8 @@
-import 'package:daycus/screen/eachMission/HealthMission.dart';
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/screen/eachMission/CategoryMission.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
-import 'package:daycus/widget/bigmissionbutton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:daycus/screen/eachMission/HealthMission.dart';
-import 'package:daycus/screen/eachMission/StudyMission.dart';
-import 'package:daycus/screen/eachMission/ExerciseMission.dart';
-import 'package:daycus/screen/eachMission/LifeMission.dart';
-import 'package:daycus/screen/eachMission/HobbyMission.dart';
 import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/screen/eachMission/AllMission.dart';
 
@@ -55,11 +50,12 @@ class MissionPage extends StatelessWidget {
 
           children: [
             AllMission(),
-            HealthMission(),
-            StudyMission(),
-            ExerciseMission(),
-            LifeMission(),
-            HobbyMission(),
+            CategoryMission(page_category: missions_health),
+            CategoryMission(page_category: missions_study),
+            CategoryMission(page_category: missions_study),
+            CategoryMission(page_category: missions_life),
+            CategoryMission(page_category: missions_hobby),
+
           ],
         ),
       ),

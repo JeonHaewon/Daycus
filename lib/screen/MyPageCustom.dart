@@ -51,7 +51,7 @@ class MyPage extends StatelessWidget {
                   Container(
                     child: Row(
                       children: [
-                        Text("TODAY 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                       ],
                     ),
                   ),
