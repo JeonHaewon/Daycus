@@ -17,8 +17,17 @@ import 'package:daycus/core/app_controller.dart';
 final OfficeFurnitureController controller =
     Get.put(OfficeFurnitureController());
 
-class TemHomePage extends StatelessWidget {
-  const TemHomePage({Key? key}) : super(key: key);
+class TemHomePage extends StatefulWidget {
+  TemHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<TemHomePage> createState() => _TemHomePageState();
+}
+
+class _TemHomePageState extends State<TemHomePage> {
+
+  // init state 넣으면 왠지 더 빨라짐.
+  // 하지만 UI는 뜨지 않음.
 
   final List<Widget> screens = const [
     LabelPage(),
@@ -31,6 +40,7 @@ class TemHomePage extends StatelessWidget {
   // 항상 첫 화면 홈페이지가 되도록 바꾸어야할 듯
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       bottomNavigationBar: Obx(
             () {

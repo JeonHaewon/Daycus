@@ -1,19 +1,17 @@
-import 'dart:convert';
 
-import 'package:daycus/backend/DoMissionImport.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_color.dart';
-import 'package:daycus/screen/HomePageCustom.dart';
+
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/startPage/FindPasswordPage.dart';
 import 'package:daycus/screen/startPage/SignupPage.dart';
-import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:daycus/backend/Api.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../backend/importMissions.dart';
+import '../backend/login.dart';
+import 'dart:convert';
+
 
 
 
@@ -26,6 +24,54 @@ class LoginPageCustom extends StatefulWidget {
 
 class KeepLoginPage extends State<LoginPageCustom> {
 
+  static final storage = FlutterSecureStorage();
+  dynamic userInfo = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // 비동기로 flutter secure storage 정보를 불러오는 작업
+    // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+
+
+  }
+
+  _asyncMethod() async {
+    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+    // 데이터가 없을때는 null을 반환
+    userInfo = await storage.read(key:'login');
+    print(userInfo);
+
+    // 자동로그인이 필요한 경우
+    if (userInfo!=null && user_data==null) {
+      var userDecode = jsonDecode(userInfo);
+      //print("userInfo : ${userDecode.runtimeType}");
+      //print("userInfo : ${userDecode}");
+      //print("${userDecode['user_email']}, ${userDecode['password']}");
+
+      print(userDecode);
+    await userLogin(userDecode['user_email'], userDecode['password']);
+    //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
+
+      // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
+      await afterLogin();
+      // 다 닫고 ㄱㄱ
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+    } // 자동로그인이 필요하지 않은 경우
+    else if (userInfo!=null && user_data!=null) {
+      // 다 닫고 ㄱㄱ
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+    }
+    else {
+      print('로그인이 필요합니다');
+    }
+  }
+
   double textFieldHeight = 55.0;
   double loginFontSize = 40.0;
 
@@ -34,65 +80,8 @@ class KeepLoginPage extends State<LoginPageCustom> {
   final TextEditingController passwordCtrl = TextEditingController();
 
   // 리소스 분리 필요
-  userLogin() async{
-    try {
-      var user_res = await http.post(
-          Uri.parse(API.login),
-          body: {
-            'user_email' : emailCtrl.text.trim(),
-            'user_password' : passwordCtrl.text.trim(),
-          });
+  // 이거 속도가 좀 딜레이돼서 그 중간 페이지나 로딩 화면 띄워야할듯 ?!
 
-      if (user_res.statusCode == 200) {
-        print("출력 : ${user_res.body}");
-        var resLogin = jsonDecode(user_res.body);
-        if (resLogin['success'] == true) {
-          // 나중에 멘트 "~님 환영합니다" 이런걸로 바꾸기 (또는 논의해서 바꾸기)
-          print("로그인에 성공하였습니다.");
-          user_data = resLogin['userData'];
-          print("{$user_data}");
-          Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
-
-          // 사용자 정보 지우기
-          setState(() {
-            emailCtrl.clear();
-            passwordCtrl.clear();
-          } );
-
-          // 미션 불러오기
-          await missionImport();
-          // 카테고리별 미션 불러오기
-          await importMissionByCategory();
-          // 하고있는 미션 불러오기
-          await doMissionImport();
-
-          missions_cnt = all_missions?.length;
-          print("미션 개수 : $missions_cnt");
-
-          // 홈페이지로 만들어놓기
-          controller.currentBottomNavItemIndex.value = 2;
-          
-          // 페이지 이동 - 모든 창을 다 닫고
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
-              TemHomePage()),
-                  (route) => false);
-
-        } else {
-          // 계정이 없다는 멘트도 띄워야할듯?
-          Fluttertoast.showToast(msg: "이메일 또는 비밀번호가 올바르지 않습니다.");
-          print("이메일 또는 비밀번호가 올바르지 않습니다.");
-
-          // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용
-          passwordCtrl.clear();
-        }
-      }
-    }
-    catch (e) {
-      print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
-
-    }
-  }
 
   @override
   void dispose() {
@@ -175,10 +164,35 @@ class KeepLoginPage extends State<LoginPageCustom> {
             ),
 
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // 로그인 버튼 눌렀을 때
                   if (_formKey.currentState!.validate()){
-                    userLogin();
+                    bool? is_login = await userLogin(
+                        emailCtrl.text.trim(),
+                        passwordCtrl.text.trim(),
+                    );
+
+                    // - 로그인 성공
+                    if (is_login == true) {
+
+                      keepLogin(
+                          user_data['user_name'],
+                          emailCtrl.text.trim(),
+                          passwordCtrl.text.trim(),
+                          storage);
+
+
+                      await afterLogin();
+
+                      // 다 닫고 감.
+                      Navigator.pushAndRemoveUntil(context,
+                          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+                    }
+                    //  - 로그인 실패
+                    else if (is_login == false) {
+                      // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용
+                      passwordCtrl.clear();
+                    }
 
                   }
 

@@ -17,7 +17,7 @@ class LabelButton extends StatelessWidget {
 
   final String image;
   final String title;
-  final int duration;
+  final String duration;
   final int totalUser;
   final int myparticipation;
   final onTap;
@@ -56,7 +56,8 @@ class LabelButton extends StatelessWidget {
             SizedBox(height: 10.h,),
 
             Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-            Text('$duration주 동안',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
+            // 하임 : ~동안을 기간으로 바꿈 int > String / 16.sp > 13.sp
+            Text('$duration',style: TextStyle(fontSize: 13.sp, fontFamily: 'korean') ),
 
             SizedBox(height: 10.h,),
 

@@ -22,7 +22,18 @@ doMissionImport() async {
     }
 
   } on Exception catch (e) {
-    print(e);
+    print("do mission : $e");
     Fluttertoast.showToast(msg: "다시 시도해주세요");
   }
+}
+
+// all_mission_data에 이 미션이 참여중인 미션이란 걸 표기.
+// do_mission에서 어디에 있는지 기록
+doMissionSave(List mission_data) {
+  int cnt = mission_data.length;
+  for (int i=0 ; i<cnt ; i++){
+    int _index = int.parse(mission_data[i]['mission_id'])-1;
+    all_missions[_index]['now_user_do'] = i;
+  }
+  print("하는 미션들 업데이트 완료 : ${all_missions}");
 }

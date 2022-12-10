@@ -148,7 +148,7 @@ class HomePage extends StatelessWidget {
                     NowNoMissionButton(onTap: (){
                       controller.currentBottomNavItemIndex.value = 3;
                     },),
-                  
+
                   // 진행중인 미션이 있을 때
                   if(do_mission!=null)
                   Container(
@@ -169,10 +169,8 @@ class HomePage extends StatelessWidget {
                               rank: 1,
                               reward: int.parse(do_mission[index]['get_reward']),
                               onTap: MissionCheckStatusPage(
-                                title: all_missions[_index]['title'],
-                                duration: '${all_missions[_index]['start_date']} ~ ${all_missions[_index]['end_date']}',
-                                totaluser: int.parse(all_missions[_index]['total_user']),
-                                certifiuser: int.parse(all_missions[_index]['certifi_user']),
+                                do_mission_data: do_mission[index],
+                                mission_data: all_missions[_index],
                               ),),
 
                             SizedBox(height: 7.h,),
@@ -188,10 +186,10 @@ class HomePage extends StatelessWidget {
               ),
 
             ), //진행중인 미션
-            
-            
-            
-            
+
+
+
+
             Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

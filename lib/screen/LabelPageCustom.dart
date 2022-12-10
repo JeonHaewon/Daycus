@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/labelbutton.dart';
 import 'package:daycus/screen/labelPage/LabelingMission.dart';
 import 'package:daycus/screen/NoticePage.dart';
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/core/app_text.dart';
 
 
 
@@ -12,6 +14,9 @@ class LabelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    int extraindex = -2;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
@@ -32,59 +37,70 @@ class LabelPage extends StatelessWidget {
       ),
 
       body: SingleChildScrollView(
-        child:Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 30.h,), //맨 위 간격
-
-
-                    Container(
-                      width: 370.w,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 370.w,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount:
+                    (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
+                    itemBuilder: (_, index) {
+                      extraindex += 2;
+                      return Column(
                         children: [
-                          LabelButton(
-                              image: 'mission1',
-                              title: "매일 물 3잔 마시기",
-                              duration: 2,
-                              totalUser: 2000,
-                              myparticipation: 500,
-                              onTap: LabelingMission(title: "매일 아침 9시 기상하기",
-                                rule1: "아날로그 시계 또는 전자 시계여야 합니다.",
-                                rule2: "시계 숫자를 포함한 테두리 전체가 나와야 합니다.",),
-                          ),
 
-                          LabelButton(
-                            image: 'mission1',
-                            title: "매일 물 3잔 마시기",
-                            duration: 2,
-                            totalUser: 2000,
-                            myparticipation: 500,
-                            onTap: (){},
+                          SizedBox(height: 20.h,),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
+                              LabeButtonToPage(i: extraindex, data: all_missions),
+                              if (extraindex + 1 < missions_cnt)
+                                LabeButtonToPage(i: extraindex+1, data: all_missions,),
+
+                              //BigMissionButtonToPage(i: extraindex, data: all_missions,),
+                              //if (extraindex + 1 < missions_cnt)
+                                //BigMissionButtonToPage(i: extraindex+1, data: all_missions,),
+                            ],
                           ),
 
                         ],
-                      ),
-                    ),
-
-                    SizedBox(height: 30.h,),
-
-
-                  ],
+                      );
+                    },
+                  ),
                 ),
+                SizedBox(height: 20.h,),
 
-              ), //금주의 추천 미션
-            ],
-          ),
-        ),
+              ],
+            ),
+          )
       ),
     );
+  }
+}
+
+class LabeButtonToPage extends StatelessWidget {
+  const LabeButtonToPage({
+    Key? key,
+    required this.i,
+    required this.data,
+  }) : super(key: key);
+
+  final int i;
+  final data;
+
+  @override
+  Widget build(BuildContext context) {
+    return LabelButton(
+        image: data[i]['image'] ?? 'mission1',
+        title: data[i]['title'],
+        // 하임 : duration 날짜 없을 경우 : ~주동안 > 진행예정으로 변경.
+        duration: data[i]['start_date']==null ? "진행 예정" : '${data[i]['start_date']} ~ ${data[i]['end_date']}',
+        totalUser: int.parse(data[i]['total_user']),
+        myparticipation: 0);
   }
 }

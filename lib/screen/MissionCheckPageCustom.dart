@@ -83,10 +83,8 @@ class MissionCheckPage extends StatelessWidget {
                           rank: 1,
                           reward: int.parse(do_mission[index]['get_reward']),
                           onTap: MissionCheckStatusPage(
-                            title: all_missions[_index]['title'],
-                            duration: '${all_missions[_index]['start_date']} ~ ${all_missions[_index]['end_date']}',
-                            totaluser: int.parse(all_missions[_index]['total_user']),
-                            certifiuser: int.parse(all_missions[_index]['certifi_user']),
+                            mission_data: all_missions[_index],
+                            do_mission_data: do_mission[index],
                           ),),
 
                         SizedBox(height: 7.h,),
