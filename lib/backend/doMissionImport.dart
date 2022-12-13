@@ -29,7 +29,7 @@ doMissionImport() async {
 
 // all_mission_data에 이 미션이 참여중인 미션이란 걸 표기.
 // do_mission에서 어디에 있는지 기록
-doMissionSave() {
+doMissionSave( ) {
   int cnt = do_mission.length;
   for (int i=0 ; i<cnt ; i++){
 
