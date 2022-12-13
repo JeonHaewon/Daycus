@@ -1,3 +1,4 @@
+import 'package:daycus/core/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,22 +11,27 @@ class LabelingMission extends StatelessWidget {
   LabelingMission({
     Key? key,
     required this.title,
-    required this.rule1,
-    required this.rule2,
+    required this.rule,
     this.onTap,
 
   }) : super(key: key);
 
 
   final String title;
-  final String rule1;
-  final String rule2;
+  final String rule;
   final onTap;
 
   var f = NumberFormat('###,###,###,###');
 
   @override
   Widget build(BuildContext context) {
+
+    final SizedBox _sizedBox = SizedBox(height: 5.h,);
+
+
+    List<String> rule_list = rule.split("\\n");
+    int rules_list_cnt = rule_list!=null ? rule_list.length : 0;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
@@ -57,10 +63,14 @@ class LabelingMission extends StatelessWidget {
 
 
             Padding(
-              padding: EdgeInsets.fromLTRB(60.w, 20.h, 0, 0),
+              // 하임 : 60.w > 40.w로 수정
+              // 20.h > 27.h로 수정
+              padding: EdgeInsets.fromLTRB(40.w, 27.h, 40.w, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  // 하임 > 해원 : 미션 정책 위에 미션 설명도 예쁘게 넣어주면 좋을듯?
 
                   Container(
                     width: 65.w,
@@ -76,10 +86,36 @@ class LabelingMission extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 5.h,),
 
-                  Text("ㆍ$rule1",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean',) ),
-                  Text("ㆍ$rule2",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean',) ),
+                  _sizedBox,
+
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: rules_list_cnt,
+
+                    itemBuilder: (_, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            // 하임 > 해원 : 이거 자동 내어쓰기 되도록 변경해야할듯.
+                            // 숫자까지 잘라서 list View로 넣으면 될지도??
+                              " - ${rule.split("\\n")[index]}",
+                              style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+
+                          // 맨 마지막 SizedBox는 빼기
+                          if (index < rules_list_cnt-1)
+                            SizedBox(height: 5.h,),
+                        ],
+                      );
+                    },
+
+                  ),
+
+                  _sizedBox,
+
+                  // Text("ㆍ$rule",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean',) ),
 
                 ],
               ),
@@ -125,7 +161,7 @@ class LabelingMission extends StatelessWidget {
                               ),
                               SizedBox(width: 6.w,),
 
-                              Text("미션 정책을 확인하고 이에 맞는 사진을 선택해주세요",style: TextStyle( fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              Text(canLabelingString,style: TextStyle( fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             ],
                           ),

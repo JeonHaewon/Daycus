@@ -1,42 +1,73 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 
 
-class MissionCheckStatusPage extends StatelessWidget {
+class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
     Key? key,
+    required this.mission_index,
     required this.do_mission_data,
     required this.mission_data,
     this.onTap,
   }) : super(key: key);
+  final int mission_index;
   final onTap;
   final do_mission_data;
   final mission_data;
 
+  @override
+  State<MissionCheckStatusPage> createState() => _MissionCheckStatusPageState();
+}
+
+File? image;
+
+class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
+
+  // dart.io로 file 불러왔음. html로 불러야할지도
+
+  final ImagePicker picker = ImagePicker();
+
   var f = NumberFormat('###,###,###,###');
+
+  Future getImage() async {
+    // 갤러리 열기 : 성공
+    //var pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    var pickedFile = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      image = File(pickedFile!.path);
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    String title = mission_data['title'];
-    String duration = '${mission_data['start_date']} ~ ${mission_data['end_date']}';
-    int totaluser = int.parse(mission_data['total_user']);
-    int certifiuser = int.parse(mission_data['certifi_user']);
+    int index_i = -1;
+    int index_j = -1;
+
+    String title = widget.mission_data['title'];
+    String duration = '${widget.mission_data['start_date']} ~ ${widget.mission_data['end_date']}';
+    int totaluser = int.parse(widget.mission_data['total_user']);
+    int certifiuser = int.parse(widget.mission_data['certifi_user']);
 
     // 크기 안맞아서 변경
-    // height 35.h > 35.w, sp 15.sp > 14.sp
+    // height 35.h > 35.w, sp 15.sp > 12.w
     double _height = 35.w;
-    double _sp = 14.sp;
+    double _sp = 12.w;
     double _width = 35.w;
 
     double _betweenWidth = 9.w;
     int _oneWeek = 7;
 
-    print(do_mission_data);
+    int i = widget.mission_index;
+    int do_i = all_missions[i]['now_user_do'];
 
     return Scaffold(
       appBar: AppBar(
@@ -57,13 +88,13 @@ class MissionCheckStatusPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
+
             Container(
               padding: EdgeInsets.fromLTRB(30.w, 40.h, 30.w, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
+
                   Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   SizedBox(height: 25.h,),
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
@@ -108,7 +139,9 @@ class MissionCheckStatusPage extends StatelessWidget {
                                 width: _width * _oneWeek + _betweenWidth * _oneWeek + 30.w,
                                 child: ListView.builder(
                                   itemCount: 2,
-                                  itemBuilder: (_, index_i){
+                                  itemBuilder: (_, ___){
+                                    index_i += 1;
+                                    index_j = -1;
                                     return Column(
                                       children: [
                                         Row(
@@ -122,15 +155,20 @@ class MissionCheckStatusPage extends StatelessWidget {
                                               child: ListView.builder(
                                                   scrollDirection: Axis.horizontal,
 
+
                                                   itemCount : _oneWeek,
-                                                  itemBuilder: (_,index_j) {
+                                                  itemBuilder: (_,__) {
+                                                    index_j += 1;
+                                                    int date = (index_i*7)+(index_j+1);
                                                     return Row(
                                                       children: [
                                                         SizedBox(
                                                           height: _height,
                                                           width: _width,
-                                                          child: do_mission_data['${index_j+1}']==null
-                                                              ? YetMissionBlock(i: index_i, j: index_j, sp: _sp) : DoneMissionBlock(i: index_j, j: index_j, sp: _sp)
+                                                          child: widget.do_mission_data['${date}']==null
+                                                              ? YetMissionBlock(i: index_i, j: index_j, sp: _sp)
+                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp,
+                                                            image: image, date: date,)
                                                         ),
                                                         if(index_j != _oneWeek-1)
                                                           SizedBox(
@@ -142,6 +180,7 @@ class MissionCheckStatusPage extends StatelessWidget {
                                             ),
                                           ],
                                         ),
+
                                         if (index_i == 0)
                                           SizedBox(
                                             height: _betweenWidth,
@@ -343,7 +382,7 @@ class MissionCheckStatusPage extends StatelessWidget {
 
                   Text("전체 결과",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   SizedBox(height: 8.h,),
-                  
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -351,7 +390,7 @@ class MissionCheckStatusPage extends StatelessWidget {
                       Text("${f.format(totaluser)} 명",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                     ],
                   ),
-                  
+
                   SizedBox(height: 5.h,),
 
                   Row(
@@ -361,9 +400,9 @@ class MissionCheckStatusPage extends StatelessWidget {
                       Text("${f.format(certifiuser)} 회",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                     ],
                   ),
-                  
 
-                  
+
+
                 ],
               ),
             ),
@@ -378,7 +417,12 @@ class MissionCheckStatusPage extends StatelessWidget {
             SizedBox(
               height: 70.h,
               width: 412.w,
-              child:TextButton(onPressed: (){}, child: Text('오늘 미션 인증하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
+              child:TextButton(onPressed: (){
+                getImage();
+                setState(() {
+                  do_mission[do_i]['1'] = true;
+                });
+              }, child: Text('오늘 미션 인증하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
         ),
@@ -386,19 +430,22 @@ class MissionCheckStatusPage extends StatelessWidget {
 
     );
   }
-
 }
 
-void showAlertDialog(BuildContext context) async {
+void showAlertDialog(BuildContext context, File? file, int date) async {
   String result = await showDialog(
     context: context, // user must tap button!
     builder: (BuildContext context) {
       return BackdropFilter(
         child: AlertDialog(
-          title: Text("내가 인증한 사진",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+          // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
+          title: Text("${date}일째 인증 사진",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
           content: InkWell(
             onTap: (){Navigator.of(context).pop();},
-            child:Image.asset('assets/image/specificmissionpage/downimage1.png', fit: BoxFit.fill),
+            child: file == null ?
+                Text("이미지를 불러올 수 없습니다 :(") :
+                Image.file(File(file.path)),
+            //Image.asset('assets/image/specificmissionpage/downimage1.png', fit: BoxFit.fill),
           ),
 
           shape: RoundedRectangleBorder(
@@ -440,18 +487,22 @@ class DoneMissionBlock extends StatelessWidget {
     required this.i,
     required this.j,
     required this.sp,
+    required this.image,
+    required this.date,
   }) : super(key: key);
 
   final int i;
   final int j;
   final double sp;
+  final File? image;
+  final int date;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: (){showAlertDialog(context);},
+        onPressed: (){showAlertDialog(context, image, date);},
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-        child: Text(((i+1)*(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
     );
   }
 }
@@ -473,7 +524,7 @@ class YetMissionBlock extends StatelessWidget {
     return TextButton(
         onPressed: (){},
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-        child: Text(((i+1)*(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
+        child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
 }
 

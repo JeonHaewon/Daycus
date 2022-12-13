@@ -24,6 +24,7 @@ class SpecificMissionToPage extends StatelessWidget {
                onTap: all_missions[i]['now_user_do'] != null ?
 
                 MissionCheckStatusPage(
+                  mission_index: i,
                    do_mission_data: do_mission[all_missions[i]['now_user_do']],
                     mission_data: all_missions[i])
 

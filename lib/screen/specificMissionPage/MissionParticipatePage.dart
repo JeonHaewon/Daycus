@@ -229,6 +229,8 @@ class MissionParticipatePage extends StatelessWidget {
                   missionImport();
                   importMissionByCategory();
                   userDataImport();
+                  doMissionSave();
+
 
 
                   // 돌아가면 홈으로 이동.

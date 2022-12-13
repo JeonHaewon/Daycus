@@ -47,6 +47,7 @@ class CategoryMission extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               // spaceAround > spaceBetween으로 변경 : 맨마지막 가운데정렬 방지
+                              // 데이터를 all로 넘기고, 인덱스를 all의 do_mission 인덱스로만 넘겨야할듯?
                               BigMissionButtonToPage(i: extraindex, data: page_category),
                               if (extraindex + 1 < _build_cnt)
                                 BigMissionButtonToPage(i: extraindex+1, data: page_category,),

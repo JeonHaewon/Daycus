@@ -83,6 +83,6 @@ afterLogin() async {
 
   // 백그라운드 실행
   if (do_mission != null) {
-    doMissionSave(do_mission);
+    doMissionSave();
   }
 }

@@ -83,6 +83,7 @@ class MissionCheckPage extends StatelessWidget {
                           rank: 1,
                           reward: int.parse(do_mission[index]['get_reward']),
                           onTap: MissionCheckStatusPage(
+                            mission_index: _index,
                             mission_data: all_missions[_index],
                             do_mission_data: do_mission[index],
                           ),),

@@ -43,6 +43,8 @@ dependencies:
   ntp: ^1.0.8
   # 로그인 유지 보안 저장소 라이브러리
   flutter_secure_storage : ^5.0.2
+  # 사진 관리 라이브러리
+  image_picker: ^0.8.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -52,7 +52,7 @@ class MissionPage extends StatelessWidget {
             AllMission(),
             CategoryMission(page_category: missions_health),
             CategoryMission(page_category: missions_study),
-            CategoryMission(page_category: missions_study),
+            CategoryMission(page_category: missions_exer),
             CategoryMission(page_category: missions_life),
             CategoryMission(page_category: missions_hobby),
 

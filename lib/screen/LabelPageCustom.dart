@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:daycus/widget/labelbutton.dart';
 import 'package:daycus/screen/labelPage/LabelingMission.dart';
 import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
-import 'package:daycus/core/app_text.dart';
+import 'package:daycus/widget/LabelButtonToPage.dart';
 
 
 
@@ -57,10 +56,10 @@ class LabelPage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-
-                              LabeButtonToPage(i: extraindex, data: all_missions),
+                              // 나중에 총 사진 개수가 0이면 라벨링 페이지에서 제거, 검증이 모두 끝났으면 라벨링 페이지에서 제거하면 될듯.
+                              LabelButtonToPage(i: extraindex, data: all_missions),
                               if (extraindex + 1 < missions_cnt)
-                                LabeButtonToPage(i: extraindex+1, data: all_missions,),
+                                LabelButtonToPage(i: extraindex+1, data: all_missions,),
 
                               //BigMissionButtonToPage(i: extraindex, data: all_missions,),
                               //if (extraindex + 1 < missions_cnt)
@@ -83,24 +82,4 @@ class LabelPage extends StatelessWidget {
   }
 }
 
-class LabeButtonToPage extends StatelessWidget {
-  const LabeButtonToPage({
-    Key? key,
-    required this.i,
-    required this.data,
-  }) : super(key: key);
 
-  final int i;
-  final data;
-
-  @override
-  Widget build(BuildContext context) {
-    return LabelButton(
-        image: data[i]['image'] ?? 'mission1',
-        title: data[i]['title'],
-        // 하임 : duration 날짜 없을 경우 : ~주동안 > 진행예정으로 변경.
-        duration: data[i]['start_date']==null ? "진행 예정" : '${data[i]['start_date']} ~ ${data[i]['end_date']}',
-        totalUser: int.parse(data[i]['total_user']),
-        myparticipation: 0);
-  }
-}
