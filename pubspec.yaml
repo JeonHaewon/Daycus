@@ -17,11 +17,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+3
 
 environment:
   # 버전 18에서 17로 내림. (하임)
-  sdk: '>=2.17.2 <3.0.0'
+  sdk: '>=2.17.2'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -33,22 +33,22 @@ dependencies:
   flutter:
     sdk: flutter
 
-  get: ^4.6.5
-  flutter_screenutil: ^5.5.3+2
-  simple_animations: ^4.0.1
-  http: ^0.13.5
-  fluttertoast: ^8.1.1
-  intl: ^0.16.1
+  get:
+  flutter_screenutil:
+  simple_animations:
+  http:
+  fluttertoast:
+  intl:
   # 현재 네트워크 시간 들고오기
-  ntp: ^1.0.8
+  ntp:
   # 로그인 유지 보안 저장소 라이브러리
-  flutter_secure_storage : ^5.0.2
+  flutter_secure_storage :
   # 사진 관리 라이브러리
-  image_picker: ^0.8.6
+  image_picker:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons:
 
 
 dev_dependencies:
@@ -60,7 +60,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

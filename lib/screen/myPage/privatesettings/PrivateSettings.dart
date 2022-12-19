@@ -138,7 +138,7 @@ class PrivateSettings extends StatelessWidget {
 
                     onPressed: () async {
                       // 기획에서 어떻게 인사할건지 정하기
-                      Fluttertoast.showToast(msg: "정상적으로 로그아웃 되었습니다.");
+                        Fluttertoast.showToast(msg: "정상적으로 로그아웃 되었습니다.");
                       // 로그인 유지 삭제 및 정보 삭제
                       // 백그라운드에서 진행.
                       await logout();

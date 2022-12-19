@@ -25,6 +25,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+// Gradle 서명 구성
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -65,22 +66,27 @@ android {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
+            storeFile file(keystoreProperties['storeFile']) ? file(keystoreProperties['storeFile']) : null
             storePassword keystoreProperties['storePassword']
         }
     }
 
     buildTypes {
+        // 빌드 시와 릴리스 시를 나누어 구성하는 것이 좋다.
+        // https://black-jin0427.tistory.com/89
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
 
             // signingConfig signingConfigs.debug
+
+            // 출시 속성으로 변경
             signingConfig signingConfigs.release
 
+            // 프로가드 활성화
             minifyEnabled true
-            //useProguard true
-
+            //useProguard true // 주석처리 해도 되는 것 같다.
+            // 기본 프로가드 설정, 프로젝트에 필요한 프로가드 설정
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
