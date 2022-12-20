@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:daycus/backend/Api.dart';
+import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,6 +33,40 @@ class MissionCheckStatusPage extends StatefulWidget {
 File? image;
 
 class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
+
+  // 하임 1220 : 미션 시작일로부터 지난 날짜 (초기화)
+  int todayBlockCnt = 0;
+  String todayString = "";
+
+  @override
+  void initState () {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _asyncMethod();
+    });
+  }
+
+  // 하임 1220: 미션 시작일로부터 지난 날짜 계산 후 set state
+  _asyncMethod() async {
+    print("init");
+    // 하임 1220 : now_time = yy/MM/dd 형태
+    DateTime now_time = await NowTime(null);
+    todayString = DateFormat('yyyyMMdd').format(now_time);
+    print("todayString : ${todayString}");
+    print(now_time);
+    //print("mission_data : ${widget.mission_data}");
+    print("20"+widget.mission_data['start_date'].substring(2,10));
+
+      setState(() {
+        todayBlockCnt = now_time
+            .difference((DateTime.parse("20"+widget.mission_data['start_date'].substring(2,10)))).inDays + 1;
+        //print("time_diff : $time_diff");
+
+        print(todayBlockCnt);
+
+      });
+
+  }
 
   // dart.io로 file 불러왔음. html로 불러야할지도
 
@@ -73,6 +108,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    print("build :: ");
 
     int index_i = -1;
     int index_j = -1;
@@ -156,7 +193,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                             children: [
                               Text("인증 현황",style: TextStyle( color: AppColor.happyblue, fontSize: 14.w, fontFamily: 'korean') ),
                               // SizedBox(height: 3.w,),
-                              Text("좋은 습관 만들기까지 16일",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              Text("좋은 습관 만들기까지 ${14-todayBlockCnt+1}일",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                               SizedBox(height: 10.w,),
 
                               Container(
@@ -165,8 +202,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                 child: ListView.builder(
                                   itemCount: 2,
                                   itemBuilder: (_, ___){
-                                    index_i += 1;
-                                    index_j = -1;
+                                    index_i += 1; index_j = -1;
                                     return Column(
                                       children: [
                                         Row(
@@ -180,7 +216,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                               child: ListView.builder(
                                                   scrollDirection: Axis.horizontal,
 
-
                                                   itemCount : _oneWeek,
                                                   itemBuilder: (_,__) {
                                                     index_j += 1;
@@ -191,7 +226,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                           height: _height,
                                                           width: _width,
                                                           child: widget.do_mission_data['${date}']==null
-                                                              ? YetMissionBlock(i: index_i, j: index_j, sp: _sp)
+
+                                                          // 아직 인증하지 않은 날짜 블럭, date+1 = 오늘 카운트
+                                                              ? (todayBlockCnt <= date ?
+                                                                  // 날짜가 지나지 않았으면
+                                                                  YetMissionBlock(i: index_i, j: index_j, sp: _sp)
+                                                              : FailMissionBlock(sp: _sp)
+                                                          )
+                                                          // 인증 완료된 날짜 블럭
                                                               : DoneMissionBlock(i: index_j, j: index_j, sp: _sp,
                                                             image: image, date: date,)
                                                         ),
@@ -447,8 +489,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
                 setState(() async {
                   // 이름을 오늘 날짜, 미션 번호, domission 코드로 하기
-                  await uploadImage("test");
-                  do_mission[do_i]['1'] = true;
+                  // 실제 이미지 이름을 바꿔야합니다.
+                  // 폴더를 미션별로 다르게 지정해서 넣어야합니다 (php)
+                  // setstate 작동 안합니다 ^^^^^ > re-build 돼야함. 이거 왜 9임??? 숫자이상
+                  await uploadImage("${widget.mission_data['mission_id']}_${todayString}_${user_data['user_id']}");
+                  do_mission[do_i]["$todayBlockCnt"] = true;
                 });
               }, child: Text('오늘 미션 인증하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),

@@ -7,7 +7,7 @@ import 'package:daycus/backend/NowTime.dart';
 
 missionParticipate(mission_id, user_email, bet_reward) async {
 
-  String now = await NowTime();
+  String now = await NowTime('yy/MM/dd - HH:mm:ss');
 
   try {
     print("<missionParticipatePage> : $user_data");
