@@ -17,10 +17,10 @@ missionImport() async{
       print("미션 해독 : ${resMission}");
       //resMission = null;
       // 이거 null 관리 어떻게 하는지 잘 알아보고 수정할 필요가 있음.
-      all_missions = resMission['missions'];
 
       if (resMission['success'] == true) {
         print("미션 불러오기를 성공하였습니다.");
+        all_missions = resMission['missions'];
 
       } else {
         // 미션 불러오기 자체에 실패했으면, 해당 페이지 자체를 띄우거나 팝업 이미지를 띄워야할듯.
@@ -48,7 +48,8 @@ importMissionByCategory() async {
   List<String> categories = ["건강", "공부", "운동", "생활", "취미"];
 
   try{
-    for (int i=0 ; i<categories.length ; i++) {
+    final int n = categories.length;
+    for (int i=0 ; i<n ; i++) {
       var select_res = await http.post(Uri.parse(API.select), body: {
           'update_sql': "SELECT * FROM missions WHERE category = '${categories[i]}'",
       });

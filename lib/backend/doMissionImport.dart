@@ -17,8 +17,9 @@ doMissionImport() async {
       do_mission = resMission['data'];
 
     } else {
-      print("에러발생");
-      Fluttertoast.showToast(msg: "미션을 불러오는 도중 문제가 발생했습니다.");
+      print("미션을 불러오지 못했습니다. 하고있는 미션이 없을수도.");
+      // 불러올 미션이 없는 것 같음.
+      //Fluttertoast.showToast(msg: ".");
     }
 
   } on Exception catch (e) {

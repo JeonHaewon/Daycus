@@ -194,6 +194,10 @@ class KeepLoginPage extends State<LoginPageCustom> {
                       passwordCtrl.clear();
                     }
 
+                    else{
+                      print("로그인 에러 발생");
+                    }
+
                   }
 
                 },

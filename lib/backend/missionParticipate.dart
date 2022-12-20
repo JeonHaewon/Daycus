@@ -1,3 +1,4 @@
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'dart:convert';
@@ -9,8 +10,9 @@ missionParticipate(mission_id, user_email, bet_reward) async {
   String now = await NowTime();
 
   try {
+    print("<missionParticipatePage> : $user_data");
     var select_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "INSERT INTO do_mission SET mission_id = '$mission_id', user_email = '${user_email}', mission_start = '${now}', bet_reward = '$bet_reward'",
+      'update_sql': "INSERT INTO do_mission SET mission_id = '${mission_id}', user_email = '${user_email}', mission_start = '${now}', bet_reward = '${bet_reward}'",
     });
 
     if (select_res.statusCode == 200 ) {
@@ -22,12 +24,13 @@ missionParticipate(mission_id, user_email, bet_reward) async {
 
       } else {
         print("에러발생");
-        Fluttertoast.showToast(msg: "미션을 불러오는 도중 문제가 발생했습니다.");
+        print(resMission);
+        Fluttertoast.showToast(msg: "다시 시도해주세요");
       }
 
     }
   } on Exception catch (e) {
     print("에러발생");
-    Fluttertoast.showToast(msg: "다시 시도해주세요");
+    Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
   }
 }
