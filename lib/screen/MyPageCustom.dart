@@ -1,4 +1,3 @@
-import 'package:daycus/backend/Missions.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -23,12 +22,7 @@ class MyPage extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(icon: Icon(Icons.search), color: Colors.grey,
-              onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => Missions()),
-            );
-              }),
+              onPressed: (){}),
           IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
               onPressed: () {
                 Navigator.push(

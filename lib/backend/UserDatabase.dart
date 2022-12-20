@@ -1,3 +1,5 @@
+// 위치 면경 시 큰일날 수 있음. 주의
+
 var user_data = null;
 var all_missions = null;
 int missions_cnt = 0;
