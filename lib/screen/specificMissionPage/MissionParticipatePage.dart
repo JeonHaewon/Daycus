@@ -241,11 +241,6 @@ class MissionParticipatePage extends StatelessWidget {
                       MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
 
 
-
-
-
-
-
                 }
               }, child: Text('미션 시작하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
