@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 missionUserUpdate(mission_id) async {
   try {
     var update_res = await http.post(Uri.parse(API.update), body: {
+      // 동시 접속 시 에러가 발생할 수 있으므로 sql 상에서 구현하기 바람.
       'update_sql': "UPDATE missions SET now_user = '${int.parse(all_missions[int.parse(mission_id)-1]['now_user'])+1}', total_user = '${int.parse(all_missions[int.parse(mission_id)-1]['total_user'])+1}' WHERE (mission_id = '${mission_id}')",
     });
 

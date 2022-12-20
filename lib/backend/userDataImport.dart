@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 userDataImport() async{
   try{
       var select_res = await http.post(Uri.parse(API.select), body: {
-        'update_sql': "SELECT * FROM user_table WHERE user_email = 'haim1121@dgist.ac.kr'",
+        'update_sql': "SELECT * FROM user_table WHERE user_email = '${user_data['user_email']}'",
       });
       if (select_res.statusCode == 200) {
         var resUser = jsonDecode(select_res.body);

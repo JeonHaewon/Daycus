@@ -1,6 +1,6 @@
 class API{
   static const hostConnect = "http://43.200.192.77/api_members";
-
+  // local
   //static const hostConnect = "http://10.8.49.61/api_members";
   static const hostConnectUser = "$hostConnect/user";
 
