@@ -81,8 +81,8 @@ class LabelingMission extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        SizedBox(height: 5.h,),
-                        Text("미션 정책",style: TextStyle(color: Colors.indigoAccent, fontSize: 12.sp, fontFamily: 'korean') ),
+                        SizedBox(height: 4.h,),
+                        Text("미션 정책",style: TextStyle(color: Colors.indigoAccent, fontSize: 10.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),

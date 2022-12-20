@@ -42,25 +42,33 @@ class NowMissionButton extends StatelessWidget {
         ),
         margin: EdgeInsets.symmetric(horizontal: 30.w),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
           children: [
 
-            SizedBox(width: 20.w,),
-            Image.asset('assets/image/$image.png' , fit: BoxFit.fill,height: 65.h),
-            SizedBox(width: 15.w,),
-
             Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child:Row(
                 children: [
-                  SizedBox(height: 20.h),
-                  Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  SizedBox(width: 20.w,),
+                  Image.asset('assets/image/$image.png' , fit: BoxFit.fill,height: 65.h),
+                  SizedBox(width: 15.w,),
+
                   Container(
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(f.format(totalUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
-                        Text(" 참여중 ",style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
-                        Text(f.format(rank),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                        Text("위",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+                        SizedBox(height: 20.h),
+                        Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Container(
+                          child: Row(
+                            children: [
+                              Text(f.format(totalUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text(" 참여중 ",style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text(f.format(rank),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text("위",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -68,18 +76,19 @@ class NowMissionButton extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: 20.w,),
-
             Container(
+
               child: Column(
                 children: [
                   SizedBox(height: 60.h),
                   Container(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+
                         Text("+",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
                         Text(f.format(reward),style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                        Text("원",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
+                        Text("원     ",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),
