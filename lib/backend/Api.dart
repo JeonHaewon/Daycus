@@ -11,4 +11,5 @@ class API{
   static const select = "$hostConnect/mission/mission_select.php";
 
   static const missionImport = "$hostConnect/mission/all_mission_import.php";
+  static const imageUpload = "$hostConnect/mission/image_upload.php";
 }

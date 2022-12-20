@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 
+
 enum AniProps { opacity, translateY }
 
 class FadeInAnimation extends StatelessWidget {

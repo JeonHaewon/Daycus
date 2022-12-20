@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/backend/login.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,6 +28,8 @@ class SignupPage extends StatefulWidget {
 
 class _signupPage extends State<SignupPage> {
 
+  static final storage = FlutterSecureStorage();
+
   checkUserEmail() async {
     try{
       var response = await http.post(Uri.parse(API.validateEmail),
@@ -45,7 +50,7 @@ class _signupPage extends State<SignupPage> {
 
           // 이용약관 초기화
         } else{
-          saveInfo();
+          await saveInfo();
         }
       }
     }catch(e){
@@ -78,6 +83,33 @@ class _signupPage extends State<SignupPage> {
           print("$agree");
           Fluttertoast.showToast(msg: "성공적으로 가입 되었습니다.");
 
+          bool? is_login = await userLogin(
+            emailCtrl.text.trim(),
+            passwordCtrl.text.trim(),
+          );
+
+          // - 로그인 성공
+          if (is_login == true) {
+
+            keepLogin(
+                user_data['user_name'],
+                emailCtrl.text.trim(),
+                passwordCtrl.text.trim(),
+                storage);
+
+
+            await afterLogin();
+
+            // 다 닫고 감.
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+          }
+          //  - 로그인 실패
+          else if (is_login == false) {
+            // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용
+            passwordCtrl.clear();
+          }
+
           // 사용자 정보 지우기
           setState(() {
             emailCtrl.clear();
@@ -85,11 +117,6 @@ class _signupPage extends State<SignupPage> {
             passwordCheckCtrl.clear();
 
           });
-
-          // 페이지 이동 - 모든 창을 다 닫고
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
-              TemHomePage()),
-                  (route) => false);
 
 
 
@@ -373,10 +400,10 @@ class _signupPage extends State<SignupPage> {
             SizedBox(
               height: 70.h,
               width: 412.w,
-              child:TextButton(onPressed: (){
+              child:TextButton(onPressed: () async {
                 // 동의 안했으면 회원가입 불가
                 if(_formKey.currentState!.validate()){
-                  checkUserEmail();
+                  await checkUserEmail();
                 }
 
               }, child: Text('회원가입',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),

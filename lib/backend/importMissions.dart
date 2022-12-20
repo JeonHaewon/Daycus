@@ -72,7 +72,8 @@ importMissionByCategory() async {
 
         } else {
           print("에러발생");
-          Fluttertoast.showToast(msg: "미션을 불러오는 도중 문제가 발생했습니다.");
+          // 왜 미션을 불러오는 도중 문제가 발생했다는 거야 !
+          //Fluttertoast.showToast(msg: "미션을 불러오는 도중 문제가 발생했습니다.");
         }
 
       }

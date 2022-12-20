@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:daycus/backend/Api.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:http/http.dart' as http;
 
 
 class MissionCheckStatusPage extends StatefulWidget {
@@ -36,6 +39,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   var f = NumberFormat('###,###,###,###');
 
+  // 사진을 찍을 수 있도록
   Future getImage() async {
     // 갤러리 열기 : 성공
     //var pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -43,6 +47,27 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     setState(() {
       image = File(pickedFile!.path);
     });
+  }
+
+  // 사진 업로드
+  Future uploadImage(String pictureName) async {
+    //var uri = Uri.parse("http://10.8.1.148/api_members/mission/upload.php");
+    var uri = Uri.parse(API.imageUpload);
+    var request = http.MultipartRequest('POST', uri);
+    request.fields['name'] = pictureName;
+    var pic = await http.MultipartFile.fromPath("image", image!.path);
+    request.files.add(pic);
+    var response = await request.send();
+
+    final result = await response.stream.bytesToString();
+    print("message : $result");
+
+    if (response.statusCode == 200) {
+      print("image upload");
+
+    } else {
+      print("image not upload");
+    }
 
   }
 
@@ -417,9 +442,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
             SizedBox(
               height: 70.h,
               width: 412.w,
-              child:TextButton(onPressed: (){
-                getImage();
-                setState(() {
+              child:TextButton(onPressed: () async {
+                await getImage();
+
+                setState(() async {
+                  // 이름을 오늘 날짜, 미션 번호, domission 코드로 하기
+                  await uploadImage("test");
                   do_mission[do_i]['1'] = true;
                 });
               }, child: Text('오늘 미션 인증하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
