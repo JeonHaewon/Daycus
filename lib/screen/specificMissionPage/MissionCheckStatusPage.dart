@@ -491,7 +491,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   // 이름을 오늘 날짜, 미션 번호, domission 코드로 하기
                   // 실제 이미지 이름을 바꿔야합니다.
                   // 폴더를 미션별로 다르게 지정해서 넣어야합니다 (php)
-                  // setstate 작동 안합니다 ^^^^^ > re-build 돼야함. 이거 왜 9임??? 숫자이상
+                  // setstate 작동 안합니다 ^^^^^ > re-build 돼야함.
                   await uploadImage("${widget.mission_data['mission_id']}_${todayString}_${user_data['user_id']}");
                   do_mission[do_i]["$todayBlockCnt"] = true;
                 });
@@ -575,7 +575,8 @@ class DoneMissionBlock extends StatelessWidget {
     return TextButton(
         onPressed: (){showAlertDialog(context, image, date);},
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-        child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        // child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        child: Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
     );
   }
 }
