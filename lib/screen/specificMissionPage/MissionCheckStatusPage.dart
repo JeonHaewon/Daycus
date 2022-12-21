@@ -85,11 +85,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   }
 
   // 사진 업로드
-  Future uploadImage(String pictureName) async {
+  Future uploadImage(String pictureName, String folderName) async {
     //var uri = Uri.parse("http://10.8.1.148/api_members/mission/upload.php");
     var uri = Uri.parse(API.imageUpload);
     var request = http.MultipartRequest('POST', uri);
-    request.fields['name'] = pictureName;
+    request.fields['name'] = pictureName; request.fields['image_folder'] = folderName;
     var pic = await http.MultipartFile.fromPath("image", image!.path);
     request.files.add(pic);
     var response = await request.send();
@@ -492,7 +492,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   // 실제 이미지 이름을 바꿔야합니다.
                   // 폴더를 미션별로 다르게 지정해서 넣어야합니다 (php)
                   // setstate 작동 안합니다 ^^^^^ > re-build 돼야함.
-                  await uploadImage("${widget.mission_data['mission_id']}_${todayString}_${user_data['user_id']}");
+                  print("${widget.mission_data['image_locate']}");
+                  await uploadImage(
+                      "${widget.mission_data['mission_id']}_${todayString}_${user_data['user_id']}",
+                      "${widget.mission_data['image_locate']}",
+                  );
                   do_mission[do_i]["$todayBlockCnt"] = true;
                 });
               }, child: Text('오늘 미션 인증하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),

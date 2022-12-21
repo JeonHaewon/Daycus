@@ -176,10 +176,13 @@ class _AccountSettingState extends State<AccountSetting> {
                               border: Border.all(width: 1.w, color: Colors.grey),
                             ),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(height: 17.h,),
-                                Text("$selected_date",style: TextStyle(color: Colors.black54, fontSize: 20.sp, fontFamily: 'korean',fontWeight: FontWeight.bold )
-                                  , textAlign: TextAlign.center, ),
+                                //SizedBox(height: 19.h,),
+                                Text("   $selected_date",
+                                    style: TextStyle(color: Colors.black54, fontSize: 16.5.sp, fontFamily: 'korean', )
+                                   ),
                               ],
                             ),
                           )),
