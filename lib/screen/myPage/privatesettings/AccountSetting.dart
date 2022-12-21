@@ -23,6 +23,8 @@ class AccountSetting extends StatefulWidget {
 
 class _AccountSettingState extends State<AccountSetting> {
 
+  TextStyle _hintTextStyle = TextStyle(color: Colors.grey,fontSize: 16.sp, fontWeight: FontWeight.w400);
+
   update_information_name() async {
     try{
       var update_res = await http.post(Uri.parse(API.update), body: {
@@ -135,7 +137,7 @@ class _AccountSettingState extends State<AccountSetting> {
                     decoration: InputDecoration(
                       labelText: '이름 : ${user_data['user_name']}',
                       hintText: '수정할 이름을 입력하세요',
-                      labelStyle: TextStyle(color: Colors.grey),
+                      labelStyle: _hintTextStyle,
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         borderSide: BorderSide(width: 1.w, color: Colors.grey),
@@ -151,58 +153,9 @@ class _AccountSettingState extends State<AccountSetting> {
                   ),
 
 
-
-
-
-
-
-                  // SizedBox(height: 20.h,),
-
-
-                  // TextField(
-                  //   decoration: InputDecoration(
-                  //     labelText: '이메일',
-                  //     hintText: 'email',
-                  //     labelStyle: TextStyle(color: Colors.grey),
-                  //     focusedBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                  //     ),
-                  //     enabledBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                  //     ),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //     ),
-                  //   ),
-                  //   keyboardType: TextInputType.emailAddress,
-                  // ),
-
                   SizedBox(height: 20.h,),
 
-
-                  // 생년월일 입력 라이브러리
-                  // https://pub.dev/packages/flutter_holo_date_picker
-                  // TextFormField(
-                  //   controller: birthCtrl,
-                  //   decoration: InputDecoration(
-                  //     labelText: '생년월일',
-                  //     hintText: '생년월일을 입력해주세요',
-                  //     labelStyle: TextStyle(color: Colors.grey),
-                  //     focusedBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                  //     ),
-                  //     enabledBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //       borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                  //     ),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //     ),
-                  //   ),
-                  // ),
+                  // 생일 변경하는 버튼
                   TextButton(
                     onPressed: () async {
                       String tmp = await _pickDateDialog(context);
@@ -216,7 +169,8 @@ class _AccountSettingState extends State<AccountSetting> {
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(width: 1.w, color: Colors.grey),
                       ),
-                      child: Text("$selected_date", style: TextStyle(color: Colors.black,fontSize: 20.sp,), textAlign: TextAlign.center,)
+                      child: Text("$selected_date",
+                        style: _hintTextStyle, textAlign: TextAlign.start, ),
                   ))
                 ],
               )
@@ -246,9 +200,14 @@ class _AccountSettingState extends State<AccountSetting> {
                     if (nameCtrl.text.trim().length > 0) {
                       update_information_name();
                     }
+
                     else{
-                      Fluttertoast.showToast(msg: "변경사항이 없습니다");
+                      // 하임 1220 : 생일가 이름이 변경됐는지 확인하기
+                      //Fluttertoast.showToast(msg: "변경사항이 없습니다");
                     }
+
+                    // 설정 다 하고 나가기
+                    Navigator.pop(context);
                   },
                   child: Text('수정하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
@@ -272,13 +231,13 @@ _pickDateDialog(BuildContext context) async {
 
   if (pickedDate == null) {
     if (current_date_var==null) {
-      return "not chosen yet!";
+      return "생년월일 : 0000-00-00";
     }else {
       return current_date_var;
     }
   }
 
-    current_date_var = DateFormat('yyyy/MM/dd').format(pickedDate);
+    current_date_var = DateFormat('yyyy-MM-dd').format(pickedDate);
     return current_date_var;
   }
 
