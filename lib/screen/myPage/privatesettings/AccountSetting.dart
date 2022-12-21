@@ -2,12 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import '../../../backend/Api.dart';
 
+String selected_date = "no chosen yet!";
+
+var current_date_var;
 
 class AccountSetting extends StatefulWidget {
   AccountSetting({Key? key}) : super(key: key);
@@ -150,25 +155,40 @@ class _AccountSettingState extends State<AccountSetting> {
 
                   // 생년월일 입력 라이브러리
                   // https://pub.dev/packages/flutter_holo_date_picker
-                  TextFormField(
-                    controller: birthCtrl,
-                    decoration: InputDecoration(
-                      labelText: '생년월일',
-                      hintText: '생년월일을 입력해주세요',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(width: 1.w, color: Colors.grey),
+                  // TextFormField(
+                  //   controller: birthCtrl,
+                  //   decoration: InputDecoration(
+                  //     labelText: '생년월일',
+                  //     hintText: '생년월일을 입력해주세요',
+                  //     labelStyle: TextStyle(color: Colors.grey),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //       borderSide: BorderSide(width: 1.w, color: Colors.grey),
+                  //     ),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //       borderSide: BorderSide(width: 1.w, color: Colors.grey),
+                  //     ),
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //     ),
+                  //   ),
+                  // ),
+                  TextButton(
+                    onPressed: () async {
+                      String tmp = await _pickDateDialog(context);
+                      setState(() {
+                        selected_date = tmp;
+                      });
+                    },
+                    child: Container(
+                      width: 500.w, height: 80.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(width: 1.w, color: Colors.grey),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                    ),
-                  ),
+                      child: Text("$selected_date", style: TextStyle(color: Colors.black,fontSize: 20.sp,), textAlign: TextAlign.center,)
+                  ))
                 ],
               )
 
@@ -208,4 +228,29 @@ class _AccountSettingState extends State<AccountSetting> {
 
     );
   }
+}
+
+_pickDateDialog(BuildContext context) async {
+  final initialDate = DateTime.now();
+  final pickedDate = await showDatePicker(
+    context: context,
+    initialDate: initialDate,
+    firstDate: DateTime(DateTime.now().year - 50),
+    lastDate: DateTime(DateTime.now().year + 3),
+  );
+
+  if (pickedDate == null) {
+    if (current_date_var==null) {
+      return "not chosen yet!";
+    }else {
+      return current_date_var;
+    }
+  }
+
+    current_date_var = DateFormat('yyyy/MM/dd').format(pickedDate);
+    return current_date_var;
+  }
+
+getText(){
+  return selected_date;
 }
