@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daycus/core/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -10,18 +11,20 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../../../backend/Api.dart';
 
-String selected_date = "no chosen yet!";
-
-var current_date_var;
+var current_date_var = null;
 
 class AccountSetting extends StatefulWidget {
   AccountSetting({Key? key}) : super(key: key);
+
+
 
   @override
   State<AccountSetting> createState() => _AccountSettingState();
 }
 
 class _AccountSettingState extends State<AccountSetting> {
+
+  String selected_date = user_data['user_birth'] ?? nullBirthdayString;
 
   TextStyle _hintTextStyle = TextStyle(color: Colors.grey,fontSize: 16.sp, fontWeight: FontWeight.w400);
 
@@ -36,22 +39,21 @@ class _AccountSettingState extends State<AccountSetting> {
       var resLogin = jsonDecode(update_res.body);
       if (resLogin['success'] == true) {
         user_data['user_name'] = nameCtrl.text;
-      print("성공적으로 반영되었습니다");
-      Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+      print("이름 변경이 성공적으로 반영되었습니다");
+      //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
 
-      // 사용자 정보 지우기
-      setState(() {
-      nameCtrl.clear();
-      birthCtrl.clear();
-      } );
+        return true;
+
 
       } else {
+        return false;
       // 이름을 바꿀 수 없는 상황?
       }
       }
     } catch (e) {
     print(e.toString());
-    Fluttertoast.showToast(msg: e.toString());
+    //Fluttertoast.showToast(msg: e.toString());
+      return false;
     }
   }
   update_information_birth() async {
@@ -65,23 +67,33 @@ class _AccountSettingState extends State<AccountSetting> {
         var resLogin = jsonDecode(update_res.body);
         if (resLogin['success'] == true) {
           user_data['user_birth'] = selected_date;
-          print("성공적으로 반영되었습니다");
-          Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
-
-          // 사용자 정보 지우기
-          setState(() {
-            nameCtrl.clear();
-            birthCtrl.clear();
-          } );
-
+          print("생일 수정이 성공적으로 반영되었습니다");
+          //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+          return true;
         } else {
+          //Fluttertoast.showToast(msg: "다시 시도해주세요");
           // 생년월일을 바꿀 수 없는 상황?
+          return false;
         }
       }
     } catch (e) {
       print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
+      return false;
     }
+  }
+
+  void success_upload(){
+    Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+
+    // 사용자 정보 지우기, dispose하면 에러뜸.
+    setState(() {
+      nameCtrl.clear();
+      birthCtrl.clear();
+    } );
+
+    // 설정 다 하고 나가기
+    Navigator.pop(context);
+
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -218,17 +230,36 @@ class _AccountSettingState extends State<AccountSetting> {
               child:TextButton(
                 // 이거 생일 있을때랑 이름 있을때랑 각각 구분해서 잘 넣기.
                 // 팝업 띄우기, 규칙 만들기 (중복허용?)
-                  onPressed: (){
-                    update_information_birth();
-                    if (nameCtrl.text.trim().length > 0) {
-                      update_information_name();
+                  onPressed: () async {
+                    bool is_change_birth = (user_data['user_birth'] != selected_date);
+                    bool is_change_name = (nameCtrl.text.trim().length > 0);
+
+                    bool sucess = false;
+
+                    print("state : $is_change_name, $is_change_birth");
+
+                    // 변경사항이 없을 때
+                    if (is_change_name==false && is_change_birth==false){
+                      Fluttertoast.showToast(msg: "변경사항이 없습니다.");
                     }
-                    else{
-                      // 하임 1220 : 생일가 이름이 변경됐는지 확인하기
-                      //Fluttertoast.showToast(msg: "변경사항이 없습니다");
+                    // 변경 사항이 있는 경우
+                    else {
+                      if (is_change_birth){
+                        sucess = await update_information_birth();}
+
+                      if (is_change_name){
+                        sucess = await update_information_name();}
+
+                      // true로 살아남으면 성공했다는 메세지가 뜸.
+                      if (sucess) {
+                        success_upload();
+
+                      } else {
+                        Fluttertoast.showToast(msg: "다시 시도해주세요");
+                      }
                     }
-                    // 설정 다 하고 나가기
-                    Navigator.pop(context);
+
+
                   },
                   child: Text('수정하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
@@ -240,7 +271,9 @@ class _AccountSettingState extends State<AccountSetting> {
 }
 
 _pickDateDialog(BuildContext context) async {
-  final initialDate = DateTime.now();
+  final initialDate = user_data['user_birth']==null
+    // 하임 1221 : 원래 설정한 생일이 있으면 그게 제일 먼저 뜸
+      ? DateTime.now() : DateTime.parse(user_data['user_birth']);
   final pickedDate = await showDatePicker(
     context: context,
     initialDate: initialDate,
@@ -260,7 +293,7 @@ _pickDateDialog(BuildContext context) async {
 
   if (pickedDate == null) {
     if (current_date_var==null) {
-      return "생년월일 : 0000-00-00";
+      return nullBirthdayString;
     }else {
       return current_date_var;
     }
@@ -270,9 +303,6 @@ _pickDateDialog(BuildContext context) async {
     return current_date_var;
   }
 
-getText(){
-  return selected_date;
-}
 
 
 
