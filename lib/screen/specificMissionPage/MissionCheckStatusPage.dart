@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -7,11 +8,12 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:http/http.dart' as http;
-
+import 'package:path/path.dart' as path;
 
 class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
@@ -31,12 +33,31 @@ class MissionCheckStatusPage extends StatefulWidget {
 }
 
 File? image;
+String? imageReNamed;
 
 class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
+  todayMissionCertify(int do_i) async {
+
+    String todayString = await NowTime('yyyyMMddHHmmss');
+    String imageName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
+    await getImage(imageName);
+
+    print("${widget.mission_data['image_locate']}");
+    await uploadImage(
+          imageName,
+        "${widget.mission_data['image_locate']}",
+    );
+
+    setState(() {
+      do_mission[do_i]["d$todayBlockCnt"] = true;
+    });
+
+    Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
+  }
+
   // 하임 1220 : 미션 시작일로부터 지난 날짜 (초기화)
   int todayBlockCnt = 0;
-  String todayString = "";
 
   @override
   void initState () {
@@ -51,8 +72,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     print("init");
     // 하임 1220 : now_time = yy/MM/dd 형태
     DateTime now_time = await NowTime(null);
-    todayString = DateFormat('yyyyMMdd').format(now_time);
-    print("todayString : ${todayString}");
     print(now_time);
     //print("mission_data : ${widget.mission_data}");
     print("20"+widget.mission_data['start_date'].substring(2,10));
@@ -66,6 +85,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
       });
 
+
+
   }
 
   // dart.io로 file 불러왔음. html로 불러야할지도
@@ -75,21 +96,44 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   var f = NumberFormat('###,###,###,###');
 
   // 사진을 찍을 수 있도록
-  Future getImage() async {
+  Future getImage(String todayString) async {
     // 갤러리 열기 : 성공
     //var pickedFile = await picker.pickImage(source: ImageSource.gallery);
     var pickedFile = await picker.pickImage(source: ImageSource.camera);
-    setState(() {
-      image = File(pickedFile!.path);
-    });
+
+    print('Original path: ${pickedFile!.path}');
+
+    String image_path = pickedFile!.path;
+    String dir = path.dirname(pickedFile!.path);
+
+    // jpg나 png파일만 업로드 가능.
+    if (image_path.endsWith(".jpg")){
+      imageReNamed = todayString+".jpg";
+      String newPath = path.join(dir, imageReNamed);
+      print('NewPath: ${newPath}');
+      image = await File(pickedFile.path).copy(newPath);
+
+    } else if (image_path.endsWith(".png")){
+      imageReNamed = todayString+".jpg";
+      String newPath = path.join(dir, imageReNamed);
+      print('NewPath: ${newPath}');
+      image = await File(pickedFile.path).copy(newPath);
+    }
+
+
+
   }
 
   // 사진 업로드
   Future uploadImage(String pictureName, String folderName) async {
     //var uri = Uri.parse("http://10.8.1.148/api_members/mission/upload.php");
+
+    String do_id = widget.do_mission_data['do_id'];
+    
+    //이미지 업로드
     var uri = Uri.parse(API.imageUpload);
     var request = http.MultipartRequest('POST', uri);
-    request.fields['name'] = pictureName; request.fields['image_folder'] = folderName;
+    request.fields['image_folder'] = folderName;
     var pic = await http.MultipartFile.fromPath("image", image!.path);
     request.files.add(pic);
     var response = await request.send();
@@ -97,11 +141,34 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     final result = await response.stream.bytesToString();
     print("message : $result");
 
+    // 이미지 업로드에 대한 테스트
     if (response.statusCode == 200) {
       print("image upload");
-
     } else {
       print("image not upload");
+    }
+
+    // do_mission에 기록
+    var update_res = await http.post(Uri.parse(API.update), body: {
+      'update_sql': "UPDATE DayCus.do_mission SET d${todayBlockCnt} = '${imageReNamed}' WHERE (do_id = '${do_id}')",
+    });
+
+    // do_mission 반영에 대한 테스트
+    if (update_res.statusCode == 200) {
+      print("출력 : ${update_res.body}");
+      var res_update = jsonDecode(update_res.body);
+      if (res_update['success'] == true) {
+
+        print("사진이 성공적으로 업로드되었습니다");
+        //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+
+        return true;
+
+
+      } else {
+        return false;
+        // 이름을 바꿀 수 없는 상황?
+      }
     }
 
   }
@@ -225,12 +292,19 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                         SizedBox(
                                                           height: _height,
                                                           width: _width,
-                                                          child: widget.do_mission_data['${date}']==null
+                                                          child: widget.do_mission_data['d${date}']==null
 
                                                           // 아직 인증하지 않은 날짜 블럭, date+1 = 오늘 카운트
                                                               ? (todayBlockCnt <= date ?
                                                                   // 날짜가 지나지 않았으면
-                                                                  YetMissionBlock(i: index_i, j: index_j, sp: _sp)
+                                                                  YetMissionBlock(i: index_i, j: index_j, sp: _sp,
+                                                                  onPressed: () async {
+                                                                    if (date == todayBlockCnt){
+                                                                      await todayMissionCertify(do_i);
+                                                                    } else {
+                                                                      Fluttertoast.showToast(msg: "해당 날짜에 인증할 수 있습니다");
+                                                                    }
+                                                                        },)
                                                               : FailMissionBlock(sp: _sp)
                                                           )
                                                           // 인증 완료된 날짜 블럭
@@ -485,20 +559,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: () async {
-                await getImage();
-
-                setState(() async {
-                  // 이름을 오늘 날짜, 미션 번호, domission 코드로 하기
-                  // 실제 이미지 이름을 바꿔야합니다.
-                  // 폴더를 미션별로 다르게 지정해서 넣어야합니다 (php)
-                  // setstate 작동 안합니다 ^^^^^ > re-build 돼야함.
-                  print("${widget.mission_data['image_locate']}");
-                  await uploadImage(
-                      "${widget.mission_data['mission_id']}_${todayString}_${user_data['user_id']}",
-                      "${widget.mission_data['image_locate']}",
-                  );
-                  do_mission[do_i]["$todayBlockCnt"] = true;
-                });
+                await todayMissionCertify(do_i);
               }, child: Text('오늘 미션 인증하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
@@ -552,8 +613,9 @@ class FailMissionBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: (){},
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.pink[50])),
-        child: Text('X',style: TextStyle(color: Colors.red, fontSize: sp, fontFamily: 'korean', ) )
+        // 원래 pink[40], red 이었음.
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[300])),
+        child: Text('X',style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
     );
   }
 }
@@ -577,7 +639,10 @@ class DoneMissionBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: (){showAlertDialog(context, image, date);},
+        onPressed: (){
+          // 이미지 다운로드가 될 때까지는 이렇게 있자.
+          //showAlertDialog(context, image, date);
+          },
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
         // child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
         child: Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
@@ -591,16 +656,18 @@ class YetMissionBlock extends StatelessWidget {
     required this.i,
     required this.j,
     required this.sp,
+    this.onPressed,
   }) : super(key: key);
 
   final int i;
   final int j;
   final double sp;
+  final onPressed;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: (){},
+        onPressed: onPressed,
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
         child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
