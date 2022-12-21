@@ -132,55 +132,75 @@ class _AccountSettingState extends State<AccountSetting> {
               key: _formKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    controller: nameCtrl,
-                    decoration: InputDecoration(
-                      labelText: '이름 : ${user_data['user_name']}',
-                      hintText: '수정할 이름을 입력하세요',
-                      labelStyle: _hintTextStyle,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  SizedBox(
+                    width: 340.w,
+                    child: TextFormField(
+                      controller: nameCtrl,
+                      decoration: InputDecoration(
+                        labelText: '이름 : ${user_data['user_name']}',
+                        hintText: '수정할 이름을 입력하세요',
+                        labelStyle: _hintTextStyle,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
                       ),
                     ),
                   ),
 
 
-                  SizedBox(height: 20.h,),
 
-                  // 생일 변경하는 버튼
-                  TextButton(
-                    onPressed: () async {
-                      String tmp = await _pickDateDialog(context);
-                      setState(() {
-                        selected_date = tmp;
-                      });
-                    },
-                    child: Container(
-                      width: 500.w, height: 80.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(width: 1.w, color: Colors.grey),
+                  SizedBox(height: 20.h,),
+                  Stack(
+                    alignment: Alignment.topLeft,
+                    children: [
+
+                      TextButton(
+                          onPressed: () async {
+                            String tmp = await _pickDateDialog(context);
+                            setState(() {
+                              selected_date = tmp;
+                            });
+                          },
+                          child: Container(
+                            width: 600.w, height: 65.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(width: 1.w, color: Colors.grey),
+                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 17.h,),
+                                Text("$selected_date",style: TextStyle(color: Colors.black54, fontSize: 20.sp, fontFamily: 'korean',fontWeight: FontWeight.bold )
+                                  , textAlign: TextAlign.center, ),
+                              ],
+                            ),
+                          )),
+
+                      Positioned(
+                        left: 18,
+                        child: Container(
+                          width: 60.w, height: 28.h,
+                          decoration: BoxDecoration(
+                              color: AppColor.background),
+                          child: Text("생년월일",style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontWeight: FontWeight.w400)
+                            , textAlign: TextAlign.center, ),
+                        ),
                       ),
-                      child: Text("$selected_date",
-                        style: _hintTextStyle, textAlign: TextAlign.start, ),
-                  ))
+
+                    ],
+                  ),
+
                 ],
               )
-
             ),
-
-
-
-
-
           ],
         ),
       ),
@@ -200,12 +220,10 @@ class _AccountSettingState extends State<AccountSetting> {
                     if (nameCtrl.text.trim().length > 0) {
                       update_information_name();
                     }
-
                     else{
                       // 하임 1220 : 생일가 이름이 변경됐는지 확인하기
                       //Fluttertoast.showToast(msg: "변경사항이 없습니다");
                     }
-
                     // 설정 다 하고 나가기
                     Navigator.pop(context);
                   },
@@ -214,8 +232,6 @@ class _AccountSettingState extends State<AccountSetting> {
           ],
         ),
       ),
-
-
     );
   }
 }
@@ -227,6 +243,16 @@ _pickDateDialog(BuildContext context) async {
     initialDate: initialDate,
     firstDate: DateTime(DateTime.now().year - 50),
     lastDate: DateTime(DateTime.now().year + 3),
+    builder: (context, child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: AppColor.happyblue,
+          ),
+        ),
+        child: child!,
+      );
+    },
   );
 
   if (pickedDate == null) {
@@ -244,3 +270,9 @@ _pickDateDialog(BuildContext context) async {
 getText(){
   return selected_date;
 }
+
+
+
+
+
+
