@@ -244,7 +244,17 @@ class _AccountSettingState extends State<AccountSetting> {
                   onPressed: (){
                     update_information_birth();
                     if (nameCtrl.text.trim().length > 0) {
-                      update_information_name();
+                      if (nameCtrl.text
+                          .trim()
+                          .length < 10 && nameCtrl.text.trim().replaceAll(RegExp('\\s'), "") == nameCtrl.text.trim() &&
+                          nameCtrl.text.trim() ==
+                              nameCtrl.text.trim().replaceAll(
+                                  RegExp('[^a-zA-Z0-9가-힣\\s]'), "")) {
+                        update_information_name();
+                      }
+                      else {
+                        Fluttertoast.showToast(msg: "할 수 없는 닉네임입니다.");
+                      }
                     }
                     else{
                       Fluttertoast.showToast(msg: "변경사항이 없습니다");
