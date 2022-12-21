@@ -23,7 +23,7 @@ class AccountSetting extends StatefulWidget {
 
 class _AccountSettingState extends State<AccountSetting> {
 
-  update_information() async {
+  update_information_name() async {
     try{
       var update_res = await http.post(Uri.parse(API.update), body: {
       'update_sql': "UPDATE DayCus.user_table SET user_name = '${nameCtrl.text.trim()}' WHERE (user_email = '${user_data['user_email']}')",
@@ -50,6 +50,35 @@ class _AccountSettingState extends State<AccountSetting> {
     } catch (e) {
     print(e.toString());
     Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+  update_information_birth() async {
+    try{
+      var update_res = await http.post(Uri.parse(API.update), body: {
+        'update_sql': "UPDATE DayCus.user_table SET user_birth = '${selected_date}' WHERE (user_email = '${user_data['user_email']}')",
+      });
+
+      if (update_res.statusCode == 200) {
+        print("출력 : ${update_res.body}");
+        var resLogin = jsonDecode(update_res.body);
+        if (resLogin['success'] == true) {
+          user_data['user_birth'] = selected_date;
+          print("성공적으로 반영되었습니다");
+          Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+
+          // 사용자 정보 지우기
+          setState(() {
+            nameCtrl.clear();
+            birthCtrl.clear();
+          } );
+
+        } else {
+          // 생년월일을 바꿀 수 없는 상황?
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
     }
   }
 
@@ -213,9 +242,11 @@ class _AccountSettingState extends State<AccountSetting> {
                 // 이거 생일 있을때랑 이름 있을때랑 각각 구분해서 잘 넣기.
                 // 팝업 띄우기, 규칙 만들기 (중복허용?)
                   onPressed: (){
-                    if (nameCtrl.text.trim().length > 0){
-                      update_information();
-                    } else {
+                    update_information_birth();
+                    if (nameCtrl.text.trim().length > 0) {
+                      update_information_name();
+                    }
+                    else{
                       Fluttertoast.showToast(msg: "변경사항이 없습니다");
                     }
                   },
