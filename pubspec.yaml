@@ -45,7 +45,8 @@ dependencies:
   flutter_secure_storage :
   # 사진 관리 라이브러리
   image_picker:
-
+  # date_time picker package download (생년월일)
+  flutter_datetime_picker:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:

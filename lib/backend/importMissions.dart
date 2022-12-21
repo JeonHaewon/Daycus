@@ -68,7 +68,6 @@ importMissionByCategory() async {
           } else if (i==4) {
             missions_hobby = resMission['data'];
           }
-
           // 성공하면 넘김
 
         } else {
