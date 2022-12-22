@@ -235,27 +235,39 @@ class _AccountSettingState extends State<AccountSetting> {
                     bool is_change_name = (nameCtrl.text.trim().length > 0);
 
                     bool sucess = false;
+                    String? msg = null;
 
                     print("state : $is_change_name, $is_change_birth");
 
                     // 변경사항이 없을 때
                     if (is_change_name==false && is_change_birth==false){
-                      Fluttertoast.showToast(msg: "변경사항이 없습니다.");
+                      msg = "변경사항이 없습니다.";
                     }
                     // 변경 사항이 있는 경우
                     else {
+
                       if (is_change_birth){
                         sucess = await update_information_birth();}
 
                       if (is_change_name){
-                        sucess = await update_information_name();}
+                        // 이름이 가능하면 : 10글자 이하
+                        if (nameCtrl.text
+                            .trim()
+                            .length <= 10 && nameCtrl.text.trim().replaceAll(RegExp('\\s'), "") == nameCtrl.text.trim() &&
+                            nameCtrl.text.trim() ==
+                                nameCtrl.text.trim().replaceAll(
+                                    RegExp('[^a-zA-Z0-9가-힣\\s]'), "")) {
+                          sucess = await update_information_name();}
+                        else {
+                          msg = "할 수 없는 닉네임입니다.";
+                        }
+                      }
 
                       // true로 살아남으면 성공했다는 메세지가 뜸.
-                      if (sucess) {
+                      if (msg==null && sucess==true) {
                         success_upload();
-
                       } else {
-                        Fluttertoast.showToast(msg: "다시 시도해주세요");
+                        Fluttertoast.showToast(msg: msg ?? "다시 시도해주세요");
                       }
                     }
 
