@@ -112,6 +112,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       String newPath = path.join(dir, imageReNamed);
       print('NewPath: ${newPath}');
       image = await File(pickedFile.path).copy(newPath);
+      //
 
     } else if (image_path.endsWith(".png")){
       imageReNamed = todayString+".jpg";
