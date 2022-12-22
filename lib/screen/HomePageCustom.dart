@@ -169,7 +169,7 @@ class HomePage extends StatelessWidget {
                         //print(all_missions[_index]);
                         return Column(
                           children: [
-                            NowMissionButton(image: 'nowmission',
+                            NowMissionButton(image: all_missions[_index]['thumbnail'] ?? 'nowmission.png',
                               title: all_missions[_index]['title'],
                               totalUser: int.parse(all_missions[_index]['total_user']),
                               rank: 1,

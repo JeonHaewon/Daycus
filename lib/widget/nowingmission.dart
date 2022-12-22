@@ -50,7 +50,11 @@ class NowMissionButton extends StatelessWidget {
               child:Row(
                 children: [
                   SizedBox(width: 20.w,),
-                  Image.asset('assets/image/$image.png' , fit: BoxFit.fill,height: 65.h),
+                  CircleAvatar(
+                    radius: 35.sp,
+                    backgroundImage: AssetImage('assets/image/thumbnail/$image'),
+                  ),
+
                   SizedBox(width: 15.w,),
 
                   Container(

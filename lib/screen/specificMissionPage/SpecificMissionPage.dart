@@ -90,7 +90,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                     decoration: BoxDecoration(
                       color: Colors.white60,
                       image: DecorationImage(
-                          image: AssetImage('assets/image/specificmissionpage/${widget.topimage}.png') ,
+                          image: AssetImage('assets/image/thumbnail/${widget.topimage}') ,
                           fit: BoxFit.cover
                       ),
                     ),
