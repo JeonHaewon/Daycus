@@ -12,7 +12,6 @@ import 'package:intl/intl.dart';
 import '../../backend/ImportData/userDataImport.dart';
 
 
-
 class MissionParticipatePage extends StatelessWidget {
   MissionParticipatePage({
     Key? key,
@@ -208,8 +207,9 @@ class MissionParticipatePage extends StatelessWidget {
                   // 참여자수 늘리는건 굳이 안해도 되므로, 로딩기능이 추가되면 await에서 빼기 !
 
                   // 참여 미션 등록하기
-                  await missionParticipate(mission_id, user_data['user_email'], rewardCtrl.text=='' ? '0' : rewardCtrl.text);
-
+                  await missionParticipate(mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
+                  print("gggg");
+                  minus_reward(rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text);
                   // 참여 유저 업데이트
                   // 이건 잘 됨.
                   await missionUserUpdate(mission_id);

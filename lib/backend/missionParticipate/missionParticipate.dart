@@ -4,6 +4,7 @@ import 'package:daycus/backend/Api.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/screen/specificMissionPage/MissionParticipatePage.dart';
 
 missionParticipate(mission_id, user_email, bet_reward) async {
 
@@ -22,6 +23,31 @@ missionParticipate(mission_id, user_email, bet_reward) async {
         print(resMission);
         Fluttertoast.showToast(msg: "미션 신청이 완료되었습니다 !");
 
+      } else {
+        print("에러발생");
+        print(resMission);
+        Fluttertoast.showToast(msg: "다시 시도해주세요");
+      }
+
+    }
+  } on Exception catch (e) {
+    print("에러발생");
+    Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+  }
+}
+
+minus_reward(bet_reward) async {
+
+  try {
+    var update_res = await http.post(Uri.parse(API.update), body: {
+      'update_sql': "UPDATE user_table SET reward = '${(int.parse(user_data['reward'])-int.parse(bet_reward)).toString()}' WHERE user_email = '${user_data['user_email']}'",
+    });
+
+    if (update_res.statusCode == 200 ) {
+      var resMission = jsonDecode(update_res.body);
+      // print(resMission);
+      if (resMission['success'] == true) {
+        user_data['reward'] = (int.parse(user_data['reward'])-int.parse(bet_reward)).toString();
       } else {
         print("에러발생");
         print(resMission);

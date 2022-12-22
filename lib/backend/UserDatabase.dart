@@ -3,7 +3,7 @@
 var user_data = null;
 var all_missions = null;
 int missions_cnt = 0;
-
+var minused_reward;
 // 카테고리 바꿀 때는 아주 주의가 필요함.
 // 미션 번호만 저장 (더 효율적인 방법이 있다면 바꾸는 것도 좋은 생각)
 var missions_health = null;
