@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../backend/Api.dart';
 import 'dart:convert';
@@ -32,13 +33,15 @@ class _NoticeSettingState extends State<NoticeSetting> {
           var resLogin = jsonDecode(update_res.body);
           if (resLogin['success'] == true) {
             user_data['terms_market'] = value.toString();
+            return true;
           } else {
-            // 이름을 바꿀 수 없는 상황?
+            return false;
           }
         }
       } catch (e) {
         print(e.toString());
-        Fluttertoast.showToast(msg: e.toString());
+        //Fluttertoast.showToast(msg: e.toString());
+        return false;
       }
     }
 
@@ -138,10 +141,14 @@ class _NoticeSettingState extends State<NoticeSetting> {
               height: 70.h,
               width: 412.w,
               child:TextButton(
-                // 이거 생일 있을때랑 이름 있을때랑 각각 구분해서 잘 넣기.
-                // 팝업 띄우기, 규칙 만들기 (중복허용?)
                   onPressed: () async {
-                    update_terms_market(isModified);
+                    bool? success = await update_terms_market(isModified);
+                    if (success == true){
+                      Fluttertoast.showToast(msg: "알림 설정이 수정되었습니다.");
+                      Navigator.pop(context);
+                    } else {
+                      Fluttertoast.showToast(msg: "다시 시도해주세요.");
+                    }
                   },
                   child: Text('수정하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),

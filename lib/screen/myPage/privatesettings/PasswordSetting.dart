@@ -47,9 +47,24 @@ update_information_password() async {
   }
 }
 
-class PasswordSetting extends StatelessWidget {
-  const PasswordSetting({Key? key}) : super(key: key);
+class PasswordSetting extends StatefulWidget {
+  PasswordSetting({Key? key}) : super(key: key);
 
+  @override
+  State<PasswordSetting> createState() => _PasswordSettingState();
+}
+
+class _PasswordSettingState extends State<PasswordSetting> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    current_password.clear();
+    want_real_password.clear();
+    want_password.clear();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,57 +80,62 @@ class PasswordSetting extends StatelessWidget {
       ),
 
       body: SingleChildScrollView(
-        child: Column(
-          children: [
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
 
+              Padding(
+                padding: EdgeInsets.fromLTRB(30.w, 50.h, 30.w, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
 
-            Padding(
-              padding: EdgeInsets.fromLTRB(30.w, 50.h, 30.w, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-
-                  TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: '현재 비밀번호 입력',
+                    TextFormField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        labelText: '현재 비밀번호 입력',
+                      ),
+                      controller: current_password,
+                      obscureText: true,
+                      onChanged: (current_password){
+                        cur = current_password.trim();
+                      },
                     ),
-                    controller: current_password,
-                    onChanged: (current_password){
-                      cur = current_password.trim();
-                    },
-                  ),
 
-                  SizedBox(height: 20.h,),
+                    SizedBox(height: 20.h,),
 
-                  TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: '새로운 비밀번호 입력',
+                    TextFormField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        labelText: '새로운 비밀번호 입력',
+                      ),
+                      controller: want_password,
+                      obscureText: true,
+                      onChanged: (want_password){
+                        want = want_password.trim();
+                      },
                     ),
-                    controller: want_password,
-                    onChanged: (want_password){
-                      want = want_password.trim();
-                    },
-                  ),
 
-                  SizedBox(height: 20.h,),
-                  
-                  TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: '새로운 비밀번호 재입력',
+                    SizedBox(height: 20.h,),
+
+                    TextFormField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        labelText: '새로운 비밀번호 재입력',
+                      ),
+                      controller: want_real_password,
+                      obscureText: true,
+                      onChanged: (want_real_password){
+                        want_real = want_real_password.trim();
+                      },
                     ),
-                    controller: want_real_password,
-                    onChanged: (want_real_password){
-                      want_real = want_real_password.trim();
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -143,7 +163,7 @@ class PasswordSetting extends StatelessWidget {
           ],
         ),
       ),
-      
+
     );
   }
 }
