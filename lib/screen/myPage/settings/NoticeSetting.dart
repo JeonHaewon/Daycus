@@ -76,7 +76,7 @@ class _NoticeSettingState extends State<NoticeSetting> {
                         isChecked[0] = value;
                         isModified = value;
                       });
-                    },
+                    },//
                   ),
 
                   Container(
