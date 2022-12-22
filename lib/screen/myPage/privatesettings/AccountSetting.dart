@@ -210,7 +210,7 @@ class _AccountSettingState extends State<AccountSetting> {
                       ),
 
                       Positioned(
-                        left: 18,
+                        left: 10.w,
                         child: Container(
                           width: 60.w, height: 20.h,
                           decoration: BoxDecoration(
