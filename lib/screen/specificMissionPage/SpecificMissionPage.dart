@@ -154,52 +154,53 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
               ),
             ),
 
-            Container(
-              width: 300.w,
-              height: 22.h,
-              margin: EdgeInsets.only(top: 15.h, left: 24.w),
-              decoration: BoxDecoration(
-                color: AppColor.happyblue,
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
 
-            SizedBox(height: 4.h,),
-
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-                  Row(
-                    children: [
-                      SizedBox(width: 24.w,),
-                      Text("${f.format(widget.totaluser)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                      Text(' 참여중',style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean',) ),
-                    ],
-                  ),
-
-                  Row(
-                    children: [
-                      Text("${f.format(widget.certifi_user)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                      Text(' 인증',style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean',) ),
-                      SizedBox(width: 24.w,),
-                    ],
-                  ),
-
-                ],
-              ),
-            ),
-
-            SizedBox(height: 15.h,),
-
-            Container(
-              width: 412.w,
-              height: 8.h,
-              decoration: BoxDecoration(
-                color: AppColor.grey2,
-              ),
-            ),
+            // Container(
+            //   width: 300.w,
+            //   height: 22.h,
+            //   margin: EdgeInsets.only(top: 15.h, left: 24.w),
+            //   decoration: BoxDecoration(
+            //     color: AppColor.happyblue,
+            //     borderRadius: BorderRadius.circular(5),
+            //   ),
+            // ),
+            //
+            // SizedBox(height: 4.h,),
+            //
+            // Container(
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //
+            //       Row(
+            //         children: [
+            //           SizedBox(width: 24.w,),
+            //           Text("${f.format(widget.totaluser)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+            //           Text(' 참여중',style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean',) ),
+            //         ],
+            //       ),
+            //
+            //       Row(
+            //         children: [
+            //           Text("${f.format(widget.certifi_user)}명",style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+            //           Text(' 인증',style: TextStyle(color: Colors. grey,fontSize: 15.sp, fontFamily: 'korean',) ),
+            //           SizedBox(width: 24.w,),
+            //         ],
+            //       ),
+            //
+            //     ],
+            //   ),
+            // ),
+            //
+            // SizedBox(height: 15.h,),
+            //
+            // Container(
+            //   width: 412.w,
+            //   height: 8.h,
+            //   decoration: BoxDecoration(
+            //     color: AppColor.grey2,
+            //   ),
+            // ),
 
 
             Padding(
