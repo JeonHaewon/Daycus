@@ -145,12 +145,14 @@ class _AccountSettingState extends State<AccountSetting> {
               child: Column(
                 children: [
                   SizedBox(
-                    width: 340.w,
+                    width: 355.w,
                     child: TextFormField(
                       controller: nameCtrl,
                       decoration: InputDecoration(
                         labelText: '이름 : ${user_data['user_name']}',
                         hintText: '수정할 이름을 입력하세요',
+                        isDense: true,
+                        contentPadding: EdgeInsets.fromLTRB(12.w, 42.h, 10.w, 0),
                         labelStyle: _hintTextStyle,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -174,35 +176,43 @@ class _AccountSettingState extends State<AccountSetting> {
                     alignment: Alignment.topLeft,
                     children: [
 
-                      TextButton(
-                          onPressed: () async {
-                            String tmp = await _pickDateDialog(context);
-                            setState(() {
-                              selected_date = tmp;
-                            });
-                          },
-                          child: Container(
-                            width: 600.w, height: 65.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(width: 1.w, color: Colors.grey),
+                      Positioned(
+                        //top: 10,
+                        child: TextButton(
+                            onPressed: () async {
+                              String tmp = await _pickDateDialog(context);
+                              setState(() {
+                                selected_date = tmp;
+                              });
+                            },
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.fromLTRB(0, 8.h, 0, 8.h),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                //SizedBox(height: 19.h,),
-                                Text("   $selected_date",
-                                    style: TextStyle(color: Colors.black54, fontSize: 16.5.sp, fontFamily: 'korean', )
-                                   ),
-                              ],
-                            ),
-                          )),
+                            child: Container(
+                              width: 355.w,
+                              height: 65.h,
+
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(width: 1.w, color: Colors.grey),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  //SizedBox(height: 19.h,),
+                                  Text("   $selected_date",
+                                      style: TextStyle(color: Colors.black54, fontSize: 16.5.sp, fontFamily: 'korean', )
+                                     ),
+                                ],
+                              ),
+                            )),
+                      ),
 
                       Positioned(
                         left: 18,
                         child: Container(
-                          width: 60.w, height: 28.h,
+                          width: 60.w, height: 20.h,
                           decoration: BoxDecoration(
                               color: AppColor.background),
                           child: Text("생년월일",style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontWeight: FontWeight.w400)
