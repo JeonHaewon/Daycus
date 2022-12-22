@@ -61,8 +61,8 @@ class BigMissionButton extends StatelessWidget {
             SizedBox(height: 5.h,),
 
             Container(
-              width: 100.w,
-              height: 10.h,
+              width: 170.w,
+              height: 1.h,
               color: AppColor.happyblue,
 
             ),
