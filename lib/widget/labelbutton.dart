@@ -46,7 +46,7 @@ class LabelButton extends StatelessWidget {
                 color: Colors.white60,
                 borderRadius: BorderRadius.circular(6),
                 image: DecorationImage(
-                    image: AssetImage('assets/image/$image.png') ,
+                    image: AssetImage('assets/image/thumbnail/$image') ,
                     fit: BoxFit.cover
                 ),
               ),

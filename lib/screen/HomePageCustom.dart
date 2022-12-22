@@ -1,6 +1,7 @@
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:daycus/screen/temHomePage.dart';
+import 'package:daycus/widget/HomePageUserInfoBar.dart';
 import 'package:daycus/widget/NowNoMission.dart';
 import 'package:daycus/widget/SpecificMissionToPage.dart';
 import 'package:flutter/material.dart';
@@ -97,38 +98,9 @@ class HomePage extends StatelessWidget {
               ),
             ),//위쪽 제일 큰 박스
 
-            Container(
-              width: 360.w,
-              height: 55.h,
-              decoration: BoxDecoration(
-                color: Colors.white60,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              margin: EdgeInsets.symmetric(horizontal: 30.w),
-              child: Row(
-                children: [
-                  SizedBox(width: 20.w,),
-
-                  Container(
-                    width: 85.w,
-                    height: 32.h,
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 7.h,),
-                        Text("나의 리워드",style: TextStyle(color: Colors.white, fontSize: 14.sp, fontFamily: 'korean') ),
-                      ],
-                    ),
-                  ),
-                  // 하임 : 주간 > 전체로 변경
-                  SizedBox(width: 30.w,),
-                  Text("${user_data['reward']}원",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
-                ],
-              ),
-            ), //주간랭킹
+            HomePageUserInfoBar(leftContent: "나의 리워드", rightContent: "${user_data['reward']} 원"),
+            SizedBox(height: 10.h,),
+            HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "="} 등"),
 
             Container(
               child: Column(

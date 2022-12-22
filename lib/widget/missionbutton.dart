@@ -28,47 +28,59 @@ class MissionButton extends StatelessWidget {
           MaterialPageRoute(builder: (_) => onTap),
         );
       },
-      child:Container(
-        width: 170.w,
-        height: 100.h,
-        decoration: BoxDecoration(
-          color: Colors.white60,
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage('assets/image/$image.png') ,
-            fit: BoxFit.cover
+      child:Stack(
+      alignment: Alignment.bottomLeft,
+      children: [
+        Container(
+          width: 170.w,
+          height: 100.h,
+          decoration: BoxDecoration(
+            color: Colors.white60,
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+                image: AssetImage('assets/image/thumbnail/$image') ,
+                fit: BoxFit.cover
+            ),
           ),
+
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
 
+        Opacity(
+          opacity: 0.25,
+          child: Container(
+            width: 170.w,
+            height: 100.h,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
 
-            Padding(
-              padding: EdgeInsets.only(left:15.w, top: 52.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,style: TextStyle(color: Colors.white,fontSize: 14.sp, fontFamily: 'korean') ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Text(f.format(totalUser),style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean') ),
-                        Text("명 참여중",style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean') ),
-
-                      ],
-                    ),
-                  ),
-
-                ],
-              ),
             ),
 
+          ),
 
-
-          ],
         ),
-      ),
+
+        Padding(
+          padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+              Container(
+                child: Row(
+                  children: [
+                    Text(f.format(totalUser),style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                    Text("명 참여중",style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+
+      ],
+    ),
     );
   }
 }

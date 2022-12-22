@@ -5,6 +5,8 @@ import 'dart:ui';
 import 'package:daycus/backend/Api.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/core/app_text.dart';
+import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
@@ -36,6 +38,9 @@ File? image;
 String? imageReNamed;
 
 class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
+
+  double _textSpacing = 10.w;
+
 
   todayMissionCertify(int do_i) async {
 
@@ -174,6 +179,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   }
 
+  int doneCnt = 0;
+
   @override
   Widget build(BuildContext context) {
 
@@ -185,7 +192,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     String title = widget.mission_data['title'];
     String duration = '${widget.mission_data['start_date']} ~ ${widget.mission_data['end_date']}';
     int totaluser = int.parse(widget.mission_data['total_user']);
-    int certifiuser = int.parse(widget.mission_data['certifi_user']);
+    // int certifiuser = int.parse(widget.mission_data['certifi_user']);
 
     // 크기 안맞아서 변경
     // height 35.h > 35.w, sp 15.sp > 12.w
@@ -195,6 +202,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
     double _betweenWidth = 9.w;
     int _oneWeek = 7;
+
+    int toCertify = int.parse(widget.mission_data['frequency']) * int.parse(widget.mission_data['term']);
+
 
     int i = widget.mission_index;
     int do_i = all_missions[i]['now_user_do'];
@@ -220,7 +230,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
           children: [
 
             Container(
-              padding: EdgeInsets.fromLTRB(30.w, 40.h, 30.w, 0),
+              padding: EdgeInsets.fromLTRB(30.w, 15.h, 30.w, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -230,24 +240,52 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                     children: [
                       Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
-                      SizedBox(
-                        height: 30.h,
-                        width: 100.w,
-                        child:TextButton(
-                            onPressed: (){},
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                            child: Text('미션 상세 페이지',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
+                      Column(
+                        verticalDirection: VerticalDirection.up,
+                        children: [
+                          TextButton(
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (_)=>
+                                    SpecificMissionPage(
+                                        topimage: widget.mission_data['thumbnail'] ?? 'topimage1.png',
+                                        progress: widget.mission_data['start_date']==null
+                                            ? (widget.mission_data['next_start_date']==null
+                                            ? "donebutton" : "comeonbutton") : "ingbutton",
+                                        title: widget.mission_data['title'],
+                                        duration: widget.mission_data['start_date']==null
+                                            ? (widget.mission_data['next_start_date']==null
+                                            ? comingSoonString : '${widget.mission_data['next_start_date']} ~ ${widget.mission_data['next_end_date']}') : '${widget.mission_data['start_date']} ~ ${widget.mission_data['end_date']}',
+
+                                        totaluser: int.parse(widget.mission_data['total_user']),
+                                        certifi_user: int.parse(widget.mission_data['certifi_user']),
+                                        downimage: 'downimage1',
+                                        content: widget.mission_data['content'],
+                                        rules: widget.mission_data['rules'],
+                                        mission_id: widget.mission_data['id'],
+                                        buttonTitle : false,
+                                    )));
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                              ),
+                              //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
+                              child: Text('미션 상세 페이지 >',style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,) ) ),
+
+                          SizedBox(height: 7.sp,),
+                        ],
                       ),
+
+
 
                     ],
                   ),
 
-                  SizedBox(height: 15.h,),
+                  //SizedBox(height: 15.h,),
 
 
                   Container(
                     width: 500.w,
-                    height: 60.h,
+                    height: 83.h,
                     padding: EdgeInsets.fromLTRB(12.w, 10.h, 0,0),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -256,17 +294,24 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("• 인증 횟수 : 1주일에 4번",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-                        SizedBox(height: 4.h,),
+                        Text("• 인증 빈도  :  ${widget.mission_data['term']}주 동안 1주일에 ${widget.mission_data['frequency']}번",
+                            style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                        
+                        SizedBox(height: 3.h,),
+                    
+                        Text("• 총    횟수   :  ${toCertify}회",
+                            style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
 
-                        Text("• 인증 방법 : 물이 담긴 컵 사진 전체가 나와야 함",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                        SizedBox(height: 3.h,),
+
+                        Text("• 인증 방법  :  물이 담긴 컵 사진 전체가 나와야 함",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
 
                       ],
                     ),
                   ),
 
 
-                  SizedBox(height: 15.h,),
+                  SizedBox(height: 25.h,),
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
                   SizedBox(height: 5.h,),
                   Text(duration,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
@@ -328,6 +373,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                   itemBuilder: (_,__) {
                                                     index_j += 1;
                                                     int date = (index_i*7)+(index_j+1);
+
+                                                    if (widget.do_mission_data['d${date}']!=null){
+                                                      doneCnt += 1 ;
+                                                    }
                                                     return Row(
                                                       children: [
                                                         SizedBox(
@@ -561,42 +610,50 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   Text("나의 미션 리포트",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   SizedBox(height: 7.h,),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("인증해야할 전체 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                      Text("8회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                    ],
-                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: _textSpacing),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("나의 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                            Text("${doneCnt}/${toCertify}회",
+                                style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          ],
+                        ),
 
-                  SizedBox(height: 5.h,),
+                        // SizedBox(height: 5.h,),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("지금까지 성공한 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                      Text("3회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                    ],
-                  ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text("지금까지 성공한 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                        //     Text("${doneCnt}회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        //   ],
+                        // ),
 
-                  SizedBox(height: 5.h,),
+                        // SizedBox(height: 5.h,),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("앞으로 해야할 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                      Text("5회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                    ],
-                  ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text("앞으로 해야할 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                        //     Text("5회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        //   ],
+                        // ),
 
-                  SizedBox(height: 5.h,),
+                        SizedBox(height: 5.h,),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("미션 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                      Text("+ 0원",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                    ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("미션 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                            Text("+ ${widget.do_mission_data['get_reward']}원",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
 
 
@@ -607,22 +664,29 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   Text("전체 결과",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   SizedBox(height: 7.h,),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("참여 인원",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                      Text("${f.format(totaluser)} 명",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                    ],
-                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: _textSpacing),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("참여 인원",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                            Text("${f.format(totaluser)} 명",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          ],
+                        ),
 
-                  SizedBox(height: 5.h,),
+                        SizedBox(height: 5.h,),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("인증 횟수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                      Text("${f.format(certifiuser)} 회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                    ],
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text("인증 횟수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                        //     Text("${f.format(certifiuser)} 회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        //   ],
+                        // ),
+                      ],
+                    ),
                   ),
 
 

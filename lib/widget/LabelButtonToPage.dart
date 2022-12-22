@@ -16,7 +16,7 @@ class LabelButtonToPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // 이거 total User에서 total image로 바뀌어야할듯?
     return LabelButton(
-        image: data[i]['image'] ?? 'mission1',
+        image: data[i]['thumbnail'] ?? 'mission1.png',
         title: data[i]['title'],
         // 하임 : duration 날짜 없을 경우 : ~주동안 > 진행예정으로 변경.
         duration: data[i]['start_date']==null ?

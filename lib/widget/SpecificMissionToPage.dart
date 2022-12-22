@@ -41,7 +41,9 @@ class SpecificMissionToPage extends StatelessWidget {
                      ? (all_missions[i]['next_start_date']==null
                      ? comingSoonString : '${all_missions[i]['next_start_date']} ~ ${all_missions[i]['next_end_date']}') : '${all_missions[i]['start_date']} ~ ${all_missions[i]['end_date']}',
 
-                 totaluser: int.parse(all_missions[i]['total_user']), certifi_user: int.parse(all_missions[i]['certifi_user']), downimage: 'downimage1',
+                 totaluser: int.parse(all_missions[i]['total_user']),
+                 certifi_user: int.parse(all_missions[i]['certifi_user']),
+                 downimage: 'downimage1',
                  content: all_missions[i]['content'],
                  rules: all_missions[i]['rules'],
              ),

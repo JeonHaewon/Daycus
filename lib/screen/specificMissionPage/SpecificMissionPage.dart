@@ -28,6 +28,7 @@ class SpecificMissionPage extends StatefulWidget {
     required this.rules,
     required this.mission_id,
     this.onTap,
+    this.buttonTitle : true,
 
   }) : super(key: key);
 
@@ -41,6 +42,7 @@ class SpecificMissionPage extends StatefulWidget {
   final String downimage;
   final String content;
   final String rules;
+  final bool buttonTitle;
   final onTap;
 
   @override
@@ -71,9 +73,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white,
-        actions: [
-          IconButton(icon: Icon(Icons.share), onPressed: null),
-        ],
+        //actions: [IconButton(icon: Icon(Icons.share), onPressed: null),],
       ),
 
       body: SingleChildScrollView(
@@ -394,14 +394,14 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
         ),
       ),
 
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: widget.buttonTitle==true ? BottomAppBar(
         color: AppColor.happyblue,
         child: Row(
           children: [
             SizedBox(
               height: 70.h,
               width: 412.w,
-              child:TextButton(onPressed: (){
+              child: TextButton(onPressed: widget.onTap ?? (){
                 if (widget.progress == "donebutton"){
                   Fluttertoast.showToast(msg: "미션 모집기간이 아닙니다.");
                 }
@@ -415,11 +415,12 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                         title: widget.title, duration: widget.duration, totaluser: widget.totaluser, avgreward: 3000)),
                   );
                 }
-              }, child: Text('미션 참여하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
+              }, child: Text("미션 참여하기",
+                style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
         ),
-      ),
+      ) : null,
     );
   }
 }
