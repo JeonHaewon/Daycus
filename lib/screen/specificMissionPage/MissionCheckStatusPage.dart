@@ -225,8 +225,48 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  SizedBox(height: 25.h,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                      SizedBox(
+                        height: 30.h,
+                        width: 100.w,
+                        child:TextButton(
+                            onPressed: (){},
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
+                            child: Text('미션 상세 페이지',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
+                      ),
+
+                    ],
+                  ),
+
+                  SizedBox(height: 15.h,),
+
+
+                  Container(
+                    width: 500.w,
+                    height: 60.h,
+                    padding: EdgeInsets.fromLTRB(12.w, 10.h, 0,0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("• 인증 횟수 : 1주일에 4번",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                        SizedBox(height: 4.h,),
+
+                        Text("• 인증 방법 : 물이 담긴 컵 사진 전체가 나와야 함",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+
+                      ],
+                    ),
+                  ),
+
+
+                  SizedBox(height: 15.h,),
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
                   SizedBox(height: 5.h,),
                   Text(duration,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
@@ -516,20 +556,16 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
 
 
+                  SizedBox(height: 30.h,),
 
-
-
-                  SizedBox(height: 40.h,),
-
-
-                  Text("전체 결과",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  SizedBox(height: 8.h,),
+                  Text("나의 미션 리포트",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  SizedBox(height: 7.h,),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("참여인원",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
-                      Text("${f.format(totaluser)} 명",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      Text("인증해야할 전체 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                      Text("8회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                     ],
                   ),
 
@@ -538,8 +574,54 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("인증 횟수",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
-                      Text("${f.format(certifiuser)} 회",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      Text("지금까지 성공한 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                      Text("3회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    ],
+                  ),
+
+                  SizedBox(height: 5.h,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("앞으로 해야할 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                      Text("5회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    ],
+                  ),
+
+                  SizedBox(height: 5.h,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("미션 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                      Text("+ 0원",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    ],
+                  ),
+
+
+
+
+                  SizedBox(height: 25.h,),
+
+                  Text("전체 결과",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  SizedBox(height: 7.h,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("참여 인원",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                      Text("${f.format(totaluser)} 명",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    ],
+                  ),
+
+                  SizedBox(height: 5.h,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("인증 횟수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                      Text("${f.format(certifiuser)} 회",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                     ],
                   ),
 
