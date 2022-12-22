@@ -13,6 +13,7 @@ import '../../../backend/Api.dart';
 
 var current_date_var = null;
 
+
 class AccountSetting extends StatefulWidget {
   AccountSetting({Key? key}) : super(key: key);
 
@@ -100,6 +101,11 @@ class _AccountSettingState extends State<AccountSetting> {
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController birthCtrl = TextEditingController();
 
+  List<bool> _selections = List.generate(3, (_) => false);
+  final List<bool> _selected = <bool>[true, false, false];
+  bool vertical = false;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,7 +192,7 @@ class _AccountSettingState extends State<AccountSetting> {
                               });
                             },
                             style: TextButton.styleFrom(
-                              padding: EdgeInsets.fromLTRB(0, 8.h, 0, 8.h),
+                              padding: EdgeInsets.fromLTRB(0, 8.h, 0, 0),
                             ),
                             child: Container(
                               width: 355.w,
@@ -222,6 +228,47 @@ class _AccountSettingState extends State<AccountSetting> {
 
                     ],
                   ),
+
+
+                  SizedBox(height: 20.h,),
+
+                  Container(
+                    width: 325.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("성별",style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontWeight: FontWeight.w400),  ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 5.h,),
+
+                  Container(
+                    child: ToggleButtons(
+                      direction: vertical ? Axis.vertical : Axis.horizontal,
+                      onPressed: (int index) {
+                        setState(() {
+                          // The button that is tapped is set to true, and the others to false.
+                          for (int i = 0; i < _selected.length; i++) {
+                            _selected[i] = i == index;
+                          }
+                        });
+                      },
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      selectedBorderColor: Colors.black54,
+                      selectedColor: Colors.white,
+                      fillColor: AppColor.happyblue,
+                      color: Colors.grey,
+                      constraints: BoxConstraints(
+                        minHeight: 60.h,
+                        minWidth: 115.w,
+                      ),
+                      isSelected: _selected,
+                      children: options,
+                    ),
+                  ),
+
 
                 ],
               )
@@ -325,9 +372,9 @@ _pickDateDialog(BuildContext context) async {
     return current_date_var;
   }
 
-
-
-
-
-
+List<Widget> options = <Widget>[
+  Text('미선택',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean',fontWeight: FontWeight.bold )),
+  Text('남성',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
+  Text('여성',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold))
+];
 
