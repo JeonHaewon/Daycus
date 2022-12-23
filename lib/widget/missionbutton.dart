@@ -53,11 +53,8 @@ class MissionButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(10),
-
             ),
-
           ),
-
         ),
 
         Padding(
@@ -77,7 +74,6 @@ class MissionButton extends StatelessWidget {
             ],
           ),
         ),
-
 
       ],
     ),

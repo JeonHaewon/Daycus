@@ -28,16 +28,18 @@ class HomePageUserInfoBar extends StatelessWidget {
 
           // 나의 리워드
           Container(
-            width: 85.w,
-            height: 32.h,
+            width: 80.w,
+            height: 30.h,
             decoration: BoxDecoration(
               color: Colors.blueGrey,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 7.h,),
-                Text(leftContent,style: TextStyle(color: Colors.white, fontSize: 14.sp, fontFamily: 'korean') ),
+
+                Text(leftContent,style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: 'korean') ),
               ],
             ),
           ),
@@ -46,7 +48,7 @@ class HomePageUserInfoBar extends StatelessWidget {
           // 하임 : 주간 > 전체로 변경
           SizedBox(width: 30.w,),
           Text(rightContent,
-            style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
+            style: TextStyle(color: AppColor.happyblue, fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
         ],
       ),
     );

@@ -8,7 +8,6 @@ import 'package:daycus/screen/specificMissionPage/MissionParticipatePage.dart';
 import 'package:daycus/core/app_text.dart';
 
 
-
 TextStyle _hintStyleGray = TextStyle(color: Colors.grey, fontSize: 17);
 TextStyle _hintStyleBlack = TextStyle(color: Colors.black, fontSize: 17);
 

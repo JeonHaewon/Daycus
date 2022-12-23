@@ -4,6 +4,7 @@ import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/myPage/privatesettings/AccountSetting.dart';
 import 'package:daycus/screen/myPage/privatesettings/PasswordSetting.dart';
+import 'package:daycus/screen/myPage/privatesettings/Withdrawal.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -192,7 +193,10 @@ class PrivateSettings extends StatelessWidget {
                     ),
 
                     onPressed: () {
-                      remove_user();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => Withdrawal()),
+                      );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

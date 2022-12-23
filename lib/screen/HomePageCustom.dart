@@ -10,7 +10,6 @@ import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/nowingmission.dart';
 import 'package:daycus/screen/NoticePage.dart';
 
-
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -72,11 +71,11 @@ class HomePage extends StatelessWidget {
                               //Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
                               SizedBox(height: 60.h,),
                               Text("현재 등급",style: TextStyle(color: Colors. grey, fontSize: 20.sp, fontFamily: 'korean') ),
-                              SizedBox(height: 10.h,),
+                              SizedBox(height: 5.h,),
                               Container(
                                 child: Row(
                                   children: [
-                                    Image.asset('assets/image/Medal.png' , fit: BoxFit.fill),
+                                    Image.asset('assets/image/Medal.png' , fit: BoxFit.fill, ),
                                     Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean') ),
                                   ],
                                 ),
