@@ -156,17 +156,10 @@ class HomePage extends StatelessWidget {
                         );
                       },
                     ),
-                  )
-
-
-
+                  ),
                 ],
               ),
-
             ), //진행중인 미션
-
-
-
 
             Container(
               child: Column(

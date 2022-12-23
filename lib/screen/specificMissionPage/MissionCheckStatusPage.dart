@@ -275,36 +275,33 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                         ],
                       ),
 
-
-
                     ],
                   ),
-
                   //SizedBox(height: 15.h,),
-
 
                   Container(
                     width: 500.w,
-                    height: 83.h,
-                    padding: EdgeInsets.fromLTRB(12.w, 10.h, 0,0),
+                    height: 85.h,
+                    padding: EdgeInsets.fromLTRB(14.w, 0, 0,0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("• 인증 빈도  :  ${widget.mission_data['term']}주 동안 1주일에 ${widget.mission_data['frequency']}번",
-                            style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
                         
-                        SizedBox(height: 3.h,),
+                        SizedBox(height: 2.h,),
                     
                         Text("• 총    횟수   :  ${toCertify}회",
-                            style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
 
-                        SizedBox(height: 3.h,),
+                        SizedBox(height: 2.h,),
 
-                        Text("• 인증 방법  :  물이 담긴 컵 사진 전체가 나와야 함",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                        Text("• 인증 방법  :  물이 담긴 컵 사진 전체가 나와야 함",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
 
                       ],
                     ),
