@@ -270,9 +270,12 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
 
                 Icon(Icons.arrow_forward_sharp, color: Colors.black,),
 
-                Row(
+
+                Column(
+
                   children: [
                     Container(
+                      alignment: Alignment.center,
                       width: 150.w, height: 30.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
@@ -280,9 +283,11 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                       ),
                       child: Text(_rewardCalculResert, style: TextStyle(color: Colors.black,fontSize: 17.sp,), textAlign: TextAlign.center,),
                     ),
-                    SizedBox(width: 25.w,),
                   ],
-                )
+                ),
+
+                SizedBox(width: 25.w,),
+
 
 
               ],
