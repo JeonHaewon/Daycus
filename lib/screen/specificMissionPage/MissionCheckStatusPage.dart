@@ -322,6 +322,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                         rules: widget.mission_data['rules'],
                                         mission_id: widget.mission_data['id'],
                                         buttonTitle : false,
+                                      rewardPercent: widget.mission_data['reward_percent'],
                                     )));
                               },
                               style: TextButton.styleFrom(

@@ -1,4 +1,5 @@
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/core/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +29,7 @@ class SpecificMissionPage extends StatefulWidget {
     required this.content,
     required this.rules,
     required this.mission_id,
+    required this.rewardPercent,
     this.onTap,
     this.buttonTitle : true,
 
@@ -44,28 +46,50 @@ class SpecificMissionPage extends StatefulWidget {
   final String content;
   final String rules;
   final bool buttonTitle;
+  final String rewardPercent;
   final onTap;
+
 
   @override
   State<SpecificMissionPage> createState() => _SpecificMissionPageState();
 }
 
+double _basicMoney = init_reward;
+String _basicText = "";
+double rewardPercent = 100;
+String _rewardCalculResert = _basicText;
+
 class _SpecificMissionPageState extends State<SpecificMissionPage> {
   var f = NumberFormat('###,###,###,###');
 
+
+
   @override
-  dispose() async {
-    super.dispose();
-    _basicMoney = 10000;
-    _basicText = "${_basicMoney*(_rewardPercent+100)/100} 원";
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    rewardPercent = double.parse(widget.rewardPercent);
+    _basicText = "${init_reward*(rewardPercent)/100} ${rewardName}";
     _rewardCalculResert = _basicText;
+
   }
 
   @override
   Widget build(BuildContext context) {
 
+    double rewardPercent = double.parse(widget.rewardPercent);
+
     List rules_list = widget.rules.split("\\n");
     int rules_list_cnt = rules_list.length;
+
+
+    @override
+    dispose() async {
+      super.dispose();
+      _basicMoney = init_reward;
+      _basicText = "${_basicMoney*(rewardPercent+100)/100} ${rewardName}";
+      _rewardCalculResert = _basicText;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -243,7 +267,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                         keyboardType: TextInputType.number,
                         onChanged: (text){
                           setState(() {
-                            _rewardCalculResert = _rewardCalcul(text, _rewardPercent);
+                            _rewardCalculResert = _rewardCalcul(text, rewardPercent, _basicText);
                             if (_rewardCalculResert != _basicText){
                               _hintStyle = _hintStyleBlack;}
                             else { _hintStyle = _hintStyleGray;}
@@ -262,7 +286,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                             borderSide: BorderSide(color: Colors.grey),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          hintText: "$_basicMoney 원", hintStyle: _hintStyle,
+                          hintText: "$_basicMoney ${rewardName}", hintStyle: _hintStyle,
                         ),
                       ),
                     ),
@@ -437,22 +461,23 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
 
 
 // 리워드 계산기에 대한 변수 및 함수
-double _rewardPercent = 10;
-double _basicMoney = 10000;
-String _basicText = "${_basicMoney*(_rewardPercent+100)/100} 원";
-String _rewardCalculResert = _basicText;
 
-_rewardCalcul(String? money, double percent){
+
+
+_rewardCalcul(String? money, double percent, String basicText){
   if (money==null){
-    return _basicText;}
+    return basicText;}
   else{
     try{
       double money_int = double.parse(money);
+      if (money_int > limit_bet_reward){
+        return "최대입니다";
+      }
       // 소숫점 몇쨋자리 이런 기준이 필요함.
-      return "${money_int*(percent+100)/100}원";
+      return "${money_int*(percent)/100} ${rewardName}";
     }catch(e){
       print(e);
-      return _basicText;
+      return basicText;
     }
   }
 }

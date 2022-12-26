@@ -43,6 +43,7 @@ class BigMissionButtonToPage extends StatelessWidget {
         totaluser: int.parse(data[i]['total_user']), certifi_user: int.parse(data[i]['certifi_user']), downimage: 'downimage1',
         content: data[i]['content'],
         rules: data[i]['rules'],
+        rewardPercent: data[i]['reward_percent'],
       ),
 
     );

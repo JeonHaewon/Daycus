@@ -46,6 +46,7 @@ class SpecificMissionToPage extends StatelessWidget {
                  downimage: 'downimage1',
                  content: all_missions[i]['content'],
                  rules: all_missions[i]['rules'],
+                 rewardPercent: all_missions[i]['reward_percent'],
              ),
     );
 
