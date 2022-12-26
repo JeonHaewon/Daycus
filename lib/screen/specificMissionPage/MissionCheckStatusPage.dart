@@ -42,17 +42,36 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   double _textSpacing = 10.w;
 
 
-  todayMissionCertify(int do_i) async {
+  todayMissionCertify(int do_i, String source) async {
+
 
     String todayString = await NowTime('yyyyMMddHHmmss');
     String imageName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
 
-    await getImage(imageName, ImageSource.camera);
+    if (source=='gallery'){
+      await getImage(imageName, ImageSource.gallery);
+    }
+    else if (source == 'camera'){
+      await getImage(imageName, ImageSource.camera);
+    }
+
+
+    // 갤러리로 찍을 경우 다시 보여준다
+    // if (source==ImageSource.gallery){
+    //   Navigator.push(context, MaterialPageRoute(builder: (_) => Scaffold(
+    //     body: Column(
+    //       children: [
+    //         Image.file(File(image!.path)),
+    //       ],
+    //     ),
+    //   )));
+    // }
 
     print("${widget.mission_data['image_locate']}");
     await uploadImage(
           imageName,
         "${widget.mission_data['image_locate']}",
+        source,
     );
 
     setState(() {
@@ -77,13 +96,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   _asyncMethod() async {
     print("init");
     // 하임 1220 : now_time = yy/MM/dd 형태
-    DateTime now_time = await NowTime(null);
+    String now_time = await NowTime("yyyyMMdd");
     print(now_time);
     //print("mission_data : ${widget.mission_data}");
     print("20"+widget.mission_data['start_date'].substring(2,10));
 
       setState(() {
-        todayBlockCnt = now_time
+        todayBlockCnt = DateTime.parse(now_time)
             .difference((DateTime.parse("20"+widget.mission_data['start_date'].substring(2,10)))).inDays + 1;
         //print("time_diff : $time_diff");
 
@@ -132,7 +151,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   }
 
   // 사진 업로드
-  Future uploadImage(String pictureName, String folderName) async {
+  Future uploadImage(String pictureName, String folderName, String source) async {
     //var uri = Uri.parse("http://10.8.1.148/api_members/mission/upload.php");
 
     String do_id = widget.do_mission_data['do_id'];
@@ -142,6 +161,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     var uri = Uri.parse(API.imageUpload);
     var request = http.MultipartRequest('POST', uri);
     request.fields['image_folder'] = folderName;
+    request.fields['source'] = source;
     var pic = await http.MultipartFile.fromPath("image", image!.path);
     request.files.add(pic);
     var response = await request.send();
@@ -153,6 +173,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       success = true;
       print("이미지가 업로드 되었습니다.");
     } else {
+      print(result);
       print("image not upload");
     }
 
@@ -172,6 +193,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
       } else {
         print("이미지 정보가 데이터 베이스 저장에 실패했습니다.");
+        print("message : ${res_update['success']}");
         return false;
         // 이름을 바꿀 수 없는 상황?
       }
@@ -183,6 +205,43 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // 카메라 아이콘 클릭시 띄울 모달 팝업
+    Widget bottomSheet(int do_i) {
+      return Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 20
+          ),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  TextButton.icon(
+                    icon: Icon(Icons.camera_alt, size: 30.sp, color: Colors.black,),
+                    onPressed: () async {
+                      await todayMissionCertify(do_i, "camera");
+                      Navigator.pop(context);
+                    },
+                    label: Text('카메라', style: TextStyle(fontSize: 17.sp, color: Colors.black),),
+                  ),
+                  TextButton.icon(
+                    icon: Icon(Icons.photo_library, size: 30.sp, color: Colors.black,),
+                    onPressed: () async {
+                      await todayMissionCertify(do_i, "gallery");
+                      Navigator.pop(context);
+                    },
+                    label: Text('갤러리', style: TextStyle(fontSize: 17.sp, color: Colors.black),),
+                  )
+                ],
+              )
+            ],
+          )
+      );
+    }
 
     print("build :: ");
 
@@ -208,47 +267,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
     int i = widget.mission_index;
     int do_i = all_missions[i]['now_user_do'];
-
-    Widget bottomSheet() {
-      return Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 20
-          ),
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Choose Profile photo',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(height: 20,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  TextButton.icon(
-                    icon: Icon(Icons.camera, size: 50,),
-                    onPressed: () {
-                      //takePhoto(ImageSource.camera);
-                    },
-                    label: Text('Camera', style: TextStyle(fontSize: 20),),
-                  ),
-                  TextButton.icon(
-                    icon: Icon(Icons.photo_library, size: 50,),
-                    onPressed: () {
-                      //takePhoto(ImageSource.gallery);
-                    },
-                    label: Text('Gallery', style: TextStyle(fontSize: 20),),
-                  )
-                ],
-              )
-            ],
-          )
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -428,7 +446,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                                   YetMissionBlock(i: index_i, j: index_j, sp: _sp,
                                                                   onPressed: () async {
                                                                     if (date == todayBlockCnt){
-                                                                      await todayMissionCertify(do_i);
+                                                                      if (widget.mission_data['certify_tool'] == 'gallery'){
+                                                                        showModalBottomSheet(context: context, builder: ((builder) => bottomSheet(do_i)));
+                                                                      } else {
+                                                                        todayMissionCertify(do_i, "camera");
+                                                                      }
                                                                     } else {
                                                                       Fluttertoast.showToast(msg: "해당 날짜에 인증할 수 있습니다");
                                                                     }
@@ -463,175 +485,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
                               ),
 
-
-                              /*
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-
-                                  // build list, row로 구현 !
-                                  // null일 경우 회식, 사진이 있을 경우 파란색.
-
-
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){showAlertDialog(context);},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('1',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('2',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('3',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('4',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('5',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('6',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.pink[50])),
-                                        child: Text('X',style: TextStyle(color: Colors.red, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.pink[50])),
-                                        child: Text('X',style: TextStyle(color: Colors.red, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                ],
-                              ),
-
-
-
-                              SizedBox(height: 6.h,),
-
-
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('7',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('8',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('9',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('10',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                                        child: Text('11',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-                                        child: Text('12',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: (){},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-                                        child: Text('13',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                  SizedBox(
-                                    height: _height,
-                                    width: _width,
-                                    child:TextButton(
-                                        onPressed: () {},
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-                                        child: Text('14',style: TextStyle(color: Colors.white, fontSize: _sp, fontFamily: 'korean', ) ) ),
-                                  ),
-
-                                ],
-                              ),*/
 
                             ],
                           ),
@@ -773,7 +626,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: () async {
-                await todayMissionCertify(do_i);
+                if (widget.mission_data['certify_tool'] == 'gallery'){
+                  showModalBottomSheet(context: context, builder: ((builder) => bottomSheet(do_i)));
+                } else {
+                  todayMissionCertify(do_i, "camera");
+                }
               }, child: Text('오늘 미션 인증하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
