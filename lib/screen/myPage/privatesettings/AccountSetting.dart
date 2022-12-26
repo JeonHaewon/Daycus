@@ -12,6 +12,8 @@ import 'package:intl/intl.dart';
 import '../../../backend/Api.dart';
 
 var current_date_var = null;
+var chosen_gender;
+
 
 
 class AccountSetting extends StatefulWidget {
@@ -82,6 +84,31 @@ class _AccountSettingState extends State<AccountSetting> {
       return false;
     }
   }
+  update_information_gender() async {
+    try{
+      var update_res = await http.post(Uri.parse(API.update), body: {
+        'update_sql': "UPDATE DayCus.user_table SET user_gender = '${chosen_gender}' WHERE (user_email = '${user_data['user_email']}')",
+      });
+
+      if (update_res.statusCode == 200) {
+        print("출력 : ${update_res.body}");
+        var resLogin = jsonDecode(update_res.body);
+        if (resLogin['success'] == true) {
+          user_data['user_gender'] = chosen_gender;
+          print("성별 수정이 성공적으로 반영되었습니다");
+          //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+          return true;
+        } else {
+          //Fluttertoast.showToast(msg: "다시 시도해주세요");
+          // 생년월일을 바꿀 수 없는 상황?
+          return false;
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
 
   void success_upload(){
     Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
@@ -101,8 +128,12 @@ class _AccountSettingState extends State<AccountSetting> {
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController birthCtrl = TextEditingController();
 
+
   List<bool> _selections = List.generate(3, (_) => false);
-  final List<bool> _selected = <bool>[true, false, false];
+  final List<bool> _selected = user_data['user_gender']==null ? [true,false,false] : [
+    for (int i = 0; i<3; i++)
+      user_data['user_gender'] == i.toString()
+    ];
   bool vertical = false;
 
 
@@ -253,6 +284,7 @@ class _AccountSettingState extends State<AccountSetting> {
                           for (int i = 0; i < _selected.length; i++) {
                             _selected[i] = i == index;
                           }
+                          chosen_gender = index.toString();
                         });
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -290,6 +322,7 @@ class _AccountSettingState extends State<AccountSetting> {
                   onPressed: () async {
                     bool is_change_birth = (user_data['user_birth'] != selected_date);
                     bool is_change_name = (nameCtrl.text.trim().length > 0);
+                    bool is_change_gender = user_data['user_gender'] != chosen_gender;
 
                     bool sucess = false;
                     String? msg = null;
@@ -297,7 +330,7 @@ class _AccountSettingState extends State<AccountSetting> {
                     print("state : $is_change_name, $is_change_birth");
 
                     // 변경사항이 없을 때
-                    if (is_change_name==false && is_change_birth==false){
+                    if (is_change_name==false && is_change_birth==false && is_change_gender==false){
                       msg = "변경사항이 없습니다.";
                     }
                     // 변경 사항이 있는 경우
@@ -318,6 +351,9 @@ class _AccountSettingState extends State<AccountSetting> {
                         else {
                           msg = "할 수 없는 닉네임입니다.";
                         }
+                      }
+                      if (is_change_gender){
+                        sucess = await update_information_gender();
                       }
 
                       // true로 살아남으면 성공했다는 메세지가 뜸.

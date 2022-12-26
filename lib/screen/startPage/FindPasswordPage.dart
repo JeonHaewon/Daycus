@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:http/http.dart' as http;
+import 'package:daycus/backend/Api.dart';
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
+final TextEditingController emailCtrl = TextEditingController();
 
 class FindPasswordPage extends StatelessWidget {
   const FindPasswordPage({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+
+
+    void is_enrolled(texting) async {
+      try {
+        var select_res = await http.post(Uri.parse(API.update), body: {
+          'select_sql': "SELECT * FROM user_table WHERE user_email = '${texting}'",
+        });
+
+        if (select_res.statusCode == 200 ) {
+          var resMission = jsonDecode(select_res.body);
+          // print(resMission);
+          if (resMission['success'] == true) {
+            Fluttertoast.showToast(msg: "이메일을 확인해주세요 !");
+          } else {
+            Fluttertoast.showToast(msg: "존재하지 않는 이메일입니다.");
+          }
+
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -31,6 +63,7 @@ class FindPasswordPage extends StatelessWidget {
                   SizedBox(height: 15.h,),
 
                   TextField(
+                    controller: emailCtrl,
                     decoration: InputDecoration(
                       filled: true,
                       labelText: '이메일 주소',
@@ -51,7 +84,9 @@ class FindPasswordPage extends StatelessWidget {
             SizedBox(
               height: 70.h,
               width: 412.w,
-              child:TextButton(onPressed: (){}, child: Text('비밀번호 찾기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
+              child:TextButton(onPressed: (){
+                is_enrolled(emailCtrl.text.trim());
+              }, child: Text('비밀번호 찾기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
         ),

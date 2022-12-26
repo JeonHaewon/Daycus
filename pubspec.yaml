@@ -52,6 +52,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
   crypto:
+  flutter_email_sender:
 
 
 dev_dependencies:
