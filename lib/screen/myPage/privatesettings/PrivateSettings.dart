@@ -15,6 +15,7 @@ import '../../../backend/NowTime.dart';
 import 'dart:convert';
 
 
+
 class PrivateSettings extends StatelessWidget {
   PrivateSettings({Key? key}) : super(key: key);
 
@@ -32,6 +33,7 @@ class PrivateSettings extends StatelessWidget {
 
       await storage.delete(key: 'login');
     }
+
     checkUserState() async {
       userInfo = await storage.read(key: 'login');
       if (userInfo == null) {
@@ -44,30 +46,6 @@ class PrivateSettings extends StatelessWidget {
         print('로그인 중');
       }
     }
-
-    remove_user() async {
-      try{
-        String cur = await NowTime('yyyy-MM-dd - HH:mm:ss');
-        var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "UPDATE DayCus.user_table SET user_state = 'withdrawing', state_changed_time = '${cur}' WHERE (user_email = '${user_data['user_email']}')",
-        });
-
-        if (update_res.statusCode == 200) {
-          print("출력 : ${update_res.body}");
-          var resLogin = jsonDecode(update_res.body);
-          if (resLogin['success'] == true) {
-            logout();
-            checkUserState();
-          } else {
-            // 이름을 바꿀 수 없는 상황?
-          }
-        }
-      } catch (e) {
-        print(e.toString());
-        Fluttertoast.showToast(msg: e.toString());
-      }
-    }
-
 
 
     return Scaffold(

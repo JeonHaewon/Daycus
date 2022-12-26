@@ -47,7 +47,6 @@ class _AccountSettingState extends State<AccountSetting> {
 
         return true;
 
-
       } else {
         return false;
       // 이름을 바꿀 수 없는 상황?
