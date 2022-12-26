@@ -1,4 +1,5 @@
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/core/app_text.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
@@ -98,7 +99,7 @@ class HomePage extends StatelessWidget {
               ),
             ),//위쪽 제일 큰 박스
 
-            HomePageUserInfoBar(leftContent: "나의 리워드", rightContent: "${user_data['reward']} 원"),
+            HomePageUserInfoBar(leftContent: "나의 리워드", rightContent: "${user_data['reward']} ${rewardName}"),
             SizedBox(height: 10.h,),
             HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "="} 등"),
 

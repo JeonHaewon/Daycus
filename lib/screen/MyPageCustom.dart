@@ -1,4 +1,5 @@
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/core/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,132 +64,110 @@ class MyPage extends StatelessWidget {
                   SizedBox(height: 15.h,),
 
 
-                  Container(
-                    width: 365.w,
-                    height: 55.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    margin: EdgeInsets.symmetric(horizontal: 2.w),
-                    child: Row(
-                      children: [
-
-                        SizedBox(width: 20.w,),
-
-                        Container(
-                          width: 90.w,
-                          height: 30.h,
-                          decoration: BoxDecoration(
-                            color: AppColor.grey1,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("나의 리워드",style: TextStyle(color: Colors.blue, fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(width: 30.w,),
-                        // 가운데 정렬?
-                        Text("${user_data['reward']}원",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
-                      ],
-                    ),
-                  ), //주간랭킹
+                   //주간랭킹
 
                   SizedBox(height: 15.h,),
 
-                  Container(
-                    width: 365.w,
-                    height:280.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    margin: EdgeInsets.symmetric(horizontal: 2.w),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 20.h,),
+                  // 미션 달성률 - 다음에 만나요 ^^
+                  // Container(
+                  //   width: 365.w,
+                  //   height:280.h,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(15),
+                  //   ),
+                  //   margin: EdgeInsets.symmetric(horizontal: 2.w),
+                  //   child: Column(
+                  //     children: [
+                  //       SizedBox(height: 20.h,),
+                  //
+                  //       Container(
+                  //         child: Row(
+                  //           children: [
+                  //             SizedBox(width: 20.w,),
+                  //             Text("미션 달성률",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //
+                  //       SizedBox(height: 10.h,),
+                  //       Image.asset('assets/image/graph.png' , height: 200.h)
+                  //
+                  //     ],
+                  //   ),
+                  // ), //주간랭킹
 
-                        Container(
-                          child: Row(
-                            children: [
-                              SizedBox(width: 20.w,),
-                              Text("미션 달성률",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                            ],
-                          ),
-                        ),
+                  //SizedBox(height: 15.h,),
 
-                        SizedBox(height: 10.h,),
-                        Image.asset('assets/image/graph.png' , height: 200.h)
 
-                      ],
-                    ),
-                  ), //주간랭킹
+                  // 미션 참여 빈도 - 다음에 만나요
+                  // Container(
+                  //   width: 365.w,
+                  //   height:260.h,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(15),
+                  //   ),
+                  //   margin: EdgeInsets.symmetric(horizontal: 2.w),
+                  //   child: Column(
+                  //     children: [
+                  //       SizedBox(height: 20.h,),
+                  //       Container(
+                  //         child: Row(
+                  //           children: [
+                  //             SizedBox(width: 20.w,),
+                  //             Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  //             SizedBox(width: 120.w,),
+                  //             Text("최근 3개월",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
+                  //
+                  //           ],
+                  //         ),
+                  //       ),
+                  //       SizedBox(height: 10.h,),
+                  //
+                  //       Image.asset('assets/image/graph2.png' , height: 180.h),
+                  //
+                  //     ],
+                  //   ),
+                  // ), //주간랭킹
+
+                  MyPageInformation(title: "리워드",
+                      content: "${user_data['reward']} ${rewardName}"),
 
                   SizedBox(height: 15.h,),
 
+                  MyPageInformation(title: "주간 랭킹",
+                      content: "${user_data['Ranking']} 등"),
 
-                  Container(
-                    width: 365.w,
-                    height:260.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    margin: EdgeInsets.symmetric(horizontal: 2.w),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 20.h,),
-                        Container(
-                          child: Row(
-                            children: [
-                              SizedBox(width: 20.w,),
-                              Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                              SizedBox(width: 120.w,),
-                              Text("최근 3개월",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
+                  //SizedBox(height: 55.h,),
 
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10.h,),
+                  // 미션 피드 - 다음에 만나요 ㅎㅎ
 
-                        Image.asset('assets/image/graph2.png' , height: 180.h),
-
-                      ],
-                    ),
-                  ), //주간랭킹
-
-                  SizedBox(height: 15.h,),
-
-
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(365.w, 50.h),
-                      textStyle: TextStyle(fontSize: 18.sp),
-                    ),
-
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => MissionFeed()),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(" 미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Image.asset('assets/image/arrow-right1.png' )
-                      ],
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10)
+                  //     ),
+                  //     primary: Colors.white,
+                  //     onPrimary: Colors.black,
+                  //     minimumSize: Size(365.w, 50.h),
+                  //     textStyle: TextStyle(fontSize: 18.sp),
+                  //   ),
+                  //
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (_) => MissionFeed()),
+                  //     );
+                  //   },
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(" 미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  //       Image.asset('assets/image/arrow-right1.png' )
+                  //     ],
+                  //   ),
+                  // ),
 
                   SizedBox(height: 15.h,),
 
@@ -263,6 +242,56 @@ class MyPage extends StatelessWidget {
 
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MyPageInformation extends StatelessWidget {
+  const MyPageInformation({
+    Key? key,
+    required this.title,
+    required this.content,
+  }) : super(key: key);
+
+  final String title;
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 365.w,
+      height: 55.h,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 2.w),
+      child: Row(
+        children: [
+
+          SizedBox(width: 20.w,),
+
+          Container(
+            width: 90.w,
+            height: 30.h,
+            decoration: BoxDecoration(
+              color: AppColor.grey1,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(title,style: TextStyle(color: Colors.blue, fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+              ],
+            ),
+          ),
+
+
+          SizedBox(width: 30.w,),
+          // 가운데 정렬?
+          Text(content,style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
+        ],
       ),
     );
   }

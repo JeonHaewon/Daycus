@@ -41,11 +41,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   double _textSpacing = 10.w;
 
+
   todayMissionCertify(int do_i) async {
 
     String todayString = await NowTime('yyyyMMddHHmmss');
     String imageName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
-    await getImage(imageName);
+
+    await getImage(imageName, ImageSource.camera);
 
     print("${widget.mission_data['image_locate']}");
     await uploadImage(
@@ -88,6 +90,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
         print(todayBlockCnt);
 
       });
+
+
+
   }
 
   // dart.io로 file 불러왔음. html로 불러야할지도
@@ -97,10 +102,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   var f = NumberFormat('###,###,###,###');
 
   // 사진을 찍을 수 있도록
-  Future getImage(String todayString) async {
+  Future getImage(String todayString, source) async {
     // 갤러리 열기 : 성공
     //var pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    var pickedFile = await picker.pickImage(source: ImageSource.camera);
+    var pickedFile = await picker.pickImage(source: source);
 
     print('Original path: ${pickedFile!.path}');
 
@@ -122,6 +127,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       image = await File(pickedFile.path).copy(newPath);
     }
 
+
+
   }
 
   // 사진 업로드
@@ -131,6 +138,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     String do_id = widget.do_mission_data['do_id'];
     
     //이미지 업로드
+    bool success = false;
     var uri = Uri.parse(API.imageUpload);
     var request = http.MultipartRequest('POST', uri);
     request.fields['image_folder'] = folderName;
@@ -139,11 +147,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     var response = await request.send();
 
     final result = await response.stream.bytesToString();
-    print("message : $result");
 
     // 이미지 업로드에 대한 테스트
-    if (response.statusCode == 200) {
-      print("image upload");
+    if (response.statusCode == 200 && jsonDecode(result)['connection']==true) {
+      success = true;
+      print("이미지가 업로드 되었습니다.");
     } else {
       print("image not upload");
     }
@@ -157,17 +165,18 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     if (update_res.statusCode == 200) {
       print("출력 : ${update_res.body}");
       var res_update = jsonDecode(update_res.body);
-      if (res_update['success'] == true) {
-
-        print("사진이 성공적으로 업로드되었습니다");
+      if (res_update['success'] == true && success==true) {
+        print("이미지 정보가 데이터 베이스에 저장되었습니다.");
         //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
         return true;
 
       } else {
+        print("이미지 정보가 데이터 베이스 저장에 실패했습니다.");
         return false;
         // 이름을 바꿀 수 없는 상황?
       }
     }
+
   }
 
   int doneCnt = 0;
@@ -199,6 +208,47 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
     int i = widget.mission_index;
     int do_i = all_missions[i]['now_user_do'];
+
+    Widget bottomSheet() {
+      return Container(
+          height: 100,
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 20
+          ),
+          child: Column(
+            children: <Widget>[
+              Text(
+                'Choose Profile photo',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  TextButton.icon(
+                    icon: Icon(Icons.camera, size: 50,),
+                    onPressed: () {
+                      //takePhoto(ImageSource.camera);
+                    },
+                    label: Text('Camera', style: TextStyle(fontSize: 20),),
+                  ),
+                  TextButton.icon(
+                    icon: Icon(Icons.photo_library, size: 50,),
+                    onPressed: () {
+                      //takePhoto(ImageSource.gallery);
+                    },
+                    label: Text('Gallery', style: TextStyle(fontSize: 20),),
+                  )
+                ],
+              )
+            ],
+          )
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -292,7 +342,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
                         SizedBox(height: 2.h,),
 
-                        Text("• 인증 방법  :  물이 담긴 컵 사진 전체가 나와야 함",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                        Text("• 인증 방법  :  ${widget.mission_data['content']}",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
 
                       ],
                     ),
@@ -633,11 +683,40 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
                         SizedBox(height: 5.h,),
 
+                        if (widget.do_mission_data['bet_reward']!='0')
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("나의 참여 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text("${widget.do_mission_data['bet_reward']} ${rewardName} ",
+                                  style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            ],
+                          ),
+
+                        if (widget.do_mission_data['bet_reward']!='0')
+                        SizedBox(height: 5.h,),
+
+                        if (widget.do_mission_data['bet_reward']!='0')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("리워드 증가율",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                            Text("${widget.mission_data['reward_percent']} % ",
+                                style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          ],
+                        ),
+
+                        if (widget.do_mission_data['bet_reward']!='0')
+                        SizedBox(height: 5.h,),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("미션 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                            Text("+ ${widget.do_mission_data['get_reward']}원",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            if (widget.do_mission_data['bet_reward']=='0')
+                            Text("+ ${(doneCnt)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            if (widget.do_mission_data['bet_reward']!='0')
+                              Text("+ ${(doneCnt+int.parse(widget.do_mission_data['bet_reward'])/100*int.parse(widget.mission_data['reward_percent']))} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                           ],
                         ),
                       ],
@@ -807,6 +886,10 @@ class YetMissionBlock extends StatelessWidget {
         child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
 }
+
+
+
+
 
 
 
