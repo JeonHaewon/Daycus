@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:daycus/screen/specificMissionPage/MissionParticipatePage.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 
 TextStyle _hintStyleGray = TextStyle(color: Colors.grey, fontSize: 17);
@@ -105,7 +107,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  Image.asset('assets/image/specificmissionpage/${widget.progress}.png' ),
+                  SvgPicture.asset('assets/image/specificmissionpage/${widget.progress}.svg' ),
                   SizedBox(height: 10.h,),
 
                   Container(

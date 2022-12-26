@@ -41,7 +41,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   double _textSpacing = 10.w;
 
-
   todayMissionCertify(int do_i) async {
 
     String todayString = await NowTime('yyyyMMddHHmmss');
@@ -89,9 +88,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
         print(todayBlockCnt);
 
       });
-
-
-
   }
 
   // dart.io로 file 불러왔음. html로 불러야할지도
@@ -125,8 +121,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       print('NewPath: ${newPath}');
       image = await File(pickedFile.path).copy(newPath);
     }
-
-
 
   }
 
@@ -167,16 +161,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
         print("사진이 성공적으로 업로드되었습니다");
         //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
-
         return true;
-
 
       } else {
         return false;
         // 이름을 바꿀 수 없는 상황?
       }
     }
-
   }
 
   int doneCnt = 0;
@@ -250,7 +241,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                         topimage: widget.mission_data['thumbnail'] ?? 'topimage1.png',
                                         progress: widget.mission_data['start_date']==null
                                             ? (widget.mission_data['next_start_date']==null
-                                            ? "donebutton" : "comeonbutton") : "ingbutton",
+                                            ? "willbutton" : "comeonbutton") : "ingbutton",
                                         title: widget.mission_data['title'],
                                         duration: widget.mission_data['start_date']==null
                                             ? (widget.mission_data['next_start_date']==null

@@ -51,7 +51,7 @@ class NowMissionButton extends StatelessWidget {
                 children: [
                   SizedBox(width: 20.w,),
                   CircleAvatar(
-                    radius: 35.sp,
+                    radius: 35.h,
                     backgroundImage: AssetImage('assets/image/thumbnail/$image'),
                   ),
 

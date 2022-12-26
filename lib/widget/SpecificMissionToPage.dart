@@ -33,7 +33,7 @@ class SpecificMissionToPage extends StatelessWidget {
 
                  progress:all_missions[i]['start_date']==null
                      ? (all_missions[i]['next_start_date']==null
-                     ? "donebutton" : "comeonbutton") : "ingbutton",
+                     ? "willbutton" : "comeonbutton") : "ingbutton",
 
                  title : all_missions[i]['title'],
 

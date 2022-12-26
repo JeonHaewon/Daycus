@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/nowingmission.dart';
 import 'package:daycus/screen/NoticePage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -75,7 +76,7 @@ class HomePage extends StatelessWidget {
                               Container(
                                 child: Row(
                                   children: [
-                                    Image.asset('assets/image/Medal.png' , fit: BoxFit.fill, ),
+                                    SvgPicture.asset('assets/image/medal.svg' , fit: BoxFit.fill, ),
                                     Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean') ),
                                   ],
                                 ),
@@ -89,7 +90,8 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       children: [
                         SizedBox(height: 40.h,),
-                        Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 240.h)
+                        Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 240.h),
+                        //SvgPicture.asset('assets/image/character.svg' , fit: BoxFit.fill,height: 240.h),
                       ],
                     ),
                   ),//오른쪽 asset
