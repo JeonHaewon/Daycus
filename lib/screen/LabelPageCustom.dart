@@ -36,6 +36,7 @@ class LabelPage extends StatelessWidget {
       ),
 
       body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Center(
             child: Column(
               children: <Widget>[

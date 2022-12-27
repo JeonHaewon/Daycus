@@ -48,7 +48,6 @@ class HomePage extends StatelessWidget {
 
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-
         child: Column(
           children: [
             Container(

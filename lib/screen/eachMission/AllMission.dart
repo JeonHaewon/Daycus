@@ -16,6 +16,7 @@ class AllMission extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.background,
       body:SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Center(
           child: Column(
             children: <Widget>[

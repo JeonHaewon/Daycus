@@ -7,6 +7,7 @@ import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:daycus/screen/myPage/settings/Settings.dart';
 import 'package:daycus/screen/myPage/feed/MissionFeed.dart';
 import 'package:daycus/screen/NoticePage.dart';
+import 'package:daycus/screen/myPage/ask/ToDeveloper.dart';
 
 
 
@@ -35,6 +36,7 @@ class MyPage extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -226,8 +228,37 @@ class MyPage extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 15.h,),
+                  SizedBox(height: 25.h,),
 
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ToDeveloper()),
+                      );
+                    },
+                    child: Container(
+                      width: 250.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                      ),
+
+                      child: Container(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            SizedBox(width: 10.w,),
+                            Icon(Icons.chat, color: Colors.grey[850])
+                          ],
+                        ),
+
+                      ),
+                    ),
+                  ),
 
 
                 ],
