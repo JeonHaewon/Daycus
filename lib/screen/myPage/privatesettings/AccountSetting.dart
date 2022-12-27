@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 import '../../../backend/Api.dart';
 
 var current_date_var = null;
-var chosen_gender;
+var chosen_gender = null;
 
 
 
@@ -327,18 +327,20 @@ class _AccountSettingState extends State<AccountSetting> {
                 // 이거 생일 있을때랑 이름 있을때랑 각각 구분해서 잘 넣기.
                 // 팝업 띄우기, 규칙 만들기 (중복허용?)
                   onPressed: () async {
+                    print("chosen_gender : ${chosen_gender}");
+
                     bool is_change_birth = (user_data['user_birth'] != selected_date);
                     bool is_change_name = (nameCtrl.text.trim().length > 0);
-                    bool is_change_gender = user_data['user_gender'] != chosen_gender;
+                    bool is_change_gender = (user_data['user_gender'] != chosen_gender)&&(chosen_gender!=null);
 
                     bool sucess = false;
                     String? msg = null;
 
-                    print("state : $is_change_name, $is_change_birth");
+                    print("state : $is_change_name, $is_change_birth, $is_change_gender");
 
                     // 변경사항이 없을 때
                     if (is_change_name==false && is_change_birth==false && is_change_gender==false){
-                      msg = "변경사항이 없습니다.";
+                      Fluttertoast.showToast(msg: "변경사항이 없습니다");
                     }
                     // 변경 사항이 있는 경우
                     else {
@@ -359,6 +361,7 @@ class _AccountSettingState extends State<AccountSetting> {
                           msg = "할 수 없는 닉네임입니다.";
                         }
                       }
+
                       if (is_change_gender){
                         sucess = await update_information_gender();
                       }

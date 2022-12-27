@@ -26,6 +26,7 @@ class NowMissionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -52,7 +53,10 @@ class NowMissionButton extends StatelessWidget {
                   SizedBox(width: 20.w,),
                   CircleAvatar(
                     radius: 35.h,
-                    backgroundImage: AssetImage('assets/image/thumbnail/$image'),
+                    backgroundImage: image!=null
+                    // 사진이 있으면
+                        ? AssetImage('assets/image/thumbnail/$image')
+                        : AssetImage('assets/image/thumbnail/missionbackground.png'),
                   ),
 
                   SizedBox(width: 15.w,),

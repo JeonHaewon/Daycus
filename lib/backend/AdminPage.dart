@@ -40,7 +40,7 @@ class _AdminScreenState extends State<AdminScreen> {
       String now = await NowTime('yy/MM/dd - HH:mm:ss');
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "INSERT INTO Done_mission  select * from (select * from do_mission where (select(datediff('${now}',mission_start) <= 14))) dating",
+          'update_sql': "INSERT INTO Done_mission  select * from (select * from do_mission where (select(datediff('${now}',mission_start) >= 14))) dating",
         });
 
         if (update_res.statusCode == 200 ) {
@@ -67,7 +67,7 @@ class _AdminScreenState extends State<AdminScreen> {
       String now = await NowTime('yy/MM/dd - HH:mm:ss');
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "DELETE FROM do_mission where (datediff('${now}',mission_start) <= 14);",
+          'update_sql': "DELETE FROM do_mission where (datediff('${now}',mission_start) >= 14);",
         });
 
         if (update_res.statusCode == 200 ) {
