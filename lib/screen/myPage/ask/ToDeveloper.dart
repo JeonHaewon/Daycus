@@ -17,7 +17,7 @@ class ToDeveloper extends StatelessWidget {
       final Email email = Email(
         body: '',
         subject: '[DayCus 앱 사용 중 문제가 생겨 문의드립니다.]',
-        recipients: ['haim11217@naver.com', 'haim1121.dgist@gmail.com'],
+        recipients: ['haim112177@naver.com', 'haim1121.dgist@gmail.com'],
         cc: [],
         bcc: [],
         attachmentPaths: [],
