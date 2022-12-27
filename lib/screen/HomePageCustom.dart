@@ -2,6 +2,7 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
+import 'package:daycus/screen/MissionCheckPageCustom.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
 import 'package:daycus/widget/NowNoMission.dart';
@@ -166,6 +167,17 @@ class HomePage extends StatelessWidget {
               ),
             ), //진행중인 미션
 
+
+            TextButton(
+                onPressed: (){},
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                child: Text('더보기 >',style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold) )
+            ),
+
+
+
             Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -207,6 +219,8 @@ class HomePage extends StatelessWidget {
                       },
                     ),
                   ),
+
+
 
 
                   SizedBox(height: 30.h,),
