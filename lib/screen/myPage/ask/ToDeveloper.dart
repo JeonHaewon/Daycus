@@ -13,9 +13,11 @@ class ToDeveloper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    void _sendEmail() async {
+    final TextEditingController supportCtrl = TextEditingController();
+
+    void _sendEmail(texting) async {
       final Email email = Email(
-        body: '',
+        body: texting,
         subject: '[DayCus 앱 사용 중 문제가 생겨 문의드립니다.]',
         recipients: ['haim112177@naver.com', 'haim1121.dgist@gmail.com'],
         cc: [],
@@ -57,6 +59,7 @@ class ToDeveloper extends StatelessWidget {
                 children: [
 
                   TextField(
+                    controller: supportCtrl,
                     maxLines: 10,
                     decoration: InputDecoration(
                       hintText: "Enter a message",
@@ -99,7 +102,7 @@ class ToDeveloper extends StatelessWidget {
 
                   InkWell(
                     onTap: () {
-                      _sendEmail();
+                      _sendEmail(supportCtrl.text.trim());
                     },
                     child: Container(
                       width: 250.w,
