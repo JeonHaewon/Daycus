@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 
 
@@ -9,6 +12,27 @@ class ToDeveloper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    void _sendEmail() async {
+      final Email email = Email(
+        body: '',
+        subject: '[DayCus 앱 사용 중 문제가 생겨 문의드립니다.]',
+        recipients: ['haim11217@naver.com', 'haim1121.dgist@gmail.com'],
+        cc: [],
+        bcc: [],
+        attachmentPaths: [],
+        isHTML: false,
+      );
+
+      try {
+        await FlutterEmailSender.send(email);
+        Fluttertoast.showToast(msg: "메일 전송이 완료되었습니다 !");
+      } catch (error) {
+        String title = "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드릴게요 :)\n\nonionfamily.official@gmail.com";
+        String message = "";
+        Fluttertoast.showToast(msg: title);
+      }
+    }
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -75,6 +99,7 @@ class ToDeveloper extends StatelessWidget {
 
                   InkWell(
                     onTap: () {
+                      _sendEmail();
                     },
                     child: Container(
                       width: 250.w,
@@ -89,7 +114,6 @@ class ToDeveloper extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.white) ),
-
                           ],
                         ),
 
