@@ -22,7 +22,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int extraindex = -2;
-    int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
+    // 최대 3개만 보여줌
+    int? do_mission_cnt = do_mission==null 
+        ? 0 : (do_mission.length<4 ? do_mission.length : 3);
+    int do_mission_real_cnt = do_mission==null ? 0 : do_mission.length;
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -112,17 +115,34 @@ class HomePage extends StatelessWidget {
                 children: [
 
                   Padding(
-                    padding: EdgeInsets.fromLTRB(35.w, 40.h, 0, 0),
+                    padding: EdgeInsets.fromLTRB(35.w, 40.h, 30.w, 0),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20.h,),
                         Text("진행 중인 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 10.sp,
+                            ),
+                            TextButton(
+                                onPressed: (){
+                                  controller.currentBottomNavItemIndex.value = 1;
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                ),
+                                child: Text('더보기 >',style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold) )
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
 
-                  SizedBox(height: 20.h,),
+                  SizedBox(height: 10.h,),
 
                   // 진행중인 미션이 없을 때
                   if(do_mission==null)
@@ -157,7 +177,8 @@ class HomePage extends StatelessWidget {
                                 mission_data: all_missions[_index],
                               ),),
 
-                            SizedBox(height: 7.h,),
+                            if (index+1 < do_mission_cnt!)
+                              SizedBox(height: 7.h,),
                           ],
                         );
                       },
@@ -167,14 +188,16 @@ class HomePage extends StatelessWidget {
               ),
             ), //진행중인 미션
 
-
-            TextButton(
-                onPressed: (){},
+            // 진행중인 미션이 3개 이상일 경우
+            if (do_mission_real_cnt!=do_mission_cnt)
+              TextButton(child: Text("외 ${do_mission_real_cnt-3}개의 미션", style: TextStyle(color: Colors.black),),
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                 ),
-                child: Text('더보기 >',style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold) )
-            ),
+                onPressed: (){
+                  controller.currentBottomNavItemIndex.value = 1;
+                },
+              ),
 
 
 

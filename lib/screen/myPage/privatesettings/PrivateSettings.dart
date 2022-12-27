@@ -70,7 +70,7 @@ class PrivateSettings extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('assets/image/settings/Profile.png',),
+                  Icon(Icons.account_circle_rounded, size: 100.w,),
                   SizedBox(height: 10.h,),
                   Text("${user_data['user_name']}",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
 

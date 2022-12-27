@@ -95,160 +95,162 @@ class KeepLoginPage extends State<LoginPageCustom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
 
-      body: Form(
-        // key는 왜필요한거지?
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(padding: EdgeInsets.only(left: 40.w ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 200.h,),
-                  Text("로그인".padRight(50), style: TextStyle(fontSize: 30.sp, fontFamily: 'korean'),),
-                  SizedBox(height: 60.h,),
-                ],
+      body: SingleChildScrollView(
+        child: Form(
+          // key는 왜필요한거지?
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(padding: EdgeInsets.only(left: 40.w ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 200.h,),
+                    Text("로그인".padRight(50), style: TextStyle(fontSize: 30.sp, fontFamily: 'korean'),),
+                    SizedBox(height: 60.h,),
+                  ],
+                ),
               ),
-            ),
 
-            Padding(padding: EdgeInsets.only(left: 40.w, right: 50.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("이메일", style: TextStyle(fontSize: 20.sp, fontFamily: 'korean'),),
-                  SizedBox(
-                    height: 80.h,
-                    child : TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      controller: emailCtrl,
+              Padding(padding: EdgeInsets.only(left: 40.w, right: 50.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("이메일", style: TextStyle(fontSize: 20.sp, fontFamily: 'korean'),),
+                    SizedBox(
+                      height: 80.h,
+                      child : TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        controller: emailCtrl,
 
-                      // 이메일 검증
-                      validator: (String? value){
-                        if (value!.isEmpty) {// == null or isEmpty
-                          return '이메일을 입력해주세요.';}
-                        else if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)!=true){
-                          return '올바른 이메일 형식을 입력해주세요.';
-                        }
+                        // 이메일 검증
+                        validator: (String? value){
+                          if (value!.isEmpty) {// == null or isEmpty
+                            return '이메일을 입력해주세요.';}
+                          else if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)!=true){
+                            return '올바른 이메일 형식을 입력해주세요.';
+                          }
 
-                        return null;
-                      },),
-                  ),
+                          return null;
+                        },),
+                    ),
 
-                  SizedBox(height: 10.h,),
+                    SizedBox(height: 10.h,),
 
-                  Text("비밀번호", style: TextStyle(fontSize: 20.sp, fontFamily: 'korean'),),
-                  SizedBox(
-                    height: 80.h,
-                    child : TextFormField(
-                      textInputAction: TextInputAction.done,
-                      controller: passwordCtrl,
-                      obscureText: true,
-                      validator: (String? value){
-                        // 비밀번호 틀렸을 때 여기서 빨간색으로 나타낼 수 있었음 좋겠는뎅..
-                        
-                        // 비밀번호 검증
-                        if (value!.isEmpty) {// == null or isEmpty
-                          return '비밀번호를 입력해주세요.';
-                        }
-                        return null;
-                      },),
-                  ),
+                    Text("비밀번호", style: TextStyle(fontSize: 20.sp, fontFamily: 'korean'),),
+                    SizedBox(
+                      height: 80.h,
+                      child : TextFormField(
+                        textInputAction: TextInputAction.done,
+                        controller: passwordCtrl,
+                        obscureText: true,
+                        validator: (String? value){
+                          // 비밀번호 틀렸을 때 여기서 빨간색으로 나타낼 수 있었음 좋겠는뎅..
+                          
+                          // 비밀번호 검증
+                          if (value!.isEmpty) {// == null or isEmpty
+                            return '비밀번호를 입력해주세요.';
+                          }
+                          return null;
+                        },),
+                    ),
 
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            ElevatedButton(
-                onPressed: () async {
-                  // 로그인 버튼 눌렀을 때
-                  if (_formKey.currentState!.validate()){
-                    bool? is_login = await userLogin(
-                        emailCtrl.text.trim(),
-                        passwordCtrl.text.trim(),
-                    );
-
-                    // - 로그인 성공
-                    if (is_login == true) {
-
-                      keepLogin(
-                          user_data['user_name'],
+              ElevatedButton(
+                  onPressed: () async {
+                    // 로그인 버튼 눌렀을 때
+                    if (_formKey.currentState!.validate()){
+                      bool? is_login = await userLogin(
                           emailCtrl.text.trim(),
                           passwordCtrl.text.trim(),
-                          storage);
+                      );
+
+                      // - 로그인 성공
+                      if (is_login == true) {
+
+                        keepLogin(
+                            user_data['user_name'],
+                            emailCtrl.text.trim(),
+                            passwordCtrl.text.trim(),
+                            storage);
 
 
-                      await afterLogin();
+                        await afterLogin();
 
-                      // 다 닫고 감.
-                      Navigator.pushAndRemoveUntil(context,
-                          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+                        // 다 닫고 감.
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+                      }
+                      //  - 로그인 실패
+                      else if (is_login == false) {
+                        // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용
+                        passwordCtrl.clear();
+                      }
+
+                      else{
+                        print("로그인 에러 발생");
+                      }
+
                     }
-                    //  - 로그인 실패
-                    else if (is_login == false) {
-                      // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용
-                      passwordCtrl.clear();
-                    }
 
-                    else{
-                      print("로그인 에러 발생");
-                    }
+                  },
 
-                  }
+                child: Text('로그인'),
 
-                },
-
-              child: Text('로그인'),
-
-              style: ElevatedButton.styleFrom(
-                primary: Colors.indigo,
-                minimumSize: Size(330.w, 40.h),
-                textStyle: TextStyle(color : Colors.indigo),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.indigo,
+                  minimumSize: Size(330.w, 40.h),
+                  textStyle: TextStyle(color : Colors.indigo),
+                ),
               ),
-            ),
 
 
-            TextButton(onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => FindPasswordPage()),
-              );
-            }, child:
-            Text('비밀번호를 잊으셨나요?',
-              style: TextStyle(color: Colors.grey[400], fontSize: 15),
-            )),
-
-            SizedBox(height: 120.h,),
-
-
-            ElevatedButton(
-              onPressed: () {
+              TextButton(onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => SignupPage()),
+                  MaterialPageRoute(builder: (_) => FindPasswordPage()),
                 );
-              },
+              }, child:
+              Text('비밀번호를 잊으셨나요?',
+                style: TextStyle(color: Colors.grey[400], fontSize: 15),
+              )),
 
-              child: Text('회원가입'),
+              SizedBox(height: 120.h,),
 
-              style: ElevatedButton.styleFrom(
-                onPrimary: AppColor.happyblue,
-                primary: Colors.white,
-                minimumSize: Size(330.w, 40.h),
-                textStyle: TextStyle(color : Colors.indigo, fontWeight: FontWeight.bold),
+
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => SignupPage()),
+                  );
+                },
+
+                child: Text('회원가입'),
+
+                style: ElevatedButton.styleFrom(
+                  onPrimary: AppColor.happyblue,
+                  primary: Colors.white,
+                  minimumSize: Size(330.w, 40.h),
+                  textStyle: TextStyle(color : Colors.indigo, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
 
 
 
 
 
 
-          ],
+            ],
+          ),
         ),
       ),
     );
