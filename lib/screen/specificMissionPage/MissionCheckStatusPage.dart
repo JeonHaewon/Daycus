@@ -1,9 +1,9 @@
-import 'dart:convert';
+
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:daycus/backend/Api.dart';
 import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UploadImage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
@@ -13,9 +13,6 @@ import 'package:daycus/core/app_color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as path;
 
 class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
@@ -36,8 +33,7 @@ class MissionCheckStatusPage extends StatefulWidget {
 
 }
 
-File? image;
-String? imageReNamed;
+
 
 class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
@@ -75,6 +71,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
           imageName,
         "${widget.mission_data['image_locate']}",
         source,
+      widget.do_mission_data['do_id'],
+      todayBlockCnt,
     );
 
     setState(() {
@@ -118,7 +116,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
         toCertify = int.parse(widget.mission_data['frequency']) * int.parse(widget.mission_data['term']);
         return_reward = doneCnt/toCertify>1 ? 1 : doneCnt/toCertify;
 
-        //print("todayBlockCnt : ${todayBlockCnt}");
+        print("todayBlockCnt : ${todayBlockCnt}");
 
       });
 
@@ -128,90 +126,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   // dart.io로 file 불러왔음. html로 불러야할지도
 
-  final ImagePicker picker = ImagePicker();
-
   var f = NumberFormat('###,###,###,###');
 
-  // 사진을 찍을 수 있도록
-  Future getImage(String todayString, source) async {
-    // 갤러리 열기 : 성공
-    //var pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    var pickedFile = await picker.pickImage(source: source);
-
-    print('Original path: ${pickedFile!.path}');
-
-    String image_path = pickedFile!.path;
-    String dir = path.dirname(pickedFile!.path);
-
-    // jpg나 png파일만 업로드 가능.
-    if (image_path.endsWith(".jpg")){
-      imageReNamed = todayString+".jpg";
-      String newPath = path.join(dir, imageReNamed);
-      print('NewPath: ${newPath}');
-      image = await File(pickedFile.path).copy(newPath);
-      //
-
-    } else if (image_path.endsWith(".png")){
-      imageReNamed = todayString+".jpg";
-      String newPath = path.join(dir, imageReNamed);
-      print('NewPath: ${newPath}');
-      image = await File(pickedFile.path).copy(newPath);
-    }
 
 
-
-  }
-
-  // 사진 업로드
-  Future uploadImage(String pictureName, String folderName, String source) async {
-    //var uri = Uri.parse("http://10.8.1.148/api_members/mission/upload.php");
-
-    String do_id = widget.do_mission_data['do_id'];
-    
-    //이미지 업로드
-    bool success = false;
-    var uri = Uri.parse(API.imageUpload);
-    var request = http.MultipartRequest('POST', uri);
-    request.fields['image_folder'] = folderName;
-    request.fields['source'] = source;
-    var pic = await http.MultipartFile.fromPath("image", image!.path);
-    request.files.add(pic);
-    var response = await request.send();
-
-    final result = await response.stream.bytesToString();
-
-    // 이미지 업로드에 대한 테스트
-    if (response.statusCode == 200 && jsonDecode(result)['connection']==true) {
-      success = true;
-      print("이미지가 업로드 되었습니다.");
-    } else {
-      print(result);
-      print("image not upload");
-    }
-
-    // do_mission에 기록
-    var update_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "UPDATE DayCus.do_mission SET d${todayBlockCnt} = '${imageReNamed}' WHERE (do_id = '${do_id}')",
-    });
-
-    // do_mission 반영에 대한 테스트
-    if (update_res.statusCode == 200) {
-      print("출력 : ${update_res.body}");
-      var res_update = jsonDecode(update_res.body);
-      if (res_update['success'] == true && success==true) {
-        print("이미지 정보가 데이터 베이스에 저장되었습니다.");
-        //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
-        return true;
-
-      } else {
-        print("이미지 정보가 데이터 베이스 저장에 실패했습니다.");
-        print("message : ${res_update['success']}");
-        return false;
-        // 이름을 바꿀 수 없는 상황?
-      }
-    }
-
-  }
 
   int doneCnt = 0;
 
@@ -315,6 +233,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                               onPressed: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (_)=>
                                     SpecificMissionPage(
+                                      mission_data: widget.mission_data,
+                                        startDate: widget.mission_data['start_date'],
                                         topimage: widget.mission_data['thumbnail'] ?? 'topimage1.png',
                                         progress: widget.mission_data['start_date']==null
                                             ? (widget.mission_data['next_start_date']==null
@@ -698,8 +618,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
 
 
-                  // 14일이 넘어가지 않았을 경우 : 미션 인증
-                } else{
+                  // 아직 미션 기간이 되지 않았을 때
+                } else if(todayBlockCnt <= 0){
+                  Fluttertoast.showToast(msg: "아직 미션 기간이 아닙니다.");
+                }
+                // 14일이 넘어가지 않았을 경우 : 미션 인증
+                 else{
                   if (widget.mission_data['certify_tool'] == 'gallery'){
                     showModalBottomSheet(context: context, builder: ((builder) => bottomSheet(do_i)));
                   } else {

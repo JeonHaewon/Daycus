@@ -28,7 +28,10 @@ class SpecificMissionToPage extends StatelessWidget {
                    do_mission_data: do_mission[all_missions[i]['now_user_do']],
                     mission_data: all_missions[i])
 
-             : SpecificMissionPage(mission_id: all_missions[i]['mission_id'],
+             : SpecificMissionPage(
+                 mission_data: all_missions[i],
+                 startDate: all_missions[i]['start_date'],
+                 mission_id: all_missions[i]['mission_id'],
                  topimage: all_missions[i]['thumbnail'] ?? 'topimage1.png',
 
                  progress:all_missions[i]['start_date']==null

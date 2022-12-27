@@ -6,3 +6,5 @@ const String rewardName = "포인트";
 
 // setting
 const String nullBirthdayString = "0000-00-00";
+
+const String cantParticipateString = "남은 날짜 동안 미션을 모두 수행할 수 없습니다.";

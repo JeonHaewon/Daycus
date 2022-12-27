@@ -35,6 +35,8 @@ class BigMissionButtonToPage extends StatelessWidget {
           mission_data: data[i]) :
 
       SpecificMissionPage(
+        mission_data: data[i],
+        startDate: data[i]['start_date'],
         mission_id: data[i]['mission_id'],
         topimage: data[i]['thumbnail'] ?? 'topimage1.png',
         progress: data[i]['start_date']==null ? (data[i]['next_start_date']==null ? "willbutton" : "comeonbutton") : "ingbutton",

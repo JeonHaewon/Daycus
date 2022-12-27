@@ -1,3 +1,4 @@
+import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/constant.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,10 @@ TextStyle _hintStyle = _hintStyleGray;
 class SpecificMissionPage extends StatefulWidget {
   SpecificMissionPage({
     Key? key,
+    required this.mission_data,
+
+    // 아래 변수들이 위의 mission_data로 받아올 수 있는 것들이므로, 최적화가 필요함.
+    required this.startDate,
     required this.topimage,
     required this.progress,
     required this.title,
@@ -35,6 +40,8 @@ class SpecificMissionPage extends StatefulWidget {
 
   }) : super(key: key);
 
+  final mission_data;
+  final String startDate;
   final String mission_id;
   final String topimage;
   final String progress;
@@ -58,19 +65,52 @@ double _basicMoney = init_reward;
 String _basicText = "";
 double rewardPercent = 100;
 String _rewardCalculResert = _basicText;
+String progress = "willbutton";
 
 class _SpecificMissionPageState extends State<SpecificMissionPage> {
   var f = NumberFormat('###,###,###,###');
 
+  int timeDiffer = 15;
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     rewardPercent = double.parse(widget.rewardPercent);
     _basicText = "${init_reward*(rewardPercent)/100} ${rewardName}";
     _rewardCalculResert = _basicText;
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _asyncMethod();
+    });
+
+  }
+
+  _asyncMethod() async {
+    String now_time = await NowTime("yyyyMMdd");
+    print("duration ${widget.startDate}");
+
+    // start date null인 경우 -1, 날짜가 지나가면 참가할 수 없음.
+     timeDiffer = widget.startDate==null ? 15 : DateTime.parse(now_time)
+         .difference((DateTime.parse(widget.startDate))).inDays + 1;
+
+     print("timeDiffer : ${timeDiffer}");
+
+     // 완료, 모집중, 모집 예정 사진 불러오는 곳. 기본 설정은 "모집 예정"
+     setState(() {
+       if (widget.startDate==null){
+         progress = "willbutton";}
+       else if(timeDiffer<0){
+         progress = "comeonbutton";}
+       else if(timeDiffer>14){
+         progress = "donebutton";}
+       else{
+         progress = "ingbutton";}
+     });
+
+
 
   }
 
@@ -131,7 +171,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  SvgPicture.asset('assets/image/specificmissionpage/${widget.progress}.svg' ),
+                  SvgPicture.asset('assets/image/specificmissionpage/${progress}.svg' ),
                   SizedBox(height: 10.h,),
 
                   Container(
@@ -432,8 +472,11 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
               height: 70.h,
               width: 412.w,
               child: TextButton(onPressed: widget.onTap ?? (){
-                if (widget.progress == "donebutton"){
+                if (timeDiffer>14){
                   Fluttertoast.showToast(msg: "미션 모집기간이 아닙니다.");
+                }
+                else if (int.parse(widget.mission_data['frequency'])*int.parse(widget.mission_data['term']) > 15-timeDiffer){
+                  Fluttertoast.showToast(msg: cantParticipateString);
                 }
                 else {
                   Navigator.push(
