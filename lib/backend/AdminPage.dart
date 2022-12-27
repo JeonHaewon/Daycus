@@ -1,3 +1,4 @@
+import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
@@ -6,12 +7,35 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/NowTime.dart';
 
-class AdminPage extends StatelessWidget {
-  const AdminPage({Key? key}) : super(key: key);
+Future<bool> appInitialize({required BuildContext context}) async {
+  LocalNotification.initialize();
+
+  await Future.delayed(const Duration(milliseconds: 1000), () {});
+  return true;
+}
+
+class AdminScreen extends StatefulWidget {
+  const AdminScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<AdminScreen> createState() => _AdminScreenState();
+}
 
+class _AdminScreenState extends State<AdminScreen> {
+  late Future appInit;
+
+  @override
+  void initState() {
+    appInit = appInitialize(context: context);
+    super.initState();
+  }
+  @override
+  void dispose(){
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    LocalNotification.requestPermission();
     move_to_done_mission() async {
       String now = await NowTime('yy/MM/dd - HH:mm:ss');
       try {
@@ -100,11 +124,36 @@ class AdminPage extends StatelessWidget {
                 ],
               ),
             ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                primary: Colors.white,
+                onPrimary: Colors.black,
+                minimumSize: Size(365.w, 50.h),
+                textStyle: TextStyle(fontSize: 18.sp),
+              ),
+
+              onPressed: () {
+                LocalNotification.sampleNotification();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("푸시 알림 보내기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  Image.asset('assets/image/arrow-right1.png' )
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
   }
 }
+
+
+
 
 

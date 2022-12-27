@@ -1,5 +1,6 @@
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
@@ -18,7 +19,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     int extraindex = -2;
     int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
 

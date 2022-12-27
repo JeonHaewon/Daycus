@@ -53,6 +53,7 @@ dependencies:
   cupertino_icons:
   crypto:
   flutter_email_sender:
+  flutter_local_notifications:
 
 
 dev_dependencies:

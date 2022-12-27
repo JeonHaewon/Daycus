@@ -1,3 +1,4 @@
+import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,10 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
+  void initState() {
+    LocalNotification.initialize();
+  }
+
   Widget build(BuildContext context) {
 
     return ScreenUtilInit(

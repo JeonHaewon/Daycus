@@ -159,8 +159,7 @@ class Settings extends StatelessWidget {
                     ),
 
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminPage()));
-
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminScreen()));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
