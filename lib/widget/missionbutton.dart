@@ -62,7 +62,31 @@ class MissionButton extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+
+
+              //Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold)),
+
+
+            Container(
+                width: 150.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                        child: RichText(
+                          overflow: TextOverflow.clip,
+                          maxLines: 2,
+                          text: TextSpan(
+                              text:
+                              title, style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold)),
+                        )),
+                  ],
+                )
+            ),
+
+
+
+
               Container(
                 child: Row(
                   children: [
@@ -71,6 +95,8 @@ class MissionButton extends StatelessWidget {
                   ],
                 ),
               ),
+
+
             ],
           ),
         ),

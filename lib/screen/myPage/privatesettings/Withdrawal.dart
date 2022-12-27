@@ -212,16 +212,10 @@ class _WithdrawalState extends State<Withdrawal> {
                     ],
                   ),
 
-                  
-
                 ],
               ),
 
             ),
-
-
-
-
           ],
         ),
       ),

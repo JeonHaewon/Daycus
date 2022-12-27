@@ -205,7 +205,15 @@ class _AccountSettingState extends State<AccountSetting> {
                     ),
                   ),
 
-
+                  SizedBox(height: 5.h,),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: [
+                        Text("   이름은 10글자 이내, 띄어쓰기/특수문자가 없어야 합니다",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontWeight: FontWeight.w400),  ),
+                      ],
+                    ),
+                  ),
 
                   SizedBox(height: 20.h,),
                   Stack(
