@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
 
   Widget build(BuildContext context) {
-
+    initNotification();
     return ScreenUtilInit(
       designSize: Size(412, 892),
       builder: (context, child) {
