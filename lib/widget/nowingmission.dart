@@ -51,13 +51,33 @@ class NowMissionButton extends StatelessWidget {
               child:Row(
                 children: [
                   SizedBox(width: 20.w,),
-                  CircleAvatar(
-                    radius: 35.h,
-                    backgroundImage: image!=null
-                    // 사진이 있으면
-                        ? AssetImage('assets/image/thumbnail/$image')
-                        : AssetImage('assets/image/thumbnail/missionbackground.png'),
+
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+
+                      CircleAvatar(
+                        radius: 35.h,
+                        backgroundImage: image!=null
+                        // 사진이 있으면
+                            ? AssetImage('assets/image/thumbnail/$image')
+                            : AssetImage('assets/image/thumbnail/missionbackground.png'),
+                      ),
+
+                      Opacity(
+                        opacity: 0.25,
+                        child: Container(
+                          width: 68.w,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle
+                          ),
+                        ),
+                      ),
+
+                    ],
                   ),
+
 
                   SizedBox(width: 15.w,),
 

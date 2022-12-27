@@ -12,10 +12,11 @@ import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/nowingmission.dart';
 import 'package:daycus/screen/NoticePage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/cupertino.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,8 @@ class HomePage extends StatelessWidget {
       //
 
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+
         child: Column(
           children: [
             Container(
@@ -227,3 +230,4 @@ class HomePage extends StatelessWidget {
 
   }
 }
+

@@ -5,16 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
-
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  @override
-  void initState() {
-    LocalNotification.initialize();
-  }
 
   Widget build(BuildContext context) {
 
@@ -34,3 +29,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
