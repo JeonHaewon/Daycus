@@ -105,7 +105,7 @@ class _AdminScreenState extends State<AdminScreen> {
     update_ranking() async{
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "SET @r=0; UPDATE user_table SET Ranking= @r:= (@r+1) ORDER BY reward DESC;",
+          'update_sql': "with rank_table as (select user_email as user_email, dense_rank() over(order by reward desc) as Ranking from user_table) update rank_table A inner join user_table B on A.user_email = B.user_email SET B.Ranking = A.Ranking;",
         });
 
         if (update_res.statusCode == 200 ) {
@@ -119,7 +119,6 @@ class _AdminScreenState extends State<AdminScreen> {
             print(resMission);
             Fluttertoast.showToast(msg: "다시 시도해주세요");
           }
-
         }
       } on Exception catch (e) {
         print("에러발생");
