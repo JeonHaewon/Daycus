@@ -1,4 +1,4 @@
-import 'package:daycus/backend/AdminPage.dart';
+import 'package:daycus/backend/admin/AdminPage.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
