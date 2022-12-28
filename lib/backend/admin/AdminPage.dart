@@ -1,4 +1,5 @@
 import 'package:daycus/backend/PedometerPage.dart';
+import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:health/health.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 
@@ -31,6 +33,7 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
 
+  static final storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -170,145 +173,64 @@ class _AdminScreenState extends State<AdminScreen> {
         padding: EdgeInsets.all(20.w),
         child: Column(
           children: [
-            
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                minimumSize: Size(365.w, 50.h),
-                textStyle: TextStyle(fontSize: 18.sp),
-              ),
 
-              onPressed: () {
-                move_to_done_mission();
-                bool finished = true;
-                if (finished) {
-                  delete_from_do_mission();
-                }
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("던미션 테스트용",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  Image.asset('assets/image/arrow-right1.png' )
-                ],
-              ),
-            ),
-            SizedBox(height: 15.h,),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                minimumSize: Size(365.w, 50.h),
-                textStyle: TextStyle(fontSize: 18.sp),
-              ),
-              onPressed: () {
+            AdminButton(
+              title: "던미션 테스트용",
+              onPressed: (){
+                Fluttertoast.showToast(msg: "데이터 손실을 막기 위해 사용을 중지했습니다.");
+                // move_to_done_mission();
+                // bool finished = true;
+                // if (finished) {
+                //   delete_from_do_mission();
+                // }
+              },),
+
+            AdminButton(
+              title: "푸시 알림 보내기",
+              onPressed: (){
                 time_showNotification();
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("푸시 알림 보내기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  Image.asset('assets/image/arrow-right1.png' )
-                ],
-              ),
             ),
-            SizedBox(height: 15.h,),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                minimumSize: Size(365.w, 50.h),
-                textStyle: TextStyle(fontSize: 18.sp),
-              ),
-              onPressed: () {
+
+            AdminButton(
+              title: "랭킹 업데이트",
+              onPressed: (){
                 update_ranking();
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("랭킹 업데이트",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  Image.asset('assets/image/arrow-right1.png' )
-                ],
-              ),
             ),
-            SizedBox(height: 15.h,),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                minimumSize: Size(365.w, 50.h),
-                textStyle: TextStyle(fontSize: 18.sp),
-              ),
-              onPressed: () {
+
+            AdminButton(
+              title: "평균 리워드 업데이트",
+              onPressed: (){
                 update_avg_reward();
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("평균 리워드 업데이트",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  Image.asset('assets/image/arrow-right1.png' )
-                ],
-              ),
             ),
-            SizedBox(height: 15.h,),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                minimumSize: Size(365.w, 50.h),
-                textStyle: TextStyle(fontSize: 18.sp),
-              ),
-              onPressed: () {
+
+            AdminButton(
+              title: "리워드 더하기 버튼",
+              onPressed: (){
                 update_plus_reward();
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("리워드 더하기 버튼",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  Image.asset('assets/image/arrow-right1.png' )
-                ],
-              ),
             ),
-            SizedBox(height: 15.h,),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                minimumSize: Size(365.w, 50.h),
-                textStyle: TextStyle(fontSize: 18.sp),
-              ),
-              onPressed: () {
+
+            AdminButton(
+              title: "만보기를 한번 해봅시다 !",
+              onPressed: (){
                 Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => PedometerPage()));
+                    context,
+                    MaterialPageRoute(builder: (_) => PedometerPage()));
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("만보기를 한번 해봅시다 !",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  Image.asset('assets/image/arrow-right1.png' )
-                ],
-              ),
             ),
+
+            AdminButton(
+              title: "데이터 re-load (재로그인)",
+              onPressed: (){
+                print("로그인 ㄱㄱ");
+                LoginAsyncMethod(storage, null, true);
+                Fluttertoast.showToast(msg: "데이터 리로드가 완료되었습니다 !");
+              },
+            ),
+
           ],
         ),
       ),
@@ -316,6 +238,45 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 }
 
+class AdminButton extends StatelessWidget {
+  const AdminButton({
+    Key? key,
+    required this.title,
+    this.onPressed,
+  }) : super(key: key);
+
+  final onPressed;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
+            ),
+            primary: Colors.white,
+            onPrimary: Colors.black,
+            minimumSize: Size(365.w, 50.h),
+            textStyle: TextStyle(fontSize: 18.sp),
+          ),
+          onPressed: onPressed,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title,style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+              Image.asset('assets/image/arrow-right1.png' )
+            ],
+          ),
+        ),
+
+        SizedBox(height: 15.h,),
+      ],
+    );
+  }
+}
 
 
 

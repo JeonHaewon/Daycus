@@ -86,6 +86,7 @@ class _signupPage extends State<SignupPage> {
           bool? is_login = await userLogin(
             emailCtrl.text.trim(),
             passwordCtrl.text.trim(),
+            false,
           );
 
           // - 로그인 성공

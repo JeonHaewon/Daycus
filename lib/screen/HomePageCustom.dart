@@ -21,6 +21,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     int extraindex = -2;
     // 최대 3개만 보여줌
     int? do_mission_cnt = do_mission==null 

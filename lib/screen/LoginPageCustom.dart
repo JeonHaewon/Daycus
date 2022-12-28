@@ -7,10 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/startPage/FindPasswordPage.dart';
 import 'package:daycus/screen/startPage/SignupPage.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../backend/login/login.dart';
-import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 
@@ -25,7 +24,6 @@ class LoginPageCustom extends StatefulWidget {
 class KeepLoginPage extends State<LoginPageCustom> {
 
   static final storage = FlutterSecureStorage();
-  dynamic userInfo = '';
 
   @override
   void initState() {
@@ -33,43 +31,10 @@ class KeepLoginPage extends State<LoginPageCustom> {
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
+      LoginAsyncMethod(storage, context, false);
     });
 
 
-  }
-
-  _asyncMethod() async {
-    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-    // 데이터가 없을때는 null을 반환
-    userInfo = await storage.read(key:'login');
-    print(userInfo);
-
-    // 자동로그인이 필요한 경우
-    if (userInfo!=null && user_data==null) {
-      var userDecode = jsonDecode(userInfo);
-      //print("userInfo : ${userDecode.runtimeType}");
-      //print("userInfo : ${userDecode}");
-      //print("${userDecode['user_email']}, ${userDecode['password']}");
-
-      print(userDecode);
-    await userLogin(userDecode['user_email'], userDecode['password']);
-    //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
-
-      // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
-      await afterLogin();
-      // 다 닫고 ㄱㄱ
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
-    } // 자동로그인이 필요하지 않은 경우
-    else if (userInfo!=null && user_data!=null) {
-      // 다 닫고 ㄱㄱ
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
-    }
-    else {
-      print('로그인이 필요합니다');
-    }
   }
 
   double textFieldHeight = 55.0;
@@ -171,6 +136,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
                       bool? is_login = await userLogin(
                           emailCtrl.text.trim(),
                           passwordCtrl.text.trim(),
+                          false,
                       );
 
                       // - 로그인 성공

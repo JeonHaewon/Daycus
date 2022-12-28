@@ -28,7 +28,7 @@ doMissionImport() async {
   }
 }
 
-// all_mission_data에 이 미션이 참여중인 미션이란 걸 표기.
+// all_mission_data에 이 미션이 참여중인 미션이란 걸 표기. - 수정 필요
 // do_mission에서 어디에 있는지 기록
 doMissionSave( ) {
   int cnt = do_mission?.length;
@@ -39,5 +39,5 @@ doMissionSave( ) {
     do_mission[i]['mission_index'] = _index;
 
   }
-  print("하는 미션들 업데이트 완료 : ${all_missions}");
+  //print("하는 미션들 업데이트 완료 : ${all_missions}");
 }

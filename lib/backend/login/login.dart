@@ -1,7 +1,6 @@
 import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
-import 'package:daycus/core/notification.dart';
-
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/Api.dart';
@@ -9,10 +8,9 @@ import 'KeepLogin.dart';
 import 'dart:convert';
 import 'package:daycus/backend/UserDatabase.dart';
 import '../../screen/temHomePage.dart';
-import 'package:daycus/backend/NowTime.dart';
 
 
-userLogin(String email, String password) async{
+userLogin(String email, String password, bool reload) async{
   try {
     print("1");
     var user_res = await http.post(
@@ -31,7 +29,12 @@ userLogin(String email, String password) async{
         //print("로그인에 성공하였습니다.");
         user_data = resLogin['userData'];
         print("{$user_data}");
-        Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
+
+        // 첫 로그인 시에만 인사해줌
+        if (reload==false){
+          Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
+        }
+
 
         return true;
 
@@ -87,5 +90,44 @@ afterLogin() async {
   // 백그라운드 실행
   if (do_mission != null) {
     doMissionSave();
+  }
+}
+
+// keep login - 유저 정보 들고오기
+LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
+
+  dynamic userInfo = '';
+
+  // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+  // 데이터가 없을때는 null을 반환
+  userInfo = await storage.read(key:'login');
+  print(userInfo);
+
+  // 자동로그인이 필요한 경우, reload 시
+  if ((userInfo!=null && user_data==null) || reload) {
+    var userDecode = jsonDecode(userInfo);
+
+    print(userDecode);
+    await userLogin(userDecode['user_email'], userDecode['password'], reload);
+    //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
+
+    // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
+    await afterLogin();
+    // 다 닫고 ㄱㄱ
+
+    if (context!=null) {
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+    }
+  } // 자동로그인이 필요하지 않은 경우
+  else if (userInfo!=null && user_data!=null) {
+    // 다 닫고 ㄱㄱ
+    if (context!=null) {
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+    }
+  }
+  else {
+    print('로그인이 필요합니다');
   }
 }
