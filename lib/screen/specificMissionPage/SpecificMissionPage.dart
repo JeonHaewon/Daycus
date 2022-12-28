@@ -65,7 +65,7 @@ double _basicMoney = init_reward;
 String _basicText = "";
 double rewardPercent = 100;
 String _rewardCalculResert = _basicText;
-String progress = "willbutton";
+String progress = "donebutton";
 
 class _SpecificMissionPageState extends State<SpecificMissionPage> {
   var f = NumberFormat('###,###,###,###');
@@ -485,7 +485,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                         topimage: 'missionparticipate_image',
                         //average reward도 데이터베이스에서 끌고오기
                         mission_id: widget.mission_id,
-                        title: widget.title, duration: widget.duration, totaluser: widget.totaluser, avgreward: 3000)),
+                        title: widget.title, duration: widget.duration, totaluser: widget.totaluser, avgreward: int.parse(widget.mission_data['average']))),
                   );
                 }
               }, child: Text("미션 참여하기",

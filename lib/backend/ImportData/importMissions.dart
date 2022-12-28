@@ -14,12 +14,12 @@ missionImport() async{
     if (res.statusCode == 200) {
       //print("출력 : ${res.body}");
       var resMission = jsonDecode(res.body);
-      print("미션 해독 : ${resMission}");
+      //print("미션 해독 : ${resMission}");
       //resMission = null;
       // 이거 null 관리 어떻게 하는지 잘 알아보고 수정할 필요가 있음.
 
       if (resMission['success'] == true) {
-        print("미션 불러오기를 성공하였습니다.");
+        //print("미션 불러오기를 성공하였습니다.");
         all_missions = resMission['missions'];
 
       } else {

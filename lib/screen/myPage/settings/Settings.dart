@@ -1,4 +1,5 @@
 import 'package:daycus/backend/AdminPage.dart';
+import 'package:daycus/core/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -189,7 +190,7 @@ class Settings extends StatelessWidget {
                             children: [
 
                               Text("     버전",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                              Text("V1.0     ",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
+                              Text("V${version}     ",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
                             ],
                           ),
                         ),

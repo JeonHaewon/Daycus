@@ -13,11 +13,11 @@ doMissionImport() async {
     var resMission = jsonDecode(select_res.body);
 
     if (resMission['success'] == true) {
-      print(resMission);
+      //print(resMission);
       do_mission = resMission['data'];
 
     } else {
-      print("미션을 불러오지 못했습니다. 하고있는 미션이 없을수도.");
+      print("불러온 미션이 없습니다");
       // 불러올 미션이 없는 것 같음.
       //Fluttertoast.showToast(msg: ".");
     }

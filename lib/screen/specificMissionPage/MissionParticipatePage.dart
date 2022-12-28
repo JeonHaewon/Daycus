@@ -4,6 +4,8 @@ import 'package:daycus/backend/ImportData/importMissions.dart';
 import 'package:daycus/backend/missionParticipate/missionParticipate.dart';
 import 'package:daycus/backend/missionParticipate/missionUserUpdate.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/core/app_text.dart';
+import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -106,7 +108,7 @@ class MissionParticipatePage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('참가인원',style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                    Text('${f.format(totaluser)}명',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+                                    Text('${f.format(totaluser)} 명',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
                                   ],
                                 ),
 
@@ -116,7 +118,7 @@ class MissionParticipatePage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('평균 참여 리워드',style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                    Text('${f.format(avgreward)}원',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+                                    Text('${f.format(avgreward)} ${rewardName}',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
                                   ],
                                 ),
 
@@ -154,7 +156,7 @@ class MissionParticipatePage extends StatelessWidget {
                             controller: rewardCtrl,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText: " 0원",
+                              hintText: " 0 ${rewardName}",
                               hintStyle: TextStyle(color: Colors.grey),
                             ),
                             validator: (String? value){
@@ -162,11 +164,15 @@ class MissionParticipatePage extends StatelessWidget {
                               if (value!.isEmpty){
                                 return null;
                               }
+                              // 최대로 걸 수 있는 리워드를 넘었을 때
+                              else if(int.parse(value) > limit_bet_reward){
+                                return "최대 ${limit_bet_reward} ${rewardName}까지 걸 수 있습니다";
+                              }
                               // 리워드를 자신이 가진 리워드보다 더 많이 걸었을 때
-                              // 최대로 걸 수 있는 리워드를 정해야함.
                               else if (int.parse(value) > int.parse(user_data['reward'])){
                                 return "보유 리워드보다 많이 걸 수 없습니다";
                               }
+                              
                             },
                           ),
                         ),

@@ -14,8 +14,13 @@ import 'package:daycus/screen/myPage/ask/ToDeveloper.dart';
 class MyPage extends StatelessWidget {
   const MyPage({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    Size m = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
@@ -37,233 +42,235 @@ class MyPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+        child: Container(
+          height: m.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
 
-            Padding(
-              padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 0),
-              child: Column(
-                children: [
-                  Container(
-                    child: Row(
-                      children: [
-                        Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Text("현재등급 ",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
-                        Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Text("입니다",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
-
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 15.h,),
-
-
-                   //주간랭킹
-
-                  SizedBox(height: 15.h,),
-
-                  // 미션 달성률 - 다음에 만나요 ^^
-                  // Container(
-                  //   width: 365.w,
-                  //   height:280.h,
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.white,
-                  //     borderRadius: BorderRadius.circular(15),
-                  //   ),
-                  //   margin: EdgeInsets.symmetric(horizontal: 2.w),
-                  //   child: Column(
-                  //     children: [
-                  //       SizedBox(height: 20.h,),
-                  //
-                  //       Container(
-                  //         child: Row(
-                  //           children: [
-                  //             SizedBox(width: 20.w,),
-                  //             Text("미션 달성률",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //
-                  //       SizedBox(height: 10.h,),
-                  //       Image.asset('assets/image/graph.png' , height: 200.h)
-                  //
-                  //     ],
-                  //   ),
-                  // ), //주간랭킹
-
-                  //SizedBox(height: 15.h,),
-
-
-                  // 미션 참여 빈도 - 다음에 만나요
-                  // Container(
-                  //   width: 365.w,
-                  //   height:260.h,
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.white,
-                  //     borderRadius: BorderRadius.circular(15),
-                  //   ),
-                  //   margin: EdgeInsets.symmetric(horizontal: 2.w),
-                  //   child: Column(
-                  //     children: [
-                  //       SizedBox(height: 20.h,),
-                  //       Container(
-                  //         child: Row(
-                  //           children: [
-                  //             SizedBox(width: 20.w,),
-                  //             Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  //             SizedBox(width: 120.w,),
-                  //             Text("최근 3개월",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
-                  //
-                  //           ],
-                  //         ),
-                  //       ),
-                  //       SizedBox(height: 10.h,),
-                  //
-                  //       Image.asset('assets/image/graph2.png' , height: 180.h),
-                  //
-                  //     ],
-                  //   ),
-                  // ), //주간랭킹
-
-                  MyPageInformation(title: "리워드",
-                      content: "${user_data['reward']} ${rewardName}"),
-
-                  SizedBox(height: 15.h,),
-
-                  MyPageInformation(title: "주간 랭킹",
-                      content: "${user_data['Ranking']} 등"),
-
-                  //SizedBox(height: 55.h,),
-
-                  // 미션 피드 - 다음에 만나요 ㅎㅎ
-
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(10)
-                  //     ),
-                  //     primary: Colors.white,
-                  //     onPrimary: Colors.black,
-                  //     minimumSize: Size(365.w, 50.h),
-                  //     textStyle: TextStyle(fontSize: 18.sp),
-                  //   ),
-                  //
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (_) => MissionFeed()),
-                  //     );
-                  //   },
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Text(" 미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  //       Image.asset('assets/image/arrow-right1.png' )
-                  //     ],
-                  //   ),
-                  // ),
-
-                  SizedBox(height: 15.h,),
-
-
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
+              Padding(
+                padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 0),
+                child: Column(
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        ],
                       ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(365.w, 50.h),
-                      textStyle: TextStyle(fontSize: 18.sp),
                     ),
+                    Container(
+                      child: Row(
+                        children: [
+                          Text("현재등급 ",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
+                          Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          Text("입니다",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
 
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => PrivateSettings()),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(" 개인정보 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Image.asset('assets/image/arrow-right1.png' )
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 15.h,),
-
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
+                        ],
                       ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(365.w, 50.h),
-                      textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => Settings()),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(" 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Image.asset('assets/image/arrow-right1.png' )
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 25.h,),
+                    SizedBox(height: 15.h,),
 
 
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => ToDeveloper()),
-                      );
-                    },
-                    child: Container(
-                      width: 250.w,
-                      height: 40.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                     //주간랭킹
+
+                    SizedBox(height: 15.h,),
+
+                    // 미션 달성률 - 다음에 만나요 ^^
+                    // Container(
+                    //   width: 365.w,
+                    //   height:280.h,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white,
+                    //     borderRadius: BorderRadius.circular(15),
+                    //   ),
+                    //   margin: EdgeInsets.symmetric(horizontal: 2.w),
+                    //   child: Column(
+                    //     children: [
+                    //       SizedBox(height: 20.h,),
+                    //
+                    //       Container(
+                    //         child: Row(
+                    //           children: [
+                    //             SizedBox(width: 20.w,),
+                    //             Text("미션 달성률",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //
+                    //       SizedBox(height: 10.h,),
+                    //       Image.asset('assets/image/graph.png' , height: 200.h)
+                    //
+                    //     ],
+                    //   ),
+                    // ), //주간랭킹
+
+                    //SizedBox(height: 15.h,),
+
+
+                    // 미션 참여 빈도 - 다음에 만나요
+                    // Container(
+                    //   width: 365.w,
+                    //   height:260.h,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white,
+                    //     borderRadius: BorderRadius.circular(15),
+                    //   ),
+                    //   margin: EdgeInsets.symmetric(horizontal: 2.w),
+                    //   child: Column(
+                    //     children: [
+                    //       SizedBox(height: 20.h,),
+                    //       Container(
+                    //         child: Row(
+                    //           children: [
+                    //             SizedBox(width: 20.w,),
+                    //             Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    //             SizedBox(width: 120.w,),
+                    //             Text("최근 3개월",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
+                    //
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       SizedBox(height: 10.h,),
+                    //
+                    //       Image.asset('assets/image/graph2.png' , height: 180.h),
+                    //
+                    //     ],
+                    //   ),
+                    // ), //주간랭킹
+
+                    MyPageInformation(title: "리워드",
+                        content: "${user_data['reward']} ${rewardName}"),
+
+                    SizedBox(height: 15.h,),
+
+                    MyPageInformation(title: "주간 랭킹",
+                        content: "${user_data['Ranking']} 등"),
+
+                    //SizedBox(height: 55.h,),
+
+                    // 미션 피드 - 다음에 만나요 ㅎㅎ
+
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(10)
+                    //     ),
+                    //     primary: Colors.white,
+                    //     onPrimary: Colors.black,
+                    //     minimumSize: Size(365.w, 50.h),
+                    //     textStyle: TextStyle(fontSize: 18.sp),
+                    //   ),
+                    //
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(builder: (_) => MissionFeed()),
+                    //     );
+                    //   },
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Text(" 미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    //       Image.asset('assets/image/arrow-right1.png' )
+                    //     ],
+                    //   ),
+                    // ),
+
+                    SizedBox(height: 15.h,),
+
+
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        primary: Colors.white,
+                        onPrimary: Colors.black,
+                        minimumSize: Size(365.w, 50.h),
+                        textStyle: TextStyle(fontSize: 18.sp),
                       ),
 
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => PrivateSettings()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(" 개인정보 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          Image.asset('assets/image/arrow-right1.png' )
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 15.h,),
+
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        primary: Colors.white,
+                        onPrimary: Colors.black,
+                        minimumSize: Size(365.w, 50.h),
+                        textStyle: TextStyle(fontSize: 18.sp),
+                      ),
+
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => Settings()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(" 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          Image.asset('assets/image/arrow-right1.png' )
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 25.h,),
+
+
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => ToDeveloper()),
+                        );
+                      },
                       child: Container(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                            SizedBox(width: 10.w,),
-                            Icon(Icons.chat, color: Colors.grey[850])
-                          ],
+                        width: 250.w,
+                        height: 40.h,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
                         ),
 
+                        child: Container(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              SizedBox(width: 10.w,),
+                              Icon(Icons.chat, color: Colors.grey[850])
+                            ],
+                          ),
+
+                        ),
                       ),
                     ),
-                  ),
 
 
-                ],
+                  ],
+                ),
               ),
-            ),
 
 
 
@@ -271,7 +278,8 @@ class MyPage extends StatelessWidget {
 
 
 
-          ],
+            ],
+          ),
         ),
       ),
     );

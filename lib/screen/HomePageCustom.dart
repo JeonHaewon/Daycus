@@ -229,7 +229,7 @@ class HomePage extends StatelessWidget {
                         return Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SpecificMissionToPage(i: extraindex),
                                 if (extraindex + 1 < missions_cnt)

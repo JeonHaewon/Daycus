@@ -20,15 +20,19 @@ class CategoryMission extends StatelessWidget {
     int extraindex = -2;
     int _build_cnt = page_category.length;
 
+    Size m = MediaQuery.of(context).size;
+
     return Scaffold(
-
-
       backgroundColor: AppColor.background,
       body:SingleChildScrollView(
+        // height를 폰 크기 정도로 해줘야 작동함. 아니면 스크롤 자체가 안되기 때문에 작동 안함.
+        physics: BouncingScrollPhysics(),
           child: Center(
             child: Column(
               children: <Widget>[
                 Container(
+                  height: m.height,
+
                   width: 370.w,
                   child: ListView.builder(
                     shrinkWrap: true,

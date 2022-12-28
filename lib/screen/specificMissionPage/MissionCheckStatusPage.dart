@@ -3,10 +3,15 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UploadImage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
+import 'package:daycus/screen/temHomePage.dart';
+import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
@@ -332,7 +337,18 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                             children: [
                               Text("인증 현황",style: TextStyle( color: AppColor.happyblue, fontSize: 14.w, fontFamily: 'korean') ),
                               // SizedBox(height: 3.w,),
-                              Text("좋은 습관 만들기까지 ${14-todayBlockCnt+1}일",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                              // 미션 기간 이전
+                              if (0>=todayBlockCnt)
+                                Text("좋은 습관에 도전하기까지 ${todayBlockCnt+1}일 전",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                              // 미션 기간 동안
+                              if (0<todayBlockCnt && todayBlockCnt<mission_week+1)
+                                Text("좋은 습관 만들기까지 ${mission_week-todayBlockCnt+1}일",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                              // 미션이 끝났을 때
+                              if (todayBlockCnt>=15)
+                                Text("${mission_week}일간 좋은 습관 만드셨나요?",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                               SizedBox(height: 10.w,),
 
                               Container(
@@ -579,44 +595,105 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
               width: 412.w,
               child:TextButton(onPressed: () async {
 
-                  // 14일이
+                  // 14일이 지났을 때
                 if (todayBlockCnt > missionDate) {
 
-                  print("미션 정산을 시작합니다");
+                  // 정산 변수 초기화
+                  // 0 row 복사 1 삭제 2 리워드 환급
+                  List<bool> success = [false, false, false];
+                  double returnReward = 0;
+                  String popTitle = ""; String popContent = "";
 
+                  double bet_reward = double.parse(widget.do_mission_data['bet_reward']);
+
+                  // 성공 개수 카운트
                   int mission_result = 0;
-                  for (int i=1 ; i<=14 ; i++){
+                  for (int i=1 ; i<=mission_week ; i++){
                     if(widget.do_mission_data['d${i}']!=null)
                       mission_result++;
                   }
-                  print(mission_result);
+                  print("미션 성공한 갯수 :  : ${mission_result}");
+
+                  // 최대 100%
+                  if (mission_result>toCertify){
+                    mission_result = toCertify;
+                  }
 
                   // 미션 성공
-                  if (mission_result >= toCertify){
+                  if (mission_result >= toCertify) {
+                    popTitle = "미션 성공 !!";
                     // 리워드를 걸지 않았을 때
-                    if (widget.do_mission_data['bet_reward']=='0'){
-                      print("원래 가진 리워드에 14를 추가함");
-                    }
-
+                    if (widget.do_mission_data['bet_reward'] == '0') {
+                      // 원래 가진 리워드에 14를 추가함
+                      // int > string > double
+                      returnReward = double.parse((mission_reward).toString());}
                     // 리워드를 걸었을 때
                     else {
-                      print("원래 가진 리워드에 14+(건 리워드)*150/100를 추가함");
-                    }
+                      // 원래 가진 리워드에 14+(건 리워드)*150/100를 추가함
+                      returnReward = mission_reward+bet_reward*150/100;}
+
+                    popContent = missionSuccessString+"\n${returnReward.toStringAsFixed(1)} ${rewardName}가 지급됩니다";
                   }
+
                   // 미션 실패
                   else {
-                    // 리워드를 걸지 않았을 때 
-                    if (widget.do_mission_data['bet_reward']=='0'){
-                      print("아무 리워드 환급이 없음.");
+                    popTitle = "미션 실패";
+                    // 리워드를 걸지 않았을 때
+                    if (widget.do_mission_data['bet_reward'] == '0') {
+                      popContent = missionFailString;
+                      success[2] = true;
                     }
                     // 리워드를 걸었을 때
                     else {
-                      print("원래 가진 리워드에 (한 퍼센트)*14+(건 리워드)/2를 추가함");
+                      // 원래 가진 리워드에 (한 퍼센트)*14+(건 리워드)/2를 추가함
+                      returnReward = (mission_result/toCertify)*mission_week+(bet_reward/2);
+                      popContent = missionSuccessAndBetString + "\n${((mission_result/toCertify)*100).toStringAsFixed(1)}% 달성하여 ${returnReward.toStringAsFixed(1)}포인트가 지급됩니다.\n다른 미션에 도전해보세요!";
                     }
                   }
 
+                  print("여기까지 됨");
 
+                  // 이후 공통 - pop 페이지 띄우기
+                  PopPage(popTitle, context, Text(popContent),
+                      "확인", null, () async {
 
+                        // do_mission > Done_mission row 이동 - 공통 작업
+                        success[0] = await update_request(
+                            "INSERT INTO Done_mission  select * from (select * from do_mission where (do_id = '${widget.do_mission_data['do_id']}')) dating",
+                            null);
+                        if (success[0]) {
+                          success[1] = await update_request(
+                              "DELETE FROM do_mission where (do_id = '${widget.do_mission_data['do_id']}')",
+                              null);
+                          if (success[1]){
+                            // 환급 리워드가 있다면, 리워드 업데이트
+                            if (returnReward>0){
+                              success[2] = await update_request(
+                                  "UPDATE user_table SET reward = reward + ${returnReward.toStringAsFixed(1)} where user_email = '${user_data['user_email']}'",
+                                  null);
+                            }
+                          }
+                        }
+
+                        // 모든 프로세스 종료 시 나갈 수 있음.
+                        if(success[0]&&success[1]&&success[2]){
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => TemHomePage()),
+                                  (route) => false);
+
+                          afterLogin();
+
+                          // toast 얼마나 환급받았는지
+                          if (returnReward>0){
+                            Fluttertoast.showToast(msg: "${returnReward.toStringAsFixed(1)} ${rewardName}가 환급되었습니다");}
+                          // 환급받을 리워드가 없을 시
+                          else {
+                            Fluttertoast.showToast(msg: missionFailToastString);}
+                        }
+
+                      });
 
                   // 아직 미션 기간이 되지 않았을 때
                 } else if(todayBlockCnt <= 0){

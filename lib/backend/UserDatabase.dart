@@ -16,3 +16,6 @@ var missions_hobby = null;
 //Map<String, List<dynamic>> missions_category = {};
 
 var do_mission = null;
+
+// 마지막 에러를 잡기 위한 변수
+String last_error = "최근에 잡힌 에러가 없음";
