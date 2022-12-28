@@ -5,8 +5,6 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
-
-
 class ToDeveloper extends StatelessWidget {
   const ToDeveloper({Key? key}) : super(key: key);
 

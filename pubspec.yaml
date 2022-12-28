@@ -54,6 +54,10 @@ dependencies:
   crypto:
   flutter_email_sender:
   flutter_local_notifications:
+  pedometer:
+  health:
+  shared_preferences:
+
 
 
 dev_dependencies:

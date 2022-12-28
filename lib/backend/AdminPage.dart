@@ -7,6 +7,19 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'dart:async';
+import 'dart:ui';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:pedometer/pedometer.dart';
+import 'package:health/health.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+String formatDate(DateTime d) {
+  return d.toString().substring(0, 19);
+}
+
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({Key? key}) : super(key: key);
@@ -17,13 +30,10 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
 
-  @override
-  void dispose(){
-    super.dispose();
-  }
+
   @override
   Widget build(BuildContext context) {
-    initNotification();
+
     move_to_done_mission() async {
       String now = await NowTime('yy/MM/dd - HH:mm:ss');
       try {
@@ -273,7 +283,27 @@ class _AdminScreenState extends State<AdminScreen> {
                   Image.asset('assets/image/arrow-right1.png' )
                 ],
               ),
-            )
+            ),
+            SizedBox(height: 15.h,),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                primary: Colors.white,
+                onPrimary: Colors.black,
+                minimumSize: Size(365.w, 50.h),
+                textStyle: TextStyle(fontSize: 18.sp),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("만보기를 한번 해봅시다 !",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  Image.asset('assets/image/arrow-right1.png' )
+                ],
+              ),
+            ),
           ],
         ),
       ),
