@@ -1,3 +1,4 @@
+import 'package:daycus/backend/PedometerPage.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -295,7 +296,11 @@ class _AdminScreenState extends State<AdminScreen> {
                 minimumSize: Size(365.w, 50.h),
                 textStyle: TextStyle(fontSize: 18.sp),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PedometerPage()));
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
