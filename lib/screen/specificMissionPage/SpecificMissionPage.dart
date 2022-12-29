@@ -75,22 +75,24 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _asyncMethod();
+    });
+  }
+
+
+
+
+  _asyncMethod() async {
 
     rewardPercent = double.parse(widget.rewardPercent);
     _basicText = "${init_reward*(rewardPercent)/100} ${rewardName}";
     _rewardCalculResert = _basicText;
 
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      _asyncMethod();
-    });
-
-  }
-
-  _asyncMethod() async {
     String now_time = await NowTime("yyyyMMdd");
-    print("duration ${widget.startDate}");
+    //print("duration ${widget.startDate}");
 
     // start date null인 경우 -1, 날짜가 지나가면 참가할 수 없음.
      timeDiffer = widget.startDate==null ? 15 : DateTime.parse(now_time)
@@ -115,6 +117,14 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+      _basicMoney = init_reward;
+      _basicText = "${_basicMoney*(rewardPercent+100)/100} ${rewardName}";
+      _rewardCalculResert = _basicText;
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double rewardPercent = double.parse(widget.rewardPercent);
@@ -122,14 +132,6 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
     List rules_list = widget.rules.split("\\n");
     int rules_list_cnt = rules_list.length;
 
-
-    @override
-    dispose() async {
-      super.dispose();
-      _basicMoney = init_reward;
-      _basicText = "${_basicMoney*(rewardPercent+100)/100} ${rewardName}";
-      _rewardCalculResert = _basicText;
-    }
 
     return Scaffold(
       appBar: AppBar(

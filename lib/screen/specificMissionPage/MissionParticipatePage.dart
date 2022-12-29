@@ -165,11 +165,11 @@ class MissionParticipatePage extends StatelessWidget {
                                 return null;
                               }
                               // 최대로 걸 수 있는 리워드를 넘었을 때
-                              else if(int.parse(value) > limit_bet_reward){
+                              else if(double.parse(value) > limit_bet_reward){
                                 return "최대 ${limit_bet_reward} ${rewardName}까지 걸 수 있습니다";
                               }
                               // 리워드를 자신이 가진 리워드보다 더 많이 걸었을 때
-                              else if (int.parse(value) > int.parse(user_data['reward'])){
+                              else if (double.parse(value) > double.parse(user_data['reward'])){
                                 return "보유 리워드보다 많이 걸 수 없습니다";
                               }
                               
@@ -214,7 +214,7 @@ class MissionParticipatePage extends StatelessWidget {
 
                   // 참여 미션 등록하기
                   await missionParticipate(mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
-                  print("gggg");
+                  //print("gggg");
                   minus_reward(rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text);
                   // 참여 유저 업데이트
                   // 이건 잘 됨.

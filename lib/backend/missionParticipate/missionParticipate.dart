@@ -36,18 +36,18 @@ missionParticipate(mission_id, user_email, bet_reward) async {
   }
 }
 
-minus_reward(bet_reward) async {
+minus_reward(String bet_reward) async {
 
   try {
     var update_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "UPDATE user_table SET reward = '${(int.parse(user_data['reward'])-int.parse(bet_reward)).toString()}' WHERE user_email = '${user_data['user_email']}'",
+      'update_sql': "UPDATE user_table SET reward = '${(double.parse(user_data['reward'])-double.parse(bet_reward)).toString()}' WHERE user_email = '${user_data['user_email']}'",
     });
 
     if (update_res.statusCode == 200 ) {
       var resMission = jsonDecode(update_res.body);
       // print(resMission);
       if (resMission['success'] == true) {
-        user_data['reward'] = (int.parse(user_data['reward'])-int.parse(bet_reward)).toString();
+        user_data['reward'] = (double.parse(user_data['reward'])-double.parse(bet_reward)).toString();
       } else {
         print("에러발생");
         print(resMission);

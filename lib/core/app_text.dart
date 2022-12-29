@@ -23,3 +23,7 @@ const String missionSuccessString = "갓생에 한걸음 가까워 지셨군요.
 const String missionSuccessAndBetString = "아쉽군요!";
 // 그냥 실패 시 토스트 메세지
 const String missionFailToastString = "미션이 종료되었습니다.";
+
+const String adminEmail = 'haim1121.dgist@gmail.com';
+
+const String toDeveloperCantString = "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드릴게요 :)";

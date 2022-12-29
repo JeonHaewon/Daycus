@@ -35,7 +35,7 @@ class FindPasswordPage extends StatelessWidget {
 
         }
       } on Exception catch (e) {
-        print("에러발생");
+        print("에러발생 : ${e}");
         Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
       }
     }

@@ -35,11 +35,12 @@ Future getImage(String todayString, source) async {
     image = await File(pickedFile.path).copy(newPath);
   }
 
+  return image;
 }
 
 // 사진 업로드
 Future uploadImage
-    (String pictureName, String folderName, String source, String do_id, int todayBlockCnt) async {
+    (String pictureName, String folderName, String source, String? do_id, int? todayBlockCnt) async {
   //var uri = Uri.parse("http://10.8.1.148/api_members/mission/upload.php");
 
   //String do_id = widget.do_mission_data['do_id'];
@@ -60,30 +61,38 @@ Future uploadImage
   if (response.statusCode == 200 && jsonDecode(result)['connection']==true) {
     success = true;
     print("이미지가 업로드 되었습니다.");
+    if ((do_id == null && todayBlockCnt == null)){
+      return true;
+    }
   } else {
     print(result);
     print("image not upload");
+    if ((do_id != null && todayBlockCnt != null)){
+      return false;
+    }
   }
 
-  // do_mission에 기록
-  var update_res = await http.post(Uri.parse(API.update), body: {
-    'update_sql': "UPDATE DayCus.do_mission SET d${todayBlockCnt} = '${imageReNamed}' WHERE (do_id = '${do_id}')",
-  });
+  if (do_id != null && todayBlockCnt != null) {
+    // do_mission에 기록
+    var update_res = await http.post(Uri.parse(API.update), body: {
+      'update_sql':
+          "UPDATE DayCus.do_mission SET d${todayBlockCnt} = '${imageReNamed}' WHERE (do_id = '${do_id}')",
+    });
 
-  // do_mission 반영에 대한 테스트
-  if (update_res.statusCode == 200) {
-    print("출력 : ${update_res.body}");
-    var res_update = jsonDecode(update_res.body);
-    if (res_update['success'] == true && success==true) {
-      print("이미지 정보가 데이터 베이스에 저장되었습니다.");
-      //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
-      return true;
-
-    } else {
-      print("이미지 정보가 데이터 베이스 저장에 실패했습니다.");
-      print("message : ${res_update['success']}");
-      return false;
-      // 이름을 바꿀 수 없는 상황?
+    // do_mission 반영에 대한 테스트
+    if (update_res.statusCode == 200) {
+      print("출력 : ${update_res.body}");
+      var res_update = jsonDecode(update_res.body);
+      if (res_update['success'] == true && success == true) {
+        print("이미지 정보가 데이터 베이스에 저장되었습니다.");
+        //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+        return true;
+      } else {
+        print("이미지 정보가 데이터 베이스 저장에 실패했습니다.");
+        print("message : ${res_update['success']}");
+        return false;
+        // 이름을 바꿀 수 없는 상황?
+      }
     }
   }
 

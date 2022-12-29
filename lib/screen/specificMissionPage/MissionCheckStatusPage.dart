@@ -1,17 +1,13 @@
-
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:daycus/backend/NowTime.dart';
-import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UploadImage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
-import 'package:daycus/backend/login/login.dart';
+import 'package:daycus/backend/missionComplete/MissionComplete.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
-import 'package:daycus/screen/temHomePage.dart';
-import 'package:daycus/widget/PopPage.dart';
+import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
@@ -35,7 +31,6 @@ class MissionCheckStatusPage extends StatefulWidget {
   @override
   State<MissionCheckStatusPage> createState() => _MissionCheckStatusPageState();
 
-
 }
 
 
@@ -44,10 +39,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   double _textSpacing = 10.w;
 
-
-
   todayMissionCertify(int do_i, String source) async {
-
 
     String todayString = await NowTime('yyyyMMddHHmmss');
     String imageName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
@@ -82,6 +74,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
     setState(() {
       do_mission[do_i]["d$todayBlockCnt"] = true;
+      return_reward = doneCnt/toCertify>1 ? 1 : doneCnt/toCertify;
     });
 
     Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
@@ -94,6 +87,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   int _oneWeek = 7;
   double return_reward = 0;
   int toCertify = 14;
+
+  String returnRewardString = "0";
 
   @override
   void initState () {
@@ -126,7 +121,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       });
 
 
-
   }
 
   // dart.io로 file 불러왔음. html로 불러야할지도
@@ -134,54 +128,15 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   var f = NumberFormat('###,###,###,###');
 
 
-
-
   int doneCnt = 0;
+
 
   @override
   Widget build(BuildContext context) {
 
-    // 카메라 아이콘 클릭시 띄울 모달 팝업
-    Widget bottomSheet(int do_i) {
-      return Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 20
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  TextButton.icon(
-                    icon: Icon(Icons.camera_alt, size: 30.sp, color: Colors.black,),
-                    onPressed: () async {
-                      await todayMissionCertify(do_i, "camera");
-                      Navigator.pop(context);
-                    },
-                    label: Text('카메라', style: TextStyle(fontSize: 17.sp, color: Colors.black),),
-                  ),
-                  TextButton.icon(
-                    icon: Icon(Icons.photo_library, size: 30.sp, color: Colors.black,),
-                    onPressed: () async {
-                      await todayMissionCertify(do_i, "gallery");
-                      Navigator.pop(context);
-                    },
-                    label: Text('갤러리', style: TextStyle(fontSize: 17.sp, color: Colors.black),),
-                  )
-                ],
-              )
-            ],
-          )
-      );
-    }
-
     //print("build :: ");
 
-    int index_i = -1;
-    int index_j = -1;
+    int index_i = -1; int index_j = -1;
 
     String title = widget.mission_data['title'];
     String duration = '${widget.mission_data['start_date']} ~ ${widget.mission_data['end_date']}';
@@ -199,6 +154,21 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
     int i = widget.mission_index;
     int do_i = all_missions[i]['now_user_do'];
+
+    Widget cameraOrGallery = bottomPopWidget(
+        context,
+
+        () async {
+          Navigator.pop(context);
+          await todayMissionCertify(do_i, "camera");
+        },
+
+        () async {
+          Navigator.pop(context);
+          await todayMissionCertify(do_i, "gallery");
+        },
+        "카메라", "갤러리",
+        Icons.camera_alt, Icons.photo);
 
     return Scaffold(
       appBar: AppBar(
@@ -393,7 +363,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                                   onPressed: () async {
                                                                     if (date == todayBlockCnt){
                                                                       if (widget.mission_data['certify_tool'] == 'gallery'){
-                                                                        showModalBottomSheet(context: context, builder: ((builder) => bottomSheet(do_i)));
+                                                                        showModalBottomSheet(context: context,
+                                                                            builder: ((builder) => cameraOrGallery
+                                                                            ));
                                                                       } else {
                                                                         todayMissionCertify(do_i, "camera");
                                                                       }
@@ -594,107 +566,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: () async {
-
-                  // 14일이 지났을 때
                 if (todayBlockCnt > missionDate) {
-
-                  // 정산 변수 초기화
-                  // 0 row 복사 1 삭제 2 리워드 환급
-                  List<bool> success = [false, false, false];
-                  double returnReward = 0;
-                  String popTitle = ""; String popContent = "";
-
-                  double bet_reward = double.parse(widget.do_mission_data['bet_reward']);
-
-                  // 성공 개수 카운트
-                  int mission_result = 0;
-                  for (int i=1 ; i<=mission_week ; i++){
-                    if(widget.do_mission_data['d${i}']!=null)
-                      mission_result++;
-                  }
-                  print("미션 성공한 갯수 :  : ${mission_result}");
-
-                  // 최대 100%
-                  if (mission_result>toCertify){
-                    mission_result = toCertify;
-                  }
-
-                  // 미션 성공
-                  if (mission_result >= toCertify) {
-                    popTitle = "미션 성공 !!";
-                    // 리워드를 걸지 않았을 때
-                    if (widget.do_mission_data['bet_reward'] == '0') {
-                      // 원래 가진 리워드에 14를 추가함
-                      // int > string > double
-                      returnReward = double.parse((mission_reward).toString());}
-                    // 리워드를 걸었을 때
-                    else {
-                      // 원래 가진 리워드에 14+(건 리워드)*150/100를 추가함
-                      returnReward = mission_reward+bet_reward*150/100;}
-
-                    popContent = missionSuccessString+"\n${returnReward.toStringAsFixed(1)} ${rewardName}가 지급됩니다";
-                  }
-
-                  // 미션 실패
-                  else {
-                    popTitle = "미션 실패";
-                    // 리워드를 걸지 않았을 때
-                    if (widget.do_mission_data['bet_reward'] == '0') {
-                      popContent = missionFailString;
-                      success[2] = true;
-                    }
-                    // 리워드를 걸었을 때
-                    else {
-                      // 원래 가진 리워드에 (한 퍼센트)*14+(건 리워드)/2를 추가함
-                      returnReward = (mission_result/toCertify)*mission_week+(bet_reward/2);
-                      popContent = missionSuccessAndBetString + "\n${((mission_result/toCertify)*100).toStringAsFixed(1)}% 달성하여 ${returnReward.toStringAsFixed(1)}포인트가 지급됩니다.\n다른 미션에 도전해보세요!";
-                    }
-                  }
-
-                  print("여기까지 됨");
-
-                  // 이후 공통 - pop 페이지 띄우기
-                  PopPage(popTitle, context, Text(popContent),
-                      "확인", null, () async {
-
-                        // do_mission > Done_mission row 이동 - 공통 작업
-                        success[0] = await update_request(
-                            "INSERT INTO Done_mission  select * from (select * from do_mission where (do_id = '${widget.do_mission_data['do_id']}')) dating",
-                            null);
-                        if (success[0]) {
-                          success[1] = await update_request(
-                              "DELETE FROM do_mission where (do_id = '${widget.do_mission_data['do_id']}')",
-                              null);
-                          if (success[1]){
-                            // 환급 리워드가 있다면, 리워드 업데이트
-                            if (returnReward>0){
-                              success[2] = await update_request(
-                                  "UPDATE user_table SET reward = reward + ${returnReward.toStringAsFixed(1)} where user_email = '${user_data['user_email']}'",
-                                  null);
-                            }
-                          }
-                        }
-
-                        // 모든 프로세스 종료 시 나갈 수 있음.
-                        if(success[0]&&success[1]&&success[2]){
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => TemHomePage()),
-                                  (route) => false);
-
-                          afterLogin();
-
-                          // toast 얼마나 환급받았는지
-                          if (returnReward>0){
-                            Fluttertoast.showToast(msg: "${returnReward.toStringAsFixed(1)} ${rewardName}가 환급되었습니다");}
-                          // 환급받을 리워드가 없을 시
-                          else {
-                            Fluttertoast.showToast(msg: missionFailToastString);}
-                        }
-
-                      });
-
+                  mission_complete(
+                      todayBlockCnt,
+                      widget.do_mission_data,
+                      toCertify,
+                      context,
+                      user_data['user_email']);
                   // 아직 미션 기간이 되지 않았을 때
                 } else if(todayBlockCnt <= 0){
                   Fluttertoast.showToast(msg: "아직 미션 기간이 아닙니다.");
@@ -702,7 +580,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                 // 14일이 넘어가지 않았을 경우 : 미션 인증
                  else{
                   if (widget.mission_data['certify_tool'] == 'gallery'){
-                    showModalBottomSheet(context: context, builder: ((builder) => bottomSheet(do_i)));
+                    showModalBottomSheet(context: context, builder: ((builder) => cameraOrGallery));
                   } else {
                     todayMissionCertify(do_i, "camera");
                   }
