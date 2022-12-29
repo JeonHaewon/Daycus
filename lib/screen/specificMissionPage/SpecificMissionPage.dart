@@ -41,7 +41,7 @@ class SpecificMissionPage extends StatefulWidget {
   }) : super(key: key);
 
   final mission_data;
-  final String startDate;
+  final String? startDate;
   final String mission_id;
   final String topimage;
   final String progress;
@@ -94,7 +94,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
 
     // start date null인 경우 -1, 날짜가 지나가면 참가할 수 없음.
      timeDiffer = widget.startDate==null ? 15 : DateTime.parse(now_time)
-         .difference((DateTime.parse(widget.startDate))).inDays + 1;
+         .difference((DateTime.parse(widget.startDate!))).inDays + 1;
 
      print("timeDiffer : ${timeDiffer}");
 

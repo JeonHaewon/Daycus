@@ -108,7 +108,7 @@ class HomePage extends StatelessWidget {
 
             HomePageUserInfoBar(leftContent: "나의 리워드", rightContent: "${user_data['reward']} ${rewardName}"),
             SizedBox(height: 10.h,),
-            HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "="} 등"),
+            HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등"),
 
             Container(
               child: Column(

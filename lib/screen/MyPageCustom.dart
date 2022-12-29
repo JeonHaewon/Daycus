@@ -146,7 +146,7 @@ class MyPage extends StatelessWidget {
                     SizedBox(height: 15.h,),
 
                     MyPageInformation(title: "주간 랭킹",
-                        content: "${user_data['Ranking']} 등"),
+                        content: "${user_data['Ranking'] ?? "-" } 등"),
 
                     //SizedBox(height: 55.h,),
 
