@@ -174,6 +174,13 @@ class _AdminScreenState extends State<AdminScreen> {
         child: Column(
           children: [
 
+          Text("개발자"),
+          Text("202111152 이하임 CTO : 2022.03.01 ~"),
+          Text("202011140 이기범 CUOP : 2022.12.20 ~"),
+
+            SizedBox(height: 15.h,),
+
+
             AdminButton(
               title: "던미션 테스트용",
               onPressed: (){
