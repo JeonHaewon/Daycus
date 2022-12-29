@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
 import 'package:pedometer/pedometer.dart';
@@ -7,6 +10,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var prefs;
+var curr;
+int suc = 0;
+int increased = 0;
+var really;
+bool isupgrade = false;
+bool isAppInactive = false;
+List<int> dap = [];
 
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
@@ -20,20 +30,8 @@ class PedometerPage extends StatefulWidget {
 }
 
 class _PedometerPageState extends State<PedometerPage> {
-  int pedometer_count = 1;
 
-  selecting_from_stroage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      pedometer_count =
-      (prefs.getInt('counter') ?? 1);
-    });
-  }
 
-  updating_pedometer_count() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('counter', pedometer_count-1);
-  }
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String _status = '?', _steps = '?';
@@ -41,15 +39,31 @@ class _PedometerPageState extends State<PedometerPage> {
   @override
   void initState() {
     super.initState();
-    selecting_from_stroage();
+    // selecting_from_stroage();
     initPlatformState();
   }
 
-  void onStepCount(StepCount event) {
+  updating_info(StepCount event) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('lit2') == null){
+      await prefs.setStringList('lit2', [event.steps.toString()]);
+    }
+    curr = prefs.getStringList('lit2');
+    return curr[0];
+  }
+
+
+  Future<void> onStepCount(StepCount event) async {
     print(event);
+    if (isupgrade==false){
+      really = await updating_info(event);
+      Fluttertoast.showToast(msg: "만보기 시작");
+      isupgrade = true;
+    }
     setState(() {
-      _steps = pedometer_count.toString();
-      pedometer_count += 1;
+      _steps = (event.steps - int.parse(really)).toString();
+      // _steps = pedometer_count.toString();
+      // pedometer_count += 1;
     });
   }
 
@@ -89,7 +103,6 @@ class _PedometerPageState extends State<PedometerPage> {
 
   void dispose(){
     super.dispose();
-    updating_pedometer_count();
   }
 
   @override
