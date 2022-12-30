@@ -218,10 +218,57 @@ class _AdminScreenState extends State<AdminScreen> {
       }
     }
 
+    update_user_count() async{
+      try {
+        var update_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "call update_user_cnt();",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          // print(resMission);
+          if (resMission['success'] == true) {
+            Fluttertoast.showToast(msg: "유저 수 업데이트가 완료되었습니다 !");
+
+          } else {
+            print("에러발생");
+            print(resMission);
+            Fluttertoast.showToast(msg: "다시 시도해주세요");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "업데이트 중 문제가 발생했습니다.");
+      }
+    }
+    update_total_user_count() async{
+      try {
+        var update_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "call update_total_user();",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          // print(resMission);
+          if (resMission['success'] == true) {
+            Fluttertoast.showToast(msg: "유저 수 업데이트가 완료되었습니다 !");
+
+          } else {
+            print("에러발생");
+            print(resMission);
+            Fluttertoast.showToast(msg: "다시 시도해주세요");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "업데이트를 진행하는 도중 문제가 발생했습니다.");
+      }
+    }
+
     update_ranking() async{
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "with rank_table as (select user_email as user_email, dense_rank() over(order by reward desc) as Ranking from user_table) update rank_table A inner join user_table B on A.user_email = B.user_email SET B.Ranking = A.Ranking;",
+          'update_sql': "call update_ranking();",
         });
 
         if (update_res.statusCode == 200 ) {
@@ -353,6 +400,14 @@ class _AdminScreenState extends State<AdminScreen> {
                 Fluttertoast.showToast(msg: "지문 인식 성공했습니다 !");
               },
             ),
+            AdminButton(
+              title: "user 수 변경 버튼",
+              onPressed: (){
+                update_user_count();
+                update_total_user_count();
+                Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
+              },
+            )
           ],
         ),
       ),
