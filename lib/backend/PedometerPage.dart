@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
@@ -30,7 +31,6 @@ class PedometerPage extends StatefulWidget {
 }
 
 class _PedometerPageState extends State<PedometerPage> {
-
 
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;

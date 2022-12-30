@@ -57,6 +57,8 @@ dependencies:
   pedometer:
   health:
   shared_preferences:
+  local_auth:
+  admob_flutter:
 
 
 

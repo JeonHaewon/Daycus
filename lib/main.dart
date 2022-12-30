@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 
-void main() => runApp(const MyApp());
+void main(){
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
 
   Widget build(BuildContext context) {
-    initNotification();
     return ScreenUtilInit(
       designSize: Size(412, 892),
       builder: (context, child) {
