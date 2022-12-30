@@ -21,6 +21,7 @@ class FindPasswordPage extends StatelessWidget {
     void is_enrolled(texting) async {
       try {
         var select_res = await http.post(Uri.parse(API.update), body: {
+          // 이거 'update_sql'로 바꾸어야함.
           'select_sql': "SELECT * FROM user_table WHERE user_email = '${texting}'",
         });
 

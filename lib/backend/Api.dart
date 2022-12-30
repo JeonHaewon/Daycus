@@ -12,5 +12,7 @@ class API{
 
   static const missionImport = "$hostConnect/mission/all_mission_import.php";
   static const imageUpload = "$hostConnect/mission/image_upload.php";
-  static const imageDownload = "$hostConnect/image_download/image_download.php";
+  static const imageDownload = "$hostConnect/image_download/image_download2.php";
+
+  static const imageDownloadLocal = "http://10.8.1.148/api_members/image_download.php";
 }
