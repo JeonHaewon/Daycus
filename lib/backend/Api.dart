@@ -12,4 +12,5 @@ class API{
 
   static const missionImport = "$hostConnect/mission/all_mission_import.php";
   static const imageUpload = "$hostConnect/mission/image_upload.php";
+  static const imageDownload = "$hostConnect/image_download/image_download.php";
 }
