@@ -58,21 +58,21 @@ android {
         // minSdkVersion flutter.minSdkVersion
         minSdkVersion 18
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
+        versionCode 8//flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled = true
     }
 
     // 출시 시
-//    signingConfigs {
-//
-//        release {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile file(keystoreProperties['storeFile']) ? file(keystoreProperties['storeFile']) : null
-//            storePassword keystoreProperties['storePassword']
-//        }
-//    }
+    signingConfigs {
+
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile']) ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
 
     buildTypes {
         build{
@@ -87,14 +87,14 @@ android {
             // signingConfig signingConfigs.debug
 
             // 출시 속성으로 변경
-            //signingConfig signingConfigs.release
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.debug
 
             // 프로가드 활성화
-            //minifyEnabled true
+            minifyEnabled true
             //useProguard true // 주석처리 해도 되는 것 같다.
             // 기본 프로가드 설정, 프로젝트에 필요한 프로가드 설정
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

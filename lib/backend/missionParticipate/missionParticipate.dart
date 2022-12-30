@@ -4,7 +4,6 @@ import 'package:daycus/backend/Api.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/NowTime.dart';
-import 'package:daycus/screen/specificMissionPage/MissionParticipatePage.dart';
 
 missionParticipate(mission_id, user_email, bet_reward) async {
 
