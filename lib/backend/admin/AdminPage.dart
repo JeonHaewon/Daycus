@@ -1,4 +1,5 @@
-import 'package:daycus/backend/PedometerPage.dart';
+import 'package:daycus/backend/admin/PedometerPage.dart';
+import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
@@ -237,6 +238,15 @@ class _AdminScreenState extends State<AdminScreen> {
                 Fluttertoast.showToast(msg: "데이터 리로드가 완료되었습니다 !");
               },
             ),
+
+            AdminButton(
+              title: "이미지 다운",
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ImageDownload()));
+              },
+            )
 
           ],
         ),
