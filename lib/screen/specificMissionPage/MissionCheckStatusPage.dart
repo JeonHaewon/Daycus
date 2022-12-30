@@ -566,6 +566,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: () async {
+                // 미션 끝 : 정산하기
                 if (todayBlockCnt > missionDate) {
                   mission_complete(
                       todayBlockCnt,

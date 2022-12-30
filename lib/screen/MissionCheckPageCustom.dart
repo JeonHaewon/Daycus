@@ -1,3 +1,4 @@
+import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -7,20 +8,32 @@ import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/widget/NowNoMission.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 
 
-class MissionCheckPage extends StatelessWidget {
+class MissionCheckPage extends StatefulWidget {
   const MissionCheckPage({Key? key}) : super(key: key);
 
+  // 이거 그냥 한 곳에서 접근할 수 있게 하면 안되나??
+  static final storage = FlutterSecureStorage();
 
+  @override
+  State<MissionCheckPage> createState() => _MissionCheckPageState();
+}
 
+class _MissionCheckPageState extends State<MissionCheckPage> {
   @override
   Widget build(BuildContext context) {
 
     int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
     Size m = MediaQuery.of(context).size;
+
+    Future<void> refresh() async {
+      await LoginAsyncMethod(MissionCheckPage.storage, null, true);
+      setState(() { });
+    };
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -41,73 +54,77 @@ class MissionCheckPage extends StatelessWidget {
         ],
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Container(
-          constraints: BoxConstraints(
-            minHeight: m.height,
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(30.w, 30.h, 0, 0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20.h,),
-                    Text("진행 중인 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 20.h,),
-
-              // 진행중인 미션이 없을 때
-              if(do_mission==null)
-              // 미션란으로 이동 !
-                NowNoMissionButton(onTap: (){
-                  controller.currentBottomNavItemIndex.value = 3;
-                },),
-
-              // 진행중인 미션이 있을 때
-              if(do_mission!=null)
-                Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: do_mission_cnt,
-                    itemBuilder: (_, index) {
-                      //id가 1부터 시작한다.
-                      int _index = int.parse(do_mission[index]['mission_id'])-1;
-                      //print("${_index}, ${_index.runtimeType}");
-                      //print(all_missions[_index]);
-                      return Column(
-                        children: [
-                          NowMissionButton(image: all_missions[_index]['thumbnail']==''
-                              ? 'missionbackground.png' : all_missions[_index]['thumbnail'],
-                            title: all_missions[_index]['title'],
-                            totalUser: int.parse(all_missions[_index]['total_user']),
-                            rank: 1,
-                            reward: int.parse(do_mission[index]['get_reward']),
-                            onTap: MissionCheckStatusPage(
-                              mission_index: _index,
-                              mission_data: all_missions[_index],
-                              do_mission_data: do_mission[index],
-                            ),),
-
-                          SizedBox(height: 7.h,),
-                        ],
-                      );
-                    },
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        color: AppColor.happyblue,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: m.height,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30.w, 30.h, 0, 0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20.h,),
+                      Text("진행 중인 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                    ],
                   ),
-                )
+                ),
+
+                SizedBox(height: 20.h,),
+
+                // 진행중인 미션이 없을 때
+                if(do_mission==null)
+                // 미션란으로 이동 !
+                  NowNoMissionButton(onTap: (){
+                    controller.currentBottomNavItemIndex.value = 3;
+                  },),
+
+                // 진행중인 미션이 있을 때
+                if(do_mission!=null)
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: do_mission_cnt,
+                      itemBuilder: (_, index) {
+                        //id가 1부터 시작한다.
+                        int _index = int.parse(do_mission[index]['mission_id'])-1;
+                        //print("${_index}, ${_index.runtimeType}");
+                        //print(all_missions[_index]);
+                        return Column(
+                          children: [
+                            NowMissionButton(image: all_missions[_index]['thumbnail']==''
+                                ? 'missionbackground.png' : all_missions[_index]['thumbnail'],
+                              title: all_missions[_index]['title'],
+                              totalUser: int.parse(all_missions[_index]['total_user']),
+                              rank: 1,
+                              reward: int.parse(do_mission[index]['get_reward']),
+                              onTap: MissionCheckStatusPage(
+                                mission_index: _index,
+                                mission_data: all_missions[_index],
+                                do_mission_data: do_mission[index],
+                              ),),
+
+                            SizedBox(height: 7.h,),
+                          ],
+                        );
+                      },
+                    ),
+                  )
 
 
 
-            ],
+              ],
+            ),
           ),
-        ),
 
+        ),
       ), //진행중인 미션
 
         );

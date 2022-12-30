@@ -82,10 +82,7 @@ afterLogin() async {
   await doMissionImport();
 
   missions_cnt = all_missions?.length;
-  print("미션 개수 : $missions_cnt");
-
-  // 홈페이지가 기본 !
-  controller.currentBottomNavItemIndex.value = 2;
+  //print("미션 개수 : $missions_cnt");
 
   // 백그라운드 실행
   if (do_mission != null) {
@@ -118,6 +115,9 @@ LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
     if (context!=null) {
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+
+      // 홈페이지가 기본 !
+      controller.currentBottomNavItemIndex.value = 2;
     }
   } // 자동로그인이 필요하지 않은 경우
   else if (userInfo!=null && user_data!=null) {

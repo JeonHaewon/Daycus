@@ -99,13 +99,15 @@ mission_complete(int todayBlockCnt, do_mission_data,
 
           // 모든 프로세스 종료 시 나갈 수 있음.
           if (success[0] && success[1] && success[2]) {
+
+            // 데이터를 다 업데이트 한 후에 페이지를 다시 불러옴
+            await afterLogin();
+
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (_) => TemHomePage()),
                     (route) => false);
-
-            afterLogin();
 
             // toast 얼마나 환급받았는지
             if (returnReward > 0) {

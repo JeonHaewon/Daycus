@@ -50,7 +50,6 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     //print("페이지가 없어졌습니다");
     super.dispose();
     emailCtrl.dispose();
