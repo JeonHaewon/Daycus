@@ -68,6 +68,15 @@ class _ImageDownloadState extends State<ImageDownload> {
               "imageName" : imageName,
             });
 
+        // var update_res = await http.post(Uri.parse(API.imageDownloadLocal),
+        //     body: {
+        //       "folder" : "water_glass",
+        //       "imageName" : "2.jpg",
+        //     });
+
+        // print(Image.network("http://10.8.1.148/api_members/image_uploaded/1.jpg").runtimeType);
+        // print(Image.network("http://10.8.1.148/api_members/image_download.php").runtimeType);
+
         if (update_res.statusCode == 200) {
           print("이미지를 불러왔습니다 : ");
           var res = jsonDecode(update_res.body);
@@ -122,9 +131,7 @@ class _ImageDownloadState extends State<ImageDownload> {
                   ),
                   
                   TextButton(onPressed: (){
-                    setState(() {
-                      folder = folderCtrl.text.trim();
-                    });
+                    folder = folderCtrl.text.trim();
                     Fluttertoast.showToast(msg: "폴더가 '${folder}'로 변경되었습니다.");
                   }, child: Text("폴더 변경")),
                 ],
@@ -182,9 +189,7 @@ class _ImageDownloadState extends State<ImageDownload> {
             ),
 
             Text("folder : ${folder}, index : ${index}, "),
-
-            if(imageList!=null)
-              Text("folder : ${imageList[index]['image']}, "),
+            Text("folder : ${imageList[index]['image']}, "),
 
             Container(
               width: 300.w, height: 600.w,
