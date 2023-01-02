@@ -39,6 +39,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   double _textSpacing = 10.w;
 
+
   todayMissionCertify(int do_i, String source) async {
 
     String todayString = await NowTime('yyyyMMddHHmmss');
@@ -98,6 +99,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     });
   }
 
+
   // 하임 1220: 미션 시작일로부터 지난 날짜 계산 후 set state
   _asyncMethod() async {
     print("init");
@@ -129,6 +131,36 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
 
   int doneCnt = 0;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    int mission_result = 0;
+    double return_reward = 0;
+    for (int i = 1; i <= mission_week; i++) {
+      if (widget.do_mission_data['d${i}'] != null)
+        mission_result++;
+    } print(mission_result);
+
+    // +0원 계산하기
+    // if (widget.do_mission_data['bet_reward']=='0' && (15-mission_result >= toCertify-doneCnt)){
+    //   return_reward = double.parse(mission_result.toString());}
+    // else if ()
+    //   Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+    //
+    // // 건 리워드가 없을 경우 & 실패했을 경우
+    // if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt < toCertify-doneCnt) )
+    // Text(" - ",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+    //
+    // // 건 리워드가 있을 경우
+    // if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-doneCnt) )
+    // Text("+ ${((return_reward*14)+int.parse(widget.do_mission_data['bet_reward'])/100*int.parse(widget.mission_data['reward_percent'])).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+    //
+    // // 건 리워드가 있을 경우 & 실패했을 경우
+    // if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-doneCnt) )
+    // Text("+ ${((return_reward*14)+(int.parse(widget.do_mission_data['bet_reward'])/2)).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+  }
 
 
   @override

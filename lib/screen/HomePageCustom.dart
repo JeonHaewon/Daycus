@@ -186,12 +186,14 @@ class _HomePageState extends State<HomePage> {
                           //print(all_missions[_index]);
                           return Column(
                             children: [
-                              NowMissionButton(image: all_missions[_index]['thumbnail']==''
+                              NowMissionButton(
+                                duration: (all_missions[_index]['start_date']).substring(5,10)+" ~ "+(all_missions[_index]['end_date']).substring(5,10),
+                                image: all_missions[_index]['thumbnail']==''
                                   ? 'missionbackground.png' : all_missions[_index]['thumbnail'],
                                 title: all_missions[_index]['title'],
                                 totalUser: int.parse(all_missions[_index]['total_user']),
                                 rank: 1,
-                                reward: int.parse(do_mission[index]['get_reward']),
+                                reward: double.parse(do_mission[index]['get_reward']),
                                 onTap: MissionCheckStatusPage(
                                   mission_index: _index,
                                   do_mission_data: do_mission[index],

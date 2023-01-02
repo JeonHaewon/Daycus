@@ -12,6 +12,7 @@ class NowMissionButton extends StatelessWidget {
     required this.totalUser,
     required this.rank,
     required this.reward,
+    required this.duration,
     this.onTap,
   }) : super(key: key);
 
@@ -19,7 +20,8 @@ class NowMissionButton extends StatelessWidget {
   final String title;
   final int totalUser;
   final int rank;
-  final int reward;
+  final double reward;
+  final String duration;
   final onTap;
 
   var f = NumberFormat('###,###,###,###');
@@ -42,88 +44,97 @@ class NowMissionButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         margin: EdgeInsets.symmetric(horizontal: 30.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+        child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-            Container(
-              child:Row(
-                children: [
-                  SizedBox(width: 20.w,),
+              children: [
 
-                  Stack(
-                    alignment: Alignment.center,
+                Container(
+                  child:Row(
                     children: [
+                      SizedBox(width: 20.w,),
 
-                      CircleAvatar(
-                        radius: 35.h,
-                        backgroundImage: image!=null
-                        // 사진이 있으면
-                            ? AssetImage('assets/image/thumbnail/$image')
-                            : AssetImage('assets/image/thumbnail/missionbackground.png'),
-                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 10.h),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
 
-                      Opacity(
-                        opacity: 0.25,
-                        child: Container(
-                          width: 66.w,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle
-                          ),
+                            CircleAvatar(
+                              radius: 35.h,
+                              backgroundImage: image!=null
+                              // 사진이 있으면
+                                  ? AssetImage('assets/image/thumbnail/$image')
+                                  : AssetImage('assets/image/thumbnail/missionbackground.png'),
+                            ),
+
+                            Opacity(
+                              opacity: 0.25,
+                              child: Container(
+                                width: 66.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  shape: BoxShape.circle
+                                ),
+                              ),
+                            ),
+
+                          ],
                         ),
                       ),
 
+
+                      SizedBox(width: 15.w,),
+
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 15.h),
+                            Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Text(f.format(totalUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
+                                  Text(" 참여중 ",style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
+                                  //Text(f.format(rank),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+                                  //Text("위",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+
+                                ],
+                              ),
+                            ),
+
+                           Container(
+                              child:  Container(
+                                width: 245.w,
+                                padding: EdgeInsets.only(right: 15.w, top: 13.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
+                                    //Text("+",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
+                                    //Text(f.format(reward),style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
+                                    //Text("원     ",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
                     ],
                   ),
+                ),
 
 
-                  SizedBox(width: 15.w,),
 
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 20.h),
-                        Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Container(
-                          child: Row(
-                            children: [
-                              Text(f.format(totalUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
-                              Text(" 참여중 ",style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
-                              //Text(f.format(rank),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                              //Text("위",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+
+              ],
             ),
 
-            Container(
-
-              child: Column(
-                children: [
-                  SizedBox(height: 60.h),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-
-                        Text("+",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                        Text(f.format(reward),style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                        Text("원     ",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                      ],
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
 
 
           ],
