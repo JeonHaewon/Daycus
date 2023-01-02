@@ -172,6 +172,16 @@ class _LabelingMissionState extends State<LabelingMission> {
 
     int extraindex = -2;
 
+    increase_index() async {
+      if (index+1 >= imageListCnt){
+        Fluttertoast.showToast(msg: "마지막입니다");}
+      else{
+        index += 1;
+        await image_download(widget.folder, imageList[index]['image']);
+        setState(() { is_load = true; });// 혹 안뜨는 경우를 대비, 2번 set state 해준다
+      }
+    }
+
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -367,13 +377,7 @@ class _LabelingMissionState extends State<LabelingMission> {
 
                 InkWell(
                   onTap: () async {
-                    if (index+1 >= imageListCnt){
-                      Fluttertoast.showToast(msg: "마지막입니다");}
-                    else{
-                      index += 1;
-                      await image_download(widget.folder, imageList[index]['image']);
-                      setState(() { is_load = true; });// 혹 안뜨는 경우를 대비, 2번 set state 해준다
-                    }
+                    increase_index();
                   },
                   child: Container(
                     height: 85.h,
@@ -422,14 +426,14 @@ class _LabelingMissionState extends State<LabelingMission> {
                             onPressed: () {
                               // 로딩이 다 됐을 때만 라벨링 가능
                               if(is_load){
-
+                                increase_index();
                               }
                             },
                             child: Text(label_category_list[extraindex]),
                             style: ElevatedButton.styleFrom(
-                              primary: label_category_list[extraindex]=="아니오"
+                              primary: label_category_list[extraindex]=="아니오"||label_category_list[extraindex]=="인증불가"
                                   ? Colors.indigo[800] : Colors.indigo[300],
-                              minimumSize: Size(120.w, 35.h),
+                              minimumSize: Size(140.w, 35.h),
                               textStyle: TextStyle(color : Colors.indigo),
                             ),
                           ),
@@ -442,17 +446,17 @@ class _LabelingMissionState extends State<LabelingMission> {
                               onPressed: () {
                                 // 로딩이 다 됐을 때만 라벨링 가능
                                 if(is_load){
-                                  // json - 메일 : category
-                                  // json - 
-                                  update_request("", "성공했습니다");
+                                  // 기범님께 부탁
+                                  increase_index();
+                                  //update_request("", "성공했습니다");
 
                                 }
                               },
                               child: Text(label_category_list[extraindex+1]),
                               style: ElevatedButton.styleFrom(
-                                primary: label_category_list[extraindex+1]=="아니오"
+                                primary: label_category_list[extraindex+1]=="아니오"||label_category_list[extraindex+1]=="인증불가"
                                     ? Colors.indigo[800] : Colors.indigo[300],
-                                minimumSize: Size(120.w, 35.h),
+                                minimumSize: Size(140.w, 35.h),
                                 textStyle: TextStyle(color : Colors.indigo),
                               ),
                             ),
@@ -465,7 +469,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                               style: ElevatedButton.styleFrom(
                                 shadowColor: Colors.transparent,
                                 primary: Colors.transparent,
-                                minimumSize: Size(120.w, 35.h),
+                                minimumSize: Size(140.w, 35.h),
                                 //textStyle: TextStyle(color : Colors.indigo),
                               ),
                             ),

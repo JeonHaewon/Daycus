@@ -53,6 +53,7 @@ class PrivacyStatement extends StatelessWidget {
 
                         Container(
                           padding: EdgeInsets.fromLTRB(25.w, 15.h, 25.w, 0),
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -70,7 +71,7 @@ class PrivacyStatement extends StatelessWidget {
 
 
                   Padding(
-                    padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 0),
+                    padding: EdgeInsets.fromLTRB(5.w, 0, 5.w, 0),
                     child: Column(
                       children: [
                         Container(
