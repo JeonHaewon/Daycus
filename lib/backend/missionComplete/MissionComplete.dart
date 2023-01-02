@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 mission_complete(int todayBlockCnt, do_mission_data,
-    int toCertify, BuildContext context, String user_email) {
+    int toCertify, BuildContext context, String user_email, int mission_result) {
   // 14일이 지났을 때
 
     // 정산 변수 초기화
@@ -20,13 +20,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
     String popContent = "";
     double bet_reward = double.parse((do_mission_data['bet_reward']).toString());
 
-    // 성공 개수 카운트
-    int mission_result = 0;
-    for (int i = 1; i <= mission_week; i++) {
-      if (do_mission_data['d${i}'] != null)
-        mission_result++;
-    }
-    print("미션 성공한 갯수 :  : ${mission_result}");
+
 
     // 최대 100%
     if (mission_result > toCertify) {
