@@ -33,8 +33,6 @@ class KeepLoginPage extends State<LoginPageCustom> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LoginAsyncMethod(storage, context, false);
     });
-
-
   }
 
   double textFieldHeight = 55.0;

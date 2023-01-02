@@ -1,27 +1,165 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:daycus/backend/Api.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:math';
 
 
 
 
-class LabelingMission extends StatelessWidget {
+class LabelingMission extends StatefulWidget {
   LabelingMission({
     Key? key,
+    required this.folder,
     required this.title,
     required this.rule,
+    required this.label_category,
     this.onTap,
 
   }) : super(key: key);
 
-
+  final String folder;
   final String title;
   final String rule;
+  final String label_category;
   final onTap;
 
+  @override
+  State<LabelingMission> createState() => _LabelingMissionState();
+}
+
+class _LabelingMissionState extends State<LabelingMission> {
   var f = NumberFormat('###,###,###,###');
+
+  int degree = 0;
+  Image? downloadImage = null;
+
+  var imageList = null;
+  int imageListCnt = 0;
+  int index = 0;
+
+  var label_category_list = null;
+  int label_cnt = 0;
+
+  image_download(String folder, String imageName) async {
+    setState(() { is_load = false; });
+    try{
+      var update_res = await http.post(Uri.parse(API.imageDownload),
+          body: {
+            "folder" : folder,
+            "imageName" : imageName,
+          });
+
+      if (update_res.statusCode == 200) {
+        print("이미지를 불러왔습니다 : ");
+        var res = jsonDecode(update_res.body);
+        Uint8List bytes = Base64Decoder().convert(res['image']);
+        print("${res['size1'].toStringAsFixed(2)} kb > ${res['size2'].toStringAsFixed(2)} kb, ${res['exif']}");
+        //print(bytes.isEmpty);
+
+        setState(() {
+          if (res['exif']==3){degree = 180;}
+          else if (res['exif']==6){degree = 90;}
+          else if (res['exif']==8){degree = 270;}
+          else{degree = 0;}
+
+          if (bytes.isEmpty){downloadImage = null;
+          } else{
+            setState(() {
+              downloadImage = Image.memory(bytes);
+            });
+          }
+
+        });
+
+        return true;
+
+      } else {
+        setState(() {
+          downloadImage = null;
+        });
+        print("<error : > ${update_res.body}");
+        return false;
+      }
+    }
+    catch (e) {
+      print(e.toString());
+      //Fluttertoast.showToast(msg: e.toString());
+      return false;
+    }
+  }
+
+  // 라벨링 한거는 제외하기
+  importImageList(String folder) async {
+    try {
+      var select_res = await http.post(Uri.parse(API.select), body: {
+        'update_sql': "SELECT * FROM image_data WHERE image_locate='${folder}'",
+      });
+
+      if (select_res.statusCode == 200 ) {
+        var resMission = jsonDecode(select_res.body);
+        print(resMission);
+        if (resMission['success'] == true) {
+          //Fluttertoast.showToast(msg: "이메일을 확인해주세요 !");
+          imageList = resMission["data"];
+          setState(() {
+            imageListCnt = resMission["data"]==null ? 0 : resMission["data"].length;
+          });
+          print("imageListCnt : ${imageListCnt}");
+          return true;
+        } else {
+          //Fluttertoast.showToast(msg: "문제가 발생했습니다");
+          return false;
+        }
+
+      }
+    } on Exception catch (e) {
+      print("에러발생 : ${e}");
+      return false;
+      //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    label_category_list = widget.label_category.split(", ");
+    label_cnt = label_category_list!.length;
+
+    print(label_category_list);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool success = await importImageList(widget.folder);
+      if (success==false) {
+        PopPage(
+            "라벨링 할 데이터가 없습니다.",
+            context,
+            Text("현재 이 라벨링 미션은 불가합니다.\n다른 미션을 선택해주세요 !"),
+            "확인", null,
+                (){
+              Navigator.pop(context); Navigator.pop(context);
+            });}
+      else {
+        await image_download(widget.folder, imageList![index]['image']);
+        setState(() { is_load = true; });
+
+      }
+    });
+  }
+
+  // 로딩을 위한 key
+  bool is_load = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +167,11 @@ class LabelingMission extends StatelessWidget {
     final SizedBox _sizedBox = SizedBox(height: 5.h,);
 
 
-    List<String> rule_list = rule.split("\\n");
+    List<String> rule_list = widget.rule.split("\\n");
     int rules_list_cnt = rule_list!=null ? rule_list.length : 0;
+
+    int extraindex = -2;
+
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -46,7 +187,8 @@ class LabelingMission extends StatelessWidget {
 
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
 
@@ -55,7 +197,7 @@ class LabelingMission extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(title ,style: TextStyle(fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  Text(widget.title ,style: TextStyle(fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                 ],
               ),
             ),
@@ -101,7 +243,7 @@ class LabelingMission extends StatelessWidget {
                           Text(
                             // 하임 > 해원 : 이거 자동 내어쓰기 되도록 변경해야할듯.
                             // 숫자까지 잘라서 list View로 넣으면 될지도??
-                              " - ${rule.split("\\n")[index]}",
+                              " - ${widget.rule.split("\\n")[index]}",
                               style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
 
                           // 맨 마지막 SizedBox는 빼기
@@ -188,7 +330,17 @@ class LabelingMission extends StatelessWidget {
               children: [
 
                 InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    if (index == 0){
+                      Fluttertoast.showToast(msg: "처음입니다");}
+                    else{
+                      index -= 1;
+                      await image_download(widget.folder, imageList[index]['image']);
+                      setState(() { is_load = true; });
+                    }
+
+
+                  },
                   child: Container(
                     height: 85.h,
                     width: 40.w,
@@ -202,10 +354,27 @@ class LabelingMission extends StatelessWidget {
                   ),
                 ),
 
-                Image.asset('assets/image/labelingmission/labeling_image.png' ,width: 320.w,),
+                Container(
+                  alignment: Alignment.center, width: 320.w,
+                  constraints: BoxConstraints(
+                    minHeight: 320.h
+                  ),
+                  child: is_load
+                            ? ( downloadImage!=null
+                              ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
+                                : Text("이미지가 없습니다", textAlign: TextAlign.center,))
+                            : CircularProgressIndicator() ),
 
                 InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    if (index+1 >= imageListCnt){
+                      Fluttertoast.showToast(msg: "마지막입니다");}
+                    else{
+                      index += 1;
+                      await image_download(widget.folder, imageList[index]['image']);
+                      setState(() { is_load = true; });// 혹 안뜨는 경우를 대비, 2번 set state 해준다
+                    }
+                  },
                   child: Container(
                     height: 85.h,
                     width: 40.w,
@@ -222,36 +391,137 @@ class LabelingMission extends StatelessWidget {
               ],
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('예'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.indigo[800],
-                    minimumSize: Size(120.w, 35.h),
-                    textStyle: TextStyle(color : Colors.indigo),
-                  ),
-                ),
-
-
-                SizedBox(width: 20.w,),
-
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('아니오'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.indigo[300],
-                    minimumSize: Size(120.w, 35.h),
-                    textStyle: TextStyle(color : Colors.indigo),
-                  ),
-                ),
-
-
-              ],
+            Container(
+              child: Text("${index+1} / ${imageListCnt}"),
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.only(right: 50.w, top: 10.h),
             ),
+
+            SizedBox(
+              height: 20.h,
+            ),
+
+            Container(
+              //alignment: Alignment.center,
+              width: 370.w,
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount:
+                (label_cnt % 2 == 0 ? label_cnt / 2 : label_cnt ~/ 2 + 1).toInt(),
+                itemBuilder: (_, index) {
+                  extraindex += 2;
+                  return Column(
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // 로딩이 다 됐을 때만 라벨링 가능
+                              if(is_load){
+
+                              }
+                            },
+                            child: Text(label_category_list[extraindex]),
+                            style: ElevatedButton.styleFrom(
+                              primary: label_category_list[extraindex]=="아니오"
+                                  ? Colors.indigo[800] : Colors.indigo[300],
+                              minimumSize: Size(120.w, 35.h),
+                              textStyle: TextStyle(color : Colors.indigo),
+                            ),
+                          ),
+
+                          // if (extraindex + 1 < label_cnt)
+                          SizedBox(width: 50.w,),
+
+                          if (extraindex + 1 < label_cnt )
+                            ElevatedButton(
+                              onPressed: () {
+                                // 로딩이 다 됐을 때만 라벨링 가능
+                                if(is_load){
+                                  // json - 메일 : category
+                                  // json - 
+                                  update_request("", "성공했습니다");
+
+                                }
+                              },
+                              child: Text(label_category_list[extraindex+1]),
+                              style: ElevatedButton.styleFrom(
+                                primary: label_category_list[extraindex+1]=="아니오"
+                                    ? Colors.indigo[800] : Colors.indigo[300],
+                                minimumSize: Size(120.w, 35.h),
+                                textStyle: TextStyle(color : Colors.indigo),
+                              ),
+                            ),
+
+                          if (extraindex + 1 == label_cnt )
+                            // 껍데기 버튼
+                            ElevatedButton(
+                              onPressed: () { },
+                              child: Text(" "),
+                              style: ElevatedButton.styleFrom(
+                                shadowColor: Colors.transparent,
+                                primary: Colors.transparent,
+                                minimumSize: Size(120.w, 35.h),
+                                //textStyle: TextStyle(color : Colors.indigo),
+                              ),
+                            ),
+                        ],
+                      ),
+
+                      SizedBox(height: 5.h,),
+
+                    ],
+                  );
+                },
+              ),
+            ),
+
+            SizedBox(height: 25.h,),
+
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //
+            //     ElevatedButton(
+            //       onPressed: () {
+            //         // 로딩이 다 됐을 때만 라벨링 가능
+            //         if(is_load){
+            //
+            //         }
+            //       },
+            //       child: Text('예'),
+            //       style: ElevatedButton.styleFrom(
+            //         primary: Colors.indigo[800],
+            //         minimumSize: Size(120.w, 35.h),
+            //         textStyle: TextStyle(color : Colors.indigo),
+            //       ),
+            //     ),
+            //
+            //
+            //     SizedBox(width: 20.w,),
+            //
+            //     ElevatedButton(
+            //       onPressed: () {
+            //         // 로딩이 다 됐을 때만 라벨링 가능
+            //         if(is_load){
+            //
+            //         }
+            //       },
+            //       child: Text('아니오'),
+            //       style: ElevatedButton.styleFrom(
+            //         primary: Colors.indigo[300],
+            //         minimumSize: Size(120.w, 35.h),
+            //         textStyle: TextStyle(color : Colors.indigo),
+            //       ),
+            //     ),
+            //
+            //
+            //   ],
+            // ),
 
 
 

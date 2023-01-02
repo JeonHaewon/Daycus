@@ -574,8 +574,18 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                       toCertify,
                       context,
                       user_data['user_email']);
-                  // 아직 미션 기간이 되지 않았을 때
-                } else if(todayBlockCnt <= 0){
+                }
+                // 미션 포기가 가능할 때
+                else if ((15-todayBlockCnt >= toCertify-doneCnt) || (widget.do_mission_data['bet_reward']!='0')==false){
+                  mission_complete(
+                      todayBlockCnt,
+                      widget.do_mission_data,
+                      toCertify,
+                      context,
+                      user_data['user_email']);
+                }
+                // 아직 미션 기간이 되지 않았을 때
+                else if(todayBlockCnt <= 0){
                   Fluttertoast.showToast(msg: "아직 미션 기간이 아닙니다.");
                 }
                 // 14일이 넘어가지 않았을 경우 : 미션 인증
@@ -590,7 +600,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                 // 시작 날짜의 14일보다 넘어가면 미션 정산하기로 바뀐다.
               }, child: Text( (todayBlockCnt > missionDate) ? '미션 정산하기'
                 // 남은 날 다 인증해도 미션을 수행할 수 있을 때 (좌) : 없을 때 (우)
-                  : ((15-todayBlockCnt >= toCertify-doneCnt) || (widget.do_mission_data['bet_reward']!='0')) ? '오늘 미션 인증하기' : '미션 포기하기',
+                  : ((15-todayBlockCnt >= toCertify-doneCnt) || (widget.do_mission_data['bet_reward']!='0'))
+                    ? '오늘 미션 인증하기' : '미션 포기하기',
                   style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],

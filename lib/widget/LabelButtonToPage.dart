@@ -24,7 +24,10 @@ class LabelButtonToPage extends StatelessWidget {
               '${data[i]['start_date'].toString().substring(5,)} ~ ${data[i]['end_date'].toString().substring(5,)}',
         totalUser: int.parse(data[i]['total_user']),
         myparticipation: 0,
-      onTap: LabelingMission(title: data[i]['title'],
+      onTap: LabelingMission(
+        label_category: data[i]['label_category'],
+        folder: data[i]['image_locate'],
+        title: data[i]['title'],
         rule: data[i]['rules'],),
     );
   }

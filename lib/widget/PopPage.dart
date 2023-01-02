@@ -42,7 +42,7 @@ Future<dynamic> PopPage(String? title, BuildContext context, Widget content,
                       Navigator.of(context).pop();
                       // 사진 취소(삭제) 필요
                     },
-                    child: Text(cancel, )),
+                    child: Text(cancel, style: TextStyle(color: Colors.indigo),)),
 
               TextButton(
                   onPressed: onPressed,
