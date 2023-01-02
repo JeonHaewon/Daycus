@@ -67,7 +67,7 @@ class NowMissionButton extends StatelessWidget {
                       Opacity(
                         opacity: 0.25,
                         child: Container(
-                          width: 68.w,
+                          width: 66.w,
                           decoration: BoxDecoration(
                             color: Colors.black,
                             shape: BoxShape.circle

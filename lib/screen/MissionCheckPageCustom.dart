@@ -29,6 +29,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
 
     int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
     Size m = MediaQuery.of(context).size;
+    String misson_cnt = do_mission_cnt.toString();
 
     Future<void> refresh() async {
       await LoginAsyncMethod(MissionCheckPage.storage, null, true);
@@ -64,19 +65,34 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
               minHeight: m.height,
             ),
             child: Column(
+              
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30.w, 30.h, 0, 0),
+                  padding: EdgeInsets.fromLTRB(30.w, 30.h,30.w, 0),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(height: 20.h,),
+
                       Text("진행 중인 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      SizedBox(width: 20.w,),
+
+                      Container(
+                        height: 34.h,
+                        child: Row(
+
+                          children: [
+                            Text(misson_cnt,style: TextStyle(color: Colors.grey[700],fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            Text("개 미션 참여 중",style: TextStyle(color: Colors.grey[700],fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                          ],
+                        ),
+                      ),
+
                     ],
                   ),
                 ),
 
-                SizedBox(height: 20.h,),
+                SizedBox(height: 15.h,),
 
                 // 진행중인 미션이 없을 때
                 if(do_mission==null)

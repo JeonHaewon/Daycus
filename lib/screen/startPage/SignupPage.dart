@@ -11,6 +11,8 @@ import 'package:daycus/backend/Api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/User.dart';
 import 'package:daycus/screen/temHomePage.dart';
+import 'package:daycus/screen/startPage/PrivacyStatement_2.dart';
+
 
 
 Map agree = {
@@ -342,7 +344,12 @@ class _signupPage extends State<SignupPage> {
                                       });
                                     }, icon: Icon(agree_2, color: Colors.black,), label: Text("개인정보 취급방침 동의 [필수]",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),),
 
-                                    TextButton(onPressed: (){}, child: Text("보기 >",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),)
+                                    TextButton(onPressed: (){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => PrivacyStatement()),
+                                      );
+                                    }, child: Text("보기 >",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),)
                                   ],
                                 ),
                                 Row(

@@ -58,14 +58,10 @@ class _ToDeveloperState extends State<ToDeveloper> {
             setState(() {
               errorImage = image;
             });
-
           },
           "카메라", "갤러리",
           Icons.camera_alt, Icons.photo)));
-
     }
-
-
 
 
     TextStyle _hintStyle = TextStyle(fontSize: 15.sp, color: Colors.grey);
@@ -152,7 +148,7 @@ class _ToDeveloperState extends State<ToDeveloper> {
         ),
         backgroundColor: Colors.white,
         title: Text('개발자에게 문의하기',
-            style: TextStyle(color: Colors.black, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+            style: TextStyle(color: Colors.black, fontSize: 18.sp, fontWeight: FontWeight.bold)),
       ),
 
       body: SingleChildScrollView(
@@ -166,22 +162,76 @@ class _ToDeveloperState extends State<ToDeveloper> {
                 children: [
 
                   Align(
-                    child: Text("개발자 이메일 : ${adminEmail}",),
+                    child: Text("개발자 이메일 : ${adminEmail}",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     alignment: Alignment.centerLeft,
                   ),
 
-                  SizedBox(height: 25.h,),
+                  SizedBox(height: 20.h,),
+
+
+
+                  Container(
+                    width: 400.w,
+                    height: 83.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        Container(
+                          padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              Text("문의 종류",
+                                  style: TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(height: 5.h,),
+
+                              Text("• 메일 문의 : 답변을 받아야 하는 문의를 보내주세요",
+                                  style: TextStyle(fontSize: 10.sp)),
+                              Text("• 일반 문의 : 답변을 받지 않아도 되는 문의를 보내주세요(오류 신고 등)",
+                                  style: TextStyle(fontSize: 10.sp)),
+
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+
+
+
+                  SizedBox(height: 20.h,),
 
                   TextField(
                     controller: supportCtrl,
                     maxLines: 10,
                     decoration: InputDecoration(
-                      hintText: "어떤 문제가 발생했나요?\n( * Gmail 어플 이외에는 메일 문의가 어렵습니다 )",
+                      hintText: "어떤 문제가 발생했나요?",
                       hintStyle: _hintStyle,
                       fillColor: Colors.white,
                       filled: true,
                     ),
                   ),
+
+                  SizedBox(height: 10.h,),
+
+                  Text(" * Gmail 어플 이외에는 메일 문의가 어렵습니다 ",
+                      style: TextStyle(color: Colors.black, fontSize: 12.sp, fontWeight: FontWeight.bold)),
 
                   SizedBox(height: 30.h,),
 
@@ -243,10 +293,15 @@ class _ToDeveloperState extends State<ToDeveloper> {
                           border: Border(bottom: BorderSide(color: Colors.grey, width: 2.sp)),
                         ),
                         child: (errorImage==null)
-                            ? Text("선택된 이미지가 없습니다. \n( * 메일 문의 시 이미지 첨부가 취소됩니다 )", style: _hintStyle,)
+                            ? Text("선택된 이미지가 없습니다.", style: _hintStyle,)
                             : Image.file(errorImage!),
                     ),
                   ),),
+
+                  SizedBox(height: 10.h,),
+
+                  Text(" * 메일 문의 시 이미지 첨부가 취소됩니다 ",
+                      style: TextStyle(color: Colors.black, fontSize: 12.sp, fontWeight: FontWeight.bold)),
 
                   SizedBox(height: 30.h,),
 

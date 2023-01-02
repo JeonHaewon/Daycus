@@ -363,6 +363,19 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
 
 
 
+            Padding(
+              padding: EdgeInsets.fromLTRB(228.w, 5.h, 0, 0),
+              child: Column(
+                children: [
+                  Text('예상 리워드 증가율 : 150%',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
+
+                ],
+
+              ),
+            ),
+
+
+
 
 
             SizedBox(height: 15.h,),

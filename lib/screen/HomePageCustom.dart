@@ -69,7 +69,10 @@ class _HomePageState extends State<HomePage> {
         color: AppColor.happyblue,
         onRefresh: refresh,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          primary: true,
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+
+
           child: Column(
             children: [
               Container(
@@ -123,9 +126,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),//위쪽 제일 큰 박스
 
-              HomePageUserInfoBar(leftContent: "나의 리워드", rightContent: "${user_data['reward']} ${rewardName}"),
+              HomePageUserInfoBar(leftContent: "나의 리워드", rightContent: "${user_data['reward']} ${rewardName}",icon: Icons.control_point_duplicate,),
               SizedBox(height: 10.h,),
-              HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등"),
+              HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등", icon: Icons.people),
 
               Container(
                 child: Column(
@@ -208,14 +211,38 @@ class _HomePageState extends State<HomePage> {
 
               // 진행중인 미션이 3개 이상일 경우
               if (do_mission_real_cnt!=do_mission_cnt)
-                TextButton(child: Text("외 ${do_mission_real_cnt-3}개의 미션", style: TextStyle(color: Colors.black),),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                  ),
-                  onPressed: (){
+
+                InkWell(
+                  onTap: () {
                     controller.currentBottomNavItemIndex.value = 1;
                   },
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 15.h,0, 0),
+                    child: Container(
+                      width: 120.w,
+                      height: 38.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Container(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("외 ${do_mission_real_cnt-3}개의 미션 ",
+                                style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold, fontSize: 12.sp) ),
+
+                            Icon(Icons.arrow_forward_ios, color: Colors.grey[600], size: 10.w,)
+                          ],
+                        ),
+
+                      ),
+                    ),
+                  ),
                 ),
+
+
 
 
 
