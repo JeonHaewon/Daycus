@@ -699,7 +699,7 @@ void showAlertDialog(BuildContext context, int date, Image? downloadImage, int d
             ],
           ),
           content: Container(
-            height: 310.h,
+            height: 300.h,
             child: downloadImage!=null
                 ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
                 : Text("이미지를 불러올 수 없습니다 :(", textAlign: TextAlign.center,),
