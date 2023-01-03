@@ -1,6 +1,7 @@
 
 import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
+import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/backend/missionParticipate/missionParticipate.dart';
 import 'package:daycus/backend/missionParticipate/missionUserUpdate.dart';
 import 'package:daycus/backend/UserDatabase.dart';
@@ -227,11 +228,13 @@ class MissionParticipatePage extends StatelessWidget {
 
                   // 백그라운
                   // 이후에 변경된 미션만 다시 불러오는 것도 좋을듯.
-                  missionImport();
-                  importMissionByCategory();
-                  userDataImport();
-                  doMissionSave();
+                  // missionImport();
+                  // importMissionByCategory();
+                  // userDataImport();
+                  // doMissionSave();
 
+                  await userLogin(user_data['user_email'], user_data['password'], true);
+                  await afterLogin();
 
 
                   // 돌아가면 홈으로 이동.
