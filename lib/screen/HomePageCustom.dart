@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),//위쪽 제일 큰 박스
 
-              HomePageUserInfoBar(leftContent: "나의 리워드", rightContent: "${user_data['reward']} ${rewardName}",icon: Icons.control_point_duplicate,),
+              HomePageUserInfoBar(leftContent: "나의 ${rewardName}", rightContent: "${user_data['reward']} ${rewardName}",icon: Icons.control_point_duplicate,),
               SizedBox(height: 10.h,),
               HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등", icon: Icons.people),
 
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                                 title: all_missions[_index]['title'],
                                 totalUser: int.parse(all_missions[_index]['total_user']),
                                 rank: 1,
-                                reward: double.parse(do_mission[index]['get_reward']),
+                                percent: double.parse(do_mission[index]['percent']),
                                 onTap: MissionCheckStatusPage(
                                   mission_index: _index,
                                   do_mission_data: do_mission[index],

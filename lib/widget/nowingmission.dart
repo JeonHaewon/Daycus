@@ -11,7 +11,7 @@ class NowMissionButton extends StatelessWidget {
     required this.title,
     required this.totalUser,
     required this.rank,
-    required this.reward,
+    required this.percent,
     required this.duration,
     this.onTap,
   }) : super(key: key);
@@ -20,7 +20,7 @@ class NowMissionButton extends StatelessWidget {
   final String title;
   final int totalUser;
   final int rank;
-  final double reward;
+  final double percent;
   final String duration;
   final onTap;
 
@@ -92,7 +92,7 @@ class NowMissionButton extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 15.h),
+                            SizedBox(height: 20.h),
                             Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                             Container(
                               child: Row(
@@ -109,14 +109,14 @@ class NowMissionButton extends StatelessWidget {
                            Container(
                               child:  Container(
                                 width: 245.w,
-                                padding: EdgeInsets.only(right: 15.w, top: 13.h),
+                                padding: EdgeInsets.only(right: 5.w, top: 7.h),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
-                                    //Text("+",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                                    //Text(f.format(reward),style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                                    //Text("원     ",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
+                                    //Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
+                                    Text("진행률 ",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+                                    Text(f.format(percent),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+                                    Text(" %    ",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
                                   ],
                                 ),
                               ),

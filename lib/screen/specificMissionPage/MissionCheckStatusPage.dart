@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UploadImage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/missionComplete/MissionComplete.dart';
@@ -79,10 +80,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       todayBlockCnt,
     );
 
-    setState(() {
-      do_mission[do_i]["d$todayBlockCnt"] = true;
-      return_reward = doneCnt/toCertify>1 ? 1 : doneCnt/toCertify;
-    });
+    do_mission[do_i]["d$todayBlockCnt"] = imageName;
+    // result 개수 다시 업데이트
+    cnt_done();
+    return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
+
+    setState(() { });
 
     Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
   }
@@ -97,6 +100,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   String returnRewardString = "0";
 
+  int mission_result = 0;
+
   @override
   void initState () {
     super.initState();
@@ -105,16 +110,17 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     });
   }
 
-
-  // 하임 1220: 미션 시작일로부터 지난 날짜 계산 후 set state
-  _asyncMethod() async {
-
-    int mission_result = 0; double return_reward = 0;
+  cnt_done(){
+    mission_result = 0;
     for (int i = 1; i <= mission_week; i++) {
       if (widget.do_mission_data['d${i}'] != null)
         mission_result++;
     } print(mission_result);
+  }
 
+  // 하임 1220: 미션 시작일로부터 지난 날짜 계산 후 set state
+  _asyncMethod() async {
+    cnt_done();
 
     print("init");
     // 하임 1220 : now_time = yy/MM/dd 형태
@@ -130,7 +136,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
         missionDate = int.parse(widget.mission_data['term'])*_oneWeek;
         toCertify = int.parse(widget.mission_data['frequency']) * int.parse(widget.mission_data['term']);
-        return_reward = doneCnt/toCertify>1 ? 1 : doneCnt/toCertify;
+        return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
 
         print("todayBlockCnt : ${todayBlockCnt}");
 
@@ -149,6 +155,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   @override
   void dispose() {
     super.dispose();
+
+    print("return_reward : $return_reward");
+
+    update_request(
+        "UPDATE do_mission SET percent='${(return_reward*100).toStringAsFixed(2)}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
+        null);
 
     // +0원 계산하기
     // if (widget.do_mission_data['bet_reward']=='0' && (15-mission_result >= toCertify-doneCnt)){
@@ -465,7 +477,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("나의 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                            Text("${doneCnt}/${toCertify}회",
+                            Text("${mission_result}/${toCertify}회",
                                 style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                           ],
                         ),
@@ -507,7 +519,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("나의 참여 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text("나의 참여 ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                               Text("${widget.do_mission_data['bet_reward']} ${rewardName} ",
                                   style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                             ],
@@ -520,7 +532,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("리워드 증가율",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                            Text("${rewardName} 증가율",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                             Text("${widget.mission_data['reward_percent']} % ",
                                 style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                           ],
@@ -532,21 +544,21 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("예상 환급 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                            Text("예상 환급 ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                             // 건 리워드가 없을 경우
-                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt >= toCertify-doneCnt))
+                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt >= toCertify-mission_result))
                             Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 없을 경우 & 실패했을 경우
-                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt < toCertify-doneCnt) )
+                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt < toCertify-mission_result) )
                             Text(" - ",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 있을 경우
-                           if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-doneCnt) )
+                           if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-mission_result) )
                               Text("+ ${((return_reward*14)+int.parse(widget.do_mission_data['bet_reward'])/100*int.parse(widget.mission_data['reward_percent'])).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 있을 경우 & 실패했을 경우
-                            if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-doneCnt) )
+                            if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-mission_result) )
                               Text("+ ${((return_reward*14)+(int.parse(widget.do_mission_data['bet_reward'])/2)).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                           ],
                         ),
@@ -605,12 +617,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
               width: 412.w,
               child:TextButton(onPressed: () async {
                 // 성공 개수 카운트
-                int mission_result = 0;
-                for (int i = 1; i <= mission_week; i++) {
-                  if (widget.do_mission_data['d${i}'] != null)
-                    mission_result++;
-                }
-                print("미션 성공한 갯수 :  : ${mission_result}");
+                // int mission_result = 0;
+                // for (int i = 1; i <= mission_week; i++) {
+                //   if (widget.do_mission_data['d${i}'] != null)
+                //     mission_result++;
+                // }
+                // print("미션 성공한 갯수 :  : ${mission_result}");
 
                 // 미션 끝 : 정산하기
                 if (todayBlockCnt > missionDate) {
@@ -654,7 +666,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                 // 시작 날짜의 14일보다 넘어가면 미션 정산하기로 바뀐다.
               }, child: Text( (todayBlockCnt > missionDate) ? '미션 정산하기'
                 // 남은 날 다 인증해도 미션을 수행할 수 있을 때 (좌) : 없을 때 (우)
-                  : ((15-todayBlockCnt >= toCertify-doneCnt) || (widget.do_mission_data['bet_reward']!='0'))
+                  : ((15-todayBlockCnt >= toCertify-mission_result) || (widget.do_mission_data['bet_reward']!='0'))
                     ? '오늘 미션 인증하기' : '미션 포기하기',
                   style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),

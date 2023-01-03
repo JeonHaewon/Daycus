@@ -278,12 +278,12 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                   Container(
                     child: Row(
                       children: [
-                        Text('예상 리워드',style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text('예상 ${rewardName}',style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                       ],
                     ),
                   ),
                   SizedBox(height: 8.h,),
-                  Text('자신이 걸 리워드를 입력하세요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
+                  Text('자신이 걸 ${rewardName}를 입력하세요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
                   SizedBox(height: 15.h,),
 
                 ],
@@ -367,7 +367,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
               padding: EdgeInsets.fromLTRB(228.w, 5.h, 0, 0),
               child: Column(
                 children: [
-                  Text('예상 리워드 증가율 : 150%',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
+                  Text('예상 ${rewardName} 증가율 : 150%',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
 
                 ],
 

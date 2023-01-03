@@ -118,7 +118,7 @@ class MissionParticipatePage extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('평균 참여 리워드',style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                    Text('평균 참여 ${rewardName}',style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                                     Text('${f.format(avgreward)} ${rewardName}',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
                                   ],
                                 ),
@@ -148,7 +148,7 @@ class MissionParticipatePage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("미션 참여 리워드", style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text("미션 참여 ${rewardName}", style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                         SizedBox(
                           height: 100.h,
                           // 항상 뒤에 "원"이 따라다녔으면 좋겠다
@@ -171,7 +171,7 @@ class MissionParticipatePage extends StatelessWidget {
                               }
                               // 리워드를 자신이 가진 리워드보다 더 많이 걸었을 때
                               else if (double.parse(value) > double.parse(user_data['reward'])){
-                                return "보유 리워드보다 많이 걸 수 없습니다";
+                                return "보유 ${rewardName}보다 많이 걸 수 없습니다";
                               }
                               
                             },
@@ -182,10 +182,10 @@ class MissionParticipatePage extends StatelessWidget {
 
                     // 하임 : 폰트 크기 16 > 15로 변경
                     SizedBox(height: 15.h,),
-                    Text('· 참여금이 높을수록 받는 리워드도 많아져요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',) ),
+                    Text('· 참여금이 높을수록 받는 ${rewardName}도 많아져요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',) ),
                     SizedBox(height: 5.h,),
 
-                    Text('· 리워드를 걸지 않고도 미션에 참여할 수 있어요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',) ),
+                    Text('· ${rewardName}를 걸지 않고도 미션에 참여할 수 있어요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',) ),
 
                   ],
                 ),

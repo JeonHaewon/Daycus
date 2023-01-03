@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:daycus/core/app_text.dart';
 // create an instance
 
 String formatDate(DateTime d) {
@@ -296,7 +297,7 @@ class _AdminScreenState extends State<AdminScreen> {
           var resMission = jsonDecode(update_res.body);
           // print(resMission);
           if (resMission['success'] == true) {
-            Fluttertoast.showToast(msg: "평균 리워드 업데이트가 완료되었습니다 !");
+            Fluttertoast.showToast(msg: "평균 ${rewardName} 업데이트가 완료되었습니다 !");
 
           } else {
             print("에러발생");

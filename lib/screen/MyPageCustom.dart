@@ -155,7 +155,7 @@ class _MyPageState extends State<MyPage> {
                       //   ),
                       // ), //주간랭킹
 
-                      MyPageInformation(title: "리워드",
+                      MyPageInformation(title: "${rewardName}",
                           content: "${user_data['reward']} ${rewardName}"),
 
                       SizedBox(height: 15.h,),

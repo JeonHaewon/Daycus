@@ -123,7 +123,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                               title: all_missions[_index]['title'],
                               totalUser: int.parse(all_missions[_index]['total_user']),
                               rank: 1,
-                              reward: double.parse(do_mission[index]['get_reward']),
+                              percent: double.parse(do_mission[index]['percent']),
                               onTap: MissionCheckStatusPage(
                                 mission_index: _index,
                                 mission_data: all_missions[_index],
