@@ -1,5 +1,5 @@
 
-import 'package:daycus/backend/PedometerPage.dart';
+import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
+import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UploadImage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
@@ -14,6 +17,9 @@ import 'package:daycus/core/app_color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'package:daycus/backend/Api.dart';
 
 class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
@@ -102,6 +108,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   // 하임 1220: 미션 시작일로부터 지난 날짜 계산 후 set state
   _asyncMethod() async {
+
+    int mission_result = 0; double return_reward = 0;
+    for (int i = 1; i <= mission_week; i++) {
+      if (widget.do_mission_data['d${i}'] != null)
+        mission_result++;
+    } print(mission_result);
+
+
     print("init");
     // 하임 1220 : now_time = yy/MM/dd 형태
     String now_time = await NowTime("yyyyMMdd");
@@ -136,13 +150,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   void dispose() {
     super.dispose();
 
-    int mission_result = 0;
-    double return_reward = 0;
-    for (int i = 1; i <= mission_week; i++) {
-      if (widget.do_mission_data['d${i}'] != null)
-        mission_result++;
-    } print(mission_result);
-
     // +0원 계산하기
     // if (widget.do_mission_data['bet_reward']=='0' && (15-mission_result >= toCertify-doneCnt)){
     //   return_reward = double.parse(mission_result.toString());}
@@ -161,7 +168,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     // if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-doneCnt) )
     // Text("+ ${((return_reward*14)+(int.parse(widget.do_mission_data['bet_reward'])/2)).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -408,8 +414,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                               : FailMissionBlock(sp: _sp)
                                                           )
                                                           // 인증 완료된 날짜 블럭
-                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp,
-                                                            image: image, date: date,)
+                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date
+                                                            , folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data,)
                                                         ),
                                                         if(index_j != _oneWeek-1)
                                                           SizedBox(
@@ -660,20 +666,30 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   }
 }
 
-void showAlertDialog(BuildContext context, File? file, int date) async {
+
+
+void showAlertDialog(BuildContext context, int date, Image? downloadImage, int degree) async {
+
   String result = await showDialog(
     context: context, // user must tap button!
     builder: (BuildContext context) {
       return BackdropFilter(
         child: AlertDialog(
           // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
-          title: Text("${date}일째 인증 사진",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-          content: InkWell(
-            onTap: (){Navigator.of(context).pop();},
-            child: file == null ?
-                Text("이미지를 불러올 수 없습니다 :(") :
-                Image.file(File(file.path)),
-            //Image.asset('assets/image/specificmissionpage/downimage1.png', fit: BoxFit.fill),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${date}일째 인증 사진",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+              InkWell(
+                onTap:(){Navigator.of(context).pop();},
+                child: Icon(Icons.clear),
+              )
+            ],
+          ),
+          content: Container(
+            child: downloadImage!=null
+                ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
+                : Text("이미지를 불러올 수 없습니다 :(", textAlign: TextAlign.center,),
           ),
 
           shape: RoundedRectangleBorder(
@@ -716,22 +732,29 @@ class DoneMissionBlock extends StatelessWidget {
     required this.i,
     required this.j,
     required this.sp,
-    required this.image,
     required this.date,
+    required this.folder,
+    required this.do_mission_data,
   }) : super(key: key);
 
   final int i;
   final int j;
   final double sp;
-  final File? image;
   final int date;
+  final String folder;
+  final do_mission_data;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: (){
+        onPressed: () async {
+          var image_data = await image_download(folder, do_mission_data["d${date}"]);
+
+          Image? downloadImage = image_data[0];
+          int degree = image_data[1];
+
           // 이미지 다운로드가 될 때까지는 이렇게 있자.
-          //showAlertDialog(context, image, date);
+          showAlertDialog(context, date, downloadImage, degree);
           },
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
         // child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
