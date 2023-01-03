@@ -6,7 +6,10 @@ import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
 import 'package:daycus/widget/NowNoMission.dart';
 import 'package:daycus/widget/SpecificMissionToPage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/nowingmission.dart';
@@ -15,6 +18,39 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 
+FirebaseMessaging messaging = FirebaseMessaging.instance;
+FlutterLocalNotificationsPlugin fltNotification = FlutterLocalNotificationsPlugin();
+
+void pushFCMtoken() async {
+  String token=await messaging.getToken();
+  print(token);
+}
+
+void initMessaging() {
+  if (user_data['terms_market'] == '0') {
+    var androiInit = AndroidInitializationSettings(
+        '@mipmap/ic_launcher'); //for logo
+    var iosInit = IOSInitializationSettings();
+    var initSetting = InitializationSettings(android: androiInit, iOS:
+    iosInit);
+    fltNotification = FlutterLocalNotificationsPlugin();
+    fltNotification.initialize(initSetting);
+    var androidDetails =
+    AndroidNotificationDetails('1', 'channelName', 'channel Description');
+    var iosDetails = IOSNotificationDetails();
+    var generalNotificationDetails =
+    NotificationDetails(android: androidDetails, iOS: iosDetails);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        fltNotification.show(
+            notification.hashCode, notification.title, notification.
+        body, generalNotificationDetails);
+      }
+    });
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,6 +62,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void iniState() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    pushFCMtoken();
+    initMessaging();
+  }
+
   @override
   Widget build(BuildContext context) {
 

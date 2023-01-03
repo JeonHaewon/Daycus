@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "2833779580",
+    "firebase_url": "https://happy-data-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "happy-data",
+    "storage_bucket": "happy-data.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2833779580:android:5d08b76520eb60c2aa72f9",
+        "android_client_info": {
+          "package_name": "com.happycircuit.daycus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2833779580-rbqtoalbdom7bm8v12khvbf6i2h72bqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0bbbHoXrcLq9PUoUilzjWqOYt6C1yhJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "2833779580-rbqtoalbdom7bm8v12khvbf6i2h72bqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

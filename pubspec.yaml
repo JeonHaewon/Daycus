@@ -63,6 +63,7 @@ dependencies:
   device_info_plus:
   firebase_messaging:
   firebase_core:
+  permission_handler:
 
 
 dev_dependencies:
