@@ -379,10 +379,16 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
               AdminButton(
-                title: "user 수 변경 버튼",
+                title: "total user 수 변경 버튼",
+                onPressed: (){
+                  update_total_user_count();
+                  Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
+                },
+              ),
+              AdminButton(
+                title: "now user 수 변경 버튼",
                 onPressed: (){
                   update_user_count();
-                  update_total_user_count();
                   Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
                 },
               ),
