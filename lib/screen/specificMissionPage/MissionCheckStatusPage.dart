@@ -351,7 +351,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                       children: [
 
                         Container(
-                          padding: EdgeInsets.fromLTRB(20.w, 17.w, 20.w, 0),
+                          padding: EdgeInsets.fromLTRB(25.w, 17.w, 25.w, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -699,6 +699,7 @@ void showAlertDialog(BuildContext context, int date, Image? downloadImage, int d
             ],
           ),
           content: Container(
+            height: 310.h,
             child: downloadImage!=null
                 ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
                 : Text("이미지를 불러올 수 없습니다 :(", textAlign: TextAlign.center,),

@@ -66,8 +66,7 @@ class MissionButton extends StatelessWidget {
 
               //Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold)),
 
-
-            Container(
+              Container(
                 width: 150.w,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -85,13 +84,20 @@ class MissionButton extends StatelessWidget {
             ),
 
 
-
-
               Container(
                 child: Row(
                   children: [
                     Text(f.format(totalUser),style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
                     Text("명 참여중",style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                  ],
+                ),
+              ),
+
+
+              Container(
+                child: Row(
+                  children: [
+                    Text("2022-01-03 ~ 2023-01-16",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.white) ),
                   ],
                 ),
               ),

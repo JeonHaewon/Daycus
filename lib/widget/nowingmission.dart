@@ -57,7 +57,7 @@ class NowMissionButton extends StatelessWidget {
                       SizedBox(width: 20.w,),
 
                       Container(
-                        padding: EdgeInsets.only(top: 10.h),
+                        padding: EdgeInsets.only(top: 12.h),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -106,21 +106,52 @@ class NowMissionButton extends StatelessWidget {
                               ),
                             ),
 
-                           Container(
-                              child:  Container(
-                                width: 245.w,
-                                padding: EdgeInsets.only(right: 5.w, top: 7.h),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    //Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
-                                    Text("진행률 ",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                                    Text(f.format(percent),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                                    Text(" %    ",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                                  ],
-                                ),
-                              ),
-                            ),
+
+                            SizedBox(height: 3.h),
+
+
+                            Row(
+                             children: [
+
+                               Container(
+                                 width: ((percent).w)*1.5,
+                                 height: 8.h,
+                                 decoration: BoxDecoration(
+                                   color: AppColor.happyblue,
+                                 ),
+
+                               ),
+
+                               Container(
+                                 width: (100.w - (percent).w)*1.5,
+                                 height: 8.h,
+                                 decoration: BoxDecoration(
+                                   color: Colors.grey[300],
+                                 ),
+
+                               ),
+
+                               SizedBox(width: 8.w),
+
+                               Container(
+                                 child:  Container(
+                                   child: Row(
+                                     mainAxisAlignment: MainAxisAlignment.end,
+                                     children: [
+                                       //Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
+                                       Text("진행률 ",style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean') ),
+                                       Text(f.format(percent),style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean') ),
+                                       Text(" %    ",style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean') ),
+                                     ],
+                                   ),
+                                 ),
+                               ),
+
+                             ],
+                           ),
+
+
+
 
                           ],
                         ),
