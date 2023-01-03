@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "372451235851",
-    "project_id": "days-820bf",
-    "storage_bucket": "days-820bf.appspot.com"
+    "project_number": "2833779580",
+    "firebase_url": "https://happy-data-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "happy-data",
+    "storage_bucket": "happy-data.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:372451235851:android:3711e8387cbfe8e0434f0e",
+        "mobilesdk_app_id": "1:2833779580:android:1cc01225843d2bf9aa72f9",
         "android_client_info": {
           "package_name": "com.happycircuit.daycus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "372451235851-umihqdtdi1v365k4aj0i41hqjuguoige.apps.googleusercontent.com",
+          "client_id": "2833779580-rbqtoalbdom7bm8v12khvbf6i2h72bqg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBHK7tlzbvbN-Xo99OMZuTAI0KqRmBs6Y4"
+          "current_key": "AIzaSyC0bbbHoXrcLq9PUoUilzjWqOYt6C1yhJI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "372451235851-umihqdtdi1v365k4aj0i41hqjuguoige.apps.googleusercontent.com",
+              "client_id": "2833779580-rbqtoalbdom7bm8v12khvbf6i2h72bqg.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

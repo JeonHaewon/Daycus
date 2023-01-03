@@ -46,10 +46,6 @@ class _AdminScreenState extends State<AdminScreen> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  FlutterLocalNotificationsPlugin fltNotification = FlutterLocalNotificationsPlugin();
-
-
 
   void initState() {
     super.initState();
@@ -80,46 +76,42 @@ class _AdminScreenState extends State<AdminScreen> {
       }
     }
 
-    // Future<void> _authenticateWithBiometrics() async {
-    //   bool authenticated = false;
-    //   try {
-    //     setState(() {
-    //       _isAuthenticating = true;
-    //       _authorized = 'Authenticating';
-    //     });
-    //     authenticated = await auth.authenticate(
-    //       localizedReason:
-    //       'Scan your fingerprint (or face or whatever) to authenticate',
-    //       options: const AuthenticationOptions(
-    //         stickyAuth: true,
-    //         biometricOnly: true,
-    //       ),
-    //     );
-    //     setState(() {
-    //       _isAuthenticating = false;
-    //       _authorized = 'Authenticating';
-    //     });
-    //   } on PlatformException catch (e) {
-    //     print(e);
-    //     setState(() {
-    //       _isAuthenticating = false;
-    //       _authorized = 'Error - ${e.message}';
-    //     });
-    //     return;
-    //   }
-    //   if (!mounted) {
-    //     return;
-    //   }
-    //
-    //   final String message = authenticated ? 'Authorized' : 'Not Authorized';
-    //   setState(() {
-    //     _authorized = message;
-    //     if (message != 'Authorized'){
-    //       logout();
-    //       checkUserState();
-    //     }
-    //   });
-    // }
+    Future<void> _authenticateWithBiometrics() async {
+      bool authenticated = false;
+      try {
+        setState(() {
+          _isAuthenticating = true;
+          _authorized = 'Authenticating';
+        });
+        authenticated = await auth.authenticate(
+          localizedReason:
+          'Scan your fingerprint (or face or whatever) to authenticate',
+        );
+        setState(() {
+          _isAuthenticating = false;
+          _authorized = 'Authenticating';
+        });
+      } on PlatformException catch (e) {
+        print(e);
+        setState(() {
+          _isAuthenticating = false;
+          _authorized = 'Error - ${e.message}';
+        });
+        return;
+      }
+      if (!mounted) {
+        return;
+      }
+
+      final String message = authenticated ? 'Authorized' : 'Not Authorized';
+      setState(() {
+        _authorized = message;
+        if (message != 'Authorized'){
+          logout();
+          checkUserState();
+        }
+      });
+    }
 
     move_to_done_mission() async {
       String now = await NowTime('yy/MM/dd - HH:mm:ss');
@@ -378,18 +370,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   Fluttertoast.showToast(msg: "유저 레벨 업데이트가 완료되었습니다 !");
                 },
               ),
-              // AdminButton(
-              //   title: "지문 인식 슛 ~",
-              //   onPressed: (){
-              //     _authenticateWithBiometrics();
-              //     Fluttertoast.showToast(msg: "지문 인식 성공했습니다 !");
-              //   },
-              // ),
               AdminButton(
-                  title: "백그라운드 실행해보자!",
-                  onPressed: () {
-
-                  },
+                title: "지문 인식 슛 ~",
+                onPressed: (){
+                  _authenticateWithBiometrics();
+                  Fluttertoast.showToast(msg: "지문 인식 성공했습니다 !");
+                },
               ),
               AdminButton(
                 title: "user 수 변경 버튼",
