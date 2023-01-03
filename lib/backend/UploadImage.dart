@@ -13,7 +13,7 @@ Future getImage(String todayString, source) async {
   final ImagePicker picker = ImagePicker();
   // 갤러리 열기 : 성공
   //var pickedFile = await picker.pickImage(source: ImageSource.gallery);
-  var pickedFile = await picker.pickImage(source: source);
+  var pickedFile = await picker.getImage(source: source);
 
   print('Original path: ${pickedFile!.path}');
 

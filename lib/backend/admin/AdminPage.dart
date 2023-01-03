@@ -1,9 +1,10 @@
-import 'package:admob_flutter/admob_flutter.dart';
+
 import 'package:daycus/backend/PedometerPage.dart';
-import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/notification.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,19 +15,17 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:pedometer/pedometer.dart';
-import 'package:health/health.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:daycus/screen/myPage/privatesettings/Withdrawal.dart';
-import 'package:daycus/backend/UserDatabase.dart';
 
 import '../../screen/LoginPageCustom.dart';
+import 'dart:io';
 
-var admobBannerId;
-
-
+import 'package:flutter/cupertino.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// create an instance
 
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
@@ -47,7 +46,14 @@ class _AdminScreenState extends State<AdminScreen> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FlutterLocalNotificationsPlugin fltNotification = FlutterLocalNotificationsPlugin();
 
+
+
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,46 +80,46 @@ class _AdminScreenState extends State<AdminScreen> {
       }
     }
 
-    Future<void> _authenticateWithBiometrics() async {
-      bool authenticated = false;
-      try {
-        setState(() {
-          _isAuthenticating = true;
-          _authorized = 'Authenticating';
-        });
-        authenticated = await auth.authenticate(
-          localizedReason:
-          'Scan your fingerprint (or face or whatever) to authenticate',
-          options: const AuthenticationOptions(
-            stickyAuth: true,
-            biometricOnly: true,
-          ),
-        );
-        setState(() {
-          _isAuthenticating = false;
-          _authorized = 'Authenticating';
-        });
-      } on PlatformException catch (e) {
-        print(e);
-        setState(() {
-          _isAuthenticating = false;
-          _authorized = 'Error - ${e.message}';
-        });
-        return;
-      }
-      if (!mounted) {
-        return;
-      }
-
-      final String message = authenticated ? 'Authorized' : 'Not Authorized';
-      setState(() {
-        _authorized = message;
-        if (message != 'Authorized'){
-          logout();
-          checkUserState();
-        }
-      });
-    }
+    // Future<void> _authenticateWithBiometrics() async {
+    //   bool authenticated = false;
+    //   try {
+    //     setState(() {
+    //       _isAuthenticating = true;
+    //       _authorized = 'Authenticating';
+    //     });
+    //     authenticated = await auth.authenticate(
+    //       localizedReason:
+    //       'Scan your fingerprint (or face or whatever) to authenticate',
+    //       options: const AuthenticationOptions(
+    //         stickyAuth: true,
+    //         biometricOnly: true,
+    //       ),
+    //     );
+    //     setState(() {
+    //       _isAuthenticating = false;
+    //       _authorized = 'Authenticating';
+    //     });
+    //   } on PlatformException catch (e) {
+    //     print(e);
+    //     setState(() {
+    //       _isAuthenticating = false;
+    //       _authorized = 'Error - ${e.message}';
+    //     });
+    //     return;
+    //   }
+    //   if (!mounted) {
+    //     return;
+    //   }
+    //
+    //   final String message = authenticated ? 'Authorized' : 'Not Authorized';
+    //   setState(() {
+    //     _authorized = message;
+    //     if (message != 'Authorized'){
+    //       logout();
+    //       checkUserState();
+    //     }
+    //   });
+    // }
 
     move_to_done_mission() async {
       String now = await NowTime('yy/MM/dd - HH:mm:ss');
@@ -133,7 +139,6 @@ class _AdminScreenState extends State<AdminScreen> {
             print(resMission);
             Fluttertoast.showToast(msg: "다시 시도해주세요");
           }
-
         }
       } on Exception catch (e) {
         print("에러발생");
@@ -320,95 +325,82 @@ class _AdminScreenState extends State<AdminScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(20.w),
-        child: Column(
-          children: [
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
 
-          Text("개발자"),
-          Text("202111152 이하임 CTO : 2022.03.01 ~"),
-          Text("202011140 이기범 CUOP : 2022.12.20 ~"),
+            Text("개발자"),
+            Text("202111152 이하임 CTO : 2022.03.01 ~"),
+            Text("202011140 이기범 CUOP : 2022.12.20 ~"),
 
-            SizedBox(height: 15.h,),
+              SizedBox(height: 15.h,),
 
+              AdminButton(
+                title: "푸시 알림 보내기",
+                onPressed: (){
+                  time_showNotification();
+                },
+              ),
 
-            AdminButton(
-              title: "던미션 테스트용",
-              onPressed: (){
-                Fluttertoast.showToast(msg: "데이터 손실을 막기 위해 사용을 중지했습니다.");
-                // move_to_done_mission();
-                // bool finished = true;
-                // if (finished) {
-                //   delete_from_do_mission();
-                // }
-              },),
+              AdminButton(
+                title: "랭킹 업데이트",
+                onPressed: (){
+                  update_ranking();
+                },
+              ),
 
-            AdminButton(
-              title: "푸시 알림 보내기",
-              onPressed: (){
-                time_showNotification();
-              },
-            ),
+              AdminButton(
+                title: "평균 리워드 업데이트",
+                onPressed: (){
+                  update_avg_reward();
+                },
+              ),
 
-            AdminButton(
-              title: "랭킹 업데이트",
-              onPressed: (){
-                update_ranking();
-              },
-            ),
+              AdminButton(
+                title: "리워드 더하기 버튼",
+                onPressed: (){
+                  update_plus_reward();
+                },
+              ),
 
-            AdminButton(
-              title: "평균 리워드 업데이트",
-              onPressed: (){
-                update_avg_reward();
-              },
-            ),
+              AdminButton(
+                title: "만보기를 한번 해봅시다 !",
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => PedometerPage()));
+                },
+              ),
+              AdminButton(
+                title: "유저 레벨 업데이트 !",
+                onPressed: (){
+                  update_level();
+                  Fluttertoast.showToast(msg: "유저 레벨 업데이트가 완료되었습니다 !");
+                },
+              ),
+              // AdminButton(
+              //   title: "지문 인식 슛 ~",
+              //   onPressed: (){
+              //     _authenticateWithBiometrics();
+              //     Fluttertoast.showToast(msg: "지문 인식 성공했습니다 !");
+              //   },
+              // ),
+              AdminButton(
+                  title: "백그라운드 실행해보자!",
+                  onPressed: () {
 
-            AdminButton(
-              title: "리워드 더하기 버튼",
-              onPressed: (){
-                update_plus_reward();
-              },
-            ),
-
-            AdminButton(
-              title: "만보기를 한번 해봅시다 !",
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => PedometerPage()));
-              },
-            ),
-
-            AdminButton(
-              title: "데이터 re-load (재로그인)",
-              onPressed: (){
-                print("로그인 ㄱㄱ");
-                LoginAsyncMethod(storage, null, true);
-                Fluttertoast.showToast(msg: "데이터 리로드가 완료되었습니다 !");
-              },
-            ),
-            AdminButton(
-              title: "유저 레벨 업데이트 !",
-              onPressed: (){
-                update_level();
-                Fluttertoast.showToast(msg: "유저 레벨 업데이트가 완료되었습니다 !");
-              },
-            ),
-            AdminButton(
-              title: "지문 인식 슛 ~",
-              onPressed: (){
-                _authenticateWithBiometrics();
-                Fluttertoast.showToast(msg: "지문 인식 성공했습니다 !");
-              },
-            ),
-            AdminButton(
-              title: "user 수 변경 버튼",
-              onPressed: (){
-                update_user_count();
-                update_total_user_count();
-                Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
-              },
-            )
-          ],
+                  },
+              ),
+              AdminButton(
+                title: "user 수 변경 버튼",
+                onPressed: (){
+                  update_user_count();
+                  update_total_user_count();
+                  Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -448,7 +440,6 @@ class AdminButton extends StatelessWidget {
             ],
           ),
         ),
-
         SizedBox(height: 15.h,),
       ],
     );
