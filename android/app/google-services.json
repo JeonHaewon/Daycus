@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "372451235851",
+    "project_id": "days-820bf",
+    "storage_bucket": "days-820bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372451235851:android:3711e8387cbfe8e0434f0e",
+        "android_client_info": {
+          "package_name": "com.happycircuit.daycus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372451235851-umihqdtdi1v365k4aj0i41hqjuguoige.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHK7tlzbvbN-Xo99OMZuTAI0KqRmBs6Y4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372451235851-umihqdtdi1v365k4aj0i41hqjuguoige.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
