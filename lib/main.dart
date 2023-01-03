@@ -10,7 +10,44 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:daycus/backend/admin/AdminPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-void main () {
+FirebaseMessaging messaging = FirebaseMessaging.instance;
+FlutterLocalNotificationsPlugin fltNotification = FlutterLocalNotificationsPlugin();
+
+void pushFCMtoken() async {
+  String token=await messaging.getToken();
+  print(token);
+}
+
+void initMessaging() {
+  var androiInit = AndroidInitializationSettings(
+      '@mipmap/ic_launcher'); //for logo
+  var iosInit = IOSInitializationSettings();
+  var initSetting = InitializationSettings(android: androiInit, iOS:
+  iosInit);
+  fltNotification = FlutterLocalNotificationsPlugin();
+  fltNotification.initialize(initSetting);
+  var androidDetails =
+  AndroidNotificationDetails('1', 'channelName', 'channel Description');
+  var iosDetails = IOSNotificationDetails();
+  var generalNotificationDetails =
+  NotificationDetails(android: androidDetails, iOS: iosDetails);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null) {
+      fltNotification.show(
+          notification.hashCode, notification.title, notification.
+      body, generalNotificationDetails);
+    }
+  });
+}
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  pushFCMtoken();
+  initMessaging();
   runApp(const MyApp());
 }
 

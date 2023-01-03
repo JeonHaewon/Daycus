@@ -15,10 +15,12 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
-
+import 'dart:typed_data';
+import 'package:sound_stream/sound_stream.dart';
 import '../../screen/LoginPageCustom.dart';
 import 'dart:io';
 
@@ -27,6 +29,22 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:daycus/core/app_text.dart';
 // create an instance
+
+Future<bool> _getStatuses() async {
+  Map<Permission, PermissionStatus> statuses =
+  await [Permission.storage, Permission.camera].request();
+
+  if (await Permission.camera.isGranted &&
+      await Permission.storage.isGranted) {
+    return Future.value(true);
+  } else {
+    return Future.value(false);
+  }
+}
+Future _scan() async {
+  await _getStatuses();
+}
+
 
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
@@ -40,6 +58,15 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
+  RecorderStream _recorder = RecorderStream();
+  PlayerStream _player = PlayerStream();
+
+  List<Uint8List> _micChunks = [];
+  bool _isRecording = false;
+  bool _isPlaying = false;
+  late StreamSubscription _recorderStatus;
+  late StreamSubscription _playerStatus;
+  late StreamSubscription _audioStream;
   dynamic userInfo = '';
   static final storage = FlutterSecureStorage();
   final LocalAuthentication auth = LocalAuthentication();
@@ -48,8 +75,49 @@ class _AdminScreenState extends State<AdminScreen> {
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
 
+  Future<void> initPlugin() async {
+    _recorderStatus = _recorder.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isRecording = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    _audioStream = _recorder.audioStream.listen((data) {
+      if (_isPlaying) {
+        _player.writeChunk(data);
+      } else {
+        _micChunks.add(data);
+      }
+    });
+
+    _playerStatus = _player.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isPlaying = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    await Future.wait([
+      _recorder.initialize(),
+      _player.initialize(),
+    ]);
+  }
+
+  void _play() async {
+    await _player.start();
+
+    if (_micChunks.isNotEmpty) {
+      for (var chunk in _micChunks) {
+        await _player.writeChunk(chunk);
+      }
+      _micChunks.clear();
+    }
+  }
+
   void initState() {
     super.initState();
+    initPlugin();
   }
 
   @override
@@ -239,6 +307,7 @@ class _AdminScreenState extends State<AdminScreen> {
         Fluttertoast.showToast(msg: "업데이트 중 문제가 발생했습니다.");
       }
     }
+
     update_total_user_count() async{
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
@@ -292,19 +361,16 @@ class _AdminScreenState extends State<AdminScreen> {
         var update_res = await http.post(Uri.parse(API.update), body: {
           'update_sql': "with count_table as (select mission_id as mission_id, avg(bet_reward) as average from do_mission group by mission_id) UPDATE count_table A INNER JOIN missions B ON A.mission_id = B.mission_id SET B.average = A.average;",
         });
-
         if (update_res.statusCode == 200 ) {
           var resMission = jsonDecode(update_res.body);
           // print(resMission);
           if (resMission['success'] == true) {
             Fluttertoast.showToast(msg: "평균 ${rewardName} 업데이트가 완료되었습니다 !");
-
           } else {
             print("에러발생");
             print(resMission);
             Fluttertoast.showToast(msg: "다시 시도해주세요");
           }
-
         }
       } on Exception catch (e) {
         print("에러발생");
@@ -355,7 +421,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   update_plus_reward();
                 },
               ),
-
+              AdminButton(
+                title: "카메라 권한 주기 버튼",
+                onPressed: (){
+                  _scan();
+                },
+              ),
               AdminButton(
                 title: "만보기를 한번 해봅시다 !",
                 onPressed: (){
@@ -391,6 +462,16 @@ class _AdminScreenState extends State<AdminScreen> {
                   update_user_count();
                   Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
                 },
+              ),
+              IconButton(
+                iconSize: 96.0,
+                icon: Icon(_isRecording ? Icons.mic_off : Icons.mic),
+                onPressed: _isRecording ? _recorder.stop : _recorder.start,
+              ),
+              IconButton(
+                iconSize: 96.0,
+                icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                onPressed: _isPlaying ? _player.stop : _play,
               ),
             ],
           ),
