@@ -140,7 +140,7 @@ class NowMissionButton extends StatelessWidget {
                                      children: [
                                        //Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
                                        Text("진행률 ",style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean') ),
-                                       Text(f.format(percent),style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean') ),
+                                       Text(percent.toStringAsFixed(1),style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean') ),
                                        Text(" %    ",style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean') ),
                                      ],
                                    ),
