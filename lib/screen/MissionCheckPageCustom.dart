@@ -116,7 +116,8 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                         return Column(
                           children: [
                             NowMissionButton(
-                              duration: (all_missions[_index]['start_date']).substring(5,10)+" ~ "+(all_missions[_index]['end_date']).substring(5,10),
+                              duration: all_missions[_index]['start_date']==null
+                                  ? "미션 종료" : ((all_missions[_index]['start_date']).substring(5,10)+" ~ "+(all_missions[_index]['end_date']).substring(5,10)),
                               image: all_missions[_index]['thumbnail']==''
                                 ? 'missionbackground.png' : all_missions[_index]['thumbnail'],
                               title: all_missions[_index]['title'],
