@@ -144,7 +144,7 @@ class PrivateSettings extends StatelessWidget {
                     onPressed: () async {
                       PopPage(
                           "로그아웃", context,
-                          Text("\n로그아웃 하시겠습니까?"),
+                          Text("로그아웃 하시겠습니까?"),
                           "로그아웃",
                           "취소",
                           () async {
@@ -154,7 +154,8 @@ class PrivateSettings extends StatelessWidget {
                             // 백그라운드에서 진행.
                             await logout();
                             checkUserState();
-                          });
+                          }, null,
+                      );
 
 
                     },

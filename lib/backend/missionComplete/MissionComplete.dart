@@ -113,5 +113,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
               Fluttertoast.showToast(msg: missionFailToastString);
             }
           }
-        });
+        },
+      null,
+    );
 }

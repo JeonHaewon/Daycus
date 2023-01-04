@@ -149,7 +149,10 @@ class _LabelingMissionState extends State<LabelingMission> {
             "확인", null,
                 (){
               Navigator.pop(context); Navigator.pop(context);
-            });}
+            },
+          null,
+        )
+      ;}
       else {
         await image_download(widget.folder, imageList![index]['image']);
         setState(() { is_load = true; });

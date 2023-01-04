@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 SizedBox _sizedBox = SizedBox(height: 10,);
 
 Future<dynamic> PopPage(String? title, BuildContext context, Widget content,
-    String check, String? cancel, onPressed) {
+    String check, String? cancel, onPressed, onPressedCancel) {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -35,13 +35,18 @@ Future<dynamic> PopPage(String? title, BuildContext context, Widget content,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // 취소 버튼
-              if (cancel!=null)
+              // 취소 버튼, 함수가 없으면 그냥 꺼짐
+              if (cancel!=null && onPressedCancel==null)
                 TextButton(
                     onPressed: (){
-                      Navigator.of(context).pop();
-                      // 사진 취소(삭제) 필요
+                      Navigator.pop(context);
                     },
+                    child: Text(cancel, style: TextStyle(color: Colors.grey[600]),)),
+
+              // 취소 버튼, 함수가 있을때
+              if (cancel!=null && onPressedCancel!=null)
+                TextButton(
+                    onPressed: onPressedCancel,
                     child: Text(cancel, style: TextStyle(color: Colors.grey[600]),)),
 
               TextButton(

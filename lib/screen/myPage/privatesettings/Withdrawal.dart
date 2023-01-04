@@ -1,3 +1,4 @@
+import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
 import 'package:daycus/core/app_color.dart';
@@ -168,7 +169,16 @@ class _WithdrawalState extends State<Withdrawal> {
 
                       TextButton(
                         onPressed: () {
-                          remove_user();
+                          // 탈퇴와 취소 반대로
+                          PopPage("회원 탈퇴", context,
+                              Text("정말 탈퇴하시겠습니까?"),
+                              "취소", "탈퇴",
+                                  (){
+                                    Navigator.pop(context);
+                                  },
+                                  (){
+                                    remove_user();
+                                  },);
                         },
 
                         child: Container(
