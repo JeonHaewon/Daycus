@@ -410,10 +410,12 @@ class _signupPage extends State<SignupPage> {
               width: 412.w,
               child:TextButton(onPressed: () async {
                 // 동의 안했으면 회원가입 불가
-                if(_formKey.currentState!.validate()){
+                if(_formKey.currentState!.validate() && agree['이용약관'] && agree['개인정보 취급방침']){
                   await checkUserEmail();
                 }
-
+                else{
+                  Fluttertoast.showToast(msg: "필수 약관을 동의해주세요 !");
+                }
               }, child: Text('회원가입',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
