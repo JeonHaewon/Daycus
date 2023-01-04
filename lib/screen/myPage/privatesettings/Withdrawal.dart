@@ -66,13 +66,14 @@ class _WithdrawalState extends State<Withdrawal> {
           if (resLogin['success'] == true) {
             logout();
             checkUserState();
+            Fluttertoast.showToast(msg: "탈퇴가 완료되었습니다.\nDayCus는 당신의 갓생을 응원합니다.");
           } else {
             // 이름을 바꿀 수 없는 상황?
           }
         }
       } catch (e) {
         print(e.toString());
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(msg: "다시 시도해주세요");
       }
     }
 

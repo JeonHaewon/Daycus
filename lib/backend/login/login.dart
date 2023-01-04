@@ -50,7 +50,7 @@ userLogin(String email, String password, bool reload) async{
   }
   catch (e) {
     print(e.toString());
-    Fluttertoast.showToast(msg: e.toString());
+    //Fluttertoast.showToast(msg: e.toString());
 
     return null;
 
@@ -78,7 +78,7 @@ afterLogin() async {
   // 미션 불러오기
   await missionImport();
   // 카테고리별 미션 불러오기
-  await importMissionByCategory();
+  //await importMissionByCategory();
   // 하고있는 미션 불러오기
   await doMissionImport();
 

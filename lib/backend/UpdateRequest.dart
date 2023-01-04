@@ -38,7 +38,7 @@ update_request(String sql, String? successMessage) async {
   } on Exception catch (e) {
     print("에러발생 : ${e}");
     last_error = "sql : ${sql} / error : ${e}";
-    Fluttertoast.showToast(msg: errorMessage);
+    //Fluttertoast.showToast(msg: errorMessage);
     return false;
   }
 }
