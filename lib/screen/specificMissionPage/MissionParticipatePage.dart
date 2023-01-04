@@ -71,7 +71,7 @@ class MissionParticipatePage extends StatelessWidget {
                     Container(
                       width: 400.w,
                       // 335 > 400으로 변경 (왜 에러가 생기는지, 400은 유효한지 확인 필요)
-                      height: 400.h,
+                      height: 360.h,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -136,7 +136,7 @@ class MissionParticipatePage extends StatelessWidget {
               ),
 
               // 하임 : 추가함
-              SizedBox(height: 15.h,),
+              SizedBox(height: 8.h,),
 
               Padding(
                 padding: EdgeInsets.fromLTRB(32.w, 20.h, 32.w, 0),
@@ -148,9 +148,34 @@ class MissionParticipatePage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("미션 참여 ${rewardName}", style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("미션 참여 ${rewardName}", style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            Container(
+                              width: 140.w,
+                              height: 25.h,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("나의 보유 ${rewardName} :  ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', ) ,textAlign: TextAlign.center,),
+                                  Text("${user_data['reward']} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 5.h,),
+
+
                         SizedBox(
-                          height: 100.h,
+                          height: 85.h,
                           // 항상 뒤에 "원"이 따라다녔으면 좋겠다
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.bottom,
@@ -181,11 +206,11 @@ class MissionParticipatePage extends StatelessWidget {
                     ),
 
                     // 하임 : 폰트 크기 16 > 15로 변경
-                    SizedBox(height: 15.h,),
-                    Text('· 참여금이 높을수록 받는 ${rewardName}도 많아져요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',) ),
+
+                    Text('· 참여금이 높을수록 받는 ${rewardName}도 많아져요',style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',) ),
                     SizedBox(height: 5.h,),
 
-                    Text('· ${rewardName}를 걸지 않고도 미션에 참여할 수 있어요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',) ),
+                    Text('· ${rewardName}를 걸지 않고도 미션에 참여할 수 있어요',style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',) ),
 
                   ],
                 ),

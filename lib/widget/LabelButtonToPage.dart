@@ -28,7 +28,8 @@ class LabelButtonToPage extends StatelessWidget {
         label_category: data[i]['label_category'],
         folder: data[i]['image_locate'],
         title: data[i]['title'],
-        rule: data[i]['rules'],),
+        rule: data[i]['rules'],
+      ),
     );
   }
 }
