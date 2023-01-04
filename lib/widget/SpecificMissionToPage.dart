@@ -19,7 +19,7 @@ class SpecificMissionToPage extends StatelessWidget {
                duration: all_missions[i]['start_date']==null
                    ? "모집 예정" : all_missions[i]['start_date'].substring(5)+" ~ "+all_missions[i]['end_date'].substring(5),
                title: all_missions[i]['title'],
-               totalUser: int.parse(all_missions[i]['now_user']),
+               currentUser: int.parse(all_missions[i]['now_user']),
                image: all_missions[i]['thumbnail'] ?? 'missionbackground.png',
 
                // next 없음

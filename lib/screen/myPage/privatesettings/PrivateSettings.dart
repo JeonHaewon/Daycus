@@ -1,4 +1,5 @@
 import 'package:daycus/screen/LoginPageCustom.dart';
+import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,12 +142,20 @@ class PrivateSettings extends StatelessWidget {
                     ),
 
                     onPressed: () async {
-                      // 기획에서 어떻게 인사할건지 정하기
-                        Fluttertoast.showToast(msg: "정상적으로 로그아웃 되었습니다.");
-                      // 로그인 유지 삭제 및 정보 삭제
-                      // 백그라운드에서 진행.
-                      await logout();
-                      checkUserState();
+                      PopPage(
+                          "로그아웃", context,
+                          Text("\n로그아웃 하시겠습니까?"),
+                          "로그아웃",
+                          "취소",
+                          () async {
+                            // 기획에서 어떻게 인사할건지 정하기
+                            Fluttertoast.showToast(msg: "정상적으로 로그아웃 되었습니다.");
+                            // 로그인 유지 삭제 및 정보 삭제
+                            // 백그라운드에서 진행.
+                            await logout();
+                            checkUserState();
+                          });
+
 
                     },
                     child: Row(

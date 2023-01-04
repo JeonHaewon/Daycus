@@ -121,7 +121,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                               image: all_missions[_index]['thumbnail']==''
                                 ? 'missionbackground.png' : all_missions[_index]['thumbnail'],
                               title: all_missions[_index]['title'],
-                              totalUser: int.parse(all_missions[_index]['total_user']),
+                              currentUser: int.parse(all_missions[_index]['now_user']),
                               rank: 1,
                               percent: double.parse(do_mission[index]['percent']),
                               onTap: MissionCheckStatusPage(

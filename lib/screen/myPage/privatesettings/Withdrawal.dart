@@ -50,6 +50,8 @@ class _WithdrawalState extends State<Withdrawal> {
         print('로그인 중');
       }
     }
+
+    // 회원 탈퇴를 적어주기만함. 실제 탈퇴는 데이터베이스에서 !
     remove_user() async {
       try{
         String cur = await NowTime('yyyy-MM-dd - HH:mm:ss');

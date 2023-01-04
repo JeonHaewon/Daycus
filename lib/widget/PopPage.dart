@@ -42,11 +42,11 @@ Future<dynamic> PopPage(String? title, BuildContext context, Widget content,
                       Navigator.of(context).pop();
                       // 사진 취소(삭제) 필요
                     },
-                    child: Text(cancel, style: TextStyle(color: Colors.indigo),)),
+                    child: Text(cancel, style: TextStyle(color: Colors.grey[600]),)),
 
               TextButton(
                   onPressed: onPressed,
-                  child: Text("${check}  ", style: TextStyle(color: AppColor.happyblue),)),
+                  child: Text("${check}  ", style: TextStyle(color: Colors.indigo),)),
             ],
           ),
         ],

@@ -33,6 +33,7 @@ userLogin(String email, String password, bool reload) async{
         // 첫 로그인 시에만 인사해줌
         if (reload==false){
           Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
+          controller.currentBottomNavItemIndex.value = 2;
         }
 
 

@@ -7,14 +7,14 @@ class MissionButton extends StatelessWidget {
   MissionButton({
     Key? key,
     required this.title,
-    required this.totalUser,
+    required this.currentUser,
     required this.image,
     required this.duration,
     this.onTap,
 }) : super(key: key);
 
   final String title;
-  final int totalUser;
+  final int currentUser;
   final String image;
   final String duration;
   final onTap;
@@ -89,7 +89,7 @@ class MissionButton extends StatelessWidget {
               Container(
                 child: Row(
                   children: [
-                    Text(f.format(totalUser),style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                    Text(f.format(currentUser),style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
                     Text("명 참여중",style: TextStyle(color: Colors.white,fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
                   ],
                 ),

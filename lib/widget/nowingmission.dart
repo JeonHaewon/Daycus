@@ -9,7 +9,7 @@ class NowMissionButton extends StatelessWidget {
     Key? key,
     required this.image,
     required this.title,
-    required this.totalUser,
+    required this.currentUser,
     required this.rank,
     required this.percent,
     required this.duration,
@@ -18,7 +18,7 @@ class NowMissionButton extends StatelessWidget {
 
   final String image;
   final String title;
-  final int totalUser;
+  final int currentUser;
   final int rank;
   final double percent;
   final String duration;
@@ -97,7 +97,7 @@ class NowMissionButton extends StatelessWidget {
                             Container(
                               child: Row(
                                 children: [
-                                  Text(f.format(totalUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
+                                  Text(f.format(currentUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
                                   Text(" 참여중 ",style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
                                   //Text(f.format(rank),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
                                   //Text("위",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),

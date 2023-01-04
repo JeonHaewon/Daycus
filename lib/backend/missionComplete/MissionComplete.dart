@@ -70,7 +70,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
 
     // 이후 공통 - pop 페이지 띄우기
     PopPage(popTitle, context, Text(popContent),
-        "확인", null, () async {
+        "확인", "돌아가기", () async {
           // do_mission > Done_mission row 이동 - 공통 작업
           success[0] = await update_request(
               "INSERT INTO Done_mission  select * from (select * from do_mission where (do_id = '${do_mission_data['do_id']}')) dating",

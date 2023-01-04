@@ -38,6 +38,7 @@ class LabelingMission extends StatefulWidget {
 }
 
 class _LabelingMissionState extends State<LabelingMission> {
+
   var f = NumberFormat('###,###,###,###');
 
   int degree = 0;
@@ -183,6 +184,7 @@ class _LabelingMissionState extends State<LabelingMission> {
     }
 
     do_label(String label_category){
+      print(label_category);
       // 로딩이 다 됐을 때만 라벨링 가능
       if(is_load){
         update_request(
@@ -439,7 +441,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              do_label(label_category_list[extraindex]);
+                              do_label(label_category_list[index*2]);
                             },
                             child: Text(label_category_list[extraindex]),
                             style: ElevatedButton.styleFrom(
@@ -457,7 +459,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                             ElevatedButton(
                               onPressed: () {
                                 // 로딩이 다 됐을 때만 라벨링 가능
-                                do_label(label_category_list[extraindex+1]);
+                                do_label(label_category_list[index*2+1]);
                               },
                               child: Text(label_category_list[extraindex+1]),
                               style: ElevatedButton.styleFrom(

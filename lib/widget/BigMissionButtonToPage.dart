@@ -18,11 +18,13 @@ class BigMissionButtonToPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BigMissionButton(
-      title: data[i]['title'],
       totalUser: int.parse(data[i]['total_user']),
+      title: data[i]['title'],
+      currentUser: int.parse(data[i]['now_user']),
       image: data[i]['thumbnail'] ?? 'mission1.png',
       certifiUser:int.parse(data[i]['certifi_user']),
-      duration:int.parse(data[i]['term']),
+      duration:data[i]['start_date']==null
+          ? "모집 예정" : data[i]['start_date'].substring(5)+" ~ "+data[i]['end_date'].substring(5),
 
       // 이거 category별로 했을 때에는 이렇게 하면 안됨.
       // 그러므로 최적화 시 동작을 다시 생각해봐야할듯.
