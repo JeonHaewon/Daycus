@@ -267,45 +267,49 @@ class _LabelingMissionState extends State<LabelingMission> {
                   // 하임 > 해원 : 미션 정책 위에 미션 설명도 예쁘게 넣어주면 좋을듯?
 
                   Container(
-                    width: 65.w,
-                    height: 25.h,
+                    width: 55.w,
+                    height: 20.h,
                     decoration: BoxDecoration(
                       color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 4.h,),
-                        Text("미션 정책",style: TextStyle(color: Colors.indigoAccent, fontSize: 10.sp, fontFamily: 'korean') ),
+                        Text("인증 방법",style: TextStyle(color: Colors.indigoAccent, fontSize: 10.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),
 
                   _sizedBox,
 
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: rules_list_cnt,
+                  Text("물이 보이도록 물컵이나 물병 사진을 찍어주세요",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
 
-                    itemBuilder: (_, index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            // 하임 > 해원 : 이거 자동 내어쓰기 되도록 변경해야할듯.
-                            // 숫자까지 잘라서 list View로 넣으면 될지도??
-                              " - ${widget.rule.split("\\n")[index]}",
-                              style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
 
-                          // 맨 마지막 SizedBox는 빼기
-                          if (index < rules_list_cnt-1)
-                            SizedBox(height: 5.h,),
-                        ],
-                      );
-                    },
-
-                  ),
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   physics: NeverScrollableScrollPhysics(),
+                  //   itemCount: rules_list_cnt,
+                  //
+                  //   itemBuilder: (_, index) {
+                  //     return Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           // 하임 > 해원 : 이거 자동 내어쓰기 되도록 변경해야할듯.
+                  //           // 숫자까지 잘라서 list View로 넣으면 될지도??
+                  //             " - ${widget.rule.split("\\n")[index]}",
+                  //             style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+                  //
+                  //         // 맨 마지막 SizedBox는 빼기
+                  //         if (index < rules_list_cnt-1)
+                  //           SizedBox(height: 5.h,),
+                  //       ],
+                  //     );
+                  //   },
+                  //
+                  // ),
 
                   _sizedBox,
 
@@ -331,8 +335,10 @@ class _LabelingMissionState extends State<LabelingMission> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height:5.h,),
+
 
                         Container(
                           child: Row(
@@ -346,8 +352,9 @@ class _LabelingMissionState extends State<LabelingMission> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SizedBox(height: 3.h,),
 
                                     Text("!",style: TextStyle(color: Colors.white, fontSize: 8.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                                   ],
