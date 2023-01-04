@@ -1,5 +1,6 @@
 
 import 'package:daycus/backend/admin/PedometerPage.dart';
+import 'package:daycus/backend/admin/RecordingPage.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -110,6 +111,7 @@ class _AdminScreenState extends State<AdminScreen> {
     if (_micChunks.isNotEmpty) {
       for (var chunk in _micChunks) {
         await _player.writeChunk(chunk);
+        print(chunk.runtimeType);
       }
       _micChunks.clear();
     }
@@ -463,15 +465,13 @@ class _AdminScreenState extends State<AdminScreen> {
                   Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
                 },
               ),
-              IconButton(
-                iconSize: 96.0,
-                icon: Icon(_isRecording ? Icons.mic_off : Icons.mic),
-                onPressed: _isRecording ? _recorder.stop : _recorder.start,
-              ),
-              IconButton(
-                iconSize: 96.0,
-                icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                onPressed: _isPlaying ? _player.stop : _play,
+              AdminButton(
+                title: "녹음을 한 번 해봅시다 !",
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => RecordingPage()));
+                },
               ),
             ],
           ),
