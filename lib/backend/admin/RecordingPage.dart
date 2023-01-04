@@ -1,17 +1,9 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
-import 'package:pedometer/pedometer.dart';
-import 'package:daycus/backend/UserDatabase.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_stream/sound_stream.dart';
 
 class RecordingPage extends StatefulWidget {

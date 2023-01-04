@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:daycus/backend/Api.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
-
-
+Map <String, Map> real_cnt_data={};
 
 class LabelingMission extends StatefulWidget {
   LabelingMission({
@@ -23,7 +23,6 @@ class LabelingMission extends StatefulWidget {
     required this.title,
     required this.rule,
     required this.label_category,
-
     this.onTap,
 
   }) : super(key: key);
@@ -32,7 +31,6 @@ class LabelingMission extends StatefulWidget {
   final String title;
   final String rule;
   final String label_category;
-
   final onTap;
 
   @override
@@ -40,7 +38,6 @@ class LabelingMission extends StatefulWidget {
 }
 
 class _LabelingMissionState extends State<LabelingMission> {
-
   var f = NumberFormat('###,###,###,###');
 
   int degree = 0;
@@ -81,7 +78,6 @@ class _LabelingMissionState extends State<LabelingMission> {
               downloadImage = Image.memory(bytes);
             });
           }
-
         });
 
         return true;
@@ -101,6 +97,31 @@ class _LabelingMissionState extends State<LabelingMission> {
     }
   }
 
+  update_map(int idx, String name) {
+    if (real_cnt_data[widget.folder]==null){
+      real_cnt_data[widget.folder] = {'${imageList[idx]['id']}' : name};
+    }
+    else {
+      real_cnt_data[widget.folder]!['${imageList[idx]['id']}'] = name;
+    }
+    print(real_cnt_data);
+    print(jsonEncode(real_cnt_data));
+  }
+  update_json() async {
+    try {
+      var select_res = await http.post(Uri.parse(API.update), body: {
+        'update_sql': "update user_table set jsondata = '${jsonEncode(real_cnt_data)}' where user_email = '${user_data['user_email']}'"
+      });
+      if (select_res.statusCode == 200 ) {
+        Fluttertoast.showToast(msg: "라벨링 결과가 업데이트 되었습니다 !");
+      }
+    } on Exception catch (e) {
+      print("에러발생 : ${e}");
+      return false;
+      //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+    }
+  }
+
   // 라벨링 한거는 제외하기
   importImageList(String folder) async {
     try {
@@ -114,6 +135,7 @@ class _LabelingMissionState extends State<LabelingMission> {
         if (resMission['success'] == true) {
           //Fluttertoast.showToast(msg: "이메일을 확인해주세요 !");
           imageList = resMission["data"];
+          imageList.shuffle();
           setState(() {
             imageListCnt = resMission["data"]==null ? 0 : resMission["data"].length;
           });
@@ -151,18 +173,18 @@ class _LabelingMissionState extends State<LabelingMission> {
             "확인", null,
                 (){
               Navigator.pop(context); Navigator.pop(context);
-            },
-          null,
-        )
-      ;}
+            }, null
+        );}
       else {
         await image_download(widget.folder, imageList![index]['image']);
         setState(() { is_load = true; });
-
       }
     });
   }
 
+  void dispose(){
+    update_json();
+  }
   // 로딩을 위한 key
   bool is_load = false;
 
@@ -189,7 +211,6 @@ class _LabelingMissionState extends State<LabelingMission> {
     }
 
     do_label(String label_category){
-      print(label_category);
       // 로딩이 다 됐을 때만 라벨링 가능
       if(is_load){
         update_request(
@@ -203,7 +224,6 @@ class _LabelingMissionState extends State<LabelingMission> {
         increase_index();
       }
     }
-
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -247,50 +267,45 @@ class _LabelingMissionState extends State<LabelingMission> {
                   // 하임 > 해원 : 미션 정책 위에 미션 설명도 예쁘게 넣어주면 좋을듯?
 
                   Container(
-                    width: 60.w,
-                    height: 22.h,
+                    width: 65.w,
+                    height: 25.h,
                     decoration: BoxDecoration(
                       color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("인증 방법",style: TextStyle(color: Colors.indigoAccent, fontSize: 10.sp, fontFamily: 'korean') ),
+                        SizedBox(height: 4.h,),
+                        Text("미션 정책",style: TextStyle(color: Colors.indigoAccent, fontSize: 10.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),
 
                   _sizedBox,
-                  
-                  
-                  Text("물이 보이도록 물컵이나 물병 사진을 찍어주세요",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
-                  // 해원 > 하임 : 미션 인증 방법 넣어주세요:)
 
-                  // ListView.builder(
-                  //   shrinkWrap: true,
-                  //   physics: NeverScrollableScrollPhysics(),
-                  //   itemCount: rules_list_cnt,
-                  //
-                  //   itemBuilder: (_, index) {
-                  //     return Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           // 하임 > 해원 : 이거 자동 내어쓰기 되도록 변경해야할듯.
-                  //           // 숫자까지 잘라서 list View로 넣으면 될지도??
-                  //             " ${widget.rule.split("\\n")[index]}",
-                  //             style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
-                  //
-                  //         // 맨 마지막 SizedBox는 빼기
-                  //         if (index < rules_list_cnt-1)
-                  //           SizedBox(height: 5.h,),
-                  //       ],
-                  //     );
-                  //   },
-                  //
-                  // ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: rules_list_cnt,
+
+                    itemBuilder: (_, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            // 하임 > 해원 : 이거 자동 내어쓰기 되도록 변경해야할듯.
+                            // 숫자까지 잘라서 list View로 넣으면 될지도??
+                              " - ${widget.rule.split("\\n")[index]}",
+                              style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+
+                          // 맨 마지막 SizedBox는 빼기
+                          if (index < rules_list_cnt-1)
+                            SizedBox(height: 5.h,),
+                        ],
+                      );
+                    },
+
+                  ),
 
                   _sizedBox,
 
@@ -309,18 +324,15 @@ class _LabelingMissionState extends State<LabelingMission> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 300.w,
+                    width: 290.w,
                     height: 30.h,
                     decoration: BoxDecoration(
                       color: Colors.deepOrange[100],
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-
                       children: [
-
+                        SizedBox(height:5.h,),
 
                         Container(
                           child: Row(
@@ -334,9 +346,8 @@ class _LabelingMissionState extends State<LabelingMission> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    SizedBox(height: 3.h,),
 
                                     Text("!",style: TextStyle(color: Colors.white, fontSize: 8.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                                   ],
@@ -345,7 +356,6 @@ class _LabelingMissionState extends State<LabelingMission> {
                               SizedBox(width: 6.w,),
 
                               Text(canLabelingString,style: TextStyle( fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-
                             ],
                           ),
                         ),
@@ -379,8 +389,6 @@ class _LabelingMissionState extends State<LabelingMission> {
                       await image_download(widget.folder, imageList[index]['image']);
                       setState(() { is_load = true; });
                     }
-
-
                   },
                   child: Container(
                     height: 85.h,
@@ -444,7 +452,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount:
                 (label_cnt % 2 == 0 ? label_cnt / 2 : label_cnt ~/ 2 + 1).toInt(),
-                itemBuilder: (_, index) {
+                itemBuilder: (_, i) {
                   extraindex += 2;
                   return Column(
                     //mainAxisAlignment: MainAxisAlignment.center,
@@ -455,7 +463,8 @@ class _LabelingMissionState extends State<LabelingMission> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              do_label(label_category_list[index*2]);
+                              update_map(index, label_category_list[i*2]);
+                              do_label(label_category_list[i*2]);
                             },
                             child: Text(label_category_list[extraindex]),
                             style: ElevatedButton.styleFrom(
@@ -473,7 +482,8 @@ class _LabelingMissionState extends State<LabelingMission> {
                             ElevatedButton(
                               onPressed: () {
                                 // 로딩이 다 됐을 때만 라벨링 가능
-                                do_label(label_category_list[index*2+1]);
+                                update_map(index, label_category_list[2*i+1]);
+                                do_label(label_category_list[2*i+1]);
                               },
                               child: Text(label_category_list[extraindex+1]),
                               style: ElevatedButton.styleFrom(
