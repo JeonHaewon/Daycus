@@ -368,13 +368,19 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
               child: Column(
                 children: [
                   Text('예상 ${rewardName} 증가율 : 150%',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
-
                 ],
-
               ),
             ),
 
 
+            Padding(
+              padding: EdgeInsets.fromLTRB(25.w, 6.h, 0, 0),
+              child: Column(
+                children: [
+                  Text('※ 미션 성공시 14${rewardName}를 추가로 지급합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                ],
+              ),
+            ),
 
 
 
