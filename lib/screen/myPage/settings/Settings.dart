@@ -35,36 +35,36 @@ class Settings extends StatelessWidget {
 
 
             Padding(
-              padding: EdgeInsets.fromLTRB(30.w, 40.h, 30.w, 0),
+              padding: EdgeInsets.fromLTRB(30.w, 10.h, 30.w, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
 
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(365.w, 50.h),
-                      textStyle: TextStyle(fontSize: 18.sp),
-                    ),
-
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => NoticeSetting()),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(" 알림 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Image.asset('assets/image/arrow-right1.png' )
-                      ],
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(10)
+                  //     ),
+                  //     primary: Colors.white,
+                  //     onPrimary: Colors.black,
+                  //     minimumSize: Size(365.w, 50.h),
+                  //     textStyle: TextStyle(fontSize: 18.sp),
+                  //   ),
+                  //
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (_) => NoticeSetting()),
+                  //     );
+                  //   },
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(" 알림 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  //       Image.asset('assets/image/arrow-right1.png' )
+                  //     ],
+                  //   ),
+                  // ),
 
                   // SizedBox(height: 20.h,),
                   // ElevatedButton(

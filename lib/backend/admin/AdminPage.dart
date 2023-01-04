@@ -1,11 +1,9 @@
 
 import 'package:daycus/backend/admin/PedometerPage.dart';
-import 'package:daycus/backend/admin/RecordingPage.dart';
 import 'package:daycus/core/notification.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:daycus/backend/admin/RecordingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,19 +13,13 @@ import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'dart:async';
 import 'dart:ui';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'dart:typed_data';
 import 'package:sound_stream/sound_stream.dart';
 import '../../screen/LoginPageCustom.dart';
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:daycus/core/app_text.dart';
 // create an instance
 
@@ -111,7 +103,6 @@ class _AdminScreenState extends State<AdminScreen> {
     if (_micChunks.isNotEmpty) {
       for (var chunk in _micChunks) {
         await _player.writeChunk(chunk);
-        print(chunk.runtimeType);
       }
       _micChunks.clear();
     }

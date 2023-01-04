@@ -29,43 +29,60 @@ class _AllMissionState extends State<AllMission> {
         color: AppColor.happyblue,
         onRefresh: refresh,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 370.w,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount:
-                    (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
-                    itemBuilder: (_, index) {
-                      extraindex += 2;
-                      return Column(
-                        children: [
-
-                          SizedBox(height: 20.h,),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BigMissionButtonToPage(i: extraindex, data: all_missions,),
-                              if (extraindex + 1 < missions_cnt)
-                                BigMissionButtonToPage(i: extraindex+1, data: all_missions,),
-                            ],
-                          ),
-
-                        ],
-                      );
-                    },
-                  ),
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              padding: EdgeInsets.only(left: 18.w, top: 25.h, bottom: 25.h),
+              child: Wrap(
+                children: List.generate(missions_cnt, (index) {
+                  if (all_missions[index]['now_user_do']==null) {
+                    return Container(
+                      width: 190.w,
+                      margin: EdgeInsets.only(bottom: 15.h, left: 5.w),
+                      child: BigMissionButtonToPage(i: index, data: all_missions,),
+                    );
+                  }
+                  else {
+                    return Container(width: 0.w,);
+                  }
+                }
                 ),
-                SizedBox(height: 20.h,),
+              ),
 
-              ],
-            ),
-          )
+              // Column(
+              //   children: <Widget>[
+              //     Container(
+              //       width: 370.w,
+              //       child: ListView.builder(
+              //         shrinkWrap: true,
+              //         physics: NeverScrollableScrollPhysics(),
+              //         itemCount:
+              //         (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
+              //         itemBuilder: (_, index) {
+              //           extraindex += 2;
+              //           return Column(
+              //             children: [
+              //
+              //               SizedBox(height: 20.h,),
+              //
+              //               Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //                 children: [
+              //                   BigMissionButtonToPage(i: extraindex, data: all_missions,),
+              //                   if (extraindex + 1 < missions_cnt)
+              //                     BigMissionButtonToPage(i: extraindex+1, data: all_missions,),
+              //                 ],
+              //               ),
+              //
+              //             ],
+              //           );
+              //         },
+              //       ),
+              //     ),
+              //     SizedBox(height: 20.h,),
+              //
+              //   ],
+              // ),
+            )
         ),
       ),
     );

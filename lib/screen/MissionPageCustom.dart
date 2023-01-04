@@ -50,11 +50,11 @@ class MissionPage extends StatelessWidget {
 
           children: [
             AllMission(),
-            CategoryMission(page_category: missions_health),
-            CategoryMission(page_category: missions_study),
-            CategoryMission(page_category: missions_exer),
-            CategoryMission(page_category: missions_life),
-            CategoryMission(page_category: missions_hobby),
+            CategoryMission(page_category: "건강"),
+            CategoryMission(page_category: "공부"),
+            CategoryMission(page_category: "운동"),
+            CategoryMission(page_category: "생활"),
+            CategoryMission(page_category: "취미"),
 
           ],
         ),

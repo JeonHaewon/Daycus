@@ -9,12 +9,14 @@ class MissionButton extends StatelessWidget {
     required this.title,
     required this.totalUser,
     required this.image,
+    required this.duration,
     this.onTap,
 }) : super(key: key);
 
   final String title;
   final int totalUser;
   final String image;
+  final String duration;
   final onTap;
 
   var f = NumberFormat('###,###,###,###');
@@ -29,7 +31,7 @@ class MissionButton extends StatelessWidget {
         );
       },
       child:Stack(
-      alignment: Alignment.bottomLeft,
+      //alignment: Alignment.bottomLeft,
       children: [
         Container(
           width: 170.w,
@@ -58,7 +60,7 @@ class MissionButton extends StatelessWidget {
         ),
 
         Padding(
-          padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
+          padding: EdgeInsets.only(left: 10.w, bottom: 10.h, top: 10.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -95,9 +97,11 @@ class MissionButton extends StatelessWidget {
 
 
               Container(
+                padding: EdgeInsets.only(top: 33.h, right: 20.w),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("2022-01-03 ~ 2023-01-16",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.white) ),
+                    Text(duration, style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',color: Colors.white) ),
                   ],
                 ),
               ),

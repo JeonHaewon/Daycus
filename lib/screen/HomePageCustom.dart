@@ -268,29 +268,45 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
 
-                    Container(
-                      width: 360.w,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount:
-                        (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
-                        itemBuilder: (_, index) {
-                          extraindex += 2;
-                          return Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SpecificMissionToPage(i: extraindex),
-                                  if (extraindex + 1 < missions_cnt)
-                                    SpecificMissionToPage(i: extraindex+1),
-                                ],
-                              ),
-                              SizedBox(height: 15.h,),
-                            ],
+                    // Container(
+                    //   width: 360.w,
+                    //   child: ListView.builder(
+                    //     shrinkWrap: true,
+                    //     physics: NeverScrollableScrollPhysics(),
+                    //     itemCount:
+                    //     (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
+                    //     itemBuilder: (_, index) {
+                    //       extraindex += 2;
+                    //       return Column(
+                    //         children: [
+                    //           Row(
+                    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //             children: [
+                    //               SpecificMissionToPage(i: extraindex),
+                    //               if (extraindex + 1 < missions_cnt)
+                    //                 SpecificMissionToPage(i: extraindex+1),
+                    //             ],
+                    //           ),
+                    //           SizedBox(height: 15.h,),
+                    //         ],
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
+
+                    Wrap(
+                      children: List.generate(missions_cnt, (index) {
+                        if (all_missions[index]['now_user_do']==null) {
+                          return Container(
+                            width: 175.w,
+                            margin: EdgeInsets.only(bottom: 15.h, left: 17.w),
+                            child: SpecificMissionToPage(i: index),
                           );
-                        },
+                        }
+                        else {
+                          return Container(width: 0.w,);
+                        }
+                      }
                       ),
                     ),
 

@@ -182,6 +182,21 @@ class _LabelingMissionState extends State<LabelingMission> {
       }
     }
 
+    do_label(String label_category){
+      // 로딩이 다 됐을 때만 라벨링 가능
+      if(is_load){
+        update_request(
+            "UPDATE image_data SET total_labelled=total_labelled+1 where image='${imageList[index]['image']}'",
+            null);
+        if (label_category=="아니오" || label_category=="인증불가") {
+          update_request(
+              "UPDATE image_data SET no_data=no_data+1 where image='${imageList[index]['image']}'",
+              null);
+        }
+        increase_index();
+      }
+    }
+
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -365,15 +380,15 @@ class _LabelingMissionState extends State<LabelingMission> {
                 ),
 
                 Container(
-                  alignment: Alignment.center, width: 320.w,
-                  constraints: BoxConstraints(
-                    minHeight: 320.h
-                  ),
-                  child: is_load
-                            ? ( downloadImage!=null
-                              ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
-                                : Text("이미지가 없습니다", textAlign: TextAlign.center,))
-                            : CircularProgressIndicator() ),
+                    alignment: Alignment.center, width: 320.w,
+                    constraints: BoxConstraints(
+                        minHeight: 320.h
+                    ),
+                    child: is_load
+                        ? ( downloadImage!=null
+                        ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
+                        : Text("이미지가 없습니다", textAlign: TextAlign.center,))
+                        : CircularProgressIndicator() ),
 
                 InkWell(
                   onTap: () async {
@@ -424,10 +439,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              // 로딩이 다 됐을 때만 라벨링 가능
-                              if(is_load){
-                                increase_index();
-                              }
+                              do_label(label_category_list[extraindex]);
                             },
                             child: Text(label_category_list[extraindex]),
                             style: ElevatedButton.styleFrom(
@@ -445,12 +457,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                             ElevatedButton(
                               onPressed: () {
                                 // 로딩이 다 됐을 때만 라벨링 가능
-                                if(is_load){
-                                  // 기범님께 부탁
-                                  increase_index();
-                                  //update_request("", "성공했습니다");
-
-                                }
+                                do_label(label_category_list[extraindex+1]);
                               },
                               child: Text(label_category_list[extraindex+1]),
                               style: ElevatedButton.styleFrom(
@@ -462,7 +469,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                             ),
 
                           if (extraindex + 1 == label_cnt )
-                            // 껍데기 버튼
+                          // 껍데기 버튼
                             ElevatedButton(
                               onPressed: () { },
                               child: Text(" "),

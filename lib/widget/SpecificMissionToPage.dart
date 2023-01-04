@@ -16,6 +16,8 @@ class SpecificMissionToPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MissionButton(
+               duration: all_missions[i]['start_date']==null
+                   ? "모집 예정" : all_missions[i]['start_date'].substring(5)+" ~ "+all_missions[i]['end_date'].substring(5),
                title: all_missions[i]['title'],
                totalUser: int.parse(all_missions[i]['now_user']),
                image: all_missions[i]['thumbnail'] ?? 'missionbackground.png',
@@ -41,8 +43,7 @@ class SpecificMissionToPage extends StatelessWidget {
                  title : all_missions[i]['title'],
 
                  duration: all_missions[i]['start_date']==null
-                     ? (all_missions[i]['next_start_date']==null
-                     ? comingSoonString : '${all_missions[i]['next_start_date']} ~ ${all_missions[i]['next_end_date']}') : '${all_missions[i]['start_date']} ~ ${all_missions[i]['end_date']}',
+                     ? comingSoonString : all_missions[i]['start_date']+" ~ "+all_missions[i]['end_date'],
 
                  totaluser: int.parse(all_missions[i]['total_user']),
                  certifi_user: int.parse(all_missions[i]['certifi_user']),

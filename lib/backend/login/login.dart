@@ -84,10 +84,11 @@ afterLogin() async {
   missions_cnt = all_missions?.length;
   //print("미션 개수 : $missions_cnt");
 
+  doMissionSave();
   // 백그라운드 실행
-  if (do_mission != null) {
-    doMissionSave();
-  }
+  // if (do_mission != null) {
+  //   doMissionSave();
+  // }
 }
 
 // keep login - 유저 정보 들고오기
