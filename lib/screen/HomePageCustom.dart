@@ -1,3 +1,4 @@
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_text.dart';
@@ -29,10 +30,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
   @override
   Widget build(BuildContext context) {
 
-    int extraindex = -2;
     // 최대 3개만 보여줌
     int? do_mission_cnt = do_mission==null
         ? 0 : (do_mission.length<4 ? do_mission.length : 3);
@@ -44,6 +45,9 @@ class _HomePageState extends State<HomePage> {
       await LoginAsyncMethod(HomePage.storage, null, true);
       setState(() { });
     };
+
+
+
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -100,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
 
                                 //Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
-                                SizedBox(height: 60.h,),
+                                SizedBox(height: 40.h,),
                                 Text("현재 등급",style: TextStyle(color: Colors. grey, fontSize: 20.sp, fontFamily: 'korean') ),
                                 SizedBox(height: 5.h,),
                                 Container(
@@ -109,27 +113,64 @@ class _HomePageState extends State<HomePage> {
                                       SvgPicture.asset('assets/image/medal.svg' , fit: BoxFit.fill, ),
                                       Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean') ),
                                       SizedBox(width: 5.w,),
-
-                                      Container(
-                                        width: (50.w)*1,
-                                        height: 12.h,
-                                        decoration: BoxDecoration(
-                                          color: AppColor.happyblue,
-                                        ),
-                                      ),
-
-                                      Container(
-                                        width: (100.w - 50.w)*1,
-                                        height: 12.h,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[400],
-                                        ),
-                                      ),
-
                                     ],
                                   ),
                                 ),
+
+
+                                // 레벨 바
+                                Container(
+                                  padding: EdgeInsets.only(top: 20.h, left: 3.w, right: 3.w),
+                                  width: 170.w,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // Row(
+                                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      //   children: [
+                                      //     Text("0 ${rewardEnglish}"), Text("10 ${rewardEnglish}"),
+                                      //   ],
+                                      // ),
+
+                                      // Row(
+                                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      //   children: [
+                                      //     Text("다음 레벨까지", style: TextStyle(fontSize: 10.sp),),
+                                      //     Text("10${rewardName}", style: TextStyle(fontSize: 10.sp),),
+                                      //   ],
+                                      // ),
+                                      //
+                                      // SizedBox(height: 2.h,),
+
+                                      // 레벨 바
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: (164.w * lv_percent),
+                                            height: 12.h,
+                                            decoration: BoxDecoration(
+                                              color: AppColor.happyblue,
+                                            ),
+                                          ),
+
+                                          Container(
+                                            width: (164.w * (1-lv_percent)),
+                                            height: 12.h,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[400],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+
+                                      //SizedBox(height: 5.h,),
+                                    ],
+                                  ),
+                                ),
+
                               ],
+
                             ),
                         ),
                       ],
@@ -147,6 +188,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),//위쪽 제일 큰 박스
 
+              //SizedBox(height: 10.h,),
+
+              
               HomePageUserInfoBar(leftContent: "나의 ${rewardName}", rightContent: "${user_data['reward']} ${rewardName}",icon: Icons.control_point_duplicate,),
               SizedBox(height: 10.h,),
               HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등", icon: Icons.people),

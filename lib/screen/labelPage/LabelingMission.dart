@@ -113,7 +113,7 @@ class _LabelingMissionState extends State<LabelingMission> {
         'update_sql': "update user_table set jsondata = '${jsonEncode(real_cnt_data)}' where user_email = '${user_data['user_email']}'"
       });
       if (select_res.statusCode == 200 ) {
-        Fluttertoast.showToast(msg: "라벨링 결과가 업데이트 되었습니다 !");
+        print("라벨링 결과가 업데이트 되었습니다 !");
       }
     } on Exception catch (e) {
       print("에러발생 : ${e}");

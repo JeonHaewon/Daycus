@@ -1,5 +1,6 @@
 import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,7 +26,6 @@ userLogin(String email, String password, bool reload) async{
 
       var resLogin = jsonDecode(user_res.body);
       if (resLogin['success'] == true) {
-        // 나중에 멘트 "~님 환영합니다" 이런걸로 바꾸기 (또는 논의해서 바꾸기)
         //print("로그인에 성공하였습니다.");
         user_data = resLogin['userData'];
         print("{$user_data}");
@@ -90,6 +90,10 @@ afterLogin() async {
   // if (do_mission != null) {
   //   doMissionSave();
   // }
+
+  level_update();
+
+
 }
 
 // keep login - 유저 정보 들고오기
@@ -132,4 +136,36 @@ LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
   else {
     print('로그인이 필요합니다');
   }
+}
+
+
+level_update() async {
+  if (leveling==null){
+    leveling = await select_request("SELECT * from leveling", null);
+    print("leveling : ${leveling}");
+  }
+
+  int user_lv = int.parse(user_data['user_lv']);
+  int user_reward = int.parse(user_data['reward']);
+
+  int lv_start = int.parse(leveling[user_lv-1]['reward']);
+  int lv_end = int.parse(leveling[user_lv]['reward']);
+
+  lv_percent = (user_reward - lv_start)/(lv_end - lv_start);
+  //print("lv_percent : $lv_percent");
+  if(lv_percent<0){lv_percent=0;}
+  if(lv_percent>1){lv_percent=1;}
+
+  // 레벨 변경
+  // if (user_reward >= lv_end){
+  //   update_request(
+  //       "UPDATE user_table SET user_lv = user_lv + 14 where user_email = '${user_data['user_email']}'",
+  //       "레벨업 !! ${user_lv}레벨이 되었습니다.");
+  // }
+  //
+  // if (user_reward < lv_start){
+  //   update_request(
+  //       "UPDATE user_table SET user_lv = user_lv + 14 where user_email = '${user_data['user_email']}'",
+  //       "리워드를 사용하여  ${user_lv}레벨이 되었습니다.");
+  // }
 }
