@@ -73,6 +73,8 @@ keepLogin (name, email, password, storage) async {
 }
 
 afterLogin() async {
+  level_update();
+
   print("로그인에 성공하였습니다.");
 
   // 미션 불러오기
@@ -91,7 +93,7 @@ afterLogin() async {
   //   doMissionSave();
   // }
 
-  level_update();
+
 
 
 }
