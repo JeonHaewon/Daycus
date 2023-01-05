@@ -586,7 +586,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                           ],
                         ),
 
-                        SizedBox(height: 5.h,),
+                        SizedBox(height: 30.h,),
 
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,

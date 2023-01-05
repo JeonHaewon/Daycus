@@ -10,6 +10,7 @@ import 'package:daycus/screen/myPage/feed/MissionFeed.dart';
 import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/screen/myPage/ask/ToDeveloper.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:math';
 
 
 
@@ -67,23 +68,96 @@ class _MyPageState extends State<MyPage> {
                   padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 0),
                   child: Column(
                     children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Text("현재등급 ",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
-                            Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                            Text("입니다",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
 
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Text("현재등급 ",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
+                                    Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                    Text("입니다",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
+
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Row(
+                            children: [
+                              Container(
+                                width: 100.w,
+                                height: 60.h,
+                                decoration: BoxDecoration(
+                                  color: AppColor.happyblue,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("갓생", style: TextStyle(fontSize: 12, fontFamily: 'korean', color: Colors.white),),
+                                    SizedBox(height: 2.h,),
+                                    Text("4일차", style: TextStyle(fontSize: 15, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.white),),
+                                  ],
+                                ),
+                              ),
+
+                              SizedBox(width: 10.w,)
+                            ],
+                          ),
+
+
+                          // Stack(
+                          //   alignment: Alignment.topLeft,
+                          //   children: [
+                          //     Padding(
+                          //       padding: EdgeInsets.fromLTRB(15.w, 15.h, 0, 0),
+                          //       child: Container(
+                          //         width: 100.w,
+                          //         height: 60.h,
+                          //         decoration: BoxDecoration(
+                          //           color: Colors.yellow[100],
+                          //         ),
+                          //         child: Column(
+                          //           crossAxisAlignment: CrossAxisAlignment.center,
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           children: [
+                          //             Text("갓생", style: TextStyle(fontSize: 14, fontFamily: 'koreantwo'),),
+                          //             Text("4일차", style: TextStyle(fontSize: 18, fontFamily: 'koreantwo', fontWeight: FontWeight.bold),),
+                          //
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Transform.rotate(
+                          //       angle: 320 * pi / 180,
+                          //       child: IconButton(
+                          //         icon: Icon(Icons.push_pin, color: Colors.red[900],),
+                          //         onPressed: null,
+                          //       ),
+                          //     ),
+                          //     //Icon(Icons.push_pin, color: Colors.red[900],),
+                          //   ],
+                          // ),
+
+
+
+                        ],
                       ),
+
 
                       SizedBox(height: 15.h,),
 
@@ -260,13 +334,13 @@ class _MyPageState extends State<MyPage> {
                             MaterialPageRoute(builder: (_) => ToDeveloper()),
                           );
                         },
+
                         child: Container(
                           width: 250.w,
                           height: 40.h,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                           ),
-
                           child: Container(
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -277,8 +351,8 @@ class _MyPageState extends State<MyPage> {
                                 Icon(Icons.chat, color: Colors.grey[850])
                               ],
                             ),
-
                           ),
+
                         ),
                       ),
 

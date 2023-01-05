@@ -101,6 +101,9 @@ flutter:
     - family: korean
       fonts:
         - asset: assets/fonts/SpoqaHanSansNeo-Regular.otf
+    - family: koreantwo
+      fonts:
+        - asset: assets/fonts/NanumPen.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
