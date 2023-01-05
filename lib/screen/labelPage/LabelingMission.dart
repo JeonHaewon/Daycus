@@ -323,10 +323,11 @@ class _LabelingMissionState extends State<LabelingMission> {
 
 
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 10.h, 0, 25.h),
+              padding: EdgeInsets.fromLTRB(0, 10.h, 0,10.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+
                   Container(
                     width: 290.w,
                     height: 30.h,
@@ -367,12 +368,26 @@ class _LabelingMissionState extends State<LabelingMission> {
                           ),
                         ),
 
+
+
                       ],
                     ),
                   ),
                 ],
               ),
             ),
+
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 15.h),
+              child: Column(
+                children: [
+                  Text("※ 모든 사진에는 사람이 나오지 않아야 합니다.\n 사람이 나오는 사진은 인증불가를 선택해주세요.",
+                      style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                ],
+              ),
+            ),
+
+
 
             Container(
               height: 5.h,

@@ -307,9 +307,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                       children: [
                         Text("• 인증 빈도  :  ${widget.mission_data['term']}주 동안 1주일에 ${widget.mission_data['frequency']}번",
                             style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-                        
+
                         SizedBox(height: 2.h,),
-                    
+
                         Text("• 총    횟수   :  ${toCertify}회",
                             style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
 
@@ -321,12 +321,23 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                     ),
                   ),
 
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10.w, 10.h, 0,0),
+                    child: Column(
+                      children: [
+                        Text("※ 미션 인증 시 사람이 나오지 않도록 주의해주세요",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
 
-                  SizedBox(height: 25.h,),
+                      ],
+
+                    ),
+                  ),
+
+
+                  SizedBox(height: 20.h,),
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
-                  SizedBox(height: 5.h,),
+                  SizedBox(height: 3.h,),
                   Text(duration,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
-                  SizedBox(height: 15.h,),
+                  SizedBox(height: 10.h,),
 
 
                   // 하임 : height 175.h > 155.w

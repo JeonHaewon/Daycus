@@ -518,13 +518,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sound_stream:
-    dependency: "direct main"
-    description:
-      name: sound_stream
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
   source_span:
     dependency: transitive
     description:

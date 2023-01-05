@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       children: [
                         Padding(
-                            padding: EdgeInsets.fromLTRB(30.w, 0, 40.w, 0),
+                            padding: EdgeInsets.fromLTRB(30.w, 0, 25.w, 0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -108,6 +108,24 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       SvgPicture.asset('assets/image/medal.svg' , fit: BoxFit.fill, ),
                                       Text("Lv${user_data['user_lv']}",style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontFamily: 'korean') ),
+                                      SizedBox(width: 5.w,),
+
+                                      Container(
+                                        width: (50.w)*1,
+                                        height: 12.h,
+                                        decoration: BoxDecoration(
+                                          color: AppColor.happyblue,
+                                        ),
+                                      ),
+
+                                      Container(
+                                        width: (100.w - 50.w)*1,
+                                        height: 12.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+
                                     ],
                                   ),
                                 ),

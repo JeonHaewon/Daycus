@@ -68,22 +68,34 @@ class MissionButton extends StatelessWidget {
 
               //Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold)),
 
+
               Container(
+                alignment: Alignment.centerLeft,
                 width: 150.w,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                        child: RichText(
-                          overflow: TextOverflow.clip,
-                          maxLines: 2,
-                          text: TextSpan(
-                              text:
-                              title, style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold)),
-                        )),
-                  ],
-                )
-            ),
+                height: 20.h,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child:Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold)),
+                ),
+              ),
+
+
+              // Container(
+              //   width: 150.w,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [
+              //       Flexible(
+              //           child: RichText(
+              //             overflow: TextOverflow.clip,
+              //             maxLines: 2,
+              //             text: TextSpan(
+              //                 text:
+              //                 title, style: TextStyle(color: Colors.white,fontSize: 15.sp, fontFamily: 'korean',fontWeight: FontWeight.bold)),
+              //           )),
+              //     ],
+              //   )
+              // ),
 
 
               Container(
