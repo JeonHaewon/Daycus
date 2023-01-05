@@ -100,7 +100,7 @@ class _MyPageState extends State<MyPage> {
                             children: [
 
                               Container(
-                                width: 100.w,
+                                width: 90.w,
                                 height: 55.h,
                                 decoration: BoxDecoration(
                                   color: Colors.indigo[100],
@@ -111,15 +111,14 @@ class _MyPageState extends State<MyPage> {
                                   children: [
 
                                     SizedBox(width: 6.w,),
-                                    Icon(Icons.calendar_month, color: AppColor.happyblue,size: 30.w,),
+                                    Icon(Icons.calendar_month, color: AppColor.happyblue,size: 25.w,),
 
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text("갓생", style: TextStyle(fontSize: 12, fontFamily: 'korean', color: AppColor.happyblue,),),
-                                        SizedBox(height: 2.h,),
-                                        Text("4일차", style: TextStyle(fontSize: 15, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+                                        Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
+                                        Text("4일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
                                       ],
                                     ),
                                     SizedBox(width: 10.w,),
