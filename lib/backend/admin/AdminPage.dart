@@ -17,7 +17,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'dart:typed_data';
-import 'package:sound_stream/sound_stream.dart';
+// import 'package:sound_stream/sound_stream.dart';
 import '../../screen/LoginPageCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:daycus/core/app_text.dart';
@@ -51,8 +51,8 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
-  RecorderStream _recorder = RecorderStream();
-  PlayerStream _player = PlayerStream();
+  // RecorderStream _recorder = RecorderStream();
+  // PlayerStream _player = PlayerStream();
 
   List<Uint8List> _micChunks = [];
   bool _isRecording = false;
@@ -68,50 +68,50 @@ class _AdminScreenState extends State<AdminScreen> {
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
 
-  Future<void> initPlugin() async {
-    _recorderStatus = _recorder.status.listen((status) {
-      if (mounted)
-        setState(() {
-          _isRecording = status == SoundStreamStatus.Playing;
-        });
-    });
+  // Future<void> initPlugin() async {
+  //   _recorderStatus = _recorder.status.listen((status) {
+  //     if (mounted)
+  //       setState(() {
+  //         _isRecording = status == SoundStreamStatus.Playing;
+  //       });
+  //   });
+  //
+  //   _audioStream = _recorder.audioStream.listen((data) {
+  //     if (_isPlaying) {
+  //       _player.writeChunk(data);
+  //     } else {
+  //       _micChunks.add(data);
+  //     }
+  //   });
+  //
+  //   _playerStatus = _player.status.listen((status) {
+  //     if (mounted)
+  //       setState(() {
+  //         _isPlaying = status == SoundStreamStatus.Playing;
+  //       });
+  //   });
+  //
+  //   await Future.wait([
+  //     _recorder.initialize(),
+  //     _player.initialize(),
+  //   ]);
+  // }
+  //
+  // void _play() async {
+  //   await _player.start();
+  //
+  //   if (_micChunks.isNotEmpty) {
+  //     for (var chunk in _micChunks) {
+  //       await _player.writeChunk(chunk);
+  //     }
+  //     _micChunks.clear();
+  //   }
+  // }
 
-    _audioStream = _recorder.audioStream.listen((data) {
-      if (_isPlaying) {
-        _player.writeChunk(data);
-      } else {
-        _micChunks.add(data);
-      }
-    });
-
-    _playerStatus = _player.status.listen((status) {
-      if (mounted)
-        setState(() {
-          _isPlaying = status == SoundStreamStatus.Playing;
-        });
-    });
-
-    await Future.wait([
-      _recorder.initialize(),
-      _player.initialize(),
-    ]);
-  }
-
-  void _play() async {
-    await _player.start();
-
-    if (_micChunks.isNotEmpty) {
-      for (var chunk in _micChunks) {
-        await _player.writeChunk(chunk);
-      }
-      _micChunks.clear();
-    }
-  }
-
-  void initState() {
-    super.initState();
-    initPlugin();
-  }
+  // void initState() {
+  //   super.initState();
+  //   initPlugin();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -459,9 +459,10 @@ class _AdminScreenState extends State<AdminScreen> {
               AdminButton(
                 title: "녹음을 한 번 해봅시다 !",
                 onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => RecordingPage()));
+                  Fluttertoast.showToast(msg: "지금은 사용할 수 없습니다");
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (_) => RecordingPage()));
                 },
               ),
             ],
