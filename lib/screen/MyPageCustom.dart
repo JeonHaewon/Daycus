@@ -122,7 +122,6 @@ class _MyPageState extends State<MyPage> {
                                       ],
                                     ),
                                     SizedBox(width: 10.w,),
-
                                   ],
                                 ),
 
