@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PrivacyStatement extends StatelessWidget {
   PrivacyStatement({Key? key}) : super(key: key);
@@ -27,6 +27,7 @@ class PrivacyStatement extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
 
+            //SvgPicture.asset('assets/image/file1.svg' , fit: BoxFit.fill, ),
 
             Padding(
               padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 0),
@@ -639,7 +640,7 @@ class PrivacyStatement extends StatelessWidget {
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
                               Text("   • 직급 :CCO",
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
-                              Text("   • 연락처 :01055759316, chdsb2021@gmail.com, 0504-498-2204",
+                              Text("   • 연락처 :01055759316, happycircuit0301@gmail.com, 0504-498-2204",
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
                               SizedBox(height: 3.h,),
                               Text("  ※ 개인정보 보호 담당부서로 연결됩니다.",
@@ -651,7 +652,7 @@ class PrivacyStatement extends StatelessWidget {
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
                               Text("   • 담당자 :석시환",
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
-                              Text("   • 연락처 :01055759316, chdsb2021@gmail.com, 0504-498-2204",
+                              Text("   • 연락처 :01055759316, happycircuit0301@gmail.com, 0504-498-2204",
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
                             ],
                           ),
@@ -697,7 +698,7 @@ class PrivacyStatement extends StatelessWidget {
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
                               Text("   • 담당자 : 석시환",
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
-                              Text("   • 연락처 :01055759316, chdsb2021@gmail.com, 0504-498-2204",
+                              Text("   • 연락처 :01055759316, happycircuit0301@gmail.com, 0504-498-2204",
                                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',) ),
                             ],
                           ),

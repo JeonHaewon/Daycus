@@ -98,24 +98,43 @@ class _MyPageState extends State<MyPage> {
 
                           Row(
                             children: [
+
                               Container(
                                 width: 100.w,
-                                height: 60.h,
+                                height: 55.h,
                                 decoration: BoxDecoration(
-                                  color: AppColor.happyblue,
+                                  color: Colors.indigo[100],
+                                  borderRadius: BorderRadius.circular(25),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("갓생", style: TextStyle(fontSize: 12, fontFamily: 'korean', color: Colors.white),),
-                                    SizedBox(height: 2.h,),
-                                    Text("4일차", style: TextStyle(fontSize: 15, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.white),),
+
+                                    SizedBox(width: 6.w,),
+                                    Icon(Icons.calendar_month, color: AppColor.happyblue,size: 30.w,),
+
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text("갓생", style: TextStyle(fontSize: 12, fontFamily: 'korean', color: AppColor.happyblue,),),
+                                        SizedBox(height: 2.h,),
+                                        Text("4일차", style: TextStyle(fontSize: 15, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+                                      ],
+                                    ),
+                                    SizedBox(width: 10.w,),
+
                                   ],
                                 ),
+
+
+
+
+
                               ),
 
-                              SizedBox(width: 10.w,)
+
+                              SizedBox(width: 15.w,)
                             ],
                           ),
 

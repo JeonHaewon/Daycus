@@ -381,7 +381,7 @@ class _LabelingMissionState extends State<LabelingMission> {
               padding: EdgeInsets.fromLTRB(0, 0, 0, 15.h),
               child: Column(
                 children: [
-                  Text("※ 모든 사진에는 사람이 나오지 않아야 합니다.\n 사람이 나오는 사진은 인증불가를 선택해주세요.",
+                  Text("※ 모든 사진에는 사람이 나오지 않아야 합니다.\n사람이 나오는 사진은 인증불가를 선택해주세요.",
                       style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
                 ],
               ),

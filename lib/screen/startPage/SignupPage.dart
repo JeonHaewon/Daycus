@@ -185,7 +185,7 @@ class _signupPage extends State<SignupPage> {
 
 
 
-                    Text("이메일", style: TextStyle(fontSize: 12.sp, fontFamily: 'korean'),),
+                    Text("이메일", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
 
                     SizedBox(
                       height: 80.h,
@@ -194,7 +194,8 @@ class _signupPage extends State<SignupPage> {
                         textInputAction: TextInputAction.next,
                         controller: emailCtrl,
                         decoration: InputDecoration(
-                          hintText: '이메일 입력'
+                          hintText: '이메일 입력',
+                          hintStyle: TextStyle(fontSize: 12.sp),
                         ),
                         // 이메일 검증
                         validator: (String? value){
@@ -209,7 +210,7 @@ class _signupPage extends State<SignupPage> {
                     ),
 
 
-                    Text("비밀번호", style: TextStyle(fontSize: 12.sp, fontFamily: 'korean'),),
+                    Text("비밀번호", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
 
                     SizedBox(
                       height: 80.h,
@@ -217,7 +218,8 @@ class _signupPage extends State<SignupPage> {
                         textInputAction: TextInputAction.next,
                         controller: passwordCtrl,
                         decoration: InputDecoration(
-                            hintText: '영문/숫자/특수문자 중 2가지 이상, 8~16자 입력'
+                          hintText: '영문/숫자/특수문자 중 2가지 이상, 8~16자 입력',
+                          hintStyle: TextStyle(fontSize: 12.sp),
                         ),
                         obscureText: true,
                         validator: (String? value){
@@ -239,7 +241,7 @@ class _signupPage extends State<SignupPage> {
                     ),
 
 
-                    Text("비밀번호 확인", style: TextStyle(fontSize: 12.sp, fontFamily: 'korean'),),
+                    Text("비밀번호 확인", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', ),),
 
                     SizedBox(
                       height: 80.h,
@@ -247,7 +249,8 @@ class _signupPage extends State<SignupPage> {
                         textInputAction: TextInputAction.done,
                         controller: passwordCheckCtrl,
                         decoration: InputDecoration(
-                            hintText: '비밀번호 재입력'
+                          hintText: '비밀번호 재입력',
+                          hintStyle: TextStyle(fontSize: 12.sp),
                         ),
                         obscureText: true,
                         validator: (String? value){
@@ -290,7 +293,7 @@ class _signupPage extends State<SignupPage> {
                           ),
 
                           // 세부 이용약관
-                          Padding(padding: EdgeInsets.fromLTRB(15.w, 5.h, 10.w, 0),
+                          Padding(padding: EdgeInsets.fromLTRB(15.w, 8.h, 10.w, 0),
                             child: Column(
                               children: [
                                 Row(
