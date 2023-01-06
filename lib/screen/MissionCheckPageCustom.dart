@@ -43,7 +43,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
         title: Text('미션인증',
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(icon: Icon(Icons.search), onPressed: null),
+          //IconButton(icon: Icon(Icons.search), onPressed: null),
           IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
               onPressed: () {
                 Navigator.push(

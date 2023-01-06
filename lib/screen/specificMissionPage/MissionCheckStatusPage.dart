@@ -229,10 +229,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
         backgroundColor: Colors.white,
         title: Text('인증 현황',
             style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
-        actions: [
-          IconButton(icon: Icon(Icons.search), onPressed: null),
-          IconButton(icon: Icon(Icons.notifications), onPressed: null),
-        ],
+        // actions: [
+        //   IconButton(icon: Icon(Icons.search), onPressed: null),
+        //   IconButton(icon: Icon(Icons.notifications), onPressed: null),
+        // ],
       ),
 
       body: SingleChildScrollView(
