@@ -99,7 +99,7 @@ class _WithdrawalState extends State<Withdrawal> {
 
                   Container(
                     width: 500.w,
-                    height: 265.h,
+                    //height: 265.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -149,7 +149,7 @@ class _WithdrawalState extends State<Withdrawal> {
                         ),
 
                         Container(
-                          padding: EdgeInsets.fromLTRB(50.w, 10.h, 50.w, 0),
+                          padding: EdgeInsets.fromLTRB(50.w, 10.h, 50.w, 20.h),
                           child: Column(
                             children: [
                               Text("회원탈퇴를 누르면 안내사항을 모두 확인하였으며, 이에 동의한 것으로 간주됩니다.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean'), textAlign: TextAlign.center, ),
