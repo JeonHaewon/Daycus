@@ -17,7 +17,7 @@ class TermsOfService extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white,
-        title: Text('이용약관',
+        title: Text('이용약관 및 운영정책',
             style: TextStyle(color: Colors.black, fontSize: 18.sp, fontWeight: FontWeight.bold)),
       ),
 

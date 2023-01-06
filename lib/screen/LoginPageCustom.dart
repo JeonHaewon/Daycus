@@ -160,11 +160,11 @@ class KeepLoginPage extends State<LoginPageCustom> {
                         DateTime today = await NowTime(null);
 
                         PopPage(
-                            "탈퇴중임", context,
+                            "계정 복구하기", context,
                             Column(
                               children: [
-                                Text("복구하시겠습니까?"),
-                                Text("탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일째"),
+                                Text("이 계정은 탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일이 지난 계정입니다. 복구하기를 누르면 탈퇴 전의 정보들은 모두 복구되며 탈퇴한 기간 동안은 미션에 참여하지 않은 것으로 간주됩니다. 복구하시겠습니까?"),
+                                //Text("탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일째"),
                               ],
                             ), "복구하기", "취소",
 
@@ -172,7 +172,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
                             () async {
                               bool success = await update_request("UPDATE user_table SET user_state=null, state_changed_time='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
                               if (success) {
-                                Fluttertoast.showToast(msg: "어서오고 ^^\n다시 로그인해주세요.");
+                                Fluttertoast.showToast(msg: "다시 한 번 ${user_data['user_name']}님의 갓생을 응원합니다.\n다시 로그인해주세요.");
                                 Navigator.pop(context);
                               }
                         // 다시 로그인 해달라고 하기 ㅋㅋㅋ

@@ -17,7 +17,7 @@ class PrivacyStatement extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white,
-        title: Text('개인정보 취급방침',
+        title: Text('개인정보 취급방침 ',
             style: TextStyle(color: Colors.black, fontSize: 18.sp, fontWeight: FontWeight.bold)),
       ),
 

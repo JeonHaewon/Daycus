@@ -7,6 +7,7 @@ import 'package:daycus/screen/myPage/settings/NoticeSetting.dart';
 import 'package:daycus/screen/myPage/settings/PictureSetting.dart';
 import 'package:daycus/screen/myPage/settings/PublicSetting.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/screen/startPage/TermsOfService_1.dart';
 
 
 
@@ -133,7 +134,9 @@ class Settings extends StatelessWidget {
                       textStyle: TextStyle(fontSize: 18.sp),
                     ),
 
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=> TermsOfService()));
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
