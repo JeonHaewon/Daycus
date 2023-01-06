@@ -1,12 +1,16 @@
 
+import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_color.dart';
 
 import 'package:daycus/screen/temHomePage.dart';
+import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/startPage/FindPasswordPage.dart';
 import 'package:daycus/screen/startPage/SignupPage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../backend/login/login.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -137,21 +141,48 @@ class KeepLoginPage extends State<LoginPageCustom> {
                       );
 
                       // - 로그인 성공
-                      if (is_login == true) {
-
+                      if ((is_login == true)&&(user_data['user_state']!='withdrawing')) {
                         keepLogin(
                             user_data['user_name'],
                             emailCtrl.text.trim(),
                             passwordCtrl.text.trim(),
                             storage);
-
-
                         await afterLogin();
 
                         // 다 닫고 감.
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
                       }
+                       // 탈퇴중인 경우
+                      else if (is_login==true && user_data['user_state']=='withdrawing'){
+
+                        passwordCtrl.clear();
+                        DateTime today = await NowTime(null);
+
+                        PopPage(
+                            "탈퇴중임", context,
+                            Column(
+                              children: [
+                                Text("복구하시겠습니까?"),
+                                Text("탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일째"),
+                              ],
+                            ), "복구하기", "취소",
+
+                            // 확인을 눌렀을 때
+                            () async {
+                              bool success = await update_request("UPDATE user_table SET user_state=null, state_changed_time='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
+                              if (success) {
+                                Fluttertoast.showToast(msg: "어서오고 ^^\n다시 로그인해주세요.");
+                                Navigator.pop(context);
+                              }
+                        // 다시 로그인 해달라고 하기 ㅋㅋㅋ
+                            },
+
+                            // 취소를 눌렀을 때
+                            null
+                          );
+                            }
+
                       //  - 로그인 실패
                       else if (is_login == false) {
                         // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용

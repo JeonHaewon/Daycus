@@ -1,5 +1,6 @@
 import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
+import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -31,7 +32,10 @@ userLogin(String email, String password, bool reload) async{
         print("{$user_data}");
 
         // 첫 로그인 시에만 인사해줌
-        if (reload==false){
+        if (reload==false && user_data['user_state']!='withdrawing'){
+          DateTime today = await NowTime(null);
+          update_request("UPDATE user_table SET last_login='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
+
           Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
           controller.currentBottomNavItemIndex.value = 2;
         }

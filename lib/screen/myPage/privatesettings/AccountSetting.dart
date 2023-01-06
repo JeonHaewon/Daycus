@@ -185,7 +185,7 @@ class _AccountSettingState extends State<AccountSetting> {
                     child: TextFormField(
                       controller: nameCtrl,
                       decoration: InputDecoration(
-                        labelText: '이름 : ${user_data['user_name']}',
+                        labelText: '${user_data['user_name']}',
                         hintText: '수정할 이름을 입력하세요',
                         isDense: true,
                         contentPadding: EdgeInsets.fromLTRB(12.w, 42.h, 10.w, 0),
@@ -329,7 +329,7 @@ class _AccountSettingState extends State<AccountSetting> {
                   onPressed: () async {
                     print("chosen_gender : ${chosen_gender}");
 
-                    bool is_change_birth = (user_data['user_birth'] != selected_date);
+                    bool is_change_birth = (user_data['user_birth']!=selected_date);
                     bool is_change_name = (nameCtrl.text.trim().length > 0);
                     bool is_change_gender = (user_data['user_gender'] != chosen_gender)&&(chosen_gender!=null);
 
@@ -408,7 +408,7 @@ _pickDateDialog(BuildContext context) async {
 
   if (pickedDate == null) {
     if (current_date_var==null) {
-      return nullBirthdayString;
+      return user_data['user_birth'] ?? nullBirthdayString;
     }else {
       return current_date_var;
     }
