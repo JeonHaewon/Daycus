@@ -19,15 +19,27 @@ Future<dynamic> PopPage(String? title, BuildContext context, Widget content,
     context: context,
     builder: (BuildContext btx){
       return AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(28))),
         scrollable: true,
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+            SizedBox(height: 4.h,),
+
             if (title!=null)
               Text(title, style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold),),
 
             if (title!=null)
               SizedBox(height: 15.sp,),
+
+
+            Container(
+              height: 1.h, color: Colors.grey[200],
+            ),
+
+            SizedBox(height: 20.h,),
 
             content,
           ],),
