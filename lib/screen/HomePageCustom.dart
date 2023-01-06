@@ -120,7 +120,8 @@ class _HomePageState extends State<HomePage> {
 
                                 // 레벨 바
                                 Container(
-                                  padding: EdgeInsets.only(top: 20.h, left: 3.w, right: 3.w),
+                                  //해원 : top 20.h > 12.h
+                                  padding: EdgeInsets.only(top: 12.h, left: 3.w, right: 3.w),
                                   width: 170.w,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,15 +133,15 @@ class _HomePageState extends State<HomePage> {
                                       //   ],
                                       // ),
 
-                                      // Row(
-                                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      //   children: [
-                                      //     Text("다음 레벨까지", style: TextStyle(fontSize: 10.sp),),
-                                      //     Text("10${rewardName}", style: TextStyle(fontSize: 10.sp),),
-                                      //   ],
-                                      // ),
-                                      //
-                                      // SizedBox(height: 2.h,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("다음 레벨까지", style: TextStyle(fontSize: 10.sp),),
+                                          Text("10${rewardName}", style: TextStyle(fontSize: 10.sp),),
+                                        ],
+                                      ),
+
+                                      SizedBox(height: 2.h,),
 
                                       // 레벨 바
                                       Row(
@@ -184,11 +185,12 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),//오른쪽 asset
+
                   ],
                 ),
               ),//위쪽 제일 큰 박스
 
-              //SizedBox(height: 10.h,),
+              SizedBox(height: 10.h,),
 
               
               HomePageUserInfoBar(leftContent: "나의 ${rewardName}", rightContent: "${user_data['reward']} ${rewardName}",icon: Icons.control_point_duplicate,),

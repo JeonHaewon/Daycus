@@ -485,7 +485,7 @@ class _signupPage extends State<SignupPage> {
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
+                            color: Colors.grey.withOpacity(0.1),
                             spreadRadius: 5,
                             blurRadius: 7,
                           ),
@@ -514,7 +514,7 @@ class _signupPage extends State<SignupPage> {
 
                     TextField(
                       //controller: ,
-                      maxLines: 3,
+                      maxLines: 4,
                       decoration: InputDecoration(
                         hintText: "어떤 미션을 원하시나요?",
                         hintStyle: TextStyle(fontSize: 12.sp, color: Colors.grey),
