@@ -84,6 +84,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       children: [
@@ -123,8 +124,8 @@ class _HomePageState extends State<HomePage> {
 
                                 // 레벨 바
                                 Container(
-                                  //해원 : top 20.h > 12.h
-                                  padding: EdgeInsets.only(top: 12.h, left: 3.w, right: 3.w),
+                                  //해원 : top 20.h > 10.h
+                                  padding: EdgeInsets.only(top: 10.h, left: 3.w, right: 3.w),
                                   width: 170.w,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,22 +179,28 @@ class _HomePageState extends State<HomePage> {
                             ),
                         ),
                       ],
-                    ), //왼쪽에 글자랑 등급들
-                    Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 40.h,),
-                          Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 240.h),
-                          //SvgPicture.asset('assets/image/character.svg' , fit: BoxFit.fill,height: 240.h),
-                        ],
-                      ),
-                    ),//오른쪽 asset
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 24.w, 0),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 40.h,),
+                            Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h),
+                            //SvgPicture.asset('assets/image/character.svg' , fit: BoxFit.fill,height: 240.h),
+                          ],
+                        ),
+                      ),//오른쪽 asset,
+                    )
+                    //왼쪽에 글자랑 등급들
+
 
                   ],
                 ),
               ),//위쪽 제일 큰 박스
 
-              SizedBox(height: 10.h,),
+              SizedBox(height: 15.h,),
 
               
               HomePageUserInfoBar(leftContent: "나의 ${rewardName}", rightContent: "${user_data['reward']} ${rewardName}",icon: Icons.control_point_duplicate,),

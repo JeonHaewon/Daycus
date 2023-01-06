@@ -472,7 +472,7 @@ class _signupPage extends State<SignupPage> {
 
                     SizedBox(height: 25.h,),
 
-                    Text("참여하고 싶은 미션이 있나요?", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
+                    Text("추가하고 싶은 미션이 있나요?", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
 
                     SizedBox(height: 8.h,),
 
