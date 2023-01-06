@@ -15,6 +15,7 @@ doMissionImport() async {
     if (resMission['success'] == true) {
       //print(resMission);
       do_mission = resMission['data'];
+      print(resMission);
 
     } else {
       print("불러온 미션이 없습니다");

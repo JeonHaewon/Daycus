@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +16,6 @@ import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/screen/startPage/PrivacyStatement_2.dart';
 import 'package:daycus/screen/startPage/TermsOfService_1.dart';
 import 'package:daycus/screen/startPage/Marketing_3.dart';
-
 
 
 Map agree = {
@@ -63,6 +64,23 @@ class _signupPage extends State<SignupPage> {
     }
   }
 
+  Future<bool> createUser(String email, String pw) async{
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+          email: email,
+          password: pw);
+    } on FirebaseException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        Fluttertoast.showToast(msg: '이미 존재하는 이메일입니다!');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+      return false;
+    }
+    return true;
+  }
+
   saveInfo() async{
     User userModel = User(
       1,
@@ -86,6 +104,7 @@ class _signupPage extends State<SignupPage> {
         if (resSignUp['success'] == true) {
           print("$agree");
           Fluttertoast.showToast(msg: "성공적으로 가입 되었습니다.");
+          Future<bool> is_update_in_firebase = createUser(emailCtrl.text.trim(),passwordCtrl.text.trim());
 
           bool? is_login = await userLogin(
             emailCtrl.text.trim(),

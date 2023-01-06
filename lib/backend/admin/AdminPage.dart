@@ -54,6 +54,7 @@ class AdminScreen extends StatefulWidget {
 class _AdminScreenState extends State<AdminScreen> {
   // RecorderStream _recorder = RecorderStream();
   // PlayerStream _player = PlayerStream();
+  var changing_idx;
 
   List<Uint8List> _micChunks = [];
   bool _isRecording = false;
@@ -278,6 +279,53 @@ class _AdminScreenState extends State<AdminScreen> {
       }
     }
 
+    from_sql_d() async {
+      try {
+        var select_res = await http.post(Uri.parse(API.select), body: {
+          'select_sql': "call looping()",
+        });
+
+        if (select_res.statusCode == 200 ) {
+          var resMission = jsonDecode(select_res.body);
+          // print(resMission);
+          if (resMission['success'] == true) {
+            changing_idx = resMission['data'][0]['nm'];
+            print(changing_idx.runtimeType);
+          } else {
+            print("에러발생");;
+            Fluttertoast.showToast(msg: "다시 시도해주세요");
+          }
+
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "삭제를 진행하는 도중 문제가 발생했습니다.");
+      }
+    }
+
+    remove_sql_image(String idx) async {
+      try {
+        var update_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "update do_mission_1 set ${idx} = 0 where do_id = (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('8_20230102_074532_16_112.jpg', '.', 1), '_', -1))",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          if (resMission['success'] == true) {
+            Fluttertoast.showToast(msg: "됐다 !!!!!!");
+          } else {
+            print("에러발생!!!!!!");
+            Fluttertoast.showToast(msg: "다시 시도해주세요");
+          }
+
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "삭제를 진행하는 도중 문제가 발생했습니다.");
+      }
+    }
+
+
     update_user_count() async{
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
@@ -456,6 +504,13 @@ class _AdminScreenState extends State<AdminScreen> {
                 onPressed: (){
                   update_user_count();
                   Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
+                },
+              ),
+              AdminButton(
+                title: "가져와봐 버튼",
+                onPressed: (){
+                  from_sql_d();
+                  remove_sql_image(changing_idx);
                 },
               ),
               AdminButton(
