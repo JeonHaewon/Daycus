@@ -46,7 +46,6 @@ void initMessaging() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  pushFCMtoken();
   initMessaging();
   runApp(const MyApp());
 }

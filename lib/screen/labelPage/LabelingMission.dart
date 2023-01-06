@@ -14,7 +14,9 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
-Map <String, Map> real_cnt_data={};
+import 'package:shared_preferences/shared_preferences.dart';
+
+Map <String, dynamic> real_cnt_data={};
 
 class LabelingMission extends StatefulWidget {
   LabelingMission({
@@ -104,9 +106,26 @@ class _LabelingMissionState extends State<LabelingMission> {
     else {
       real_cnt_data[widget.folder]!['${imageList[idx]['id']}'] = name;
     }
-    print(real_cnt_data);
     print(jsonEncode(real_cnt_data));
   }
+
+  storing_json() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('${user_data['user_email']}_label', jsonEncode(real_cnt_data));
+  }
+
+  from_jsondata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('${user_data['user_email']}_label')!=null){
+      String? currr = prefs.getString('${user_data['user_email']}_label');
+      print(jsonDecode(currr!));
+      return jsonDecode(currr!);
+    }
+    else{
+      return {};
+    }
+  }
+
   update_json() async {
     try {
       var select_res = await http.post(Uri.parse(API.update), body: {
@@ -154,9 +173,14 @@ class _LabelingMissionState extends State<LabelingMission> {
     }
   }
 
+  get_data() async {
+    real_cnt_data = await from_jsondata();
+  }
+
   @override
   void initState() {
     super.initState();
+    get_data();
 
     label_category_list = widget.label_category.split(", ");
     label_cnt = label_category_list!.length;
@@ -183,6 +207,8 @@ class _LabelingMissionState extends State<LabelingMission> {
   }
 
   void dispose(){
+    super.dispose();
+    storing_json();
     update_json();
   }
   // 로딩을 위한 key

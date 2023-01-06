@@ -21,6 +21,7 @@ import 'dart:typed_data';
 import '../../screen/LoginPageCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:daycus/core/app_text.dart';
+
 // create an instance
 
 Future<bool> _getStatuses() async {

@@ -77,6 +77,8 @@ android {
     buildTypes {
         build{
             signingConfig signingConfigs.debug
+            minifyEnabled false
+            shrinkResources false
         }
         // 빌드 시와 릴리스 시를 나누어 구성하는 것이 좋다. : 어떻게 나눔? 애뮬레이터 돌릴때도 release 내를 실행하는 것 같은데
         // https://black-jin0427.tistory.com/89
@@ -89,6 +91,8 @@ android {
             // 출시 속성으로 변경
 //            signingConfig signingConfigs.release
             signingConfig signingConfigs.debug
+            minifyEnabled false
+            shrinkResources false
 
             // 프로가드 활성화
 //            minifyEnabled true
