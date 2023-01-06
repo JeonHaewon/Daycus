@@ -121,13 +121,10 @@ class _MyPageState extends State<MyPage> {
                                         Text("4일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
                                       ],
                                     ),
+
                                     SizedBox(width: 10.w,),
                                   ],
                                 ),
-
-
-
-
 
                               ),
 

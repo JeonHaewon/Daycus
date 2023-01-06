@@ -12,6 +12,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/User.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/screen/startPage/PrivacyStatement_2.dart';
+import 'package:daycus/screen/startPage/TermsOfService_1.dart';
+import 'package:daycus/screen/startPage/Marketing_3.dart';
 
 
 
@@ -281,7 +283,7 @@ class _signupPage extends State<SignupPage> {
                                     agree["이용약관"]=false; agree["개인정보 취급방침"]=false; agree["마케팅 정보"]=false;
                                   }
                                 });
-                              }, icon: Icon(agree_all, color: Colors.black), label: Text("모두 동의합니다",style: TextStyle(fontSize: 17.sp,  color: Colors.black),),
+                              }, icon: Icon(agree_all, color: Colors.black), label: Text("모두 동의합니다",style: TextStyle(fontSize: 15.sp,  color: Colors.black),),
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
                                   padding: EdgeInsets.zero,
@@ -293,7 +295,7 @@ class _signupPage extends State<SignupPage> {
                           ),
 
                           // 세부 이용약관
-                          Padding(padding: EdgeInsets.fromLTRB(15.w, 8.h, 10.w, 0),
+                          Padding(padding: EdgeInsets.fromLTRB(15.w, 6.h, 10.w, 0),
                             child: Column(
                               children: [
                                 Row(
@@ -310,7 +312,7 @@ class _signupPage extends State<SignupPage> {
                                             agree["이용약관"]=false;
                                           }
                                         });
-                                      }, icon: Icon(agree_1, color: Colors.black), label: Text("이용약관 동의 [필수]",style: TextStyle(fontSize: 14.sp,  color: Colors.black),),
+                                      }, icon: Icon(agree_1, color: Colors.black), label: Text("이용약관 동의 [필수]",style: TextStyle(fontSize: 12.sp,  color: Colors.black),),
                                       style: TextButton.styleFrom(
                                         minimumSize: Size.zero,
                                         padding: EdgeInsets.zero,
@@ -319,7 +321,12 @@ class _signupPage extends State<SignupPage> {
 
 
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (_) => TermsOfService()),
+                                        );
+                                      },
                                       child: Container(
                                         width: 54.w,
                                         height: 22.h,
@@ -347,7 +354,7 @@ class _signupPage extends State<SignupPage> {
 
 
 
-                                SizedBox(height: 6.h,),
+                                SizedBox(height: 3.h,),
 
 
                                 Row(
@@ -363,7 +370,7 @@ class _signupPage extends State<SignupPage> {
                                           agree["개인정보 취급방침"]=false;
                                         }
                                       });
-                                    }, icon: Icon(agree_2, color: Colors.black,), label: Text("개인정보 취급방침 동의 [필수]",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),
+                                    }, icon: Icon(agree_2, color: Colors.black,), label: Text("개인정보 취급방침 동의 [필수]",style: TextStyle(fontSize: 12.sp,  color: Colors.black)),
                                       style: TextButton.styleFrom(
                                         minimumSize: Size.zero,
                                         padding: EdgeInsets.zero,
@@ -403,7 +410,7 @@ class _signupPage extends State<SignupPage> {
                                   ],
                                 ),
 
-                                SizedBox(height: 6.h,),
+                                SizedBox(height: 3.h,),
 
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -417,7 +424,7 @@ class _signupPage extends State<SignupPage> {
                                           agree_3 = Icons.check_box_outline_blank;
                                           agree["마케팅 정보"]=false;}
                                       });
-                                    }, icon: Icon(agree_3, color: Colors.black), label: Text("마케팅 정보 수신 동의 [선택]",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),
+                                    }, icon: Icon(agree_3, color: Colors.black), label: Text("마케팅 정보 수신 동의 [선택]",style: TextStyle(fontSize: 12.sp,  color: Colors.black)),
                                       style: TextButton.styleFrom(
                                         minimumSize: Size.zero,
                                         padding: EdgeInsets.zero,
@@ -425,7 +432,12 @@ class _signupPage extends State<SignupPage> {
                                       ),),
 
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (_) => Marketing()),
+                                        );
+                                      },
                                       child: Container(
                                         width: 54.w,
                                         height: 22.h,
@@ -456,6 +468,63 @@ class _signupPage extends State<SignupPage> {
 
                       ),
                     ),
+
+
+                    SizedBox(height: 25.h,),
+
+                    Text("참여하고 싶은 미션이 있나요?", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
+
+                    SizedBox(height: 8.h,),
+
+
+                    Container(
+                      width: 400.w,
+
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("DayCus에서는 갓생을 위한 미션을 수행할 수 있습니다. 현재 '하루 물 한컵 마시기', '아침 9시 기상', '만보 걷기' 등의 미션이 있습니다. 하고 싶은 미션이 있다면 아래에 적어주세요! 여러분의 의견을 반영하여 미션이 만들어집니다:)\n",
+                                    style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',) ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 10.h,),
+
+
+                    TextField(
+                      //controller: ,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                        hintText: "어떤 미션을 원하시나요?",
+                        hintStyle: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+
+
+                    SizedBox(height: 25.h,),
 
 
 

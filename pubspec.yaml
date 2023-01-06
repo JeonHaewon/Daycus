@@ -91,6 +91,7 @@ flutter:
     - assets/image/settings/
     - assets/image/labelingmission/
     - assets/image/thumbnail/
+    - assets/image/Signup_terms/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
