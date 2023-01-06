@@ -76,13 +76,26 @@ class _MyPageState extends State<MyPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
 
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  ],
+                              SizedBox(
+                                width: 210.w,
+                                height: 38.h,
+                                child: FittedBox(
+                                  alignment: Alignment.centerLeft,
+                                  fit: BoxFit.contain,
+
+                                  child: Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                                 ),
                               ),
+
+                              // Container(
+                              //   child: Row(
+                              //     children: [
+                              //       Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              //     ],
+                              //   ),
+                              // ),
+
+
                               Container(
                                 child: Row(
                                   children: [

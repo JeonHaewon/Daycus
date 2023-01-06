@@ -95,11 +95,14 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(height: 25.h,),
                                 Text("안녕하세요",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean') ),
                                 SizedBox(
-                                  width: 160.w,
+                                  width: 170.w,
+                                  height: 40.h,
                                   child: FittedBox(
-                                    alignment: Alignment.centerLeft,
-                                    fit: BoxFit.fitWidth,
-                                    child: Text("${user_data['user_name']} 님",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
+                                    alignment: Alignment.topLeft,
+                                    fit: BoxFit.contain,
+
+                                    child: Text("${user_data['user_name']} 님",
+                                        style: TextStyle(fontSize: 30.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
                                   ),
                                 ),
 
