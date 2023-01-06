@@ -326,9 +326,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                     child: Column(
                       children: [
                         Text("※ 미션 인증 시 사람이 나오지 않도록 주의해주세요",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
-
                       ],
-
                     ),
                   ),
 

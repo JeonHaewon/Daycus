@@ -8,6 +8,8 @@ import 'package:daycus/backend/Api.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:daycus/screen/startPage/PasswordResetPage.dart';
+
 
 final TextEditingController emailCtrl = TextEditingController();
 
@@ -72,13 +74,103 @@ class FindPasswordPage extends StatelessWidget {
                   Text("비밀번호 찾기",style: TextStyle(fontSize: 22.sp, fontFamily: 'korean', ) ),
                   SizedBox(height: 15.h,),
 
-                  TextField(
-                    controller: emailCtrl,
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: '이메일 주소',
-                    ),
+                  // TextField(
+                  //   controller: emailCtrl,
+                  //   decoration: InputDecoration(
+                  //
+                  //     labelText: '이메일 주소',
+                  //   ),
+                  // ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      SizedBox(
+                        height: 80.h,
+                        width: 260.w,
+                        child : TextFormField(
+                          controller: emailCtrl,
+                          decoration: InputDecoration(
+                            labelText: '이메일 주소',
+                            hintText: '가입한 이메일을 입력해주세요',
+                            hintStyle: TextStyle(fontSize: 14.sp),
+                          ),
+                        ),
+                      ),
+
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 80.w,
+                          height: 30.h,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Container(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("인증코드 받기",style: TextStyle(fontSize: 11.sp,  color: Colors.grey[800], fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                    ],
                   ),
+
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      SizedBox(
+                        height: 80.h,
+                        width: 260.w,
+                        child : TextFormField(
+                          //controller: ,
+                          decoration: InputDecoration(
+                            labelText: '인증코드',
+                            hintText: '이메일로 받은 인증코드를 입력해주세요',
+                            hintStyle: TextStyle(fontSize: 14.sp),
+                          ),
+                        ),
+                      ),
+
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => PasswordResetPage()));
+                        },
+                        child: Container(
+                          width: 80.w,
+                          height: 30.h,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Container(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("확인",style: TextStyle(fontSize: 11.sp,  color: Colors.grey[800], fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                    ],
+                  ),
+
                 ],
               ),
             ),
@@ -86,23 +178,23 @@ class FindPasswordPage extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: BottomAppBar(
-        color: AppColor.happyblue,
-        child: Row(
-          children: [
-            SizedBox(
-              height: 70.h,
-              width: 412.w,
-              child:TextButton(onPressed: () async {
-                bool? is_real = await is_enrolled(emailCtrl.text.trim());
-                if (is_real == true){
-                  sendPasswordResetEmail(emailCtrl.text.trim());
-                }
-              }, child: Text('비밀번호 찾기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   color: AppColor.happyblue,
+      //   child: Row(
+      //     children: [
+      //       SizedBox(
+      //         height: 70.h,
+      //         width: 412.w,
+      //         child:TextButton(onPressed: () async {
+      //           bool? is_real = await is_enrolled(emailCtrl.text.trim());
+      //           if (is_real == true){
+      //             sendPasswordResetEmail(emailCtrl.text.trim());
+      //           }
+      //         }, child: Text('비밀번호 찾기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       
     );
   }
