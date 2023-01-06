@@ -15,6 +15,8 @@ var leveling = null;
 var do_mission = null;
 
 double lv_percent = 0;
+int lv_start = 1;
+int lv_end = 2;
 
 // 마지막 에러를 잡기 위한 변수
 String last_error = "최근에 잡힌 에러가 없음";

@@ -130,7 +130,7 @@ class _MyPageState extends State<MyPage> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
-                                        Text("4일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+                                        Text("n일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
                                       ],
                                     ),
 

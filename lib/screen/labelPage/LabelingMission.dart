@@ -25,6 +25,7 @@ class LabelingMission extends StatefulWidget {
     required this.title,
     required this.rule,
     required this.label_category,
+    required this.content,
     this.onTap,
 
   }) : super(key: key);
@@ -33,6 +34,7 @@ class LabelingMission extends StatefulWidget {
   final String title;
   final String rule;
   final String label_category;
+  final String content;
   final onTap;
 
   @override
@@ -310,7 +312,7 @@ class _LabelingMissionState extends State<LabelingMission> {
 
                   _sizedBox,
 
-                  Text("물이 보이도록 물컵이나 물병 사진을 찍어주세요",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                  Text("${widget.content}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
 
 
                   // ListView.builder(

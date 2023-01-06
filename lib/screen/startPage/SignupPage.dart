@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +18,7 @@ import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/screen/startPage/PrivacyStatement_2.dart';
 import 'package:daycus/screen/startPage/TermsOfService_1.dart';
 import 'package:daycus/screen/startPage/Marketing_3.dart';
+
 
 
 Map agree = {
@@ -160,6 +163,8 @@ class _signupPage extends State<SignupPage> {
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
   final TextEditingController passwordCheckCtrl = TextEditingController();
+
+  final TextEditingController customMissionCtrl = TextEditingController();
 
   var agree_all = Icons.check_box_outline_blank;
   var agree_1 = Icons.check_box_outline_blank;
@@ -491,7 +496,7 @@ class _signupPage extends State<SignupPage> {
 
                     SizedBox(height: 25.h,),
 
-                    Text("추가하고 싶은 미션이 있나요?", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
+                    Text("추가하고 싶은 \"나만의 미션\"이 있나요?", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
 
                     SizedBox(height: 8.h,),
 
@@ -519,7 +524,7 @@ class _signupPage extends State<SignupPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("DayCus에서는 갓생을 위한 미션을 수행할 수 있습니다. 현재 '하루 물 한컵 마시기', '아침 9시 기상', '만보 걷기' 등의 미션이 있습니다. 하고 싶은 미션이 있다면 아래에 적어주세요! 여러분의 의견을 반영하여 미션이 만들어집니다:)\n",
+                                Text("DayCus에서는 갓생을 위한 미션을 수행할 수 있습니다. 현재 '하루 물 한컵 마시기', '아침 9시 기상', '만보 걷기' 등의 미션이 있습니다. 하고 싶은 미션이 있다면 아래에 적어주세요! 빠른 시간 내에 여러분의 의견을 반영하여 미션을 추가하겠습니다 :)\n",
                                     style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',) ),
                               ],
                             ),
@@ -532,10 +537,10 @@ class _signupPage extends State<SignupPage> {
 
 
                     TextField(
-                      //controller: ,
+                      controller: customMissionCtrl,
                       maxLines: 4,
                       decoration: InputDecoration(
-                        hintText: "어떤 미션을 원하시나요?",
+                        hintText: "추가하고 싶은 새로운 미션이 있나요?",
                         hintStyle: TextStyle(fontSize: 12.sp, color: Colors.grey),
                         fillColor: Colors.white,
                         filled: true,
@@ -575,8 +580,19 @@ class _signupPage extends State<SignupPage> {
                 // 동의 안했으면 회원가입 불가
                 if(_formKey.currentState!.validate() && agree['이용약관'] && agree['개인정보 취급방침']){
                   await checkUserEmail();
+
+                  // 새로운 미션 추천받기 !
+                  if (customMissionCtrl.text!=null){
+                    DateTime today = await NowTime(null);
+                    update_request(
+                        "INSERT INTO to_developer (content, error_message, user_email, datetime, error_image) VALUES ('${customMissionCtrl.text.trim().replaceAll("'", "`")}', '테스터의 추천 미션', '${user_data['user_email']}', '${today.toString().substring(0,23)}', null);",
+                        null);
+                  }
                 }
-                else{
+                else if (_formKey.currentState!.validate()==false){
+                  // 이메일 입력을 안했을 때
+                }
+                else if (agree['이용약관']==false || agree['개인정보 취급방침']==false){
                   Fluttertoast.showToast(msg: "필수 약관을 동의해주세요 !");
                 }
               }, child: Text('회원가입',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),

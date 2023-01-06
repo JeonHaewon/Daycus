@@ -25,6 +25,7 @@ class LabelButtonToPage extends StatelessWidget {
         totalUser: int.parse(data[i]['total_user']),
         myparticipation: 0,
       onTap: LabelingMission(
+        content: data[i]['content'],
         label_category: data[i]['label_category'],
         folder: data[i]['image_locate'],
         title: data[i]['title'],

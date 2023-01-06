@@ -1,5 +1,6 @@
 
 import 'package:daycus/backend/admin/PedometerPage.dart';
+import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:daycus/backend/admin/RecordingPage.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,9 @@ class _AdminScreenState extends State<AdminScreen> {
   //   super.initState();
   //   initPlugin();
   // }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -520,6 +524,13 @@ class _AdminScreenState extends State<AdminScreen> {
                   // Navigator.push(
                   //     context,
                   //     MaterialPageRoute(builder: (_) => RecordingPage()));
+                },
+              ),
+
+              AdminButton(
+                title: "php로 이메일을 보내봅시당 !",
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> PhpMail()));
                 },
               ),
             ],

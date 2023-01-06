@@ -14,5 +14,9 @@ class API{
   static const imageUpload = "$hostConnect/mission/image_upload.php";
   static const imageDownload = "$hostConnect/image_download/image_download2.php";
 
-  static const imageDownloadLocal = "http://10.8.1.148/api_members/image_download.php";
+  static const sendEmail = "$hostConnect/user/send_email.php";
+
+  //static const imageDownloadLocal = "http://10.8.1.148/api_members/image_download.php";
+
+  //static const sendEmail = "http://10.8.1.148/api_members/email.php";
 }

@@ -154,10 +154,10 @@ level_update() async {
   int user_lv = int.parse(user_data['user_lv']);
   int user_reward = int.parse(user_data['reward']);
 
-  int lv_start = int.parse(leveling[user_lv-1]['reward']);
-  int lv_end = int.parse(leveling[user_lv]['reward']);
+  lv_start = int.parse(leveling[user_lv-1]['reward']);
+  lv_end = int.parse(leveling[user_lv]['reward']);
 
-  lv_percent = (user_reward - lv_start)/(lv_end - lv_start);
+  lv_percent = (user_reward - lv_start)/(lv_end-lv_start);
   //print("lv_percent : $lv_percent");
   if(lv_percent<0){lv_percent=0;}
   if(lv_percent>1){lv_percent=1;}
