@@ -86,14 +86,14 @@ class _PasswordSettingState extends State<PasswordSetting> {
             children: [
 
               Padding(
-                padding: EdgeInsets.fromLTRB(30.w, 50.h, 30.w, 0),
+                padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
 
                     TextFormField(
                       decoration: InputDecoration(
-                        filled: true,
+                        //filled: true,
                         labelText: '현재 비밀번호 입력',
                       ),
                       controller: current_password,
@@ -107,7 +107,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
 
                     TextFormField(
                       decoration: InputDecoration(
-                        filled: true,
+                        //filled: true,
                         labelText: '새로운 비밀번호 입력',
                       ),
                       controller: want_password,
@@ -121,7 +121,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
 
                     TextFormField(
                       decoration: InputDecoration(
-                        filled: true,
+                        //filled: true,
                         labelText: '새로운 비밀번호 재입력',
                       ),
                       controller: want_real_password,
