@@ -294,7 +294,7 @@ class _AdminScreenState extends State<AdminScreen> {
           // print(resMission);
           if (resMission['success'] == true) {
             changing_idx = resMission['data'][0]['nm'];
-            print(changing_idx.runtimeType);
+
           } else {
             print("에러발생");;
             Fluttertoast.showToast(msg: "다시 시도해주세요");

@@ -59,7 +59,6 @@ dependencies:
   shared_preferences:
   local_auth:
   admob_flutter:
-  flutter_background_service:
   device_info_plus:
   firebase_messaging:
   firebase_core:
