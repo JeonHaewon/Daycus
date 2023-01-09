@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text("다음 레벨까지", style: TextStyle(fontSize: 10.sp),),
-                                          Text("${lv_end-int.parse(user_data['reward'])}${rewardName}", style: TextStyle(fontSize: 10.sp),),
+                                          Text("${(lv_end-double.parse(user_data['reward'])).toStringAsFixed(1)}${rewardName}", style: TextStyle(fontSize: 10.sp),),
                                         ],
                                       ),
 
