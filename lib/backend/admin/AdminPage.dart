@@ -1,4 +1,5 @@
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/core/notification.dart';
@@ -22,6 +23,7 @@ import 'dart:typed_data';
 import '../../screen/LoginPageCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:daycus/core/app_text.dart';
+var admobBannerId = 'ca-app-pub-8531216673338188/1251178970';
 
 // create an instance
 
@@ -70,6 +72,11 @@ class _AdminScreenState extends State<AdminScreen> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
+
+  void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+    Admob.initialize();
+  }
 
   // Future<void> initPlugin() async {
   //   _recorderStatus = _recorder.status.listen((status) {
@@ -593,6 +600,16 @@ class _AdminScreenState extends State<AdminScreen> {
                   change_to_done();
                 },
               ),
+              Center(
+                child: Container(
+                  child: AdmobBanner(
+                    adUnitId: admobBannerId,
+                    adSize: AdmobBannerSize.BANNER,
+                    onBannerCreated:
+                    (AdmobBannerController controller){},
+                  )
+                )
+              )
             ],
           ),
         ),
