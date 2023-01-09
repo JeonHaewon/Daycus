@@ -110,7 +110,8 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                       itemCount: do_mission_cnt,
                       itemBuilder: (_, index) {
                         //id가 1부터 시작한다.
-                        int _index = int.parse(do_mission[index]['mission_id'])-1;
+                        //print("do_mission : ${do_mission[index]['mission_index']}");
+                        int _index = do_mission[index]['mission_index'];
                         //print("${_index}, ${_index.runtimeType}");
                         //print(all_missions[_index]);
                         return Column(

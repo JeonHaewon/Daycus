@@ -147,7 +147,7 @@ LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
 
 level_update() async {
   if (leveling==null){
-    leveling = await select_request("SELECT * from leveling", null);
+    leveling = await select_request("SELECT * from leveling", null, true);
     print("leveling : ${leveling}");
   }
 

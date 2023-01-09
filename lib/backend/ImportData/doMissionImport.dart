@@ -3,29 +3,17 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/Api.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
+
 
 doMissionImport() async {
-  try {
-    var select_res = await http.post(Uri.parse(API.select), body: {
-      'update_sql': "SELECT * FROM do_mission WHERE user_email = '${user_data['user_email']}'",
-    });
+  // 성공적으로 불러와도 하고 있는 미션이 없는 경우 false가 나올 수 있음
+  do_mission = await select_request(
+      "SELECT * FROM do_mission WHERE user_email = '${user_data['user_email']}'",
+      null, false);
 
-    var resMission = jsonDecode(select_res.body);
-
-    if (resMission['success'] == true) {
-      //print(resMission);
-      do_mission = resMission['data'];
-      print(resMission);
-
-    } else {
-      print("불러온 미션이 없습니다");
-      // 불러올 미션이 없는 것 같음.
-      //Fluttertoast.showToast(msg: ".");
-    }
-
-  } on Exception catch (e) {
-    print("do mission : $e");
-    Fluttertoast.showToast(msg: "다시 시도해주세요");
+  if (do_mission==false){
+    do_mission = null;
   }
 }
 
@@ -42,3 +30,4 @@ doMissionSave( ) {
   }
   //print("하는 미션들 업데이트 완료 : ${all_missions}");
 }
+

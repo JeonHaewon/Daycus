@@ -46,7 +46,7 @@ update_request(String sql, String? successMessage) async {
 
 
 
-select_request(String sql, String? successMessage) async {
+select_request(String sql, String? successMessage, bool failMessage) async {
   try {
     var update_res = await http.post(Uri.parse(API.select), body: {
       'update_sql': sql,
@@ -74,7 +74,10 @@ select_request(String sql, String? successMessage) async {
         //print("에러발생");
         print("작업이 완료되지 않음 : ${resMessage}");
         last_error = "sql : ${sql} / resMessage : ${resMessage}";
-        Fluttertoast.showToast(msg: "다시 시도해주세요");
+        if (failMessage){
+          Fluttertoast.showToast(msg: "다시 시도해주세요");
+        }
+
         return false;
       }
 

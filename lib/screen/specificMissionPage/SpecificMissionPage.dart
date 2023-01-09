@@ -349,7 +349,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(width: 1.w, color: Colors.grey),
                       ),
-                      child: Text(_rewardCalculResert, style: TextStyle(color: Colors.black,fontSize: 17.sp,), textAlign: TextAlign.center,),
+                      child: Text(_rewardCalculResert, style: TextStyle(color: Colors.black,fontSize: 15.sp,), textAlign: TextAlign.center,),
                     ),
                   ],
                 ),
@@ -534,8 +534,11 @@ _rewardCalcul(String? money, double percent, String basicText){
   else{
     try{
       double money_int = double.parse(money);
-      if (money_int > limit_bet_reward){
+      if (money_int == limit_bet_reward){
         return "최대입니다";
+      }
+      if (money_int > limit_bet_reward){
+        return "최대를 초과했습니다";
       }
       // 소숫점 몇쨋자리 이런 기준이 필요함.
       return "${money_int*(percent)/100} ${rewardName}";

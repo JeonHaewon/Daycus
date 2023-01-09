@@ -643,6 +643,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                       user_data['user_email'],
                       mission_result
                   );
+
+
+
                 }
 
                 // 미션 포기가 가능할 때

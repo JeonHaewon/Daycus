@@ -244,7 +244,7 @@ class MissionParticipatePage extends StatelessWidget {
                   minus_reward(rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text);
                   // 참여 유저 업데이트
                   // 이건 잘 됨.
-                  await missionUserUpdate(mission_id);
+                  // await missionUserUpdate(mission_id);
 
                   // 이것도 어플 상에서 UI 업데이트 구현하고, 네트워크는 백그라운드상에서 구현
                   // 로딩 시 네트워크로 구현해도 될듯.

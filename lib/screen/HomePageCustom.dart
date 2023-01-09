@@ -225,6 +225,7 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(
                                 height: 10.sp,
                               ),
+                              // 미션 더보기
                               TextButton(
                                   onPressed: (){
                                     controller.currentBottomNavItemIndex.value = 1;
@@ -258,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                         itemCount: do_mission_cnt,
                         itemBuilder: (_, index) {
                           //id가 1부터 시작한다.
-                          int _index = int.parse(do_mission[index]['mission_id'])-1;
+                          int _index = do_mission[index]['mission_index'];
                           //print("${_index}, ${_index.runtimeType}");
                           //print(all_missions[_index]);
                           return Column(
@@ -370,6 +371,7 @@ class _HomePageState extends State<HomePage> {
 
                     Wrap(
                       children: List.generate(missions_cnt, (index) {
+                        // 참여하고 있지 않은 것만 뜸.
                         if (all_missions[index]['now_user_do']==null) {
                           return Container(
                             width: 175.w,
@@ -377,6 +379,7 @@ class _HomePageState extends State<HomePage> {
                             child: SpecificMissionToPage(i: index),
                           );
                         }
+                        // 참여하고 있는 건 안뜸.
                         else {
                           return Container(width: 0.w,);
                         }
