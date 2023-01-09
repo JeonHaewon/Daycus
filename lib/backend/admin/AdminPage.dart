@@ -23,7 +23,7 @@ import 'dart:typed_data';
 import '../../screen/LoginPageCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:daycus/core/app_text.dart';
-var admobBannerId = 'ca-app-pub-8531216673338188/1251178970';
+var admobBannerId = 'ca-app-pub-3339242274230109/7848999030';
 
 // create an instance
 
@@ -72,11 +72,6 @@ class _AdminScreenState extends State<AdminScreen> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
-
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    Admob.initialize();
-  }
 
   // Future<void> initPlugin() async {
   //   _recorderStatus = _recorder.status.listen((status) {

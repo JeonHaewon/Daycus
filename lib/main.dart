@@ -46,6 +46,7 @@ void initMessaging() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Admob.initialize();
   initMessaging();
   runApp(const MyApp());
 }
