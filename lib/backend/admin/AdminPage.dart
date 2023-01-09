@@ -205,6 +205,30 @@ class _AdminScreenState extends State<AdminScreen> {
         Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
       }
     }
+    String ok = 'done';
+    change_to_done() async {
+      try {
+        var update_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "update missions set mission_state = '$ok' where datediff(current_date, end_date)>0;",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          // print(resMission);
+          if (resMission['success'] == true) {
+            Fluttertoast.showToast(msg: "done으로 옮겨짐 !");
+
+          } else {
+            print("에러발생");
+            print(resMission);
+            Fluttertoast.showToast(msg: "다시 시도해주세요");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
 
     update_level() async {
       try {
@@ -561,6 +585,12 @@ class _AdminScreenState extends State<AdminScreen> {
                 title: "한 유저만 레벨 업데이트 !",
                 onPressed: (){
                   update_level_individual();
+                },
+              ),
+              AdminButton(
+                title: "기한 된거 done으로 표시하기",
+                onPressed: (){
+                  change_to_done();
                 },
               ),
             ],
