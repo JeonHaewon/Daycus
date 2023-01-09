@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 
 
 
-class Pedometer extends StatelessWidget {
-  Pedometer({Key? key}) : super(key: key);
+class WalkCount extends StatelessWidget {
+  WalkCount({Key? key}) : super(key: key);
 
   var f = NumberFormat('###,###,###,###');
   @override

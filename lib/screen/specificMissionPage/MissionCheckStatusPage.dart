@@ -21,7 +21,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
-import 'package:daycus/screen/specificMissionPage/PedometerPage.dart';
+import 'package:daycus/screen/specificMissionPage/WalkCountPage.dart';
 
 class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
@@ -402,7 +402,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => Pedometer()),
+                            MaterialPageRoute(builder: (_) => WalkCount()),
                           );
                         },
                         child: Padding(
@@ -697,7 +697,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                           ],
                         ),
 
-                        SizedBox(height: 30.h,),
+                        SizedBox(height: 20.h,),
 
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
