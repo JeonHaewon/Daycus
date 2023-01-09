@@ -230,6 +230,30 @@ class _AdminScreenState extends State<AdminScreen> {
         Fluttertoast.showToast(msg: "삭제를 진행하는 도중 문제가 발생했습니다.");
       }
     }
+    update_level_individual() async {
+      try {
+        var update_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "call update_level5('${user_data['user_email']}');",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          // print(resMission);
+          if (resMission['success'] == true) {
+            Fluttertoast.showToast(msg: "유저 레벨 업데이트가 완료되었습니다 !");
+
+          } else {
+            print("에러발생");
+            print(resMission);
+            Fluttertoast.showToast(msg: "다시 시도해주세요");
+          }
+
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "삭제를 진행하는 도중 문제가 발생했습니다.");
+      }
+    }
 
     delete_from_do_mission() async{
 
@@ -531,6 +555,12 @@ class _AdminScreenState extends State<AdminScreen> {
                 title: "php로 이메일을 보내봅시당 !",
                 onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (_)=> PhpMail()));
+                },
+              ),
+              AdminButton(
+                title: "한 유저만 레벨 업데이트 !",
+                onPressed: (){
+                  update_level_individual();
                 },
               ),
             ],
