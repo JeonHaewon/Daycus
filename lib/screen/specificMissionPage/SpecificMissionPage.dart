@@ -376,7 +376,10 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
             Padding(
               padding: EdgeInsets.fromLTRB(25.w, 6.h, 0, 0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text('※ 한 미션에 걸 수 있는 최대 ${rewardName}는 20${rewardName}입니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+
                   Text('※ 미션 성공시 14${rewardName}를 추가로 지급합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
                 ],
               ),

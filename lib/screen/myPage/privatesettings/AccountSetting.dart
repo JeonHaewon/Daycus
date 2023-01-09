@@ -247,7 +247,7 @@ class _AccountSettingState extends State<AccountSetting> {
                                   //SizedBox(height: 19.h,),
                                   Text("   $selected_date",
                                       style: TextStyle(color: Colors.black54, fontSize: 16.5.sp, fontFamily: 'korean', )
-                                     ),
+                                  ),
                                 ],
                               ),
                             )),

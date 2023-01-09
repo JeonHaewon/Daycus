@@ -153,21 +153,54 @@ class MissionParticipatePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("미션 참여 ${rewardName}", style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+
+                            // Container(
+                            //   width: 150.w,
+                            //   height: 25.h,
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.grey[300],
+                            //     borderRadius: BorderRadius.circular(5),
+                            //   ),
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: [
+                            //       Text("나의 보유 ${rewardName} :  ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', ) ,textAlign: TextAlign.center,),
+                            //       Text("${user_data['reward']} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                            //     ],
+                            //   ),
+                            // ),
+
                             Container(
-                              width: 140.w,
+                              width: 150.w,
                               height: 25.h,
                               decoration: BoxDecoration(
                                 color: Colors.grey[300],
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("나의 보유 ${rewardName} :  ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', ) ,textAlign: TextAlign.center,),
-                                  Text("${user_data['reward']} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                                ],
+                              child: SizedBox(
+                                child:
+                                FittedBox(
+                                    alignment: Alignment.centerLeft,
+                                    fit: BoxFit.contain,
+
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(width: 5.w,),
+                                        Text("나의 보유 ${rewardName} :  ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', ) ,textAlign: TextAlign.center,),
+                                        Text("${user_data['reward']} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                                        SizedBox(width:7.w,),
+                                      ],
+                                    )
+                                ),
                               ),
                             ),
+
+
+
+
+
                           ],
                         ),
 
