@@ -1,5 +1,8 @@
 // 위치 면경 시 큰일날 수 있음. 주의
 
+import 'dart:io';
+import 'package:flutter/material.dart';
+
 var user_data = null;
 var all_missions = null;
 int missions_cnt = 0;
@@ -20,3 +23,11 @@ double lv_end = 2;
 
 // 마지막 에러를 잡기 위한 변수
 String last_error = "최근에 잡힌 에러가 없음";
+
+// -- 최적화 필요
+// 다운로드 한 이미지 사진
+Image? downloadProfileImage;
+// 선택한 이미지 사진
+File? profileImage;
+String? profileImageReNamed;
+int profileDegree = 0;

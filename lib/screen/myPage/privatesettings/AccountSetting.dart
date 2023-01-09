@@ -1,6 +1,12 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:daycus/backend/ImportData/imageDownload.dart';
+import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/backend/UploadImage.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -10,6 +16,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../../../backend/Api.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 var current_date_var = null;
 var chosen_gender = null;
@@ -25,24 +33,40 @@ class AccountSetting extends StatefulWidget {
   State<AccountSetting> createState() => _AccountSettingState();
 }
 
+
+
 class _AccountSettingState extends State<AccountSetting> {
+
 
   String selected_date = user_data['user_birth'] ?? nullBirthdayString;
 
   TextStyle _hintTextStyle = TextStyle(color: Colors.grey,fontSize: 16.sp, fontWeight: FontWeight.w400);
 
+
   update_information_name() async {
+    bool success = await update_request(
+        "UPDATE DayCus.user_table SET user_name = '${nameCtrl.text.trim()}' WHERE (user_email = '${user_data['user_email']}')",
+        null);
+
+    if (success){
+      print("이름 변경이 성공적으로 반영되었습니다");
+    } else {
+      print("이름 변경에 실패하였습니다");
+    }
+
     try{
       var update_res = await http.post(Uri.parse(API.update), body: {
       'update_sql': "UPDATE DayCus.user_table SET user_name = '${nameCtrl.text.trim()}' WHERE (user_email = '${user_data['user_email']}')",
       });
+
+
 
       if (update_res.statusCode == 200) {
       print("출력 : ${update_res.body}");
       var resLogin = jsonDecode(update_res.body);
       if (resLogin['success'] == true) {
         user_data['user_name'] = nameCtrl.text;
-      print("이름 변경이 성공적으로 반영되었습니다");
+
       //Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
 
         return true;
@@ -58,6 +82,7 @@ class _AccountSettingState extends State<AccountSetting> {
       return false;
     }
   }
+
   update_information_birth() async {
     try{
       var update_res = await http.post(Uri.parse(API.update), body: {
@@ -83,6 +108,7 @@ class _AccountSettingState extends State<AccountSetting> {
       return false;
     }
   }
+
   update_information_gender() async {
     try{
       var update_res = await http.post(Uri.parse(API.update), body: {
@@ -128,16 +154,67 @@ class _AccountSettingState extends State<AccountSetting> {
   final TextEditingController birthCtrl = TextEditingController();
 
 
-  List<bool> _selections = List.generate(3, (_) => false);
+  //List<bool> _selections = List.generate(3, (_) => false);
   final List<bool> _selected = user_data['user_gender']==null ? [true,false,false] : [
     for (int i = 0; i<3; i++)
       user_data['user_gender'] == i.toString()
     ];
+
   bool vertical = false;
+
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    //profileImage = null;
+    profileImageReNamed = null;
+    profileImage = null;
+  }
 
 
   @override
   Widget build(BuildContext context) {
+
+    addProfile(String source) async {
+
+      String todayString = await NowTime('yyyyMMddHHmmss');
+
+      print(user_data['user_email'].split("@"));
+      String imageName = "${user_data['user_id']}_profile_${todayString.substring(0,8)}_${todayString.substring(8,14)}";
+      print("imageName : ${imageName}");
+
+      profileImageReNamed = null;
+
+      if (source=='gallery'){
+        profileImage = await getImage(imageName, ImageSource.gallery);
+        // 방금 바꾼 이미지로 변경
+      }
+      else if (source == 'camera'){
+        profileImage = await getImage(imageName, ImageSource.camera);
+      }
+
+      setState(() {
+        profileImageReNamed = imageReNamed;
+      });
+    }
+
+    Widget cameraOrGallery = bottomPopWidget(
+        context,
+
+            () async {
+          Navigator.pop(context);
+          addProfile("camera");
+        },
+
+            () async {
+          Navigator.pop(context);
+          addProfile("gallery");
+        },
+        "카메라", "갤러리",
+        Icons.camera_alt, Icons.photo);
+
+
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
@@ -158,14 +235,36 @@ class _AccountSettingState extends State<AccountSetting> {
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                Icon(Icons.account_circle_rounded, size: 150,),
-                TextButton(onPressed: (){},
+                TextButton(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: Size.zero),
+                  onPressed: (){
+                    showModalBottomSheet(context: context,
+                        builder: ((builder) => cameraOrGallery
+                        ));
+                  },
                   child: Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50)),
-                        color: Colors.grey),
-                    child: Icon(Icons.camera_alt, size: 20, color: Colors.black,),
+                    padding: EdgeInsets.all(13.sp),
+
+                    child: (profileImage==null)
+                    // 고른 프로필 사진이 없을 때
+                        ? (user_data['profile']==null || downloadProfileImage==null)
+                              ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 70.sp,)
+                              : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 70.sp), )
+                        : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 70.sp,)
+                  ),
+                ),
+
+                TextButton(onPressed: (){
+                  showModalBottomSheet(context: context,
+                      builder: ((builder) => cameraOrGallery
+                      ));
+                },
+                  child: Container(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50.sp)), color: Colors.white,
+                    ),
+                    child: Icon(Icons.camera_alt, size: 25.sp, color: Colors.black,),
                     //margin: EdgeInsets.all(15),
-                    padding: EdgeInsets.all(3),
+                    padding: EdgeInsets.all(1.sp),
                   ),)
               ],
             ),
@@ -332,22 +431,25 @@ class _AccountSettingState extends State<AccountSetting> {
                     bool is_change_birth = (user_data['user_birth']!=selected_date);
                     bool is_change_name = (nameCtrl.text.trim().length > 0);
                     bool is_change_gender = (user_data['user_gender'] != chosen_gender)&&(chosen_gender!=null);
+                    bool is_change_image = (profileImageReNamed!=null);
 
-                    bool sucess = false;
+                    bool success = false;
                     String? msg = null;
 
                     print("state : $is_change_name, $is_change_birth, $is_change_gender");
 
                     // 변경사항이 없을 때
-                    if (is_change_name==false && is_change_birth==false && is_change_gender==false){
+                    if (is_change_name==false && is_change_birth==false && is_change_gender==false && is_change_image==false){
                       Fluttertoast.showToast(msg: "변경사항이 없습니다");
                     }
                     // 변경 사항이 있는 경우
                     else {
 
+                      // 생일 수정
                       if (is_change_birth){
-                        sucess = await update_information_birth();}
+                        success = await update_information_birth();}
 
+                      // 이름 수정
                       if (is_change_name){
                         // 이름이 가능하면 : 10글자 이하
                         if (nameCtrl.text
@@ -356,18 +458,39 @@ class _AccountSettingState extends State<AccountSetting> {
                             nameCtrl.text.trim() ==
                                 nameCtrl.text.trim().replaceAll(
                                     RegExp('[^a-zA-Z0-9가-힣\\s]'), "")) {
-                          sucess = await update_information_name();}
+                          success = await update_information_name();}
                         else {
                           msg = "할 수 없는 닉네임입니다.";
                         }
                       }
 
+                      // 성별 수정
                       if (is_change_gender){
-                        sucess = await update_information_gender();
+                        success = await update_information_gender();
+                      }
+
+                      // 프로필 사진 수정 - 프로필 삭제하기와 변경 시 옛날 사진 삭제하기 프로세스가 있어야함.
+                      if (is_change_image){
+
+                        success = await justUploadImage(profileImageReNamed!, "image_application/user_profile");
+
+                        if (success) {
+                          success = await update_request(
+                              "UPDATE user_table set profile='${profileImageReNamed}' where user_email = '${user_data['user_email']}'", null);
+
+                          if (success){
+                            var result = await image_download_root(
+                                "image_application/user_profile", profileImageReNamed!);
+                            downloadProfileImage = result[0] ; profileDegree = result[1];
+
+                          }
+                        }
+
+
                       }
 
                       // true로 살아남으면 성공했다는 메세지가 뜸.
-                      if (msg==null && sucess==true) {
+                      if (msg==null && success==true) {
                         success_upload();
                       } else {
                         Fluttertoast.showToast(msg: msg ?? "다시 시도해주세요");
