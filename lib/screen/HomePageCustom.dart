@@ -325,22 +325,28 @@ class _HomePageState extends State<HomePage> {
                             thickness: 8,
                             radius: Radius.circular(10),
                             //scrollbarOrientation: ScrollbarOrientation.right,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
+                            child: NotificationListener<OverscrollIndicatorNotification>(
+                              onNotification: (OverscrollIndicatorNotification overScroll) {
+                                overScroll.disallowGlow();
+                                return false;
+                              },
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
 
-                                  RankingBar(1, "aaaaaaaaa", 105450),
-                                  RankingBar(2, "ggggg", 100000),
-                                  RankingBar(3, "bbbbbbb", 9800),
-                                  RankingBar(4, "dddddd", 1030),
-                                  RankingBar(5, "dfdfdfdf", 1030),
-                                  RankingBar(6, "dfdfdf3", 930),
-                                  RankingBar(7, "dfdge", 90),
-                                  RankingBar(8, "3t3t", 10),
-                                  RankingBar(9, "가가가가", 9),
-                                  RankingBar(10, "2145", 8),
+                                    RankingBar(1, "aaaaaaaaa", 105450),
+                                    RankingBar(2, "ggggg", 100000),
+                                    RankingBar(3, "bbbbbbb", 9800),
+                                    RankingBar(4, "dddddd", 1030),
+                                    RankingBar(5, "dfdfdfdf", 1030),
+                                    RankingBar(6, "dfdfdf3", 930),
+                                    RankingBar(7, "dfdge", 90),
+                                    RankingBar(8, "3t3t", 10),
+                                    RankingBar(9, "가가가가", 9),
+                                    RankingBar(10, "2145", 8),
 
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
