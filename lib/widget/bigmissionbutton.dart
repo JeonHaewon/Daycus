@@ -60,15 +60,36 @@ class BigMissionButton extends StatelessWidget {
 
             //Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,), ),
 
+
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   width: 170.w,
+            //   height: 24.h,
+            //   child: FittedBox(
+            //     fit: BoxFit.scaleDown,
+            //     child:Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,), ),
+            //   ),
+            // ),
+
             Container(
-              alignment: Alignment.centerLeft,
-              width: 170.w,
-              height: 24.h,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child:Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,), ),
-              ),
+                width: 170.w,
+                height: 24.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                        child: RichText(
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          text: TextSpan(
+                              text:
+                              title,
+                              style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: Colors.black),),
+                        )),
+                  ],
+                )
             ),
+
 
 
             Text('$duration',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),

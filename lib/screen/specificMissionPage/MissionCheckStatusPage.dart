@@ -250,7 +250,28 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                      Container(
+                          width: 240.w,
+
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                  child: RichText(
+                                    overflow: TextOverflow.clip,
+                                    maxLines: 3,
+                                    text: TextSpan(
+                                        text: title,
+                                        style: TextStyle(fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                  )
+                              ),
+                            ],
+                          )
+                      ),
+
+                      //Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
 
                       Column(
                         verticalDirection: VerticalDirection.up,

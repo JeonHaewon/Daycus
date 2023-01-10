@@ -71,7 +71,7 @@ class MissionParticipatePage extends StatelessWidget {
                     Container(
                       width: 400.w,
                       // 335 > 400으로 변경 (왜 에러가 생기는지, 400은 유효한지 확인 필요)
-                      height: 360.h,
+                      //height: 360.h,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -86,7 +86,7 @@ class MissionParticipatePage extends StatelessWidget {
                         children: [
 
                           Padding(
-                            padding: EdgeInsets.fromLTRB(30.w, 15.h, 30.w, 0),
+                            padding: EdgeInsets.fromLTRB(30.w, 15.h, 30.w, 15.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

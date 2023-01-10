@@ -180,7 +180,27 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                     child: Row(
                       children: [
                         SizedBox(width: 8.w,),
-                        Text(widget.title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                        Container(
+                            width: 360.w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                    child: RichText(
+                                      overflow: TextOverflow.clip,
+                                      maxLines: 3,
+                                      text: TextSpan(
+                                          text: widget.title,
+                                          style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                    )
+                                ),
+                              ],
+                            )
+                        ),
+
+                        //Text(widget.title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
                       ],
                     ),
                   ),
