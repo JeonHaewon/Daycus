@@ -27,10 +27,12 @@ class WalkCountPage extends StatefulWidget {
   State<WalkCountPage> createState() => _WalkCountPageState();
 }
 
+String steps = '0';
+
 class _WalkCountPageState extends State<WalkCountPage> {
 
   late Stream<StepCount> _stepCountStream;
-  String _steps = '0';
+
 
   @override
   void initState() {
@@ -53,11 +55,11 @@ class _WalkCountPageState extends State<WalkCountPage> {
     print(event);
     if (isupgrade==false){
       really = await updating_info(event);
-      Fluttertoast.showToast(msg: "만보기 시작");
+      //Fluttertoast.showToast(msg: "만보기 시작");
       isupgrade = true;
     }
     setState(() {
-      _steps = (event.steps - int.parse(really)).toString();
+      steps = (event.steps - int.parse(really)).toString();
       // _steps = pedometer_count.toString();
       // pedometer_count += 1;
     });
@@ -67,7 +69,7 @@ class _WalkCountPageState extends State<WalkCountPage> {
   void onStepCountError(error) {
     print('onStepCountError: $error');
     setState(() {
-      _steps = 'Step Count not available';
+      steps = '만보기를 사용할 수 없습니다 :(';
     });
   }
 
@@ -150,21 +152,36 @@ class _WalkCountPageState extends State<WalkCountPage> {
                                   ),
                                   SizedBox(height: 2.h,),
 
-                                  Text("${_steps.replaceAll(RegExp(r'[^0-9]'),'')}걸음",
+                                  Text("${steps.replaceAll(RegExp(r'[^0-9]'),'')}걸음",
                                       style: TextStyle(fontSize: 24.sp, fontFamily: 'korean',fontWeight: FontWeight.bold, color: AppColor.happyblue )
                                   ),
                                   SizedBox(height: 60.h,),
-                                  Row(
+
+                                  (widget.walkNumber-int.parse(steps.replaceAll(RegExp(r'[^0-9]'),'')) > 0)
+                                      ? Row(
+                                          children: [
+                                            Text("미션 성공까지 ",
+                                                style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
+                                            ),
+                                            Text("${(widget.walkNumber-int.parse(steps.replaceAll(RegExp(r'[^0-9]'),''))).toString()}",
+                                                style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold )
+                                            ),
+                                            Text("걸음",
+                                                style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
+                                            ),
+                                          ],
+                                        )
+                                    : Row(
                                     children: [
-                                      Text("미션 성공까지 ",
+                                      Text("${widget.walkNumber}걸음 걷기 ",
                                           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
                                       ),
-                                      Text("${(widget.walkNumber-int.parse(_steps.replaceAll(RegExp(r'[^0-9]'),''))).toString()}",
-                                          style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold )
+                                      Text("미션 완료 !!",
+                                          style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold ),
                                       ),
-                                      Text("걸음",
-                                          style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
-                                      ),
+                                      // Text(" !!",
+                                      //     style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
+                                      // ),
                                     ],
                                   ),
 

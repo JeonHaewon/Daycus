@@ -72,6 +72,8 @@ class _LabelPageState extends State<LabelPage> {
 
                             SizedBox(height: 20.h,),
 
+
+                            // 라벨링 ㅠㅠㅠㅠㅠㅠ 바꿔야돼 ㅠㅠㅠㅠㅠㅠ 라벨링 필요없는건 ㅠㅠㅠㅠㅠ
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

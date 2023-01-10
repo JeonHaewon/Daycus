@@ -11,11 +11,13 @@ import 'package:daycus/backend/missionComplete/MissionComplete.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
+import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:math';
@@ -82,11 +84,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     );
 
     do_mission[do_i]["d$todayBlockCnt"] = imageName;
+    setState(() { });
     // result 개수 다시 업데이트
     cnt_done();
     return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
 
-    setState(() { });
+
 
     Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
   }
@@ -392,8 +395,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                     )
                   ),
 
-
-
+                  if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
                   Padding(
                     padding: EdgeInsets.fromLTRB(10.w, 10.h, 0,0),
                     child: Column(
@@ -414,46 +416,47 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
 
 
-                  //------만보기 필요한 미션
-                  if (widget.mission_data['certify_tool']=='pedometer')
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(duration,style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_)
-                            => WalkCountPage(walkNumber: int.parse(widget.mission_data['condition']),)),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 5.w, 2.h),
-                          child: Container(
-                            width: 100.w,
-                            height: 30.h,
-                            decoration: BoxDecoration(
-                              color: Colors.indigo[100],
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.directions_run,size: 18.w,color: AppColor.happyblue,),
-                                  Text('현재 걸음 수 >',
-                                  style: TextStyle(color: AppColor.happyblue, fontSize: 10.sp, fontFamily: 'korean',) ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
 
-                    ],
-                  ),
+                  //------만보기 필요한 미션
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(duration,style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
+                  //     InkWell(
+                  //       onTap: () {
+                  //         Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(builder: (_)
+                  //           => WalkCountPage(walkNumber: int.parse(widget.mission_data['condition']),)),
+                  //         );
+                  //       },
+                  //       child: Padding(
+                  //         padding: EdgeInsets.fromLTRB(0, 0, 5.w, 2.h),
+                  //         child: Container(
+                  //           width: 100.w,
+                  //           height: 30.h,
+                  //           decoration: BoxDecoration(
+                  //             color: Colors.indigo[100],
+                  //             borderRadius: BorderRadius.circular(20),
+                  //           ),
+                  //           child: Container(
+                  //             child: Row(
+                  //               crossAxisAlignment: CrossAxisAlignment.center,
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: [
+                  //                 Icon(Icons.directions_run,size: 18.w,color: AppColor.happyblue,),
+                  //                 Text('현재 걸음 수 >',
+                  //                 style: TextStyle(color: AppColor.happyblue, fontSize: 10.sp, fontFamily: 'korean',) ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //
+                  //   ],
+                  // ),
 
 
 
@@ -550,7 +553,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                                         showModalBottomSheet(context: context,
                                                                             builder: ((builder) => cameraOrGallery
                                                                             ));
-                                                                      } else {
+                                                                      } else if(widget.mission_data['certify_tool'] == 'pedometer'){
+                                                                        Fluttertoast.showToast(msg: "아직 미션이 완료되지 않았습니다");
+                                                                      } 
+                                                                      else {
                                                                         todayMissionCertify(do_i, "camera");
                                                                       }
                                                                     } else {
@@ -561,7 +567,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                           )
                                                           // 인증 완료된 날짜 블럭
                                                               : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date
-                                                            , folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data,)
+                                                            , folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
                                                         ),
                                                         if(index_j != _oneWeek-1)
                                                           SizedBox(
@@ -596,12 +602,83 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                     ),
                   ),
 
+                  if (widget.mission_data['certify_tool']=='pedometer')
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 40.h,),
+
+                        Text("현재 걸음 수",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                        SizedBox(height: 5.h,),
+
+                        Row(
+                          children: [
+                            Text("※ 미션 완료 시 ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                            Text("오늘 미션 인증하기",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                            Text(" 버튼을 눌러주세요.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                          ],
+                        ),
+
+                        Container(
+                            padding: EdgeInsets.fromLTRB(17.w, 14.h, 17.w, 0),
+                            width: 600.w, height: 200.h,
+                            child: WalkCountWidget(walkNumber: int.parse(widget.mission_data['condition']))),
+                      ],
+                    ),
+
 
 
                   SizedBox(height: 30.h,),
 
                   Text("나의 미션 리포트",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+
+                   if (return_reward>1)
+                  Container(
+                    margin: EdgeInsets.only(left: 8.w, top: 7.h, bottom: 3.h),
+                    width: 395.w,
+                    height: 80.h,
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[50],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+
+                            Container(
+                              height: 70.h,
+                              width: 35.w,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(width: 10.w,),
+                                  Icon(Icons.notifications_rounded, color: Colors.blueGrey[400], size: 25.h,),
+
+                                ],
+                              ),
+                            ),
+
+                            Container(
+                              height: 70.h,
+                              width: 275.w,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("미션 총 횟수(인증률 100%)를 넘어도\n미션 기간 동안 계속해서 인증할 수 있습니다.\n꾸준히 여러분의 갓생을 기록해보세요!",
+                                      style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                  ),
+
                   SizedBox(height: 7.h,),
+
 
                   Padding(
                     padding: EdgeInsets.only(left: _textSpacing),
@@ -734,53 +811,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   ),
 
 
-                  Container(
-                    width: 400.w,
-                    height: 80.h,
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey[50],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
 
-                        Container(
-                          height: 70.h,
-                          width: 35.w,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(width: 10.w,),
-                              Icon(Icons.notifications_rounded, color: Colors.blueGrey[400], size: 25.h,),
-
-                            ],
-                          ),
-                        ),
-
-                        Container(
-                          height: 70.h,
-                          width: 275.w,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("미션 총 횟수(인증률 100%)를 넘어도\n미션 기간 동안 계속해서 인증할 수 있습니다.\n꾸준히 여러분의 갓생을 기록해보세요!",
-                                  style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
-
-                            ],
-                          ),
-                        ),
-
-
-
-
-
-
-                      ],
-                    ),
-
-                  ),
 
                   SizedBox(height: 30.h,),
 
@@ -820,9 +851,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                       user_data['user_email'],
                       mission_result
                   );
-
-
-
                 }
 
                 // 미션 포기가 가능할 때
@@ -847,7 +875,38 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                  else{
                   if (widget.mission_data['certify_tool'] == 'gallery'){
                     showModalBottomSheet(context: context, builder: ((builder) => cameraOrGallery));
-                  } else {
+
+                    // 만보기
+                  } else if (widget.mission_data['certify_tool'] == 'pedometer'){
+                    print("만보기");
+                    print("$PedometerSteps ${widget.mission_data['condition']}");
+                    if((int.parse(PedometerSteps) >= int.parse(widget.mission_data['condition']))&&(do_mission[do_i]["d$todayBlockCnt"]==null)){
+
+                      // 미션 인증
+                      bool success = await update_request(
+                          "UPDATE do_mission SET d${todayBlockCnt}='${PedometerSteps}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
+                          null);
+
+                      if (success){
+                        setState(() {
+                          do_mission[do_i]["d$todayBlockCnt"] = PedometerSteps;
+                        });
+
+                        // result 개수 다시 업데이트
+                        cnt_done();
+                        return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
+
+                        Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
+                      }
+                    } else if (do_mission[do_i]["d$todayBlockCnt"]!=null){
+                      Fluttertoast.showToast(msg: "미션을 이미 인증하셨습니다");
+                    }
+
+
+
+                    
+                  }
+                  else {
                     todayMissionCertify(do_i, "camera");
                   }
                 }
@@ -867,7 +926,41 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   }
 }
 
+void showPedometerAlertDialog(BuildContext context, int date, String? pedometerNum) async {
 
+  String result = await showDialog(
+    context: context, // user must tap button!
+    builder: (BuildContext context) {
+      return BackdropFilter(
+        child: AlertDialog(
+          // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${date}일째 걸음 수",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+              InkWell(
+                onTap:(){Navigator.of(context).pop();},
+                child: Icon(Icons.clear),
+              )
+            ],
+          ),
+          content: Container(
+            height: 50.h,
+            child: Text("${pedometerNum ?? "데이터를 불러올 수 없습니다"}", textAlign: TextAlign.center,),
+          ),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        filter: ImageFilter.blur(
+          sigmaX : 6,
+          sigmaY : 6,
+        ),
+      );
+    },
+  );
+}
 
 void showAlertDialog(BuildContext context, int date, Image? downloadImage, int degree) async {
 
@@ -937,6 +1030,7 @@ class DoneMissionBlock extends StatelessWidget {
     required this.date,
     required this.folder,
     required this.do_mission_data,
+    required this.tool,
   }) : super(key: key);
 
   final int i;
@@ -945,19 +1039,23 @@ class DoneMissionBlock extends StatelessWidget {
   final int date;
   final String folder;
   final do_mission_data;
+  final String tool;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: () async {
-          var image_data = await image_download(folder, do_mission_data["d${date}"]);
+          if (tool=="camera" || tool=='gallery') {
+            var image_data = await image_download(folder, do_mission_data["d${date}"]);
 
-          Image? downloadImage = image_data[0];
-          int degree = image_data[1];
+            Image? downloadImage = image_data[0];
+            int degree = image_data[1];
 
-          // 이미지 다운로드가 될 때까지는 이렇게 있자.
-          showAlertDialog(context, date, downloadImage, degree);
-          },
+            showAlertDialog(context, date, downloadImage, degree);
+          } else if (tool=="pedometer"){
+            showPedometerAlertDialog(context, date, do_mission_data["d${date}"]);
+          }
+        },
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
         // child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
         child: Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
