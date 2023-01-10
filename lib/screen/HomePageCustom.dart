@@ -30,10 +30,10 @@ onWillPop() {
       now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
     currentBackPressTime = now;
     Fluttertoast.showToast(
-        msg: "뒤로 버튼을 한번 더 누르시면 종료됩니다.",
+        msg: "뒤로 버튼을 한 번 더 누르시면 종료됩니다.",
         gravity: ToastGravity.BOTTOM,
         backgroundColor: const Color(0xff6E6E6E),
-        fontSize: 20,
+        fontSize: 14.sp,
         toastLength: Toast.LENGTH_SHORT);
     return false;
   }
@@ -328,6 +328,7 @@ class _HomePageState extends State<HomePage> {
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
+
                                   RankingBar(1, "aaaaaaaaa", 105450),
                                   RankingBar(2, "ggggg", 100000),
                                   RankingBar(3, "bbbbbbb", 9800),
@@ -345,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
 
-                        SizedBox(height: 10.h,),
+                        SizedBox(height: 8.h,),
 
                       ],
                     ),
