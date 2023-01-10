@@ -210,6 +210,28 @@ class _AdminScreenState extends State<AdminScreen> {
         Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
       }
     }
+    without_json() async {
+      try {
+        var update_res = await http.post(Uri.parse(API.select), body: {
+          'update_sql': "call without_json8('${user_data['user_email']}')",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          print(resMission);
+          if (resMission['success'] == true) {
+            Fluttertoast.showToast(msg: "불러왔습니다!");
+          } else {
+            print("에러발생");
+            Fluttertoast.showToast(msg: "다시 시도해주세요");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
+
     String ok = 'done';
     change_to_done() async {
       try {
@@ -596,6 +618,12 @@ class _AdminScreenState extends State<AdminScreen> {
                 title: "기한 된거 done으로 표시하기",
                 onPressed: (){
                   change_to_done();
+                },
+              ),
+              AdminButton(
+                title: "jsondata 빼고 부르기",
+                onPressed: (){
+                  without_json();
                 },
               ),
               AdminButton(
