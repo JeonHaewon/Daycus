@@ -163,7 +163,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
                             "계정 복구하기", context,
                             Column(
                               children: [
-                                Text("이 계정은 탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일이 지난 계정입니다. 복구하기를 누르면 탈퇴 전의 정보들은 모두 복구되며 탈퇴한 기간 동안은 미션에 참여하지 않은 것으로 간주됩니다. 복구하시겠습니까?"),
+                                Text("이 계정은 탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays}일이 지난 계정입니다. 복구하기를 누르면 탈퇴 전의 정보들은 모두 복구되며 탈퇴한 기간 동안은 미션에 참여하지 않은 것으로 간주됩니다. 복구하시겠습니까?"),
                                 //Text("탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일째"),
                               ],
                             ), "복구하기", "취소",

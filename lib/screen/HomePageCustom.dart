@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 15.h,),
 
               
-              HomePageUserInfoBar(leftContent: "나의 ${rewardName}", rightContent: "${user_data['reward']} ${rewardName}",icon: Icons.control_point_duplicate,),
+              HomePageUserInfoBar(leftContent: "나의 ${rewardName}", rightContent: "${double.parse(user_data['reward']).toStringAsFixed(1)} ${rewardName}",icon: Icons.control_point_duplicate,),
               SizedBox(height: 10.h,),
               HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등", icon: Icons.people),
 
@@ -397,11 +397,11 @@ class _HomePageState extends State<HomePage> {
                     Wrap(
                       children: List.generate(missions_cnt, (index) {
                         // 참여하고 있지 않은 것만 뜸.
-                        if (all_missions[index]['now_user_do']==null) {
+                        if (all_missions[missions_cnt-index-1]['now_user_do']==null && all_missions[missions_cnt-index-1]['mission_state']!='done') {
                           return Container(
                             width: 175.w,
                             margin: EdgeInsets.only(bottom: 15.h, left: 17.w),
-                            child: SpecificMissionToPage(i: index),
+                            child: SpecificMissionToPage(i: missions_cnt-index-1),
                           );
                         }
                         // 참여하고 있는 건 안뜸.

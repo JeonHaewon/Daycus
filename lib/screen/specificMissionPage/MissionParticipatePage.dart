@@ -189,7 +189,7 @@ class MissionParticipatePage extends StatelessWidget {
                                       children: [
                                         SizedBox(width: 5.w,),
                                         Text("나의 보유 ${rewardName} :  ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', ) ,textAlign: TextAlign.center,),
-                                        Text("${user_data['reward']} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                                        Text("${(double.parse(user_data['reward'])).toStringAsFixed(1)} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                                         SizedBox(width:7.w,),
                                       ],
                                     )
@@ -223,6 +223,10 @@ class MissionParticipatePage extends StatelessWidget {
                               if (value!.isEmpty){
                                 return null;
                               }
+                              else if(rewardCtrl.text.replaceAll("-", "")!= rewardCtrl.text){
+                                rewardCtrl.clear();
+                                return "숫자만 입력해 주세요";
+                              }
                               // 최대로 걸 수 있는 리워드를 넘었을 때
                               else if(double.parse(value) > limit_bet_reward){
                                 return "최대 ${limit_bet_reward} ${rewardName}까지 걸 수 있습니다";
@@ -237,6 +241,8 @@ class MissionParticipatePage extends StatelessWidget {
                         ),
                       ],
                     ),
+
+                    SizedBox(height: 5.h,),
 
                     // 하임 : 폰트 크기 16 > 15로 변경
 

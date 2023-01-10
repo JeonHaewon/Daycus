@@ -66,78 +66,47 @@ class _ToDeveloperState extends State<ToDeveloper> {
 
     TextStyle _hintStyle = TextStyle(fontSize: 15.sp, color: Colors.grey);
 
-    void _sendEmail(texting) async {
-      final Email email = Email(
-        body: texting,
-        subject: '[DayCus 앱 사용 중 문제가 생겨 문의드립니다]',
-        recipients: [adminEmail],
-        cc: [],
-        bcc: [],
-        attachmentPaths: [],
-        isHTML: false,
-      );
+    general_to_developer() async {
+      if (supportCtrl.text.trim()!='') {
+        //Navigator.pop(context);
+        bool success1 = false; bool success2 = false;
 
-      try {
-        await FlutterEmailSender.send(email);
-        // 하임 : 메일 안갔는데도 완료되었다고 할 때가 있어서 주석처리함.
-        //Fluttertoast.showToast(msg: "메일 전송이 완료되었습니다 !");
-      } catch (error) {
-        String title = toDeveloperCantString+"\n\n${adminEmail}";
-        String message = "";
-        Fluttertoast.showToast(msg: title);
+        // 사진이 있을 때와 없을 때 sql 문을 조정하기 위한 코드
+        if(errorImage==null){errorImageName = null;}
+        else{errorImageName = "'" + errorImageName! + "'";}
+
+        // 'yy/MM/dd - HH:mm:ss'
+        String now = await NowTime("yyyy-MM-dd HH:mm:ss");
+        print(now);
+        print(last_error.replaceAll("'", ""));
+
+        if (errorImage!=null) {
+          success1 = await uploadImage(errorImageName!, "to_developer", sorce!, null, null);
+        } else{success1 = true;
+        }
+
+        // 이미지 업로드에 성공할 시
+        if (success1){
+          success2 = await update_request(
+              "INSERT INTO to_developer (content, error_message, user_email, datetime, error_image) VALUES ('${supportCtrl.text.trim()}', '${last_error.replaceAll("'", "`")}', '${user_data['user_email']}', '${now}', ${errorImageName});",
+              toDeveloperSuccess);
+        }
+
+        // 문의가 완료됨
+        if (success1 && success2){
+          Navigator.pop(context); // 개발자 페이지 나가기
+        } else {
+          Fluttertoast.showToast(msg: "다시 시도해주세요");
+        }
+
+        // 적은 내용이 없을 때
+      } else{
+        Navigator.pop(context);
+        Fluttertoast.showToast(msg: "문의 내용을 입력해주세요");
       }
     }
 
-    Widget toDeveloperBottomSheet = bottomPopWidget(
-        context,
-        // 메일 문의
-          () async {
-            _sendEmail(supportCtrl.text.trim());
-            Navigator.pop(context);
-          },
-        
-        // 일반 문의
-          () async {
-          if (supportCtrl.text.trim()!='') {
-              Navigator.pop(context);
-              bool success1 = false; bool success2 = false;
-              
-              // 사진이 있을 때와 없을 때 sql 문을 조정하기 위한 코드
-              if(errorImage==null){errorImageName = null;}
-              else{errorImageName = "'" + errorImageName! + "'";}
-              
-              // 'yy/MM/dd - HH:mm:ss'
-              String now = await NowTime("yyyy-MM-dd HH:mm:ss");
-              print(now);
-              print(last_error.replaceAll("'", ""));
 
-              if (errorImage!=null) {
-                success1 = await uploadImage(errorImageName!, "to_developer", sorce!, null, null);
-              } else{success1 = true;
-              }
-
-              // 이미지 업로드에 성공할 시
-            if (success1){
-                success2 = await update_request(
-                    "INSERT INTO to_developer (content, error_message, user_email, datetime, error_image) VALUES ('${supportCtrl.text.trim()}', '${last_error.replaceAll("'", "`")}', '${user_data['user_email']}', '${now}', ${errorImageName});",
-                    toDeveloperSuccess);
-              }
-
-              // 문의가 완료됨
-              if (success1 && success2){
-                Navigator.pop(context); // 개발자 페이지 나가기
-              } else {
-                Fluttertoast.showToast(msg: "다시 시도해주세요");
-              }
-
-              // 적은 내용이 없을 때
-            } else{
-              Navigator.pop(context);
-              Fluttertoast.showToast(msg: "문의 내용을 입력해주세요");
-            }
-        },
-        '메일 문의', '일반 문의',
-        Icons.info_rounded, Icons.info_rounded);
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -324,7 +293,8 @@ class _ToDeveloperState extends State<ToDeveloper> {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: () {
-                showModalBottomSheet(context: context, builder: ((builder) => toDeveloperBottomSheet));
+                general_to_developer();
+                //showModalBottomSheet(context: context, builder: ((builder) => toDeveloperBottomSheet));
               }, child: Text('문의하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],

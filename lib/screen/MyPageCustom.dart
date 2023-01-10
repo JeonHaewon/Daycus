@@ -1,8 +1,10 @@
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:daycus/screen/myPage/settings/Settings.dart';
@@ -11,6 +13,8 @@ import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/screen/myPage/ask/ToDeveloper.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:math';
+
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 
@@ -24,6 +28,30 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  // 사용자 > 개발자 gmail 이메일 보내기
+  void _sendEmail(texting) async {
+    final Email email = Email(
+      body: texting,
+      subject: '[DayCus 앱 사용 중 문제가 생겨 문의드립니다]',
+      recipients: [adminEmail],
+      cc: [],
+      bcc: [],
+      attachmentPaths: [],
+      isHTML: false,
+    );
+
+    try {
+      await FlutterEmailSender.send(email);
+      // 하임 : 메일 안갔는데도 완료되었다고 할 때가 있어서 주석처리함.
+      //Fluttertoast.showToast(msg: "메일 전송이 완료되었습니다 !");
+    } catch (error) {
+      String title = toDeveloperCantString+"\n\n${adminEmail}";
+      String message = "";
+      Fluttertoast.showToast(msg: title);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -33,6 +61,27 @@ class _MyPageState extends State<MyPage> {
       await LoginAsyncMethod(MyPage.storage, null, true);
       setState(() { });
     };
+
+    Widget toDeveloperBottomSheet = bottomPopWidget(
+        context,
+        // 메일 문의
+            () async {
+          _sendEmail(" ");
+          Navigator.pop(context);
+        },
+
+        // 일반 문의
+            () async {
+          // 문의 선택 창만 닫기
+              Navigator.pop(context);
+              
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ToDeveloper()),
+              );
+        },
+        '메일 문의', '일반 문의',
+        Icons.email, Icons.info_rounded);
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -130,7 +179,7 @@ class _MyPageState extends State<MyPage> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
-                                        Text("n일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+                                        Text("${user_data['attendance']}일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
                                       ],
                                     ),
 
@@ -256,7 +305,7 @@ class _MyPageState extends State<MyPage> {
                       // ), //주간랭킹
 
                       MyPageInformation(title: "${rewardName}",
-                          content: "${user_data['reward']} ${rewardName}"),
+                          content: "${double.parse(user_data['reward']).toStringAsFixed(1)} ${rewardName}"),
 
                       SizedBox(height: 15.h,),
 
@@ -355,10 +404,8 @@ class _MyPageState extends State<MyPage> {
 
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => ToDeveloper()),
-                          );
+                          showModalBottomSheet(context: context, builder: ((builder) => toDeveloperBottomSheet));
+
                         },
 
                         child: Container(

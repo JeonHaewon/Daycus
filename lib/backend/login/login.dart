@@ -31,10 +31,25 @@ userLogin(String email, String password, bool reload) async{
         user_data = resLogin['userData'];
         print("{$user_data}");
 
-        // 첫 로그인 시에만 인사해줌
+        // 첫 로그인 시에만 인사해줌 - 앱을 나갔다 들어올때도 아래가 실행됨.
         if (reload==false && user_data['user_state']!='withdrawing'){
           DateTime today = await NowTime(null);
-          update_request("UPDATE user_table SET last_login='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
+          print("today : ${today.toString().substring(0,10)}");
+
+          if (user_data['last_login']!=null){
+            if(user_data['last_login'].substring(0,10) != today.toString().substring(0,10)){
+              // 추가 로그인 일수 플러스
+              update_request(
+                  "UPDATE user_table SET attendance = attendance + 1 where user_email = '${user_data['user_email']}'", null);
+              user_data['attendance'] = (int.parse(user_data['attendance'])+1).toString();
+              print("오늘 처음으로 출석하셨네요 !");
+            }
+          }
+
+          // 마지막 로그인 업데이트
+          update_request(
+              "UPDATE user_table SET last_login='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
+
 
           Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
           controller.currentBottomNavItemIndex.value = 2;
@@ -102,6 +117,8 @@ afterLogin() async {
 
 }
 
+
+
 // keep login - 유저 정보 들고오기
 LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
 
@@ -144,7 +161,7 @@ LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
   }
 }
 
-
+// 현재 레벨에서 다음 레벨까지 필요한 리워드를 받아옴
 level_update() async {
   if (leveling==null){
     leveling = await select_request("SELECT * from leveling", null, true);
