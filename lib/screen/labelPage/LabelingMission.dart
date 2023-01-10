@@ -295,24 +295,34 @@ class _LabelingMissionState extends State<LabelingMission> {
                   // 하임 > 해원 : 미션 정책 위에 미션 설명도 예쁘게 넣어주면 좋을듯?
 
                   Container(
-                    width: 55.w,
-                    height: 20.h,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+                    width: 290.w,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("인증 방법",style: TextStyle(color: Colors.indigoAccent, fontSize: 10.sp, fontFamily: 'korean') ),
+                        Container(
+                          width: 55.w,
+                          height: 20.h,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[400],
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("인증 방법",style: TextStyle(color: Colors.indigoAccent, fontSize: 10.sp, fontFamily: 'korean') ),
+                            ],
+                          ),
+                        ),
+
+                        _sizedBox,
+
+                        Text("${widget.content}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                       ],
                     ),
                   ),
 
-                  _sizedBox,
-
-                  Text("${widget.content}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
 
 
                   // ListView.builder(

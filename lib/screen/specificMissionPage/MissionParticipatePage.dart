@@ -123,6 +123,25 @@ class MissionParticipatePage extends StatelessWidget {
                                   ],
                                 ),
 
+                                SizedBox(height: 12.h,),
+
+                                Container(
+                                  width: 385.w,
+                                  height: 20.h,
+                                  decoration: BoxDecoration(
+                                    color: Colors.indigo[50],
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text('미션 종료까지 8일 남았습니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean', ) ),
+
+                                    ],
+                                  ),
+                                ),
+
                               ],
                             ),
                           ),

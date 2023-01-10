@@ -14,8 +14,6 @@ class RecordingPage extends StatefulWidget {
 
 class _RecordingPageState extends State<RecordingPage> {
 
-
-  var f = NumberFormat('###,###,###,###');
   @override
   Widget build(BuildContext context) {
 
@@ -63,7 +61,6 @@ class _RecordingPageState extends State<RecordingPage> {
             Text("00:00:28",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 14.sp) ),
             SizedBox(height: 5.h,),
 
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -95,7 +92,6 @@ class _RecordingPageState extends State<RecordingPage> {
                     ),
                   ),
                 ),
-
               ],
             ),
 
@@ -137,14 +133,10 @@ class _RecordingPageState extends State<RecordingPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("오늘의 미션 인증하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12.sp) ),
-
                   ],
                 ),
               ),
             ),
-
-
-
 
 
           ],
