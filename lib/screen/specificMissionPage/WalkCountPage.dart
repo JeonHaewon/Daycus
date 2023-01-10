@@ -25,8 +25,7 @@ class WalkCountPage extends StatefulWidget {
 class _WalkCountPageState extends State<WalkCountPage> {
 
   late Stream<StepCount> _stepCountStream;
-  late Stream<PedestrianStatus> _pedestrianStatusStream;
-  String _status = '?', _steps = '?';
+  String _steps = '0';
 
   @override
   void initState() {
@@ -59,20 +58,6 @@ class _WalkCountPageState extends State<WalkCountPage> {
     });
   }
 
-  void onPedestrianStatusChanged(PedestrianStatus event) {
-    print(event);
-    setState(() {
-      _status = event.status;
-    });
-  }
-
-  void onPedestrianStatusError(error) {
-    print('onPedestrianStatusError: $error');
-    setState(() {
-      _status = 'Pedestrian Status not available';
-    });
-    print(_status);
-  }
 
   void onStepCountError(error) {
     print('onStepCountError: $error');
@@ -83,10 +68,6 @@ class _WalkCountPageState extends State<WalkCountPage> {
 
   void initPlatformState () async {
     if (await Permission.activityRecognition.request().isGranted) {
-      _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
-      _pedestrianStatusStream
-          .listen(onPedestrianStatusChanged)
-          .onError(onPedestrianStatusError);
 
       _stepCountStream = Pedometer.stepCountStream;
       _stepCountStream.listen(onStepCount).onError(onStepCountError);
@@ -164,7 +145,7 @@ class _WalkCountPageState extends State<WalkCountPage> {
                                   ),
                                   SizedBox(height: 2.h,),
 
-                                  Text("$_steps걸음",
+                                  Text("${_steps.replaceAll(RegExp(r'[^0-9]'),'')}걸음",
                                       style: TextStyle(fontSize: 24.sp, fontFamily: 'korean',fontWeight: FontWeight.bold, color: AppColor.happyblue )
                                   ),
                                   SizedBox(height: 60.h,),
@@ -173,7 +154,7 @@ class _WalkCountPageState extends State<WalkCountPage> {
                                       Text("미션 성공까지 ",
                                           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
                                       ),
-                                      Text("${(10000-int.parse(_steps)).toString()}",
+                                      Text("${(10000-int.parse(_steps.replaceAll(RegExp(r'[^0-9]'),''))).toString()}",
                                           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold )
                                       ),
                                       Text("걸음",
