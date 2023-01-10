@@ -20,6 +20,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:daycus/widget/RankingBar.dart';
 
 DateTime? currentBackPressTime;
 
@@ -229,8 +230,136 @@ class _HomePageState extends State<HomePage> {
 
               
               HomePageUserInfoBar(leftContent: "나의 ${rewardName}", rightContent: "${double.parse(user_data['reward']).toStringAsFixed(1)} ${rewardName}",icon: Icons.control_point_duplicate,),
+
+
+              // SizedBox(height: 10.h,),
+              // HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등", icon: Icons.people),
+
+
               SizedBox(height: 10.h,),
-              HomePageUserInfoBar(leftContent: "이번주 랭킹", rightContent: "${user_data['Ranking'] ?? "-"} 등", icon: Icons.people),
+              Column(
+                children: [
+                  Container(
+                    width: 360.w,
+                    height:250.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white60,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 30.w),
+                    child: Column(
+                      children: [
+
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10.h, 0, 5.h),
+                          child: Container(
+                            width: 310.w,
+                            height: 30.h,
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+
+                                Text("주간랭킹",style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: 'korean') ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        Container(
+                          width : 300.w,
+                          height: 20.h,
+                          decoration: BoxDecoration(
+                            color: Colors.blueGrey[100],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50.w,
+                                alignment: Alignment.center,
+                                child: Text("순위", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, )),
+                              ),
+
+                              SizedBox(width: 4.w,),
+
+                              Container(
+                                width: 135.w,
+                                alignment: Alignment.center,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child:Text("닉네임", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, ),),
+                                ),
+                              ),
+
+                              SizedBox(width: 8.w,),
+
+                              Container(
+                                width: 100.w,
+                                alignment: Alignment.center,
+                                child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child:Row(
+                                      children: [
+
+                                        Text("${rewardName}", style: TextStyle( fontWeight: FontWeight.bold, fontSize: 9.sp,),),
+                                      ],
+                                    )
+                                ),
+                              ),
+
+                            ],
+
+                          ),
+                        ),
+                        SizedBox(height: 3.h,),
+
+                        Container(
+                          width : 330.w,
+                          height: 170.h,
+                          child: Scrollbar(
+                            isAlwaysShown: true,
+                            thickness: 8,
+                            radius: Radius.circular(10),
+                            //scrollbarOrientation: ScrollbarOrientation.right,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  RankingBar(1, "aaaaaaaaa", 105450),
+                                  RankingBar(2, "ggggg", 100000),
+                                  RankingBar(3, "bbbbbbb", 9800),
+                                  RankingBar(4, "dddddd", 1030),
+                                  RankingBar(5, "dfdfdfdf", 1030),
+                                  RankingBar(6, "dfdfdf3", 930),
+                                  RankingBar(7, "dfdge", 90),
+                                  RankingBar(8, "3t3t", 10),
+                                  RankingBar(9, "가가가가", 9),
+                                  RankingBar(10, "2145", 8),
+
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 10.h,),
+
+                      ],
+                    ),
+                  ),
+
+
+
+                ],
+
+
+              ),
+
+
+
 
               Container(
                 child: Column(
