@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UserDatabase.dart';
@@ -596,6 +597,15 @@ class _AdminScreenState extends State<AdminScreen> {
                 onPressed: (){
                   change_to_done();
                 },
+              ),
+              AdminButton(
+                title: "리뷰 슛 ~",
+                onPressed: () async {
+                  final InAppReview inAppReview = InAppReview.instance;
+
+                  if (await inAppReview.isAvailable()) {
+                  inAppReview.requestReview();
+                  }},
               ),
               AdminButton(
                 title: "녹음 미션",

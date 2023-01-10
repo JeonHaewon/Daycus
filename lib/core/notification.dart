@@ -27,7 +27,6 @@ showNotification() async {
   var androidDetails = AndroidNotificationDetails(
     '유니크한 알림 채널 ID',
     '알림종류 설명',
-    '',
     priority: Priority.high,
     importance: Importance.max,
     color: Color.fromARGB(255, 255, 0, 0),
@@ -61,7 +60,6 @@ time_showNotification() async {
   var androidDetails = const AndroidNotificationDetails(
     '유니크한 알림 ID',
     '알림종류 설명',
-    '',
     priority: Priority.high,
     importance: Importance.max,
     color: Color.fromARGB(255, 255, 0, 0)

@@ -10,6 +10,7 @@ import 'package:daycus/widget/SpecificMissionToPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
@@ -18,6 +19,25 @@ import 'package:daycus/screen/NoticePage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+DateTime? currentBackPressTime;
+
+onWillPop() {
+  DateTime now = DateTime.now();
+  if (currentBackPressTime == null ||
+      now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+    currentBackPressTime = now;
+    Fluttertoast.showToast(
+        msg: "뒤로 버튼을 한번 더 누르시면 종료됩니다.",
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: const Color(0xff6E6E6E),
+        fontSize: 20,
+        toastLength: Toast.LENGTH_SHORT);
+    return false;
+  }
+  return true;
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -49,35 +69,40 @@ class _HomePageState extends State<HomePage> {
 
 
 
-    return Scaffold(
-      backgroundColor: AppColor.background,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('DAYCUS',
-            style: TextStyle(color: Colors.black, fontSize: 25.sp)),
-        actions: [
+    return WillPopScope(
+        onWillPop: () async {
+          bool result = onWillPop();
+          return await Future.value(result);
+        },
+        child: Scaffold(
+        backgroundColor: AppColor.background,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text('DAYCUS',
+              style: TextStyle(color: Colors.black, fontSize: 25.sp)),
+          actions: [
           //IconButton(icon: Icon(Icons.search), onPressed: null),
-          IconButton(icon: Icon(Icons.notifications),color: Colors.grey,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => NoticePage()),
-                );
-              }
-          ),
+            IconButton(icon: Icon(Icons.notifications),color: Colors.grey,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => NoticePage()),
+                  );
+                }
+            ),
 
-        ],
-        automaticallyImplyLeading: false,
-      ),
+          ],
+          automaticallyImplyLeading: false,
+        ),
 
       //
 
-      body: RefreshIndicator(
-        color: AppColor.happyblue,
-        onRefresh: refresh,
-        child: SingleChildScrollView(
-          primary: true,
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        body: RefreshIndicator(
+          color: AppColor.happyblue,
+          onRefresh: refresh,
+          child: SingleChildScrollView(
+            primary: true,
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
 
 
           child: Column(
@@ -403,9 +428,11 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+
       ),
 
 
+    )
     );
 
 

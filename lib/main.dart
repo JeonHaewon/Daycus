@@ -14,25 +14,22 @@ FirebaseMessaging messaging = FirebaseMessaging.instance;
 FlutterLocalNotificationsPlugin fltNotification = FlutterLocalNotificationsPlugin();
 
 void pushFCMtoken() async {
-  String token=await messaging.getToken();
+  String? token=await messaging.getToken();
   print(token);
 }
 
 void initMessaging() {
   var androiInit = AndroidInitializationSettings(
       '@mipmap/ic_launcher'); //for logo
-  var iosInit = IOSInitializationSettings();
-  var initSetting = InitializationSettings(android: androiInit, iOS:
-  iosInit);
+  var initSetting = InitializationSettings(android: androiInit,);
   fltNotification = FlutterLocalNotificationsPlugin();
   fltNotification.initialize(initSetting);
   var androidDetails =
-  AndroidNotificationDetails('1', 'channelName', 'channel Description');
-  var iosDetails = IOSNotificationDetails();
+  AndroidNotificationDetails('1', 'channelName',);
   var generalNotificationDetails =
-  NotificationDetails(android: androidDetails, iOS: iosDetails);
+  NotificationDetails(android: androidDetails,);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification notification = message.notification;
+    RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
       fltNotification.show(
