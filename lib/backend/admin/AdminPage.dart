@@ -23,6 +23,8 @@ import 'dart:typed_data';
 import '../../screen/LoginPageCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/screen/specificMissionPage/RecordingPage.dart';
+
 var admobBannerId = 'ca-app-pub-3339242274230109/7848999030';
 
 // create an instance
@@ -595,6 +597,17 @@ class _AdminScreenState extends State<AdminScreen> {
                   change_to_done();
                 },
               ),
+              AdminButton(
+                title: "녹음 미션",
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => RecordingPage()),
+                  );
+
+                },
+              ),
+
               Center(
                 child: Container(
                   child: AdmobBanner(
