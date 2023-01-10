@@ -415,6 +415,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
 
                   //------만보기 필요한 미션
+                  if (widget.mission_data['certify_tool']=='pedometer')
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -423,7 +424,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => WalkCountPage()),
+                            MaterialPageRoute(builder: (_)
+                            => WalkCountPage(walkNumber: int.parse(widget.mission_data['condition']),)),
                           );
                         },
                         child: Padding(

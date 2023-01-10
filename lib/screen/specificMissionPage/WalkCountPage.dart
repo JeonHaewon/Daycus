@@ -16,7 +16,12 @@ bool isupgrade = false;
 List<int> dap = [];
 
 class WalkCountPage extends StatefulWidget {
-  const WalkCountPage({Key? key}) : super(key: key);
+  const WalkCountPage({
+    Key? key,
+    required this.walkNumber,
+  }) : super(key: key);
+
+  final int walkNumber;
 
   @override
   State<WalkCountPage> createState() => _WalkCountPageState();
@@ -154,7 +159,7 @@ class _WalkCountPageState extends State<WalkCountPage> {
                                       Text("미션 성공까지 ",
                                           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
                                       ),
-                                      Text("${(10000-int.parse(_steps.replaceAll(RegExp(r'[^0-9]'),''))).toString()}",
+                                      Text("${(widget.walkNumber-int.parse(_steps.replaceAll(RegExp(r'[^0-9]'),''))).toString()}",
                                           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold )
                                       ),
                                       Text("걸음",
