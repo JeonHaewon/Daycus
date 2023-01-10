@@ -1,12 +1,102 @@
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+var prefs;
+var curr;
+int suc = 0;
+int increased = 0;
+var really;
+bool isupgrade = false;
+List<int> dap = [];
+
+class WalkCountPage extends StatefulWidget {
+  const WalkCountPage({Key? key}) : super(key: key);
+
+  @override
+  State<WalkCountPage> createState() => _WalkCountPageState();
+}
+
+class _WalkCountPageState extends State<WalkCountPage> {
+
+  late Stream<StepCount> _stepCountStream;
+  late Stream<PedestrianStatus> _pedestrianStatusStream;
+  String _status = '?', _steps = '?';
+
+  @override
+  void initState() {
+    super.initState();
+    // selecting_from_stroage();
+    initPlatformState();
+  }
+
+  updating_info(StepCount event) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('lit2') == null){
+      await prefs.setStringList('lit2', [event.steps.toString()]);
+    }
+    curr = prefs.getStringList('lit2');
+    return curr[0];
+  }
 
 
+  Future<void> onStepCount(StepCount event) async {
+    print(event);
+    if (isupgrade==false){
+      really = await updating_info(event);
+      Fluttertoast.showToast(msg: "만보기 시작");
+      isupgrade = true;
+    }
+    setState(() {
+      _steps = (event.steps - int.parse(really)).toString();
+      // _steps = pedometer_count.toString();
+      // pedometer_count += 1;
+    });
+  }
 
-class WalkCount extends StatelessWidget {
-  WalkCount({Key? key}) : super(key: key);
+  void onPedestrianStatusChanged(PedestrianStatus event) {
+    print(event);
+    setState(() {
+      _status = event.status;
+    });
+  }
+
+  void onPedestrianStatusError(error) {
+    print('onPedestrianStatusError: $error');
+    setState(() {
+      _status = 'Pedestrian Status not available';
+    });
+    print(_status);
+  }
+
+  void onStepCountError(error) {
+    print('onStepCountError: $error');
+    setState(() {
+      _steps = 'Step Count not available';
+    });
+  }
+
+  void initPlatformState () async {
+    if (await Permission.activityRecognition.request().isGranted) {
+      _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+      _pedestrianStatusStream
+          .listen(onPedestrianStatusChanged)
+          .onError(onPedestrianStatusError);
+
+      _stepCountStream = Pedometer.stepCountStream;
+      _stepCountStream.listen(onStepCount).onError(onStepCountError);
+    }
+    if (!mounted) return;
+  }
+
+  void dispose(){
+    super.dispose();
+  }
 
   var f = NumberFormat('###,###,###,###');
   @override
@@ -74,7 +164,7 @@ class WalkCount extends StatelessWidget {
                                   ),
                                   SizedBox(height: 2.h,),
 
-                                  Text("${f.format(50000)}걸음",
+                                  Text("$_steps걸음",
                                       style: TextStyle(fontSize: 24.sp, fontFamily: 'korean',fontWeight: FontWeight.bold, color: AppColor.happyblue )
                                   ),
                                   SizedBox(height: 60.h,),
@@ -83,7 +173,7 @@ class WalkCount extends StatelessWidget {
                                       Text("미션 성공까지 ",
                                           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
                                       ),
-                                      Text("${f.format(5000)}",
+                                      Text("${(10000-int.parse(_steps)).toString()}",
                                           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold )
                                       ),
                                       Text("걸음",
@@ -123,4 +213,5 @@ class WalkCount extends StatelessWidget {
       ),
     );
   }
+
 }

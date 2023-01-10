@@ -57,7 +57,6 @@ class _PedometerPageState extends State<PedometerPage> {
     print(event);
     if (isupgrade==false){
       really = await updating_info(event);
-      Fluttertoast.showToast(msg: "만보기 시작");
       isupgrade = true;
     }
     setState(() {

@@ -402,7 +402,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => WalkCount()),
+                            MaterialPageRoute(builder: (_) => WalkCountPage()),
                           );
                         },
                         child: Padding(
