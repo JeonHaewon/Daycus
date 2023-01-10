@@ -38,7 +38,7 @@ class _RecordingPageState extends State<RecordingPage> {
             SizedBox(height: 60.h,),
 
             Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(60),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
@@ -52,9 +52,10 @@ class _RecordingPageState extends State<RecordingPage> {
                 ),
               ),
               child: CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.white,
-                backgroundImage: AssetImage("assets/image/character2.png"),
+                radius: 40,
+                backgroundColor: Color(0xff474AA1),
+                child: Icon(Icons.record_voice_over_outlined, color: Colors.grey[100], size: 30.w,),
+                //backgroundImage: AssetImage("assets/image/character2.png"),
               ),
             ),
 
@@ -98,13 +99,35 @@ class _RecordingPageState extends State<RecordingPage> {
               ],
             ),
 
-            SizedBox(height: 40.h,),
+            SizedBox(height: 35.h,),
 
             InkWell(
               onTap: () {},
               child: Container(
-                width: 100.w,
-                height: 70.h,
+                width: 150.w,
+                height: 50.h,
+                decoration: BoxDecoration(
+                  color: Colors.grey[350],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("다시 듣기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.grey[600], fontSize: 12.sp) ),
+
+                  ],
+                ),
+              ),
+            ),
+
+            SizedBox(height: 10.h,),
+
+            InkWell(
+              onTap: () {},
+              child: Container(
+                width: 150.w,
+                height: 50.h,
                 decoration: BoxDecoration(
                   color: AppColor.happyblue,
                   borderRadius: BorderRadius.circular(20),
@@ -113,8 +136,7 @@ class _RecordingPageState extends State<RecordingPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("오늘의 미션",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12.sp) ),
-                    Text("인증하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12.sp) ),
+                    Text("오늘의 미션 인증하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12.sp) ),
 
                   ],
                 ),
