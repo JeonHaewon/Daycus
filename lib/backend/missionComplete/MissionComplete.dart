@@ -83,16 +83,18 @@ mission_complete(int todayBlockCnt, do_mission_data,
               // 환급 리워드가 있다면, 리워드 업데이트
               if (returnReward > 0) {
                 success[2] = await update_request(
-                    "UPDATE user_table SET reward = reward + ${returnReward
-                        .toStringAsFixed(
-                        1)} where user_email = '${user_email}'",
-                    null);
-              }
+                    "UPDATE user_table SET reward = reward + ${returnReward.toStringAsFixed(1)} where user_email = '${user_email}'",
+                    null);}
             }
           }
 
           // 모든 프로세스 종료 시 나갈 수 있음.
           if (success[0] && success[1] && success[2]) {
+
+            // 랭킹 업그레이드
+            update_request("call update_ranking();", null);
+            // 레벨 업데이트
+            update_request("call update_level5();", null);
 
             // 데이터를 다 업데이트 한 후에 페이지를 다시 불러옴
             await afterLogin();

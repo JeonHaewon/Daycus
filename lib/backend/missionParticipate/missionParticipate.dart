@@ -1,3 +1,4 @@
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
@@ -36,26 +37,35 @@ missionParticipate(mission_id, user_email, bet_reward) async {
 }
 
 minus_reward(String bet_reward) async {
+  // try {
 
-  try {
-    var update_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "UPDATE user_table SET reward = '${(double.parse(user_data['reward'])-double.parse(bet_reward)).toString()}' WHERE user_email = '${user_data['user_email']}'",
-    });
+    update_request(
+        "UPDATE user_table SET reward = '${(double.parse(user_data['reward'])-double.parse(bet_reward)).toString()}' WHERE user_email = '${user_data['user_email']}'",
+        null);
 
-    if (update_res.statusCode == 200 ) {
-      var resMission = jsonDecode(update_res.body);
-      // print(resMission);
-      if (resMission['success'] == true) {
-        user_data['reward'] = (double.parse(user_data['reward'])-double.parse(bet_reward)).toString();
-      } else {
-        print("에러발생");
-        print(resMission);
-        Fluttertoast.showToast(msg: "다시 시도해주세요");
-      }
+    // 랭킹 업그레이드
+    update_request("call update_ranking();", null);
+    // 레벨 업데이트
+    update_request("call update_level5();", null);
 
-    }
-  } on Exception catch (e) {
-    print("에러발생");
-    Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
-  }
+  //   var update_res = await http.post(Uri.parse(API.update), body: {
+  //     'update_sql': "UPDATE user_table SET reward = '${(double.parse(user_data['reward'])-double.parse(bet_reward)).toString()}' WHERE user_email = '${user_data['user_email']}'",
+  //   });
+  //
+  //   if (update_res.statusCode == 200 ) {
+  //     var resMission = jsonDecode(update_res.body);
+  //     // print(resMission);
+  //     if (resMission['success'] == true) {
+  //       user_data['reward'] = (double.parse(user_data['reward'])-double.parse(bet_reward)).toString();
+  //     } else {
+  //       print("에러발생");
+  //       print(resMission);
+  //       Fluttertoast.showToast(msg: "다시 시도해주세요");
+  //     }
+  //
+  //   }
+  // } on Exception catch (e) {
+  //   print("에러발생");
+  //   Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+  // }
 }

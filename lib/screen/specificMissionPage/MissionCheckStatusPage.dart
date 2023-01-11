@@ -83,7 +83,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       todayBlockCnt,
     );
 
-    do_mission[do_i]["d$todayBlockCnt"] = imageName;
+    do_mission[do_i]["d$todayBlockCnt"] = imageReNamed;
     setState(() { });
     // result 개수 다시 업데이트
     cnt_done();
