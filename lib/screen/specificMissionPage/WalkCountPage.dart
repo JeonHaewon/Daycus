@@ -7,6 +7,8 @@ import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../backend/UserDatabase.dart';
+
 var prefs;
 var curr;
 int suc = 0;
@@ -14,6 +16,7 @@ int increased = 0;
 var really;
 bool isupgrade = false;
 List<int> dap = [];
+
 
 class WalkCountPage extends StatefulWidget {
   const WalkCountPage({
@@ -43,19 +46,23 @@ class _WalkCountPageState extends State<WalkCountPage> {
 
   updating_info(StepCount event) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('lit2') == null){
-      await prefs.setStringList('lit2', [event.steps.toString()]);
+    if (prefs.getStringList('${user_data['user_email']}') == null){
+      await prefs.setStringList('${user_data['user_email']}', [event.steps.toString()]);
     }
-    curr = prefs.getStringList('lit2');
+    curr = prefs.getStringList('${user_data['user_email']}');
     return curr[0];
+  }
+
+  get_data (StepCount event) async {
+    really = await updating_info(event);
   }
 
 
   Future<void> onStepCount(StepCount event) async {
     print(event);
     if (isupgrade==false){
-      really = await updating_info(event);
-      //Fluttertoast.showToast(msg: "만보기 시작");
+      get_data(event);
+      Fluttertoast.showToast(msg: "만보기 시작");
       isupgrade = true;
     }
     setState(() {

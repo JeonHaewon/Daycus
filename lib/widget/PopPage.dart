@@ -2,7 +2,7 @@ import 'package:daycus/core/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-//late ScrollController _scrollController = ScrollController();
+late ScrollController _scrollController = ScrollController();
 SizedBox _sizedBox = SizedBox(height: 10,);
 
 Future<dynamic> PopPage(String? title, BuildContext context, Widget content,

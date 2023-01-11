@@ -2,6 +2,7 @@ import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
@@ -21,6 +22,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/widget/RankingBar.dart';
+
+late ScrollController _scrollController = ScrollController();
 
 DateTime? currentBackPressTime;
 
@@ -49,8 +52,36 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch(state){
+      case AppLifecycleState.resumed:
+        break;
+      case AppLifecycleState.inactive:
+        time_showNotification();
+        break;
+      case AppLifecycleState.detached:
+        time_showNotification();
+        break;
+      case AppLifecycleState.paused:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -321,6 +352,7 @@ class _HomePageState extends State<HomePage> {
                           width : 330.w,
                           height: 170.h,
                           child: Scrollbar(
+                            controller: _scrollController,
                             isAlwaysShown: true,
                             thickness: 8,
                             radius: Radius.circular(10),
@@ -331,6 +363,7 @@ class _HomePageState extends State<HomePage> {
                                 return false;
                               },
                               child: SingleChildScrollView(
+                                controller: _scrollController,
                                 child: Column(
                                   children: [
 
