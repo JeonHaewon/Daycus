@@ -94,6 +94,13 @@ class KeepLoginPage extends State<LoginPageCustom> {
                         textInputAction: TextInputAction.next,
                         controller: emailCtrl,
 
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
+                        ),
+                        cursorColor: AppColor.happyblue,
+
                         // 이메일 검증
                         validator: (String? value){
                           if (value!.isEmpty) {// == null or isEmpty
@@ -114,6 +121,14 @@ class KeepLoginPage extends State<LoginPageCustom> {
                       child : TextFormField(
                         textInputAction: TextInputAction.done,
                         controller: passwordCtrl,
+
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
+                        ),
+                        cursorColor: AppColor.happyblue,
+
                         obscureText: true,
                         validator: (String? value){
                           // 비밀번호 틀렸을 때 여기서 빨간색으로 나타낼 수 있었음 좋겠는뎅..

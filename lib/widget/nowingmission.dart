@@ -139,25 +139,34 @@ class NowMissionButton extends StatelessWidget {
                             Row(
                              children: [
 
-                               Container(
-                                 width: ((percent).w)*1.5,
-                                 height: 8.h,
-                                 decoration: BoxDecoration(
-                                   color: AppColor.happyblue,
-                                 ),
+                               Stack(
+                                 children: [
+
+                                   Container(
+                                     width: (100.w)*1.45,
+                                     height: 8.h,
+                                     decoration: BoxDecoration(
+                                       color: Colors.grey[300],
+                                       borderRadius: BorderRadius.circular(10),
+                                     ),
+
+                                   ),
+
+                                   Container(
+                                     width: ((percent).w)*1.45,
+                                     height: 8.h,
+                                     decoration: BoxDecoration(
+                                       color: AppColor.happyblue,
+                                       borderRadius: BorderRadius.circular(10),
+                                     ),
+                                   ),
+
+                                 ],
 
                                ),
 
-                               Container(
-                                 width: (100.w - (percent).w)*1.5,
-                                 height: 8.h,
-                                 decoration: BoxDecoration(
-                                   color: Colors.grey[300],
-                                 ),
 
-                               ),
-
-                               SizedBox(width: 8.w),
+                               SizedBox(width: 9.w),
 
                                Container(
                                  child:  Container(

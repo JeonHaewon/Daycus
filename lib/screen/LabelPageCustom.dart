@@ -58,7 +58,7 @@ class _LabelPageState extends State<LabelPage> {
             },
 
             child: Container(
-                padding: EdgeInsets.all(12.sp),
+                padding: EdgeInsets.all(14.sp),
                 child: (profileImage==null)
                 // 고른 프로필 사진이 없을 때
                     ? (user_data['profile']==null || downloadProfileImage==null)

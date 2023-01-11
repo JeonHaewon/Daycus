@@ -105,11 +105,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               },
 
               child: Container(
-                  padding: EdgeInsets.all(12.sp),
+                  padding: EdgeInsets.all(14.sp),
                   child: (profileImage==null)
                   // 고른 프로필 사진이 없을 때
                       ? (user_data['profile']==null || downloadProfileImage==null)
-                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
+                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
                       : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
                       : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
               ),
@@ -201,21 +201,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                       // 레벨 바
                                       Row(
                                         children: [
-                                          Container(
-                                            width: (164.w * lv_percent),
-                                            height: 12.h,
-                                            decoration: BoxDecoration(
-                                              color: AppColor.happyblue,
-                                            ),
+                                          Stack(
+                                            children: [
+
+                                              Container(
+                                                width: 164.w,
+                                                height: 12.h,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[400],
+                                                    borderRadius: BorderRadius.circular(10)
+                                                ),
+                                              ),
+
+                                              Container(
+                                                width: (164.w * lv_percent),
+                                                height: 12.h,
+                                                decoration: BoxDecoration(
+                                                    color: AppColor.happyblue,
+                                                    borderRadius: BorderRadius.circular(10)
+                                                ),
+                                              ),
+
+                                            ],
                                           ),
 
-                                          Container(
-                                            width: (164.w * (1-lv_percent)),
-                                            height: 12.h,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[400],
-                                            ),
-                                          ),
                                         ],
                                       ),
 

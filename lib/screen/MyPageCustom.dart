@@ -120,7 +120,7 @@ class _MyPageState extends State<MyPage> {
             },
 
             child: Container(
-                padding: EdgeInsets.all(12.sp),
+                padding: EdgeInsets.all(14.sp),
                 child: (profileImage==null)
                 // 고른 프로필 사진이 없을 때
                     ? (user_data['profile']==null || downloadProfileImage==null)
@@ -350,6 +350,8 @@ class _MyPageState extends State<MyPage> {
                           ],
                         ),
                       ), //주간랭킹
+
+                      SizedBox(height: 15.h,),
 
                       MyPageInformation(title: "${rewardName}",
                           content: "${double.parse(user_data['reward']).toStringAsFixed(1)} ${rewardName}"),
