@@ -95,7 +95,8 @@ keepLogin (name, email, password, storage) async {
 afterLogin() async {
   level_update();
 
-  await import_ranking();
+  // 검토 필요
+  import_ranking();
 
   print("로그인에 성공하였습니다.");
 
