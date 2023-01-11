@@ -9,6 +9,8 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/widget/NowNoMission.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:math';
+import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 
 
 
@@ -51,6 +53,27 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                   MaterialPageRoute(builder: (_) => NoticePage()),
                 );
               }),
+
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PrivateSettings()),
+              );
+            },
+
+            child: Container(
+                padding: EdgeInsets.all(12.sp),
+                child: (profileImage==null)
+                // 고른 프로필 사진이 없을 때
+                    ? (user_data['profile']==null || downloadProfileImage==null)
+                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
+                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                    : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+            ),
+          ),
+
+
 
         ],
         automaticallyImplyLeading: false,

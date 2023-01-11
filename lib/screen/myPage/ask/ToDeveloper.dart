@@ -136,50 +136,50 @@ class _ToDeveloperState extends State<ToDeveloper> {
                     alignment: Alignment.centerLeft,
                   ),
 
-                  SizedBox(height: 20.h,),
 
 
+                  //SizedBox(height: 20.h,),
 
-                  Container(
-                    width: 400.w,
-                    height: 83.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        Container(
-                          padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-
-                              Text("문의 종류",
-                                  style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(height: 5.h,),
-
-                              Text("• 메일 문의 : 답변을 받아야 하는 문의를 보내주세요",
-                                  style: TextStyle(fontSize: 10.sp)),
-                              Text("• 일반 문의 : 답변을 받지 않아도 되는 문의를 보내주세요(오류 신고 등)",
-                                  style: TextStyle(fontSize: 10.sp)),
-
-
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   width: 400.w,
+                  //   height: 83.h,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: Colors.grey.withOpacity(0.1),
+                  //         spreadRadius: 5,
+                  //         blurRadius: 7,
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //
+                  //       Container(
+                  //         padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
+                  //         child: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //
+                  //             Text("문의 종류",
+                  //                 style: TextStyle(fontWeight: FontWeight.bold)),
+                  //             SizedBox(height: 5.h,),
+                  //
+                  //             Text("• 메일 문의 : 답변을 받아야 하는 문의를 보내주세요",
+                  //                 style: TextStyle(fontSize: 10.sp)),
+                  //             Text("• 일반 문의 : 답변을 받지 않아도 되는 문의를 보내주세요(오류 신고 등)",
+                  //                 style: TextStyle(fontSize: 10.sp)),
+                  //
+                  //
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
 
 

@@ -24,6 +24,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:daycus/screen/specificMissionPage/WalkCountPage.dart';
+import 'package:intl/intl.dart';
 
 class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
@@ -184,6 +185,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     // if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-doneCnt) )
     // Text("+ ${((return_reward*14)+(int.parse(widget.do_mission_data['bet_reward'])/2)).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -927,7 +929,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 }
 
 void showPedometerAlertDialog(BuildContext context, int date, String? pedometerNum) async {
-
+  var f = NumberFormat('###,###,###,###');
   String result = await showDialog(
     context: context, // user must tap button!
     builder: (BuildContext context) {
@@ -945,8 +947,45 @@ void showPedometerAlertDialog(BuildContext context, int date, String? pedometerN
             ],
           ),
           content: Container(
-            height: 50.h,
-            child: Text("${pedometerNum ?? "데이터를 불러올 수 없습니다"}", textAlign: TextAlign.center,),
+            height: 80.h,
+            child: pedometerNum != null
+            ? Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.directions_run, size: 60.w, color: AppColor.happyblue,),
+                  SizedBox(width: 6.w,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("갓생에 성공하셨군요!",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
+                      Row(
+                        children: [
+
+                          Container(
+                            alignment: Alignment.center,
+                            height: 40.h,
+                            child: Text("${f.format(int.parse(pedometerNum))}", style: TextStyle(fontSize: 28.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          ),
+
+
+                          Container(
+                            alignment: Alignment.center,
+                            height: 40.h,
+                            child: Text(" 걸음",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean',), ),
+                          ),
+
+
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 15.w,),
+                ],
+              ),
+            )
+            : Text("데이터를 불러올 수 없습니다", style: TextStyle(fontSize: 28.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
           ),
 
           shape: RoundedRectangleBorder(

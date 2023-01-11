@@ -22,6 +22,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/widget/RankingBar.dart';
+import 'dart:math';
+import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 
 late ScrollController _scrollController = ScrollController();
 
@@ -122,6 +124,27 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   );
                 }
             ),
+
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => PrivateSettings()),
+                );
+              },
+
+              child: Container(
+                  padding: EdgeInsets.all(12.sp),
+                  child: (profileImage==null)
+                  // 고른 프로필 사진이 없을 때
+                      ? (user_data['profile']==null || downloadProfileImage==null)
+                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
+                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                      : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+              ),
+            ),
+
+
 
           ],
           automaticallyImplyLeading: false,
@@ -367,16 +390,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                 child: Column(
                                   children: [
 
-                                    RankingBar(1, "aaaaaaaaa", 105450),
-                                    RankingBar(2, "ggggg", 100000),
-                                    RankingBar(3, "bbbbbbb", 9800),
-                                    RankingBar(4, "dddddd", 1030),
-                                    RankingBar(5, "dfdfdfdf", 1030),
-                                    RankingBar(6, "dfdfdf3", 930),
-                                    RankingBar(7, "dfdge", 90),
-                                    RankingBar(8, "3t3t", 10),
-                                    RankingBar(9, "가가가가", 9),
-                                    RankingBar(10, "2145", 8),
+                                    RankingBar(1, "aaaaaaaaa", 16548656),
+                                    RankingBar(2, "ggggg", 187878),
+                                    RankingBar(3, "bbbbbbb", 870),
+                                    RankingBar(4, "dddddd", 545),
+                                    RankingBar(5, "dfdfdfdf", 99),
+                                    RankingBar(6, "dfdfdf3", 10),
+                                    RankingBar(7, "dfdge", 9),
+                                    RankingBar(8, "3t3t", 8),
+                                    RankingBar(9, "가가가가", 7),
+                                    RankingBar(10, "2145", 6),
 
                                   ],
                                 ),

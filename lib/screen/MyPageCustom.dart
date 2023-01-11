@@ -15,6 +15,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:math';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:daycus/core/app_text.dart';
 
 
 
@@ -98,6 +99,27 @@ class _MyPageState extends State<MyPage> {
                   MaterialPageRoute(builder: (_) => NoticePage()),
                 );
               }),
+
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PrivateSettings()),
+              );
+            },
+
+            child: Container(
+                padding: EdgeInsets.all(12.sp),
+                child: (profileImage==null)
+                // 고른 프로필 사진이 없을 때
+                    ? (user_data['profile']==null || downloadProfileImage==null)
+                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
+                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                    : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+            ),
+          ),
+
+
         ],
         automaticallyImplyLeading: false,
       ),
@@ -178,8 +200,22 @@ class _MyPageState extends State<MyPage> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
+
+
+
                                         Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
-                                        Text("${user_data['attendance']}일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+
+                                        Container(
+                                          alignment: Alignment.center,
+                                          width: 42.w,
+                                          height: 16.h,
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text("${user_data['attendance']}일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+                                          ),
+                                        ),
+
+                                        //Text("${user_data['attendance']}일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
                                       ],
                                     ),
 
@@ -399,35 +435,111 @@ class _MyPageState extends State<MyPage> {
                         ),
                       ),
 
-                      SizedBox(height: 25.h,),
+                      SizedBox(height: 30.h,),
 
 
-                      InkWell(
-                        onTap: () {
-                          showModalBottomSheet(context: context, builder: ((builder) => toDeveloperBottomSheet));
 
-                        },
 
-                        child: Container(
-                          width: 250.w,
-                          height: 40.h,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                          ),
-                          child: Container(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                SizedBox(width: 10.w,),
-                                Icon(Icons.chat, color: Colors.grey[850])
-                              ],
+
+                      Container(
+                        width: 400.w,
+                        height: 130.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 7,
                             ),
-                          ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
 
+                            Container(
+                              padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+
+                                  Container(
+                                    width: 380.w,
+                                    alignment: Alignment.center,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showModalBottomSheet(context: context, builder: ((builder) => toDeveloperBottomSheet));
+                                      },
+                                      child: Container(
+                                        width: 250.w,
+                                        height: 40.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                        ),
+                                        child: Container(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                              SizedBox(width: 10.w,),
+                                              Icon(Icons.chat, color: Colors.grey[850])
+                                            ],
+                                          ),
+                                        ),
+
+                                      ),
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 6.h,),
+
+                                  Container(
+                                    width: 380.w,
+
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Text("문의 종류",
+                                        //     style: TextStyle(fontWeight: FontWeight.bold)),
+                                        SizedBox(height: 5.h,),
+
+                                        Text(" • 메일 문의 : 답변을 받아야 하는 문의를 보내주세요",
+                                            style: TextStyle(fontSize: 10.sp)),
+                                        Text(" • 일반 문의 : 답변을 받지 않아도 되는 문의를 보내주세요(오류 신고 등)",
+                                            style: TextStyle(fontSize: 10.sp)),
+                                      ],
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 8.h,),
+
+                                  Container(
+                                    width: 380.w,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+
+                                        Text("개발자 이메일 : ${adminEmail}",
+                                          style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+
+                                      ],
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 10.h,),
+
+
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+
 
 
                     ],
