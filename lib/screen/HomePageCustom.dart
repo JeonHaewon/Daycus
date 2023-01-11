@@ -8,11 +8,8 @@ import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
 import 'package:daycus/widget/NowNoMission.dart';
 import 'package:daycus/widget/SpecificMissionToPage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:daycus/widget/nowingmission.dart';
@@ -55,35 +52,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance?.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    switch(state){
-      case AppLifecycleState.resumed:
-        break;
-      case AppLifecycleState.inactive:
-        time_showNotification();
-        break;
-      case AppLifecycleState.detached:
-        time_showNotification();
-        break;
-      case AppLifecycleState.paused:
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
@@ -24,7 +25,6 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:daycus/screen/specificMissionPage/WalkCountPage.dart';
-import 'package:intl/intl.dart';
 
 class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
@@ -44,9 +44,23 @@ class MissionCheckStatusPage extends StatefulWidget {
 
 }
 
+class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with WidgetsBindingObserver {
 
 
-class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch(state){
+      case AppLifecycleState.resumed:
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.paused:
+        break;
+    }
+  }
 
   double _textSpacing = 10.w;
 
@@ -113,6 +127,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     WidgetsBinding.instance.addPostFrameCallback((_){
       _asyncMethod();
     });
+    WidgetsBinding.instance?.addObserver(this);
   }
 
   cnt_done(){
@@ -160,6 +175,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
 
     print("return_reward : $return_reward");
 
@@ -185,7 +201,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     // if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-doneCnt) )
     // Text("+ ${((return_reward*14)+(int.parse(widget.do_mission_data['bet_reward'])/2)).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
   }
-
 
   @override
   Widget build(BuildContext context) {

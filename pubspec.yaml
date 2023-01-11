@@ -59,12 +59,12 @@ dependencies:
   shared_preferences:
   local_auth:
   admob_flutter:
-  device_info_plus:
   firebase_messaging:
   firebase_core:
   permission_handler:
   firebase_auth:
   in_app_review: ^2.0.6
+  device_info_plus:
   # sound_stream:
 
 
