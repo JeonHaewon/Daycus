@@ -1,5 +1,6 @@
 
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/core/notification.dart';
@@ -642,6 +643,20 @@ class _AdminScreenState extends State<AdminScreen> {
                     context,
                     MaterialPageRoute(builder: (_) => RecordingPage()),
                   );
+
+                },
+              ),
+
+              AdminButton(
+                title: "랭킹 가져오기",
+                onPressed: () async {
+                  int userRanking = int.parse(user_data['Ranking']);
+                  rankingList = await select_request(
+                      "select user_name, reward, Ranking, user_id From user_table WHERE (${userRanking-2}<=Ranking) AND (Ranking<=${userRanking+2}) ORDER BY Ranking;",
+                      "위 아래 2위를 불러왔습니다",
+                      true);
+
+                  print(rankingList);
 
                 },
               ),

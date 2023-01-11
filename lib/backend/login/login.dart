@@ -10,6 +10,7 @@ import 'KeepLogin.dart';
 import 'dart:convert';
 import 'package:daycus/backend/UserDatabase.dart';
 import '../../screen/temHomePage.dart';
+import 'package:daycus/backend/ImportData/importElse.dart';
 
 
 userLogin(String email, String password, bool reload) async{
@@ -94,6 +95,8 @@ keepLogin (name, email, password, storage) async {
 afterLogin() async {
   level_update();
 
+  await import_ranking();
+
   print("로그인에 성공하였습니다.");
 
   // 미션 불러오기
@@ -112,10 +115,9 @@ afterLogin() async {
   //   doMissionSave();
   // }
 
-
-
-
 }
+
+
 
 
 

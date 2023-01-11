@@ -31,3 +31,5 @@ Image? downloadProfileImage;
 File? profileImage;
 String? profileImageReNamed;
 int profileDegree = 0;
+
+List? rankingList = null;

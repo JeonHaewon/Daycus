@@ -91,6 +91,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
           // 모든 프로세스 종료 시 나갈 수 있음.
           if (success[0] && success[1] && success[2]) {
 
+            // 삭제해야할수도 있음
             // 랭킹 업그레이드
             update_request("call update_ranking();", null);
             // 레벨 업데이트
