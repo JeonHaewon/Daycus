@@ -1,3 +1,4 @@
+import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -75,6 +76,23 @@ time_showNotification() async {
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time
+  );
+}
+continue_showNotification() async {
+
+  var androidDetails = const AndroidNotificationDetails(
+      '유니크한 알림 ID',
+      '알림종류 설명',
+      priority: Priority.high,
+      importance: Importance.max,
+      color: Color.fromARGB(255, 255, 0, 0)
+  );
+
+  notifications.show(
+      3,
+      '현재 걸음 수',
+      '$PedometerSteps',
+      NotificationDetails(android: androidDetails),
   );
 }
 

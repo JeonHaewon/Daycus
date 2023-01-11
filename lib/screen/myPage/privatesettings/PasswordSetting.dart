@@ -95,7 +95,10 @@ class _PasswordSettingState extends State<PasswordSetting> {
                       decoration: InputDecoration(
                         //filled: true,
                         labelText: '현재 비밀번호 입력',
+
                       ),
+
+
                       controller: current_password,
                       obscureText: true,
                       onChanged: (current_password){
@@ -109,7 +112,10 @@ class _PasswordSettingState extends State<PasswordSetting> {
                       decoration: InputDecoration(
                         //filled: true,
                         labelText: '새로운 비밀번호 입력',
+
                       ),
+
+
                       controller: want_password,
                       obscureText: true,
                       onChanged: (want_password){
@@ -123,7 +129,10 @@ class _PasswordSettingState extends State<PasswordSetting> {
                       decoration: InputDecoration(
                         //filled: true,
                         labelText: '새로운 비밀번호 재입력',
+
                       ),
+
+
                       controller: want_real_password,
                       obscureText: true,
                       onChanged: (want_real_password){

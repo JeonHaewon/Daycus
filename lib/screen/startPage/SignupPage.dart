@@ -222,7 +222,11 @@ class _signupPage extends State<SignupPage> {
                         decoration: InputDecoration(
                           hintText: '이메일 입력',
                           hintStyle: TextStyle(fontSize: 12.sp),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
                         ),
+                        cursorColor: AppColor.happyblue,
                         // 이메일 검증
                         validator: (String? value){
                           if (value!.isEmpty) {// == null or isEmpty
@@ -246,7 +250,11 @@ class _signupPage extends State<SignupPage> {
                         decoration: InputDecoration(
                           hintText: '영문/숫자/특수문자 중 2가지 이상, 8~16자 입력',
                           hintStyle: TextStyle(fontSize: 12.sp),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
                         ),
+                        cursorColor: AppColor.happyblue,
                         obscureText: true,
                         validator: (String? value){
                           // 비밀번호 검증
@@ -277,7 +285,11 @@ class _signupPage extends State<SignupPage> {
                         decoration: InputDecoration(
                           hintText: '비밀번호 재입력',
                           hintStyle: TextStyle(fontSize: 12.sp),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
                         ),
+                        cursorColor: AppColor.happyblue,
                         obscureText: true,
                         validator: (String? value){
                           // 비밀번호 검증
@@ -544,7 +556,11 @@ class _signupPage extends State<SignupPage> {
                         hintStyle: TextStyle(fontSize: 12.sp, color: Colors.grey),
                         fillColor: Colors.white,
                         filled: true,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                        ),
                       ),
+                      cursorColor: AppColor.happyblue,
                     ),
 
 
