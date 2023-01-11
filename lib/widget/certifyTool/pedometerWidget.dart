@@ -68,7 +68,8 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
   void onStepCountError(error) {
     print('onStepCountError: $error');
     setState(() {
-      PedometerSteps = '만보기를 불러올 수 없습니다 :(';
+      Fluttertoast.showToast(msg: "만보기를 불러올 수 없습니다 :(");
+      PedometerSteps = '0';
     });
   }
 

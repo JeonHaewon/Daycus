@@ -44,12 +44,13 @@ class _PrivateSettingsState extends State<PrivateSettings> {
 
   InitAsyncMethod() async {
     profileImageReNamed = null;
+    // 이거검토 필요
     //profileImageRename은 그대로 null임. 그래서 change 했는지를 판단할 수 있음.
-    if (user_data['profile']!=null && downloadProfileImage==null) {
-      var result = await image_download_root(
-          "image_application/user_profile", user_data['profile']);
-      downloadProfileImage = result[0] ; profileDegree = result[1];
-    }
+    // if (user_data['profile']!=null && downloadProfileImage==null) {
+    //   var result = await image_download_root(
+    //       "image_application/user_profile", user_data['profile']);
+    //   downloadProfileImage = result[0] ; profileDegree = result[1];
+    // }
     setState(() {
 
     });

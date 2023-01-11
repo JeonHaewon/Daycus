@@ -1,3 +1,5 @@
+import 'package:daycus/backend/ImportData/imageDownload.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +27,8 @@ class TemHomePage extends StatefulWidget {
 }
 
 class _TemHomePageState extends State<TemHomePage> {
+
+
 
   // init state 넣으면 왠지 더 빨라짐.
   // 하지만 UI는 뜨지 않음.

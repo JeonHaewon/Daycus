@@ -1,3 +1,4 @@
+import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
@@ -60,6 +61,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
+    InitAsyncMethod();
+  }
+
+  InitAsyncMethod() async {
+    profileImageReNamed = null;
+    // 이거검토 필요
+    // profileImageRename은 그대로 null임. 그래서 change 했는지를 판단할 수 있음.
+    if (user_data['profile']!=null && downloadProfileImage==null) {
+      var result = await image_download_root(
+          "image_application/user_profile", user_data['profile']);
+      downloadProfileImage = result[0] ; profileDegree = result[1];
+    }
+    setState(() {
+
+    });
   }
 
   @override

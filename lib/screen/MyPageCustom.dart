@@ -310,37 +310,37 @@ class _MyPageState extends State<MyPage> {
 
 
                       // 미션 참여 빈도 - 다음에 만나요
-                      Container(
-                        width: 365.w,
-                        height:260.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        margin: EdgeInsets.symmetric(horizontal: 2.w),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 20.h,),
-                            Container(
-                              child: Row(
-                                children: [
-                                  SizedBox(width: 20.w,),
-                                  Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  SizedBox(width: 120.w,),
-                                  Text("최근 3개월",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
-
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10.h,),
-
-                            Image.asset('assets/image/graph2.png' , height: 180.h),
-
-                          ],
-                        ),
-                      ), //주간랭킹
-
-                      SizedBox(height: 15.h,),
+                      // Container(
+                      //   width: 365.w,
+                      //   height:260.h,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(15),
+                      //   ),
+                      //   margin: EdgeInsets.symmetric(horizontal: 2.w),
+                      //   child: Column(
+                      //     children: [
+                      //       SizedBox(height: 20.h,),
+                      //       Container(
+                      //         child: Row(
+                      //           children: [
+                      //             SizedBox(width: 20.w,),
+                      //             Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      //             SizedBox(width: 120.w,),
+                      //             Text("최근 3개월",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
+                      //
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       SizedBox(height: 10.h,),
+                      //
+                      //       Image.asset('assets/image/graph2.png' , height: 180.h),
+                      //
+                      //     ],
+                      //   ),
+                      // ), //주간랭킹
+                      //
+                      // SizedBox(height: 15.h,),
 
                       MyPageInformation(title: "${rewardName}",
                           content: "${double.parse(user_data['reward']).toStringAsFixed(1)} ${rewardName}"),
@@ -445,7 +445,7 @@ class _MyPageState extends State<MyPage> {
 
                       Container(
                         width: 400.w,
-                        height: 130.h,
+                        height: 160.h,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
@@ -463,7 +463,7 @@ class _MyPageState extends State<MyPage> {
                           children: [
 
                             Container(
-                              padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
+                              padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
