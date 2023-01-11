@@ -15,7 +15,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:math';
 
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:daycus/core/app_text.dart';
 
 
 
@@ -29,6 +28,18 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  print_during() {
+    DateTime ll = DateTime.parse(user_data['last_login']);
+    DateTime rd = DateTime.parse(user_data['register_date']);
+    Duration diff = ll.difference(rd);
+    if (diff.inDays >= 0 && diff.inDays <= 30){
+      return ("${diff.inDays} 일");
+    }
+    else {
+      return ("${(diff.inDays ~/ 30)} 개월");
+    }
+  }
 
   // 사용자 > 개발자 gmail 이메일 보내기
   void _sendEmail(texting) async {
@@ -327,7 +338,7 @@ class _MyPageState extends State<MyPage> {
                                   SizedBox(width: 20.w,),
                                   Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                                   SizedBox(width: 120.w,),
-                                  Text("최근 3개월",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
+                                  Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
 
                                 ],
                               ),
@@ -339,8 +350,6 @@ class _MyPageState extends State<MyPage> {
                           ],
                         ),
                       ), //주간랭킹
-
-                      SizedBox(height: 15.h,),
 
                       MyPageInformation(title: "${rewardName}",
                           content: "${double.parse(user_data['reward']).toStringAsFixed(1)} ${rewardName}"),
@@ -379,8 +388,8 @@ class _MyPageState extends State<MyPage> {
                       //     ],
                       //   ),
                       // ),
-                      //
-                      // SizedBox(height: 15.h,),
+
+                      SizedBox(height: 15.h,),
 
 
                       ElevatedButton(
@@ -437,8 +446,7 @@ class _MyPageState extends State<MyPage> {
                         ),
                       ),
 
-                      SizedBox(height: 30.h,),
-
+                      SizedBox(height: 25.h,),
 
 
 

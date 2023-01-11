@@ -30,7 +30,12 @@ userLogin(String email, String password, bool reload) async{
       if (resLogin['success'] == true) {
         //print("로그인에 성공하였습니다.");
         user_data = resLogin['userData'];
-        print("{$user_data}");
+        if (user_data['register_date']==null){
+          update_request(
+              "UPDATE user_table SET register_date = '${DateTime.now()}' where user_email = '${user_data['user_email']}'",null);
+          user_data['register_date'] = DateTime.now().toString();
+        }
+        print("${user_data['register_date']}");
 
         // 첫 로그인 시에만 인사해줌 - 앱을 나갔다 들어올때도 아래가 실행됨.
         if (reload==false && user_data['user_state']!='withdrawing'){
@@ -50,7 +55,6 @@ userLogin(String email, String password, bool reload) async{
           // 마지막 로그인 업데이트
           update_request(
               "UPDATE user_table SET last_login='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
-
 
           Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
           controller.currentBottomNavItemIndex.value = 2;
