@@ -59,16 +59,8 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
-  // RecorderStream _recorder = RecorderStream();
-  // PlayerStream _player = PlayerStream();
   var changing_idx;
 
-  List<Uint8List> _micChunks = [];
-  bool _isRecording = false;
-  bool _isPlaying = false;
-  late StreamSubscription _recorderStatus;
-  late StreamSubscription _playerStatus;
-  late StreamSubscription _audioStream;
   dynamic userInfo = '';
   static final storage = FlutterSecureStorage();
   final LocalAuthentication auth = LocalAuthentication();
@@ -76,52 +68,6 @@ class _AdminScreenState extends State<AdminScreen> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
-
-  // Future<void> initPlugin() async {
-  //   _recorderStatus = _recorder.status.listen((status) {
-  //     if (mounted)
-  //       setState(() {
-  //         _isRecording = status == SoundStreamStatus.Playing;
-  //       });
-  //   });
-  //
-  //   _audioStream = _recorder.audioStream.listen((data) {
-  //     if (_isPlaying) {
-  //       _player.writeChunk(data);
-  //     } else {
-  //       _micChunks.add(data);
-  //     }
-  //   });
-  //
-  //   _playerStatus = _player.status.listen((status) {
-  //     if (mounted)
-  //       setState(() {
-  //         _isPlaying = status == SoundStreamStatus.Playing;
-  //       });
-  //   });
-  //
-  //   await Future.wait([
-  //     _recorder.initialize(),
-  //     _player.initialize(),
-  //   ]);
-  // }
-  //
-  // void _play() async {
-  //   await _player.start();
-  //
-  //   if (_micChunks.isNotEmpty) {
-  //     for (var chunk in _micChunks) {
-  //       await _player.writeChunk(chunk);
-  //     }
-  //     _micChunks.clear();
-  //   }
-  // }
-
-  // void initState() {
-  //   super.initState();
-  //   initPlugin();
-  // }
-
 
 
 
@@ -596,13 +542,11 @@ class _AdminScreenState extends State<AdminScreen> {
               AdminButton(
                 title: "녹음을 한 번 해봅시다 !",
                 onPressed: (){
-                  Fluttertoast.showToast(msg: "지금은 사용할 수 없습니다");
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (_) => RecordingPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => RecordingPage()));
                 },
               ),
-
               AdminButton(
                 title: "php로 이메일을 보내봅시당 !",
                 onPressed: (){
@@ -643,7 +587,6 @@ class _AdminScreenState extends State<AdminScreen> {
                     context,
                     MaterialPageRoute(builder: (_) => RecordingPage()),
                   );
-
                 },
               ),
 

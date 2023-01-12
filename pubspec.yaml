@@ -65,7 +65,7 @@ dependencies:
   firebase_auth:
   in_app_review: ^2.0.6
   device_info_plus:
-  # sound_stream:
+  sound_stream:
 
 
 dev_dependencies:

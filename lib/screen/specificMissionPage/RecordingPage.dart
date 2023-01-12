@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:sound_stream/sound_stream.dart';
 
 
 
@@ -12,7 +16,74 @@ class RecordingPage extends StatefulWidget {
   State<RecordingPage> createState() => _RecordingPageState();
 }
 
+
 class _RecordingPageState extends State<RecordingPage> {
+
+  RecorderStream _recorder = RecorderStream();
+  PlayerStream _player = PlayerStream();
+
+  List<Uint8List> _micChunks = [];
+  bool _isRecording = false;
+  bool _isPlaying = false;
+
+  late StreamSubscription _recorderStatus;
+  late StreamSubscription _playerStatus;
+  late StreamSubscription _audioStream;
+
+  @override
+  void initState() {
+    super.initState();
+    initPlugin();
+  }
+
+  @override
+  void dispose() {
+    _recorderStatus?.cancel();
+    _playerStatus?.cancel();
+    _audioStream?.cancel();
+    super.dispose();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlugin() async {
+    _recorderStatus = _recorder.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isRecording = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    _audioStream = _recorder.audioStream.listen((data) {
+      if (_isPlaying) {
+        _player.writeChunk(data);
+      } else {
+        _micChunks.add(data);
+      }
+    });
+
+    _playerStatus = _player.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isPlaying = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    await Future.wait([
+      _recorder.initialize(),
+      _player.initialize(),
+    ]);
+  }
+
+  void _play() async {
+    await _player.start();
+
+    if (_micChunks.isNotEmpty) {
+      for (var chunk in _micChunks) {
+        await _player.writeChunk(chunk);
+      }
+      _micChunks.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,34 +135,48 @@ class _RecordingPageState extends State<RecordingPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.play_arrow, size: 50.w,),
-                      ],
-                    ),
-                  ),
+                IconButton(
+                  iconSize: 50.0,
+                  icon: Icon(_isRecording ? Icons.mic_off : Icons.mic),
+                  onPressed: _isRecording ? _recorder.stop : _recorder.start,
                 ),
+                IconButton(
+                  iconSize: 50.0,
+                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                  onPressed: _isPlaying ? _player.stop : _play,
+                ),
+
+                // InkWell(
+                //   onTap: () {
+                //     _isRecording ? _recorder.stop : _recorder.start;
+                //   },
+                //   child: Container(
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Icon(Icons.play_arrow, size: 50.w,),
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
                 SizedBox(width: 10.w,),
 
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.stop, size: 50.w,),
-                      ],
-                    ),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () {
+                //     _isPlaying ? _player.stop : _play;
+                //   },
+                //   child: Container(
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Icon(Icons.stop, size: 50.w,),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
 
