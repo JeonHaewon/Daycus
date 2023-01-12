@@ -83,6 +83,9 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
+
+  bool _isInitialValue = true;
+
   @override
   void initState() {
     super.initState();
@@ -94,6 +97,12 @@ class _MyPageState extends State<MyPage> {
       GraphWidth = CountCategory();
       do_mission_cnt = do_mission_cnt_after;
     }
+
+    Future.delayed(const Duration(milliseconds: 400), () {
+      setState(() {
+        _isInitialValue = !_isInitialValue;
+      });
+    });
 
   }
   
@@ -383,24 +392,24 @@ class _MyPageState extends State<MyPage> {
 
                             SizedBox(height: 15.h,),
 
-                            ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0]),
+                            ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0], initialValue: _isInitialValue,),
 
                             SizedBox(height: 8.h,),
 
-                            ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1]),
+                            ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1], initialValue: _isInitialValue,),
 
 
                             SizedBox(height: 8.h,),
 
-                            ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2]),
+                            ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2], initialValue: _isInitialValue,),
 
                             SizedBox(height: 8.h,),
 
-                            ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3]),
+                            ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3], initialValue: _isInitialValue,),
 
                             SizedBox(height: 8.h,),
 
-                            ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4]),
+                            ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4], initialValue: _isInitialValue,),
 
                             SizedBox(height: 20.h,),
 
@@ -714,11 +723,13 @@ class ParticipateBar extends StatelessWidget {
     required this.title,
     required this.cnt,
     required this.graphWidth,
+    this.initialValue : true,
   }) : super(key: key);
 
   final String title;
   final double cnt;
   final double graphWidth;
+  final bool initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -732,8 +743,10 @@ class ParticipateBar extends StatelessWidget {
             child: Text(title,style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
           ),
           SizedBox(width: 10.w,),
-          Container(
-            width: (225.w)*(graphWidth/cnt),
+
+          AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            width:  initialValue ? 0 : (225.w)*(graphWidth/cnt),
             height: 10.h,
             decoration: BoxDecoration(
                 color: AppColor.happyblue,
@@ -742,6 +755,17 @@ class ParticipateBar extends StatelessWidget {
                 )
             ),
           ),
+
+          // Container(
+          //   width: (225.w)*(graphWidth/cnt),
+          //   height: 10.h,
+          //   decoration: BoxDecoration(
+          //       color: AppColor.happyblue,
+          //       borderRadius: BorderRadius.horizontal(
+          //           right: Radius.circular(10)
+          //       )
+          //   ),
+          // ),
 
           SizedBox(width: 5.w,),
 
