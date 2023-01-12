@@ -363,7 +363,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                 child: Text("순위", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, )),
                               ),
 
-                              SizedBox(width: 4.w,),
+                              SizedBox(width: 5.w,),
 
                               Container(
                                 width: 135.w,
@@ -374,10 +374,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                 ),
                               ),
 
-                              SizedBox(width: 8.w,),
 
                               Container(
-                                width: 100.w,
+                                width: 90.w,
                                 alignment: Alignment.center,
                                 child: FittedBox(
                                     fit: BoxFit.scaleDown,
@@ -397,7 +396,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         SizedBox(height: 3.h,),
 
                         Container(
-                          width : 330.w,
+                          width : 300.w,
                           height: 170.h,
                           child: Scrollbar(
                             controller: _scrollController,
