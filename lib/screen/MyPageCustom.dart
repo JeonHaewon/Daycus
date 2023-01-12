@@ -543,7 +543,6 @@ class _MyPageState extends State<MyPage> {
 
                       SizedBox(height: 15.h,),
 
-
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -599,9 +598,6 @@ class _MyPageState extends State<MyPage> {
                       ),
 
                       SizedBox(height: 25.h,),
-
-
-
 
                       Container(
                         width: 400.w,
@@ -694,25 +690,15 @@ class _MyPageState extends State<MyPage> {
 
                                   SizedBox(height: 15.h,),
 
-
                                 ],
                               ),
                             ),
                           ],
                         ),
                       ),
-
-
-
                     ],
                   ),
                 ),
-
-
-
-
-
-
 
               ],
             ),
