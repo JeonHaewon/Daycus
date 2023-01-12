@@ -637,6 +637,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                           ],
                         ),
 
+                        Row(
+                          children: [
+                            Text("※ ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                            Text("코딩하다 산책하기",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                            Text(" 미션은 어플을 종료 시 만보기가 초기화됩니다.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                          ],
+                        ),
+
                         Container(
                             padding: EdgeInsets.fromLTRB(17.w, 14.h, 17.w, 0),
                             width: 600.w, height: 200.h,
