@@ -32,7 +32,8 @@ userLogin(String email, String password, bool reload) async{
         user_data = resLogin['userData'];
         if (user_data['register_date']==null){
           update_request(
-              "UPDATE user_table SET register_date = '${DateTime.now()}' where user_email = '${user_data['user_email']}'",null);
+              "UPDATE user_table SET register_date = '${DateTime.now()}' where user_email = '${user_data['user_email']}'",null
+          );
           user_data['register_date'] = DateTime.now().toString();
         }
         print("${user_data['register_date']}");

@@ -16,6 +16,7 @@ int increased = 0;
 var really;
 bool isupgrade = false;
 List<int> dap = [];
+bool ismanbogi = false;
 
 class WalkCountWidget extends StatefulWidget {
   const WalkCountWidget({
@@ -43,12 +44,19 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
   }
 
   updating_info(StepCount event) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('${user_data['user_email']}') == null){
-      await prefs.setStringList('${user_data['user_email']}', [event.steps.toString()]);
+    if (ismanbogi == true) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getStringList('${user_data['user_email']}') == null) {
+        await prefs.setStringList(
+            '${user_data['user_email']}', [event.steps.toString()]);
+      }
+      curr = prefs.getStringList('${user_data['user_email']}');
+      return curr[0];
     }
-    curr = prefs.getStringList('${user_data['user_email']}');
-    return curr[0];
+    else {
+      ismanbogi = true;
+      return event.steps.toString();
+    }
   }
 
 
@@ -59,7 +67,6 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
       //Fluttertoast.showToast(msg: "만보기 시작");
       isupgrade = true;
     }
-    PedometerSteps = (event.steps - int.parse(really)).toString();
     setState(() {
       PedometerSteps = (event.steps - int.parse(really)).toString();
       // _steps = pedometer_count.toString();
