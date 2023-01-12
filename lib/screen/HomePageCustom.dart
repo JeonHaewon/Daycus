@@ -320,7 +320,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 children: [
                   Container(
                     width: 360.w,
-                    height:250.h,
+                    //height:250.h,
                     decoration: BoxDecoration(
                       color: Colors.white60,
                       borderRadius: BorderRadius.circular(10),
@@ -445,6 +445,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           ),
                         ),
 
+                        SizedBox(height: 6.h,),
+                        Text("※ 자신을 기준으로 위아래 2순위까지 표시됩니다",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean', color: Colors.grey[600]) ),
                         SizedBox(height: 8.h,),
 
                       ],
