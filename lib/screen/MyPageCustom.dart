@@ -32,7 +32,9 @@ CountCategory() {
   }
   return cntList;
 }
+
 List<double> GraphWidth = CountCategory();
+int do_mission_cnt = do_mission==null ? 0 : do_mission.length;
 
 
 class MyPage extends StatefulWidget {
@@ -80,6 +82,21 @@ class _MyPageState extends State<MyPage> {
       Fluttertoast.showToast(msg: title);
     }
   }
+
+  @override
+  void initState() {
+    super.initState();
+    int do_mission_cnt_after = do_mission==null ? 0 : do_mission.length;
+
+    // 갯수 다시 로드
+    if (do_mission_cnt != do_mission_cnt_after){
+      print("미션 참여빈도 업데이트");
+      GraphWidth = CountCategory();
+      do_mission_cnt = do_mission_cnt_after;
+    }
+
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +355,7 @@ class _MyPageState extends State<MyPage> {
 
                       //SizedBox(height: 15.h,),
 
-                      // 미션 참여 빈도 - 다음에 만나요
+                      // 현재 참여 빈도
                       Container(
                         width: 365.w,
                         //height:260.h,
@@ -347,16 +364,18 @@ class _MyPageState extends State<MyPage> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         margin: EdgeInsets.symmetric(horizontal: 2.w),
+                        padding: EdgeInsets.only(left: 25.w, right: 25.w),
                         child: Column(
                           children: [
                             SizedBox(height: 20.h,),
                             Container(
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(width: 20.w,),
-                                  Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  SizedBox(width: 120.w,),
-                                  Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
+                                  Text("현재 미션 참여현황",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                  
+                                  // 회원가입 날짜로부터
+                                  //Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 13.sp, fontFamily: 'korean') ),
 
                                 ],
                               ),
@@ -364,138 +383,27 @@ class _MyPageState extends State<MyPage> {
 
                             SizedBox(height: 15.h,),
 
-                            Container(
-                              width: 270.w,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 30.w,
-                                    child: Text("건강",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
-                                  ),
-                                  SizedBox(width: 10.w,),
-                                  Container(
-                                    width: (225.w)*(GraphWidth[0]/cnt2),
-                                    height: 10.h,
-                                    decoration: BoxDecoration(
-                                      color: AppColor.happyblue,
-                                      borderRadius: BorderRadius.horizontal(
-                                        right: Radius.circular(10)
-                                      )
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0]),
 
                             SizedBox(height: 8.h,),
 
-                            Container(
-                              width: 270.w,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 30.w,
-                                    child: Text("공부",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
-                                  ),
-                                  SizedBox(width: 10.w,),
-                                  Container(
-                                    width: (225.w)*(GraphWidth[1]/cnt2),
-                                    height: 10.h,
-                                    decoration: BoxDecoration(
-                                        color: AppColor.happyblue,
-                                        borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(10)
-                                        )
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1]),
+
 
                             SizedBox(height: 8.h,),
 
-                            Container(
-                              width: 270.w,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 30.w,
-                                    child: Text("운동",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
-                                  ),
-                                  SizedBox(width: 10.w,),
-                                  Container(
-                                    width: (225.w)*(GraphWidth[2]/cnt2),
-                                    height: 10.h,
-                                    decoration: BoxDecoration(
-                                        color: AppColor.happyblue,
-                                        borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(10)
-                                        )
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2]),
 
                             SizedBox(height: 8.h,),
 
-                            Container(
-                              width: 270.w,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 30.w,
-                                    child: Text("생활",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
-                                  ),
-                                  SizedBox(width: 10.w,),
-                                  Container(
-                                    width: (225.w)*(GraphWidth[3]/cnt2),
-                                    height: 10.h,
-                                    decoration: BoxDecoration(
-                                        color: AppColor.happyblue,
-                                        borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(10)
-                                        )
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3]),
 
                             SizedBox(height: 8.h,),
 
-                            Container(
-                              width: 270.w,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 30.w,
-                                    child: Text("취미",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
-                                  ),
-                                  SizedBox(width: 10.w,),
-                                  Container(
-                                    width: (225.w)*(GraphWidth[4]/cnt2),
-                                    height: 10.h,
-                                    decoration: BoxDecoration(
-                                        color: AppColor.happyblue,
-                                        borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(10)
-                                        )
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4]),
 
                             SizedBox(height: 20.h,),
 
-
-                            //Image.asset('assets/image/graph2.png' , height: 180.h),
 
                           ],
                         ),
@@ -797,3 +705,52 @@ class MyPageButton extends StatelessWidget {
     );
   }
 }
+
+
+
+class ParticipateBar extends StatelessWidget {
+  const ParticipateBar({
+    Key? key,
+    required this.title,
+    required this.cnt,
+    required this.graphWidth,
+  }) : super(key: key);
+
+  final String title;
+  final double cnt;
+  final double graphWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 270.w,
+      child: Row(
+        children: [
+          Container(
+            alignment: Alignment.center,
+            width: 30.w,
+            child: Text(title,style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
+          ),
+          SizedBox(width: 10.w,),
+          Container(
+            width: (225.w)*(graphWidth/cnt),
+            height: 10.h,
+            decoration: BoxDecoration(
+                color: AppColor.happyblue,
+                borderRadius: BorderRadius.horizontal(
+                    right: Radius.circular(10)
+                )
+            ),
+          ),
+
+          SizedBox(width: 5.w,),
+
+          // 갯수, 0이면 포함 안함.
+          if (graphWidth.toStringAsFixed(0)!="0")
+            Text("${graphWidth.toStringAsFixed(0)}", style: TextStyle(fontSize: 12.sp, ),),
+        ],
+      ),
+    );
+  }
+}
+

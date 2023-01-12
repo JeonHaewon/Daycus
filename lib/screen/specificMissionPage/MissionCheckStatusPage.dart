@@ -47,20 +47,20 @@ class MissionCheckStatusPage extends StatefulWidget {
 class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with WidgetsBindingObserver {
 
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    switch(state){
-      case AppLifecycleState.resumed:
-        break;
-      case AppLifecycleState.inactive:
-        break;
-      case AppLifecycleState.detached:
-        break;
-      case AppLifecycleState.paused:
-        break;
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   switch(state){
+  //     case AppLifecycleState.resumed:
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       break;
+  //   }
+  // }
 
   double _textSpacing = 10.w;
 

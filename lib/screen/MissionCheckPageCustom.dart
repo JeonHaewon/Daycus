@@ -160,9 +160,10 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                         );
                       },
                     ),
-                  )
+                  ),
 
 
+                SizedBox(height: 15.h,),
 
               ],
             ),

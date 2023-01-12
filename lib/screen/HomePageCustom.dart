@@ -24,24 +24,11 @@ import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 
 late ScrollController _scrollController = ScrollController();
+late ScrollController _scrollController1 = ScrollController();
 
 DateTime? currentBackPressTime;
 
-onWillPop() {
-  DateTime now = DateTime.now();
-  if (currentBackPressTime == null ||
-      now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-    currentBackPressTime = now;
-    Fluttertoast.showToast(
-        msg: "뒤로 버튼을 한 번 더 누르시면 종료됩니다.",
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: const Color(0xff6E6E6E),
-        fontSize: 14.sp,
-        toastLength: Toast.LENGTH_SHORT);
-    return false;
-  }
-  return true;
-}
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -81,22 +68,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance?.removeObserver(this);
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    switch(state){
-      case AppLifecycleState.resumed:
-        break;
-      case AppLifecycleState.inactive:
-        // time_showNotification();
-        break;
-      case AppLifecycleState.detached:
-        // time_showNotification();
-        break;
-      case AppLifecycleState.paused:
-        break;
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   switch(state){
+  //     case AppLifecycleState.resumed:
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       // time_showNotification();
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       // time_showNotification();
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       break;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,12 +106,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
 
 
-    return WillPopScope(
-        onWillPop: () async {
-          bool result = onWillPop();
-          return await Future.value(result);
-        },
-        child: Scaffold(
+    return Scaffold(
         backgroundColor: AppColor.background,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -399,7 +381,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           width : 300.w,
                           height: 170.h,
                           child: Scrollbar(
-                            controller: _scrollController,
+                            controller: _scrollController1,
                             isAlwaysShown: true,
                             thickness: 8,
                             radius: Radius.circular(10),
@@ -663,7 +645,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
 
 
-    )
     );
 
 

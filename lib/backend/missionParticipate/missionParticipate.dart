@@ -47,7 +47,7 @@ minus_reward(String bet_reward) async {
     // 랭킹 업그레이드
     update_request("call update_ranking();", null);
     // 레벨 업데이트
-    update_request("call update_level5();", null);
+    update_request("call update_level5('${user_data['user_email']}');", null);
 
   //   var update_res = await http.post(Uri.parse(API.update), body: {
   //     'update_sql': "UPDATE user_table SET reward = '${(double.parse(user_data['reward'])-double.parse(bet_reward)).toString()}' WHERE user_email = '${user_data['user_email']}'",

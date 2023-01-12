@@ -7,6 +7,7 @@ import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 
 mission_complete(int todayBlockCnt, do_mission_data,
     int toCertify, BuildContext context, String user_email, int mission_result) {
@@ -95,7 +96,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
             // 랭킹 업그레이드
             update_request("call update_ranking();", null);
             // 레벨 업데이트
-            update_request("call update_level5();", null);
+            update_request("call update_level5('${user_data['user_email']}');", null);
 
             // 데이터를 다 업데이트 한 후에 페이지를 다시 불러옴
             await afterLogin();
