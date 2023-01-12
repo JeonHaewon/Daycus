@@ -152,7 +152,8 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                                 mission_index: _index,
                                 mission_data: all_missions[_index],
                                 do_mission_data: do_mission[index],
-                              ),),
+                              ),
+                            ),
 
                             SizedBox(height: 7.h,),
                           ],

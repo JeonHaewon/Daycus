@@ -18,6 +18,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 
 
+
+CountCategory() {
+  int cnt = do_mission==null ? 0 : do_mission.length;
+  List<double> cntList = [0,0,0,0,0];
+  for (int i = 0; i<cnt; i++){
+    int _index = do_mission[i]['mission_index'];
+    if (all_missions[_index]['category'] == "건강") { cntList[0] += 1; }
+    else if (all_missions[_index]['category'] == "공부") { cntList[1] += 1; }
+    else if (all_missions[_index]['category'] == "운동") { cntList[2] += 1; }
+    else if (all_missions[_index]['category'] == "생활") { cntList[3] += 1; }
+    else if (all_missions[_index]['category'] == "취미") { cntList[4] += 1; }
+  }
+  return cntList;
+}
+List<double> GraphWidth = CountCategory();
+
+
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
 
@@ -68,6 +85,8 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
 
     Size m = MediaQuery.of(context).size;
+    int cnt1 = do_mission==null ? 0 : do_mission.length;
+    double cnt2 = cnt1.toDouble();
 
     Future<void> refresh() async {
       await LoginAsyncMethod(MyPage.storage, null, true);
@@ -319,39 +338,170 @@ class _MyPageState extends State<MyPage> {
 
                       //SizedBox(height: 15.h,),
 
-
                       // 미션 참여 빈도 - 다음에 만나요
-                      // Container(
-                      //   width: 365.w,
-                      //   height:260.h,
-                      //   decoration: BoxDecoration(
-                      //     color: Colors.white,
-                      //     borderRadius: BorderRadius.circular(15),
-                      //   ),
-                      //   margin: EdgeInsets.symmetric(horizontal: 2.w),
-                      //   child: Column(
-                      //     children: [
-                      //       SizedBox(height: 20.h,),
-                      //       Container(
-                      //         child: Row(
-                      //           children: [
-                      //             SizedBox(width: 20.w,),
-                      //             Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                      //             SizedBox(width: 120.w,),
-                      //             Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
-                      //
-                      //           ],
-                      //         ),
-                      //       ),
-                      //       SizedBox(height: 10.h,),
-                      //
-                      //       Image.asset('assets/image/graph2.png' , height: 180.h),
-                      //
-                      //     ],
-                      //   ),
-                      // ), //주간랭킹
+                      Container(
+                        width: 365.w,
+                        //height:260.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 2.w),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 20.h,),
+                            Container(
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 20.w,),
+                                  Text("미션 참여빈도",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                  SizedBox(width: 120.w,),
+                                  Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 15.sp, fontFamily: 'korean') ),
 
-                      // SizedBox(height: 15.h,),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 15.h,),
+
+                            Container(
+                              width: 270.w,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 30.w,
+                                    child: Text("건강",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
+                                  ),
+                                  SizedBox(width: 10.w,),
+                                  Container(
+                                    width: (225.w)*(GraphWidth[0]/cnt2),
+                                    height: 10.h,
+                                    decoration: BoxDecoration(
+                                      color: AppColor.happyblue,
+                                      borderRadius: BorderRadius.horizontal(
+                                        right: Radius.circular(10)
+                                      )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 8.h,),
+
+                            Container(
+                              width: 270.w,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 30.w,
+                                    child: Text("공부",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
+                                  ),
+                                  SizedBox(width: 10.w,),
+                                  Container(
+                                    width: (225.w)*(GraphWidth[1]/cnt2),
+                                    height: 10.h,
+                                    decoration: BoxDecoration(
+                                        color: AppColor.happyblue,
+                                        borderRadius: BorderRadius.horizontal(
+                                            right: Radius.circular(10)
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 8.h,),
+
+                            Container(
+                              width: 270.w,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 30.w,
+                                    child: Text("운동",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
+                                  ),
+                                  SizedBox(width: 10.w,),
+                                  Container(
+                                    width: (225.w)*(GraphWidth[2]/cnt2),
+                                    height: 10.h,
+                                    decoration: BoxDecoration(
+                                        color: AppColor.happyblue,
+                                        borderRadius: BorderRadius.horizontal(
+                                            right: Radius.circular(10)
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 8.h,),
+
+                            Container(
+                              width: 270.w,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 30.w,
+                                    child: Text("생활",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
+                                  ),
+                                  SizedBox(width: 10.w,),
+                                  Container(
+                                    width: (225.w)*(GraphWidth[3]/cnt2),
+                                    height: 10.h,
+                                    decoration: BoxDecoration(
+                                        color: AppColor.happyblue,
+                                        borderRadius: BorderRadius.horizontal(
+                                            right: Radius.circular(10)
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 8.h,),
+
+                            Container(
+                              width: 270.w,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 30.w,
+                                    child: Text("취미",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)),
+                                  ),
+                                  SizedBox(width: 10.w,),
+                                  Container(
+                                    width: (225.w)*(GraphWidth[4]/cnt2),
+                                    height: 10.h,
+                                    decoration: BoxDecoration(
+                                        color: AppColor.happyblue,
+                                        borderRadius: BorderRadius.horizontal(
+                                            right: Radius.circular(10)
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 20.h,),
+
+
+                            //Image.asset('assets/image/graph2.png' , height: 180.h),
+
+                          ],
+                        ),
+                      ), //주간랭킹
+
+                      SizedBox(height: 15.h,),
 
                       MyPageInformation(title: "${rewardName}",
                           content: "${double.parse(user_data['reward']).toStringAsFixed(1)} ${rewardName}"),
@@ -455,7 +605,7 @@ class _MyPageState extends State<MyPage> {
 
                       Container(
                         width: 400.w,
-                        height: 160.h,
+                        //height: 160.h,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
@@ -473,7 +623,7 @@ class _MyPageState extends State<MyPage> {
                           children: [
 
                             Container(
-                              padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 0),
+                              padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -542,7 +692,7 @@ class _MyPageState extends State<MyPage> {
                                     ),
                                   ),
 
-                                  SizedBox(height: 10.h,),
+                                  SizedBox(height: 15.h,),
 
 
                                 ],

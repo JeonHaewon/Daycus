@@ -137,7 +137,7 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
                         ),
                         SizedBox(height: 2.h,),
 
-                        Text("${PedometerSteps}걸음",
+                        Text("${f.format(int.parse(PedometerSteps))}걸음",
                             style: TextStyle(fontSize: 24.sp, fontFamily: 'korean',fontWeight: FontWeight.bold, color: AppColor.happyblue )
                         ),
                         SizedBox(height: 60.h,),
@@ -148,7 +148,7 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
                             Text("미션 성공까지 ",
                                 style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
                             ),
-                            Text("${(widget.walkNumber-int.parse(PedometerSteps)).toString()}",
+                            Text("${f.format(int.parse((widget.walkNumber-int.parse(PedometerSteps)).toString()))}",
                                 style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold )
                             ),
                             Text("걸음",
