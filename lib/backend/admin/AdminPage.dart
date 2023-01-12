@@ -520,7 +520,7 @@ class _AdminScreenState extends State<AdminScreen> {
               AdminButton(
                 title: "푸시 알림 보내기",
                 onPressed: (){
-                  time_showNotification();
+                  // time_showNotification();
                 },
               ),
 

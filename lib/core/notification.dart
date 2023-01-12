@@ -54,45 +54,45 @@ makeDate(hour, min, sec){
   }
 }
 
-time_showNotification() async {
-
-  tz.initializeTimeZones();
-
-  var androidDetails = const AndroidNotificationDetails(
-    '유니크한 알림 ID',
-    '알림종류 설명',
-    priority: Priority.high,
-    importance: Importance.max,
-    color: Color.fromARGB(255, 255, 0, 0)
-  );
-
-  notifications.zonedSchedule(
-      2,
-      '제목2',
-      '랭킹 업데이트가 반영되었습니다! 확인해보세요!',
-      tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
-      NotificationDetails(android: androidDetails),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time
-  );
-}
-continue_showNotification() async {
-
-  var androidDetails = const AndroidNotificationDetails(
-      '유니크한 알림 ID',
-      '알림종류 설명',
-      priority: Priority.high,
-      importance: Importance.max,
-      color: Color.fromARGB(255, 255, 0, 0)
-  );
-
-  notifications.show(
-      3,
-      '현재 걸음 수',
-      '$PedometerSteps',
-      NotificationDetails(android: androidDetails),
-  );
-}
+// time_showNotification() async {
+//
+//   tz.initializeTimeZones();
+//
+//   var androidDetails = const AndroidNotificationDetails(
+//     '유니크한 알림 ID',
+//     '알림종류 설명',
+//     priority: Priority.high,
+//     importance: Importance.max,
+//     color: Color.fromARGB(255, 255, 0, 0)
+//   );
+//
+//   notifications.zonedSchedule(
+//       2,
+//       '제목2',
+//       '랭킹 업데이트가 반영되었습니다! 확인해보세요!',
+//       tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
+//       NotificationDetails(android: androidDetails),
+//       androidAllowWhileIdle: true,
+//       uiLocalNotificationDateInterpretation:
+//       UILocalNotificationDateInterpretation.absoluteTime,
+//       matchDateTimeComponents: DateTimeComponents.time
+//   );
+// }
+// continue_showNotification() async {
+//
+//   var androidDetails = const AndroidNotificationDetails(
+//       '유니크한 알림 ID',
+//       '알림종류 설명',
+//       priority: Priority.high,
+//       importance: Importance.max,
+//       color: Color.fromARGB(255, 255, 0, 0)
+//   );
+//
+//   notifications.show(
+//       3,
+//       '현재 걸음 수',
+//       '$PedometerSteps',
+//       NotificationDetails(android: androidDetails),
+//   );
+// }
 

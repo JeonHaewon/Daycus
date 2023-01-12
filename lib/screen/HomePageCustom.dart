@@ -88,10 +88,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       case AppLifecycleState.resumed:
         break;
       case AppLifecycleState.inactive:
-        time_showNotification();
+        // time_showNotification();
         break;
       case AppLifecycleState.detached:
-        time_showNotification();
+        // time_showNotification();
         break;
       case AppLifecycleState.paused:
         break;
