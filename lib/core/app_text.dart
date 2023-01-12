@@ -14,7 +14,9 @@ const String nullBirthdayString = "0000-00-00";
 
 const String cantParticipateString = "남은 날짜 동안 미션을 모두 수행할 수 없습니다.";
 
-const String errorMessage = "문제가 발생했습니다, '마이페이지>개발자에게 문의하기'를 이용해주세요";
+const String errorMessage = "문제가 발생했습니다, '마이페이지>"
+    ""
+    "개발자에게 문의하기'를 이용해주세요";
 const String toDeveloperSuccess = "감사합니다. 더 좋은 서비스로 돌아오겠습니다.";
 
 // 미션 정산 시
