@@ -35,7 +35,7 @@ dependencies:
 
   get:
   flutter_screenutil:
-  simple_animations:
+  simple_animations: ^4.0.1
   http:
   fluttertoast:
   intl:

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
-
+import 'package:simple_animations/simple_animations.dart';
 
 enum AniProps { opacity, translateY }
 
@@ -10,13 +9,13 @@ class FadeInAnimation extends StatelessWidget {
 
   const FadeInAnimation({Key? key ,required this.delay, required  this.child}):super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final tween = MultiTween<AniProps>()
       ..add(AniProps.opacity, Tween<double>(begin: 0.0, end: 1.0), const Duration(milliseconds: 500))
       ..add(AniProps.translateY, Tween<double>(begin: -30.0, end: 0.0), const Duration(milliseconds: 500),
           Curves.easeOut);
+
 
 
     return PlayAnimation<MultiTweenValues<AniProps>>(
