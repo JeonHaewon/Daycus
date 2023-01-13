@@ -85,7 +85,7 @@ class _signupPage extends State<SignupPage> {
   }
 
   saveInfo() async{
-    User userModel = User(
+    Userr userModel = Userr(
       1,
       emailCtrl.text.trim(),
       passwordCtrl.text.trim(),

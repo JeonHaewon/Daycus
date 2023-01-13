@@ -22,9 +22,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/widget/RankingBar.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
+import 'package:daycus/screen/MissionAddPage.dart';
 
 late ScrollController _scrollController = ScrollController();
-late ScrollController _scrollController1 = ScrollController();
+//late ScrollController _scrollController1 = ScrollController();
 
 DateTime? currentBackPressTime;
 
@@ -394,7 +395,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           width : 300.w,
                           height: 170.h,
                           child: Scrollbar(
-                            controller: _scrollController1,
+                            controller: _scrollController,
                             isAlwaysShown: true,
                             thickness: 8,
                             radius: Radius.circular(10),
@@ -582,17 +583,49 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
                     Padding(
-                      padding: EdgeInsets.only(left:35.w, top: 45.h),
+                      padding: EdgeInsets.fromLTRB(35.w, 45.h, 25.w, 20.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(height: 50.h,),
                           Text("금주의 추천 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => MissionAddPage()));
+                            },
+                            child: Container(
+                              width: 100.w,
+                              height: 30.h,
+                              decoration: BoxDecoration(
+                                color: Colors.blueGrey[400],
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Container(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("미션 추가",
+                                        style: TextStyle(color: Colors.white, fontSize: 11.sp) ),
+
+                                    //Icon(Icons.arrow_forward_ios, color: Colors.white, size: 10.w,)
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
 
                         ],
                       ),
                     ),
+
 
                     // Container(
                     //   width: 360.w,

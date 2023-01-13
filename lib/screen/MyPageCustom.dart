@@ -461,6 +461,7 @@ class _MyPageState extends State<MyPage> {
                       //SizedBox(height: 15.h,),
 
 
+
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -481,7 +482,7 @@ class _MyPageState extends State<MyPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(" 개인정보 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            Text(" 개인정보 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 16.sp) ),
                             Image.asset('assets/image/arrow-right1.png' )
                           ],
                         ),
@@ -509,7 +510,7 @@ class _MyPageState extends State<MyPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(" 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            Text(" 설정",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 16.sp) ),
                             Image.asset('assets/image/arrow-right1.png' )
                           ],
                         ),
