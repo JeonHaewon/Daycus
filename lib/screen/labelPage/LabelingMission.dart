@@ -17,6 +17,7 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var fromdb;
+int ccnt = 0;
 
 Map <String, dynamic> real_cnt_data={};
 
@@ -119,7 +120,8 @@ class _LabelingMissionState extends State<LabelingMission> {
   }
 
   from_jsondata() async {
-    getjson_fromdb();
+    fromdb = await getjson_fromdb();
+    print(jsonDecode(fromdb));
     if (fromdb != null){
       return jsonDecode(fromdb);
     }
@@ -143,7 +145,10 @@ class _LabelingMissionState extends State<LabelingMission> {
       if (select_res.statusCode == 200 ) {
         var resUser = jsonDecode(select_res.body);
         fromdb = resUser['data'][0]['jsondata'];
-        print(fromdb);
+        if (fromdb == null){
+          fromdb = {};
+        }
+        return fromdb;
       }
     } on Exception catch (e) {
       print("에러발생 : ${e}");
@@ -153,15 +158,17 @@ class _LabelingMissionState extends State<LabelingMission> {
   }
 
   update_json() async {
-    var fromdt = await from_jsondata();
     try {
       var select_res = await http.post(Uri.parse(API.update), body: {
         'update_sql': "update user_table set jsondata = '${jsonEncode(real_cnt_data)}' where user_email = '${user_data['user_email']}'"
       });
+      print(jsonDecode(fromdb));
+      print(real_cnt_data);
       if (select_res.statusCode == 200 ) {
-        if (Map<String, dynamic>.from(fromdt) != Map<String, dynamic>.from(real_cnt_data)) {
-          Fluttertoast.showToast(msg: "라벨링 결과가 업데이트 되었습니다 !");
+        if (ccnt != 0) {
+          Fluttertoast.showToast(msg: "라벨링 업데이트가 완료되었습니다 !");
         }
+        else return print("변함 없음");
       }
     } on Exception catch (e) {
       print("에러발생 : ${e}");
@@ -210,7 +217,7 @@ class _LabelingMissionState extends State<LabelingMission> {
   void initState() {
     super.initState();
     get_data();
-    getjson_fromdb();
+    ccnt = 0;
 
     label_category_list = widget.label_category.split(", ");
     label_cnt = label_category_list!.length;
@@ -553,6 +560,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                             onPressed: () {
                               update_map(index, label_category_list[i*2]);
                               do_label(label_category_list[i*2]);
+                              ccnt += 1;
                             },
                             child: Text(label_category_list[extraindex]),
                             style: ElevatedButton.styleFrom(
@@ -572,6 +580,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                                 // 로딩이 다 됐을 때만 라벨링 가능
                                 update_map(index, label_category_list[2*i+1]);
                                 do_label(label_category_list[2*i+1]);
+                                ccnt += 1;
                               },
                               child: Text(label_category_list[extraindex+1]),
                               style: ElevatedButton.styleFrom(
