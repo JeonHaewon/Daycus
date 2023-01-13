@@ -20,6 +20,7 @@ import 'dart:ui';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:typed_data';
 // import 'package:sound_stream/sound_stream.dart';
 import '../../screen/LoginPageCustom.dart';
@@ -28,6 +29,14 @@ import 'package:daycus/core/app_text.dart';
 import 'package:daycus/screen/specificMissionPage/RecordingPage.dart';
 
 var admobBannerId = 'ca-app-pub-3339242274230109/7848999030';
+_launchURL() async {
+  const url = 'https://blog.naver.com/happy-circuit';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 // create an instance
 
@@ -589,7 +598,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   );
                 },
               ),
-
+              AdminButton(
+                title: "링크 이동 슛 ~",
+                onPressed: (){
+                  _launchURL();
+                },
+              ),
               AdminButton(
                 title: "랭킹 가져오기",
                 onPressed: () async {

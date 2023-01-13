@@ -66,6 +66,7 @@ dependencies:
   in_app_review: ^2.0.6
   device_info_plus:
   sound_stream:
+  url_launcher:
 
 
 dev_dependencies:

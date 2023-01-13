@@ -16,6 +16,8 @@ import 'dart:math';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+var fromdb;
+
 Map <String, dynamic> real_cnt_data={};
 
 class LabelingMission extends StatefulWidget {
@@ -117,24 +119,49 @@ class _LabelingMissionState extends State<LabelingMission> {
   }
 
   from_jsondata() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('${user_data['user_email']}_label')!=null){
-      String? currr = prefs.getString('${user_data['user_email']}_label');
-      print(jsonDecode(currr!));
-      return jsonDecode(currr!);
+    getjson_fromdb();
+    if (fromdb != null){
+      return jsonDecode(fromdb);
     }
-    else{
-      return {};
+    else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getString('${user_data['user_email']}_label') != null) {
+        String? currr = prefs.getString('${user_data['user_email']}_label');
+        print(jsonDecode(currr!));
+        return jsonDecode(currr!);
+      }
+      else {
+        return {};
+      }
+    }
+  }
+  getjson_fromdb() async {
+    try {
+      var select_res = await http.post(Uri.parse(API.select), body: {
+        'update_sql': "select jsondata from user_table where user_email = '${user_data['user_email']}'"
+      });
+      if (select_res.statusCode == 200 ) {
+        var resUser = jsonDecode(select_res.body);
+        fromdb = resUser['data'][0]['jsondata'];
+        print(fromdb);
+      }
+    } on Exception catch (e) {
+      print("에러발생 : ${e}");
+      return false;
+      //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
     }
   }
 
   update_json() async {
+    var fromdt = await from_jsondata();
     try {
       var select_res = await http.post(Uri.parse(API.update), body: {
         'update_sql': "update user_table set jsondata = '${jsonEncode(real_cnt_data)}' where user_email = '${user_data['user_email']}'"
       });
       if (select_res.statusCode == 200 ) {
-        print("라벨링 결과가 업데이트 되었습니다 !");
+        if (Map<String, dynamic>.from(fromdt) != Map<String, dynamic>.from(real_cnt_data)) {
+          Fluttertoast.showToast(msg: "라벨링 결과가 업데이트 되었습니다 !");
+        }
       }
     } on Exception catch (e) {
       print("에러발생 : ${e}");
@@ -183,6 +210,7 @@ class _LabelingMissionState extends State<LabelingMission> {
   void initState() {
     super.initState();
     get_data();
+    getjson_fromdb();
 
     label_category_list = widget.label_category.split(", ");
     label_cnt = label_category_list!.length;
