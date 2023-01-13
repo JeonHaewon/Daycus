@@ -499,9 +499,9 @@ class _LabelingMissionState extends State<LabelingMission> {
                 ),
 
                 Container(
-                    alignment: Alignment.center, width: 320.w,
+                    alignment: Alignment.center, width: 310.w,
                     constraints: BoxConstraints(
-                        minHeight: 320.h
+                        minHeight: 335.h
                     ),
                     child: is_load
                         ? ( downloadImage!=null

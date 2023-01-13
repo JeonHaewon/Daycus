@@ -213,6 +213,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     String duration = '${widget.mission_data['start_date']} ~ ${widget.mission_data['end_date']}';
     int totaluser = int.parse(widget.mission_data['total_user']);
     // int certifiuser = int.parse(widget.mission_data['certifi_user']);
+    String rule = widget.mission_data['rules'];
+
 
     // 크기 안맞아서 변경
     // height 35.h > 35.w, sp 15.sp > 12.w
@@ -240,6 +242,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
         },
         "카메라", "갤러리",
         Icons.camera_alt, Icons.photo);
+
+    List rules_list = rule.split("\\n");
+    int rules_list_cnt = rules_list.length;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -367,6 +373,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                   // ),
 
 
+
+
                   Container(
                       width: 500.w,
                       height: 90.h,
@@ -412,6 +420,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     )
                   ),
 
+
+
+
+
                   if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
                   Padding(
                     padding: EdgeInsets.fromLTRB(10.w, 10.h, 0,0),
@@ -424,6 +436,52 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
 
                   SizedBox(height: 20.h,),
+
+                  Text("미션 참여방법",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
+
+                  Container(
+                    width: 500.w,
+                    //height: 90.h,
+                    //padding: EdgeInsets.fromLTRB(14.w, 0, 15.w,0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 5.h,),
+
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(14.w, 0, 15.w,0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: rules_list_cnt,
+
+                            itemBuilder: (_, index) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(rule.split("\\n")[index],
+                                      style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',) ),
+
+                                  // 맨 마지막 SizedBox는 빼기
+                                  if (index < rules_list_cnt-1)
+                                    SizedBox(height: 2.h,),
+                                ],
+                              );
+                            },
+
+                          ),
+                        ),
+
+                        SizedBox(height: 20.h,),
+
+                      ],
+                    ),
+                  ),
+
+
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
 
 
