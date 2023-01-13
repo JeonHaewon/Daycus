@@ -653,6 +653,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                           // 인증 완료된 날짜 블럭
                                                               : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
                                                             is_today: (todayBlockCnt==date), isLoad : is_load,
+
                                                             folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
                                                         ),
                                                         if(index_j != _oneWeek-1)
