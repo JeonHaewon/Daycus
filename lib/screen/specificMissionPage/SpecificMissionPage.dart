@@ -65,7 +65,7 @@ double _basicMoney = init_reward;
 String _basicText = "";
 double rewardPercent = 100;
 String _rewardCalculResert = _basicText;
-String progress = "donebutton";
+String progress = "defaultbutton";
 
 class _SpecificMissionPageState extends State<SpecificMissionPage> {
   var f = NumberFormat('###,###,###,###');
@@ -113,7 +113,6 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
      });
 
 
-
   }
 
   @override
@@ -122,6 +121,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
       _basicMoney = init_reward;
       _basicText = "${_basicMoney*(rewardPercent+100)/100} ${rewardName}";
       _rewardCalculResert = _basicText;
+      progress = "defaultbutton";
   }
 
   @override
@@ -399,7 +399,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('※ 한 미션에 걸 수 있는 최대 ${rewardName}는 20${rewardName}입니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                  Text('※ 한 미션에 걸 수 있는 최대 ${rewardName}는 ${limit_bet_reward}${rewardName}입니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
 
                   Text('※ 미션 성공시 14${rewardName}를 추가로 지급합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
                 ],
@@ -527,6 +527,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => MissionParticipatePage(
+                        remainDate: 14-timeDiffer,
                         topimage: 'missionparticipate_image',
                         //average reward도 데이터베이스에서 끌고오기
                         mission_id: widget.mission_id,

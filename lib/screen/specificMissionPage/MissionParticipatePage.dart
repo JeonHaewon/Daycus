@@ -1,6 +1,7 @@
 
 import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/backend/missionParticipate/missionParticipate.dart';
 import 'package:daycus/backend/missionParticipate/missionUserUpdate.dart';
@@ -15,12 +16,13 @@ import 'package:intl/intl.dart';
 import '../../backend/ImportData/userDataImport.dart';
 
 
-class MissionParticipatePage extends StatelessWidget {
+class MissionParticipatePage extends StatefulWidget {
   MissionParticipatePage({
     Key? key,
     required this.mission_id,
     required this.topimage,
     required this.title,
+    required this.remainDate,
     required this.duration,
     required this.totaluser,
     required this.avgreward,
@@ -35,13 +37,27 @@ class MissionParticipatePage extends StatelessWidget {
   final String duration;
   final int totaluser;
   final int avgreward;
+  final int remainDate;
 
   final onTap;
 
+  @override
+  State<MissionParticipatePage> createState() => _MissionParticipatePageState();
+}
+
+class _MissionParticipatePageState extends State<MissionParticipatePage> {
   final TextEditingController rewardCtrl = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   var f = NumberFormat('###,###,###,###');
+
+  @override
+  void initState() {
+    super.initState();
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,16 +106,16 @@ class MissionParticipatePage extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset('assets/image/specificmissionpage/$topimage.png' , width: 330.w,),
+                                Image.asset('assets/image/specificmissionpage/${widget.topimage}.png' , width: 330.w,),
                                 SizedBox(height: 15.h,),
-                                Text(title,style: TextStyle(color: Colors.black,fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                Text(widget.title,style: TextStyle(color: Colors.black,fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                                 SizedBox(height: 15.h,),
 
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('챌린지 기간',style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                    Text(duration,style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+                                    Text(widget.duration,style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
                                   ],
                                 ),
 
@@ -109,7 +125,7 @@ class MissionParticipatePage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('참가인원',style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                    Text('${f.format(totaluser)} 명',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+                                    Text('${f.format(widget.totaluser)} 명',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
                                   ],
                                 ),
 
@@ -119,7 +135,7 @@ class MissionParticipatePage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('평균 참여 ${rewardName}',style: TextStyle(color: Colors.grey,fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                    Text('${f.format(avgreward)} ${rewardName}',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
+                                    Text('${f.format(widget.avgreward)} ${rewardName}',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', ) ),
                                   ],
                                 ),
 
@@ -136,7 +152,9 @@ class MissionParticipatePage extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Text('미션 종료까지 8일 남았습니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean', ) ),
+
+                                      Text('미션 종료까지 ${widget.remainDate+1}일 남았습니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean', ) ),
+
 
                                     ],
                                   ),
@@ -254,7 +272,7 @@ class MissionParticipatePage extends StatelessWidget {
                               else if (double.parse(value) > double.parse(user_data['reward'])){
                                 return "보유 ${rewardName}보다 많이 걸 수 없습니다";
                               }
-                              
+
                             },
                           ),
                         ),
@@ -297,7 +315,7 @@ class MissionParticipatePage extends StatelessWidget {
                   // 참여자수 늘리는건 굳이 안해도 되므로, 로딩기능이 추가되면 await에서 빼기 !
 
                   // 참여 미션 등록하기
-                  await missionParticipate(mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
+                  await missionParticipate(widget.mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
                   //print("gggg");
                   minus_reward(rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text);
                   // 참여 유저 업데이트
@@ -318,6 +336,11 @@ class MissionParticipatePage extends StatelessWidget {
 
                   await userLogin(user_data['user_email'], user_data['password'], true);
                   await afterLogin();
+                  
+                  // 평균 리워드 업로드
+                  update_request(
+                      "with count_table as (select mission_id as mission_id, avg(bet_reward) as average from do_mission group by mission_id) UPDATE count_table A INNER JOIN missions B ON A.mission_id = B.mission_id SET B.average = A.average;",
+                      null);
 
 
                   // 돌아가면 홈으로 이동.

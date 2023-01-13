@@ -64,11 +64,26 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
   double _textSpacing = 10.w;
 
+  // 하임 1220 : 미션 시작일로부터 지난 날짜 (초기화)
+  int todayBlockCnt = 0;
+  int missionDate = 0;
+
+  int _oneWeek = 7;
+  double return_reward = 0;
+  int toCertify = 14;
+
+  String returnRewardString = "0";
+
+  int mission_result = 0;
+
+  bool is_load = false;
+
 
   todayMissionCertify(int do_i, String source) async {
 
     String todayString = await NowTime('yyyyMMddHHmmss');
     String imageName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
+
 
     if (source=='gallery'){
       await getImage(imageName, ImageSource.gallery);
@@ -76,6 +91,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     else if (source == 'camera'){
       await getImage(imageName, ImageSource.camera);
     }
+
+    setState(() {
+      is_load = true;
+    });
 
 
     // 갤러리로 찍을 경우 다시 보여준다
@@ -99,7 +118,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     );
 
     do_mission[do_i]["d$todayBlockCnt"] = imageReNamed;
-    setState(() { });
+    setState(() { is_load = false; });
     // result 개수 다시 업데이트
     cnt_done();
     return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
@@ -109,17 +128,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
   }
 
-  // 하임 1220 : 미션 시작일로부터 지난 날짜 (초기화)
-  int todayBlockCnt = 0;
-  int missionDate = 0;
 
-  int _oneWeek = 7;
-  double return_reward = 0;
-  int toCertify = 14;
-
-  String returnRewardString = "0";
-
-  int mission_result = 0;
 
   @override
   void initState () {
@@ -622,6 +631,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                               ? (todayBlockCnt <= date ?
                                                                   // 날짜가 지나지 않았으면
                                                                   YetMissionBlock(i: index_i, j: index_j, sp: _sp,
+                                                                    isLoad: is_load, is_today: (todayBlockCnt==date),
                                                                   onPressed: () async {
                                                                     if (date == todayBlockCnt){
                                                                       if (widget.mission_data['certify_tool'] == 'gallery'){
@@ -641,8 +651,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                               : FailMissionBlock(sp: _sp)
                                                           )
                                                           // 인증 완료된 날짜 블럭
-                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date
-                                                            , folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
+                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
+                                                            is_today: (todayBlockCnt==date), isLoad : is_load,
+                                                            folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
                                                         ),
                                                         if(index_j != _oneWeek-1)
                                                           SizedBox(
@@ -960,26 +971,25 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                   } else if (widget.mission_data['certify_tool'] == 'pedometer'){
                     print("만보기");
                     print("$PedometerSteps ${widget.mission_data['condition']}");
-                    if((int.parse(PedometerSteps) >= int.parse(widget.mission_data['condition']))&&(do_mission[do_i]["d$todayBlockCnt"]==null)){
-
+                    if((int.parse(PedometerSteps) >= int.parse(widget.mission_data['condition']))){
                       // 미션 인증
                       bool success = await update_request(
                           "UPDATE do_mission SET d${todayBlockCnt}='${PedometerSteps}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
                           null);
-
                       if (success){
                         setState(() {
                           do_mission[do_i]["d$todayBlockCnt"] = PedometerSteps;
                         });
-
                         // result 개수 다시 업데이트
                         cnt_done();
                         return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
-
                         Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
                       }
                     } else if (do_mission[do_i]["d$todayBlockCnt"]!=null){
                       Fluttertoast.showToast(msg: "미션을 이미 인증하셨습니다");
+                    }
+                    else {
+                      Fluttertoast.showToast(msg: "${(int.parse(widget.mission_data['condition'])-int.parse(PedometerSteps))} 걸음 남았습니다");
                     }
 
 
@@ -1148,6 +1158,8 @@ class DoneMissionBlock extends StatelessWidget {
     required this.folder,
     required this.do_mission_data,
     required this.tool,
+    required this.isLoad,
+    required this.is_today,
   }) : super(key: key);
 
   final int i;
@@ -1157,6 +1169,8 @@ class DoneMissionBlock extends StatelessWidget {
   final String folder;
   final do_mission_data;
   final String tool;
+  final bool isLoad;
+  final bool is_today;
 
   @override
   Widget build(BuildContext context) {
@@ -1168,14 +1182,16 @@ class DoneMissionBlock extends StatelessWidget {
             Image? downloadImage = image_data[0];
             int degree = image_data[1];
 
-            showAlertDialog(context, date, downloadImage, degree);
-          } else if (tool=="pedometer"){
-            showPedometerAlertDialog(context, date, do_mission_data["d${date}"]);
-          }
-        },
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
+    showAlertDialog(context, date, downloadImage, degree);
+  } else if (tool=="pedometer"){
+  showPedometerAlertDialog(context, date, do_mission_data["d${date}"]);
+  }
+},
+style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
         // child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
-        child: Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        child: (isLoad && is_today)
+            ? CircularProgressIndicator()
+            : Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
     );
   }
 }
@@ -1186,20 +1202,27 @@ class YetMissionBlock extends StatelessWidget {
     required this.i,
     required this.j,
     required this.sp,
+    required this.is_today,
     this.onPressed,
+    required this.isLoad,
   }) : super(key: key);
 
   final int i;
   final int j;
   final double sp;
   final onPressed;
+  final bool isLoad;
+  final bool is_today;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: onPressed,
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-        child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
+        // 블럭이 오늘을 가리키고, isload가 true이면.
+        child: (isLoad && is_today)
+            ? CircularProgressIndicator()
+            : Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
 }
 

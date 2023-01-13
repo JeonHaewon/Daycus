@@ -65,8 +65,14 @@ userLogin(String email, String password, bool reload) async{
         return true;
 
       } else {
-        // 계정이 없다는 멘트도 띄워야할듯?
-        Fluttertoast.showToast(msg: "이메일 또는 비밀번호가 올바르지 않습니다.");
+        if (reload){
+          Fluttertoast.showToast(msg: "오류가 발생했습니다. 로그아웃 후 다시 로그인해주세요.");
+        }
+        else {
+          // 계정이 없다는 멘트도 띄워야할듯?
+          Fluttertoast.showToast(msg: "이메일 또는 비밀번호가 올바르지 않습니다.");
+        }
+
         print("이메일 또는 비밀번호가 올바르지 않습니다.");
 
         return false;

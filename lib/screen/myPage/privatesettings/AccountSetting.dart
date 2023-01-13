@@ -181,7 +181,7 @@ class _AccountSettingState extends State<AccountSetting> {
       String todayString = await NowTime('yyyyMMddHHmmss');
 
       print(user_data['user_email'].split("@"));
-      String imageName = "${user_data['user_id']}_profile_${todayString.substring(0,8)}_${todayString.substring(8,14)}";
+      String imageName = "${user_data['user_id']}_profile";
       print("imageName : ${imageName}");
 
       profileImageReNamed = null;
