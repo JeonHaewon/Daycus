@@ -12,8 +12,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 
-TextStyle _hintStyleGray = TextStyle(color: Colors.grey, fontSize: 17);
-TextStyle _hintStyleBlack = TextStyle(color: Colors.black, fontSize: 17);
+TextStyle _hintStyleGray = TextStyle(color: Colors.grey, fontSize: 15.sp);
+TextStyle _hintStyleBlack = TextStyle(color: Colors.black, fontSize: 15.sp);
 
 TextStyle _hintStyle = _hintStyleGray;
 
@@ -326,6 +326,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                       width: 150.w, height: 30.h,
                       // '미션 참여 금액' 아래의 텍스트 박스
                       child: TextFormField(
+                        style: TextStyle(fontSize: 15.sp),
                         keyboardType: TextInputType.number,
                         onChanged: (text){
                           setState(() {

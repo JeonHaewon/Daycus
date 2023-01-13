@@ -271,16 +271,29 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 0, 24.w, 0),
                       child: Container(
+
                         child: Column(
                           children: [
+
                             SizedBox(height: 40.h,),
-                            Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h),
+
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Container(
+                                height: 210.h,
+                                width: 150.w,
+                                child: Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h)),
+                            ),
+
+                            //Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h),
                             //SvgPicture.asset('assets/image/character.svg' , fit: BoxFit.fill,height: 240.h),
                           ],
                         ),
                       ),//오른쪽 asset,
-                    )
+                    ),
                     //왼쪽에 글자랑 등급들
+
+
 
 
                   ],

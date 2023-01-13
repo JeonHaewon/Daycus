@@ -132,8 +132,10 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
               children: [
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+
+                    SizedBox(width: 2.w,),
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,8 +184,17 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
                       ],
                     ),
 
-                    SizedBox(width: 10.w,),
-                    Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 150.h),
+                    //SizedBox(width: 8.w,),
+
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Container(
+                        height: 150.h,
+                        width: 95.w,
+                        child: Image.asset('assets/image/character.png' , height: 150.h),),
+                    ),
+
+                    //Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 150.h),
 
                   ],
                 ),

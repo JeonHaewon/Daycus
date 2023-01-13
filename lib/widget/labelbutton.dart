@@ -74,27 +74,27 @@ class LabelButton extends StatelessWidget {
             SizedBox(height: 10.h,),
 
 
-            Container(
-              width: 170.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("나의 참여 현황",style: TextStyle(color: AppColor.happyblue,fontSize: 12.sp, fontFamily: 'korean') ),
-                  Text("${f.format(totalUser)}/${f.format(myparticipation)}",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
-                ],
-              ),
-            ),
-
-
-
-            SizedBox(height: 5.h,),
-
-            Container(
-              width: 100.w,
-              height: 10.h,
-              color: AppColor.happyblue,
-
-            ),
+            // Container(
+            //   width: 170.w,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text("나의 참여 현황",style: TextStyle(color: AppColor.happyblue,fontSize: 12.sp, fontFamily: 'korean') ),
+            //       Text("${f.format(totalUser)}/${f.format(myparticipation)}",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
+            //     ],
+            //   ),
+            // ),
+            //
+            //
+            //
+            // SizedBox(height: 5.h,),
+            //
+            // Container(
+            //   width: 100.w,
+            //   height: 10.h,
+            //   color: AppColor.happyblue,
+            //
+            // ),
 
 
           ],

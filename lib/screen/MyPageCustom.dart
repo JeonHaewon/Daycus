@@ -458,7 +458,8 @@ class _MyPageState extends State<MyPage> {
                       //   ),
                       // ),
 
-                      SizedBox(height: 15.h,),
+                      //SizedBox(height: 15.h,),
+
 
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -550,7 +551,7 @@ class _MyPageState extends State<MyPage> {
                                       },
                                       child: Container(
                                         width: 250.w,
-                                        height: 40.h,
+                                        height: 38.h,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[300],
                                         ),
@@ -559,9 +560,11 @@ class _MyPageState extends State<MyPage> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                              SizedBox(width: 10.w,),
-                                              Icon(Icons.chat, color: Colors.grey[850])
+
+                                              Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                                              SizedBox(width: 8.w,),
+                                              Icon(Icons.chat, color: Colors.grey[850],size: 25.w,),
+
                                             ],
                                           ),
                                         ),
