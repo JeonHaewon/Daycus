@@ -158,6 +158,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     //print("mission_data : ${widget.mission_data}");
     //print("end date : "+widget.mission_data['end_date']);
 
+    print("날짜 --  : ${DateTime.parse(now_time).difference((DateTime.parse(widget.mission_data['start_date']))).inDays + 1}");
+
       setState(() {
         todayBlockCnt = DateTime.parse(now_time)
             .difference((DateTime.parse(widget.mission_data['start_date']))).inDays + 1;

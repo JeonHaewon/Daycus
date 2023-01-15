@@ -34,7 +34,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
     String misson_cnt = do_mission_cnt.toString();
 
     Future<void> refresh() async {
-      await LoginAsyncMethod(MissionCheckPage.storage, null, true);
+      await LoginAsyncMethod(MissionCheckPage.storage, context, true);
       setState(() { });
     };
 

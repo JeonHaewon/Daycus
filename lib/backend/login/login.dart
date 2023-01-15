@@ -2,6 +2,9 @@ import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/screen/CheckConnection.dart';
+import 'package:daycus/screen/LoginPageCustom.dart';
+import 'package:daycus/screen/ReConnection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -57,6 +60,7 @@ userLogin(String email, String password, bool reload) async{
           update_request(
               "UPDATE user_table SET last_login='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
 
+
           Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
           controller.currentBottomNavItemIndex.value = 2;
         }
@@ -104,6 +108,7 @@ keepLogin (name, email, password, storage) async {
 }
 
 afterLogin() async {
+
   level_update();
 
   // 검토 필요
@@ -134,44 +139,55 @@ afterLogin() async {
 
 
 // keep login - 유저 정보 들고오기
-LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
+LoginAsyncMethod(storage, BuildContext context, bool reload) async {
 
-  dynamic userInfo = '';
-
-  // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-  // 데이터가 없을때는 null을 반환
-  userInfo = await storage.read(key:'login');
-  print(userInfo);
-
-  // 자동로그인이 필요한 경우, reload 시
-  if ((userInfo!=null && user_data==null) || reload) {
-    var userDecode = jsonDecode(userInfo);
-
-    print(userDecode);
-    await userLogin(userDecode['user_email'], userDecode['password'], reload);
-    //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
-
-    // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
-    await afterLogin();
-    // 다 닫고 ㄱㄱ
-
-    if (context!=null) {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
-
-      // 홈페이지가 기본 !
-      controller.currentBottomNavItemIndex.value = 2;
-    }
-  } // 자동로그인이 필요하지 않은 경우
-  else if (userInfo!=null && user_data!=null) {
-    // 다 닫고 ㄱㄱ
-    if (context!=null) {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
-    }
+  String connection = await checkConnectionStatus(context);
+  if (connection=="ConnectivityResult.none"){
+    Navigator.push(context, MaterialPageRoute(builder: (_) => ReConnection()));
   }
   else {
-    print('로그인이 필요합니다');
+    dynamic userInfo = '';
+
+    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+    // 데이터가 없을때는 null을 반환
+    userInfo = await storage.read(key: 'login');
+    print(userInfo);
+
+    // 자동로그인이 필요한 경우, reload 시
+    if ((userInfo != null && user_data == null) || reload) {
+      var userDecode = jsonDecode(userInfo);
+
+      print(userDecode);
+      await userLogin(userDecode['user_email'], userDecode['password'], reload);
+      //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
+
+      // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
+      await afterLogin();
+      // 다 닫고 ㄱㄱ
+
+      if (context!=null && reload==false) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+
+        // 홈페이지가 기본 !
+        controller.currentBottomNavItemIndex.value = 2;
+      }
+    } // 자동로그인이 필요하지 않은 경우
+    else if (userInfo != null && user_data != null) {
+      // 다 닫고 ㄱㄱ
+      if (context!=null && reload==false) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+      }
+    }
+    else {
+      if (context!=null && reload==false) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => LoginPageCustom()), (
+                route) => false);
+      }
+      print('로그인이 필요합니다');
+    }
   }
 }
 

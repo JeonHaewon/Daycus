@@ -67,6 +67,7 @@ dependencies:
   device_info_plus:
   sound_stream:
   url_launcher:
+  connectivity:
 
 
 dev_dependencies:

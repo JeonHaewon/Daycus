@@ -315,17 +315,21 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                   // 참여자수 늘리는건 굳이 안해도 되므로, 로딩기능이 추가되면 await에서 빼기 !
 
                   // 참여 미션 등록하기
-                  await missionParticipate(widget.mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
+                  bool success2 = false;
+                  bool success1 = await missionParticipate(widget.mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
                   //print("gggg");
-                  minus_reward(rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text);
-                  // 참여 유저 업데이트
+                  if (success1) {
+                        success2 = await minus_reward(
+                            rewardCtrl.text.trim() == ''
+                                ? '0'
+                                : rewardCtrl.text);
+                      }
+                      // 참여 유저 업데이트
                   // 이건 잘 됨.
                   // await missionUserUpdate(mission_id);
 
                   // 이것도 어플 상에서 UI 업데이트 구현하고, 네트워크는 백그라운드상에서 구현
                   // 로딩 시 네트워크로 구현해도 될듯.
-                  // 진행중인 미션 목록 불러오기
-                  await doMissionImport();
 
                   // 백그라운
                   // 이후에 변경된 미션만 다시 불러오는 것도 좋을듯.
@@ -333,25 +337,36 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                   // importMissionByCategory();
                   // userDataImport();
                   // doMissionSave();
+                  if (success1 && success2)
+                      {
+                        // 진행중인 미션 목록 불러오기
+                        await doMissionImport();
 
-                  await userLogin(user_data['user_email'], user_data['password'], true);
-                  await afterLogin();
-                  
-                  // 평균 리워드 업로드
-                  update_request(
-                      "with count_table as (select mission_id as mission_id, avg(bet_reward) as average from do_mission group by mission_id) UPDATE count_table A INNER JOIN missions B ON A.mission_id = B.mission_id SET B.average = A.average;",
-                      null);
+                        await userLogin(user_data['user_email'],
+                            user_data['password'], true);
+                        await afterLogin();
 
+                        // 평균 리워드 업로드
+                        update_request(
+                            "with count_table as (select mission_id as mission_id, avg(bet_reward) as average from do_mission group by mission_id) UPDATE count_table A INNER JOIN missions B ON A.mission_id = B.mission_id SET B.average = A.average;",
+                            null);
 
-                  // 돌아가면 홈으로 이동.
-                  controller.currentBottomNavItemIndex.value = 2;
+                        update_request("call update_ranking();", null);
+                        // 레벨 업데이트
+                        update_request(
+                            "call update_level5('${user_data['user_email']}');",
+                            null);
 
-                  // 페이지 다 닫고 이동
-                  Navigator.pushAndRemoveUntil(context,
-                      MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+                        // 돌아가면 홈으로 이동.
+                        controller.currentBottomNavItemIndex.value = 2;
 
-
-                }
+                        // 페이지 다 닫고 이동
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (_) => TemHomePage()),
+                            (route) => false);
+                      }
+                    }
               }, child: Text('미션 시작하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],

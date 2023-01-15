@@ -1,6 +1,10 @@
+import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MissionAddPage extends StatefulWidget {
   @override
@@ -10,7 +14,16 @@ class MissionAddPage extends StatefulWidget {
 
 class _MissionAddPage extends State<MissionAddPage> {
 
-  final TextEditingController AddMissionCtrl = TextEditingController();
+  //final TextEditingController AddMissionCtrl = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController customMissionCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    customMissionCtrl.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,19 +87,28 @@ class _MissionAddPage extends State<MissionAddPage> {
                   SizedBox(height: 12.h,),
 
 
-                  TextField(
-                    controller: AddMissionCtrl,
-                    maxLines: 6,
-                    decoration: InputDecoration(
-                      hintText: "추가하고 싶은 새로운 미션이 있나요?",
-                      hintStyle: TextStyle(fontSize: 12.sp, color: Colors.grey),
-                      fillColor: Colors.white,
-                      filled: true,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: customMissionCtrl,
+                      maxLines: 6,
+                      validator: (String? value){
+                        if (value!.isEmpty) {
+                          return '내용을 입력해주세요.';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: "추가하고 싶은 새로운 미션이 있나요?\n설명이 구체적일수록 좋습니다 !",
+                        hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                        fillColor: Colors.white,
+                        filled: true,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                        ),
                       ),
+                      cursorColor: AppColor.happyblue,
                     ),
-                    cursorColor: AppColor.happyblue,
                   ),
 
 
@@ -126,7 +148,19 @@ class _MissionAddPage extends State<MissionAddPage> {
               height: 70.h,
               width: 412.w,
               child: TextButton(
-                onPressed: () {}, 
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    // 금주의 추천 미션 신청 완료
+                      DateTime today = await NowTime(null);
+                      bool success = await update_request(
+                      "INSERT INTO to_developer (content, error_message, user_email, datetime, error_image) VALUES ('${customMissionCtrl.text.trim().replaceAll("'", "`")}', '추천 미션', '${user_data['user_email']}', '${today.toString().substring(0,23)}', null);",
+                      null);
+                      if (success){
+                        Navigator.pop(context);
+                        Fluttertoast.showToast(msg: "미션 신청이 완료되었습니다.\n좋은 의견 감사합니다 :)");
+                      }
+                  }
+                },
                 child: Text('신청하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) )
               ),
             ),

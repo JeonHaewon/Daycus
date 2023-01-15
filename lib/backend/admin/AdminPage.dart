@@ -5,6 +5,7 @@ import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:daycus/backend/admin/RecordingPage.dart';
+import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -615,6 +616,15 @@ class _AdminScreenState extends State<AdminScreen> {
 
                   print(rankingList);
 
+                },
+              ),
+
+              AdminButton(
+                title: "로딩페이지",
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoadingPage()));
                 },
               ),
 

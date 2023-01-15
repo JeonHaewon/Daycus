@@ -1,5 +1,6 @@
 import 'package:daycus/core/constant.dart';
 import 'package:daycus/core/notification.dart';
+import 'package:daycus/screen/LoadingPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
@@ -63,7 +64,8 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // 그냥 로고 화면으로 갔다가 로그인이 필요한 경우에만 로그인 페이지로 가게끔 구현이 필요하다.
-          home: LoginPageCustom(),
+          home: LoadingPage(),
+          // LoginPageCustom(),
         );
       },
     );

@@ -3,6 +3,8 @@ import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_color.dart';
+import 'package:daycus/screen/CheckConnection.dart';
+import 'package:daycus/screen/ReConnection.dart';
 
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/PopPage.dart';
@@ -29,15 +31,15 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
   static final storage = FlutterSecureStorage();
 
-  @override
-  void initState() {
-    super.initState();
-    // 비동기로 flutter secure storage 정보를 불러오는 작업
-    // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      LoginAsyncMethod(storage, context, false);
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // 비동기로 flutter secure storage 정보를 불러오는 작업
+  //   // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     LoginAsyncMethod(storage, context, false);
+  //   });
+  // }
 
   double textFieldHeight = 55.0;
   double loginFontSize = 40.0;
@@ -56,6 +58,11 @@ class KeepLoginPage extends State<LoginPageCustom> {
     super.dispose();
     emailCtrl.dispose();
     passwordCtrl.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -147,6 +154,10 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
               ElevatedButton(
                   onPressed: () async {
+                    String connection = await checkConnectionStatus(context);
+                    if (connection=="ConnectivityResult.none"){
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => ReConnection()));
+                    }
                     // 로그인 버튼 눌렀을 때
                     if (_formKey.currentState!.validate()){
                       bool? is_login = await userLogin(

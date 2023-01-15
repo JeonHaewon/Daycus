@@ -115,7 +115,7 @@ class _MyPageState extends State<MyPage> {
     double cnt2 = cnt1.toDouble();
 
     Future<void> refresh() async {
-      await LoginAsyncMethod(MyPage.storage, null, true);
+      await LoginAsyncMethod(MyPage.storage, context, true);
       setState(() { });
     };
 
@@ -365,6 +365,7 @@ class _MyPageState extends State<MyPage> {
                       //SizedBox(height: 15.h,),
 
                       // 현재 참여 빈도
+                      if (cnt1>0)
                       Container(
                         width: 365.w,
                         //height:260.h,

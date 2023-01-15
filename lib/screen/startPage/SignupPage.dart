@@ -109,6 +109,9 @@ class _signupPage extends State<SignupPage> {
           Fluttertoast.showToast(msg: "성공적으로 가입 되었습니다.");
           Future<bool> is_update_in_firebase = createUser(emailCtrl.text.trim(),passwordCtrl.text.trim());
 
+          // 랭킹 업그레이드
+          update_request("call update_ranking();", null);
+
           bool? is_login = await userLogin(
             emailCtrl.text.trim(),
             passwordCtrl.text.trim(),
@@ -175,11 +178,11 @@ class _signupPage extends State<SignupPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     passwordCtrl.clear();
     passwordCheckCtrl.clear();
     emailCtrl.clear();
+    customMissionCtrl.clear();
   }
 
   @override

@@ -17,6 +17,8 @@ class _AllMissionState extends State<AllMission> {
   @override
   Widget build(BuildContext context) {
 
+    Size m = MediaQuery.of(context).size;
+
     Future<void> refresh() async {
       await afterLogin();
       setState(() { });
@@ -31,6 +33,9 @@ class _AllMissionState extends State<AllMission> {
         child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
+              constraints: BoxConstraints(
+                minHeight: m.height,
+              ),
               padding: EdgeInsets.only(left: 18.w, top: 25.h, bottom: 25.h),
               child: Wrap(
                 children: List.generate(missions_cnt, (index) {

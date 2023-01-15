@@ -4,6 +4,7 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/notification.dart';
+import 'package:daycus/screen/CheckConnection.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
@@ -100,7 +101,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     // 데이터 리로드
     Future<void> refresh() async {
-      await LoginAsyncMethod(HomePage.storage, null, true);
+      await LoginAsyncMethod(HomePage.storage, context, true);
       setState(() { });
     };
 
@@ -138,7 +139,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   // 고른 프로필 사진이 없을 때
                       ? (user_data['profile']==null || downloadProfileImage==null)
                       ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
-                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
                       : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
               ),
             ),
@@ -465,7 +466,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   children: [
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(35.w, 40.h, 30.w, 0),
+                      padding: EdgeInsets.fromLTRB(35.w, 40.h, 30.w, 5.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,7 +494,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ),
                     ),
 
-                    SizedBox(height: 10.h,),
+                    //SizedBox(height: 10.h,),
 
                     // 진행중인 미션이 없을 때
                     if(do_mission==null)
@@ -585,41 +586,51 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   children: [
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(35.w, 45.h, 25.w, 20.h),
+                      padding: EdgeInsets.fromLTRB(35.w, 45.h, 25.w, 10.h),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("금주의 추천 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
 
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => MissionAddPage()));
-                            },
-                            child: Container(
-                              width: 100.w,
-                              height: 30.h,
-                              decoration: BoxDecoration(
-                                color: Colors.blueGrey[400],
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                              child: Container(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("미션 추가",
-                                        style: TextStyle(color: Colors.white, fontSize: 11.sp) ),
 
-                                    //Icon(Icons.arrow_forward_ios, color: Colors.white, size: 10.w,)
-                                  ],
-                                ),
-                              ),
+                          // InkWell(
+                          //   onTap: () {
+                          //
+                          //   },
+                          //   child: Container(
+                          //     width: 100.w,
+                          //     height: 30.h,
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.blueGrey[400],
+                          //       borderRadius: BorderRadius.circular(3),
+                          //     ),
+                          //     child: Container(
+                          //       child: Row(
+                          //         crossAxisAlignment: CrossAxisAlignment.center,
+                          //         mainAxisAlignment: MainAxisAlignment.center,
+                          //         children: [
+                          //           Text("미션 추가",
+                          //               style: TextStyle(color: Colors.white, fontSize: 11.sp) ),
+                          //
+                          //           //Icon(Icons.arrow_forward_ios, color: Colors.white, size: 10.w,)
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
                             ),
-                          ),
+                              onPressed: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => MissionAddPage()));
+                              },
+                              child: Icon(Icons.add, color: Colors.black,)),
 
 
                         ],
