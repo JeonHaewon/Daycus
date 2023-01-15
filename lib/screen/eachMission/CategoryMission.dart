@@ -53,11 +53,11 @@ class _CategoryMissionState extends State<CategoryMission> {
             padding: EdgeInsets.only(left: 18.w, top: 25.h, bottom: 25.h),
             child: Wrap(
               children: List.generate(missions_cnt, (index) {
-                if (all_missions[index]['now_user_do']==null && all_missions[index]['category']==widget.page_category && all_missions[index]['mission_state']!='done') {
+                if (all_missions[missions_cnt-index-1]['now_user_do']==null && all_missions[missions_cnt-index-1]['category']==widget.page_category && all_missions[missions_cnt-index-1]['mission_state']!='done') {
                   return Container(
                     width: 190.w,
                     margin: EdgeInsets.only(bottom: 15.h, left: 5.w),
-                    child: BigMissionButtonToPage(i: index, data: all_missions,),
+                    child: BigMissionButtonToPage(i: missions_cnt-index-1, data: all_missions,),
                   );
                 }
                 else {

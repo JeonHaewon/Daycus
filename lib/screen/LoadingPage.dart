@@ -41,7 +41,7 @@ class _LoadingPageState extends State<LoadingPage> {
             child: Column(
               children: [
                 SizedBox(height: 720.h,),
-                Text("로딩이 지속될 경우\n앱을 완전히 껐다가 켜주세요"),
+                Text("로딩이 지속될 경우\n앱을 완전히 껐다가 켜주세요", textAlign: TextAlign.center,),
                 SizedBox(height: 20.h,),
                 SizedBox(
                   width: 30.w, height: 30.h,

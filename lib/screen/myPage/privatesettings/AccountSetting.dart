@@ -136,7 +136,8 @@ class _AccountSettingState extends State<AccountSetting> {
   }
 
   void success_upload(){
-    Fluttertoast.showToast(msg: "성공적으로 반영되었습니다");
+    // 수정해야하는 부분
+    Fluttertoast.showToast(msg: "성공적으로 반영되었습니다\n홈페이지에서 리로드 시 반영됩니다");
 
     // 사용자 정보 지우기, dispose하면 에러뜸.
     setState(() {
