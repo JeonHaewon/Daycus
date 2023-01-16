@@ -81,7 +81,7 @@ class FindPasswordPage extends StatelessWidget {
 
     is_enrolled(texting) async {
       try {
-        var select_res = await http.post(Uri.parse(API.update), body: {
+        var select_res = await http.post(Uri.parse(API.select), body: {
           // 이거 'update_sql'로 바꾸어야함.
           'update_sql': "SELECT * FROM user_table WHERE user_email = '${texting}'",
         });
@@ -90,6 +90,7 @@ class FindPasswordPage extends StatelessWidget {
           var resMission = jsonDecode(select_res.body);
           // print(resMission);
           if (resMission['success'] == true) {
+            print(resMission);
             Fluttertoast.showToast(msg: "이메일을 확인해주세요 !");
             return true;
           } else {
@@ -153,8 +154,10 @@ class FindPasswordPage extends StatelessWidget {
                       ),
 
                       InkWell(
-                        onTap: () {
-                          send_email_to_user(emailCtrl.text.trim(), making_new_code());
+                        onTap: () async {
+                          if (await is_enrolled(emailCtrl.text.trim()) == true){
+                            send_email_to_user(emailCtrl.text.trim(), making_new_code());
+                          }
                         },
                         child: Container(
                           width: 80.w,

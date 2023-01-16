@@ -74,12 +74,15 @@ class _RecordingPageState extends State<RecordingPage> {
     ]);
   }
 
+  var replayList = [];
+
   void _play() async {
     await _player.start();
 
     if (_micChunks.isNotEmpty) {
       for (var chunk in _micChunks) {
         await _player.writeChunk(chunk);
+        replayList.add(chunk);
       }
       _micChunks.clear();
     }
@@ -183,7 +186,8 @@ class _RecordingPageState extends State<RecordingPage> {
             SizedBox(height: 35.h,),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+              },
               child: Container(
                 width: 150.w,
                 height: 50.h,
