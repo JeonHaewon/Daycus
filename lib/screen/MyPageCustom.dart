@@ -415,6 +415,7 @@ class _MyPageState extends State<MyPage> {
                             SizedBox(height: 20.h,),
 
 
+
                           ],
                         ),
                       ), //주간랭킹
@@ -751,7 +752,7 @@ class ParticipateBar extends StatelessWidget {
 
           AnimatedContainer(
             duration: Duration(milliseconds: 500),
-            width:  initialValue ? 0 : (225.w)*(graphWidth/cnt),
+            width:  initialValue ? 0 : (190.w)*(graphWidth/cnt),
             height: 10.h,
             decoration: BoxDecoration(
                 color: AppColor.happyblue,
