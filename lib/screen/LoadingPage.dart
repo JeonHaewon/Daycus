@@ -2,6 +2,7 @@ import 'package:daycus/backend/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 
@@ -21,15 +22,17 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
+    print("init");
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      LoginAsyncMethod(storage, context, false);
-    });
+    Fluttertoast.showToast(msg: "init");
+    LoginAsyncMethod(storage, context, false);
   }
 
   @override
   Widget build(BuildContext context) {
+    Fluttertoast.showToast(msg: "build");
+    print("build");
     return Scaffold(
       body: Stack(
         children: [
