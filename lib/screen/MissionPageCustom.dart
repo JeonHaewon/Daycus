@@ -69,20 +69,28 @@ class MissionPage extends StatelessWidget {
           ),
 
         ),
-        body:TabBarView(
-
+        body:Stack(
+          alignment: Alignment.bottomCenter,
           children: [
-            AllMission(),
-            CategoryMission(page_category: "건강"),
-            CategoryMission(page_category: "공부"),
-            CategoryMission(page_category: "운동"),
-            CategoryMission(page_category: "생활"),
-            CategoryMission(page_category: "취미"),
+            TabBarView(
 
+              children: [
+                AllMission(),
+                CategoryMission(page_category: "건강"),
+                CategoryMission(page_category: "공부"),
+                CategoryMission(page_category: "운동"),
+                CategoryMission(page_category: "생활"),
+                CategoryMission(page_category: "취미"),
+
+              ],
+            ),
+
+            Advertisement(),
           ],
+
         ),
 
-        bottomNavigationBar: Advertisement()
+        //bottomNavigationBar: Advertisement()
       ),
     );
   }

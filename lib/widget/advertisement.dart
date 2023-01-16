@@ -9,20 +9,13 @@ class Advertisement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                child: AdmobBanner(
-                  adUnitId: admobBannerId,
-                  adSize: AdmobBannerSize.BANNER,
-                  onBannerCreated:
-                      (AdmobBannerController controller){},
-                )
-            )
-          ],
-        )
+    return Container(
+      child: AdmobBanner(
+        adUnitId: admobBannerId,
+        adSize: AdmobBannerSize.BANNER,
+        onBannerCreated:
+            (AdmobBannerController controller){},
+      )
     );
   }
 }

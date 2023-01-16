@@ -74,58 +74,67 @@ class _LabelPageState extends State<LabelPage> {
         automaticallyImplyLeading: false,
       ),
 
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        color: AppColor.happyblue,
-        child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: 370.w,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount:
-                      (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
-                      itemBuilder: (_, index) {
-                        extraindex += 2;
-                        return Column(
-                          children: [
-
-                            SizedBox(height: 20.h,),
-
-
-                            // 라벨링 ㅠㅠㅠㅠㅠㅠ 바꿔야돼 ㅠㅠㅠㅠㅠㅠ 라벨링 필요없는건 ㅠㅠㅠㅠㅠ
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          RefreshIndicator(
+            onRefresh: refresh,
+            color: AppColor.happyblue,
+            child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        width: 370.w,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                          (missions_cnt % 2 == 0 ? missions_cnt / 2 : missions_cnt ~/ 2 + 1).toInt(),
+                          itemBuilder: (_, index) {
+                            extraindex += 2;
+                            return Column(
                               children: [
-                                // 나중에 총 사진 개수가 0이면 라벨링 페이지에서 제거, 검증이 모두 끝났으면 라벨링 페이지에서 제거하면 될듯.
-                                LabelButtonToPage(i: extraindex, data: all_missions),
-                                if (extraindex + 1 < missions_cnt)
-                                  LabelButtonToPage(i: extraindex+1, data: all_missions,),
 
-                                //BigMissionButtonToPage(i: extraindex, data: all_missions,),
-                                //if (extraindex + 1 < missions_cnt)
-                                  //BigMissionButtonToPage(i: extraindex+1, data: all_missions,),
+                                SizedBox(height: 20.h,),
+
+
+                                // 라벨링 ㅠㅠㅠㅠㅠㅠ 바꿔야돼 ㅠㅠㅠㅠㅠㅠ 라벨링 필요없는건 ㅠㅠㅠㅠㅠ
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // 나중에 총 사진 개수가 0이면 라벨링 페이지에서 제거, 검증이 모두 끝났으면 라벨링 페이지에서 제거하면 될듯.
+                                    LabelButtonToPage(i: extraindex, data: all_missions),
+                                    if (extraindex + 1 < missions_cnt)
+                                      LabelButtonToPage(i: extraindex+1, data: all_missions,),
+
+                                    //BigMissionButtonToPage(i: extraindex, data: all_missions,),
+                                    //if (extraindex + 1 < missions_cnt)
+                                    //BigMissionButtonToPage(i: extraindex+1, data: all_missions,),
+                                  ],
+                                ),
+
                               ],
-                            ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 60.h,),
 
-                          ],
-                        );
-                      },
-                    ),
+                    ],
                   ),
-                  SizedBox(height: 20.h,),
+                )
+            ),
+          ),
 
-                ],
-              ),
-            )
-        ),
+          Advertisement()
+
+        ],
+
       ),
 
-      bottomNavigationBar: Advertisement()
+      //bottomNavigationBar: Advertisement()
 
     );
   }
