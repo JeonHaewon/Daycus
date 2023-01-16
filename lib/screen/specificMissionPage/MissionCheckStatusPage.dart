@@ -728,7 +728,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                   Text("나의 미션 리포트",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
 
-                   if (return_reward>1)
+                   if (return_reward>=1)
                   Container(
                     margin: EdgeInsets.only(left: 8.w, top: 7.h, bottom: 3.h),
                     width: 395.w,

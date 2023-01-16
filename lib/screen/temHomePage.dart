@@ -63,28 +63,36 @@ class _TemHomePageState extends State<TemHomePage> {
   @override
   Widget build(BuildContext context) {
 
+    Size m = MediaQuery.of(context).size;
+    double additionalBottomPadding = MediaQuery.of(context).padding.bottom;
+
     return WillPopScope(
       onWillPop: () async {
         bool result = onWillPop();
         return await Future.value(result);
       },
       child: Scaffold(
-        bottomNavigationBar: Obx(
-              () {
-            return BottomNavigationBar(
-              unselectedItemColor: Colors.grey,
-              currentIndex: controller.currentBottomNavItemIndex.value,
-              showUnselectedLabels: true,
-              onTap: controller.switchBetweenBottomNavigationItems,
-              fixedColor: AppColor.lightBlack,
-              items: AppData.bottomNavigationItems
-                  .map(
-                    (element) => BottomNavigationBarItem(
-                    icon: element.icon, label: element.label),
-              )
-                  .toList(),
-            );
-          },
+        bottomNavigationBar: Container(
+          constraints: BoxConstraints(
+            maxHeight: kBottomNavigationBarHeight+additionalBottomPadding,
+          ),
+          child: Obx(
+                () {
+              return BottomNavigationBar(
+                unselectedItemColor: Colors.grey,
+                currentIndex: controller.currentBottomNavItemIndex.value,
+                showUnselectedLabels: true,
+                onTap: controller.switchBetweenBottomNavigationItems,
+                fixedColor: AppColor.lightBlack,
+                items: AppData.bottomNavigationItems
+                    .map(
+                      (element) => BottomNavigationBarItem(
+                      icon: element.icon, label: element.label),
+                )
+                    .toList(),
+              );
+            },
+          ),
         ),
         body: Obx(() => screens[controller.currentBottomNavItemIndex.value]),
       ),

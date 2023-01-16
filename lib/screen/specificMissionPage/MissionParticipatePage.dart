@@ -102,11 +102,17 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                         children: [
 
                           Padding(
-                            padding: EdgeInsets.fromLTRB(30.w, 15.h, 30.w, 15.h),
+                            padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 15.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset('assets/image/specificmissionpage/${widget.topimage}.png' , width: 330.w,),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    image: DecorationImage(image: AssetImage('assets/image/thumbnail/${widget.topimage}', ),fit: BoxFit.cover),
+                                  ),
+                                  width: 300.w, height: 200.h,
+                                ),
                                 SizedBox(height: 15.h,),
                                 Text(widget.title,style: TextStyle(color: Colors.black,fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                                 SizedBox(height: 15.h,),

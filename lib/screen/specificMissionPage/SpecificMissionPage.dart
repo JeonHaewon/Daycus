@@ -528,7 +528,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                     context,
                     MaterialPageRoute(builder: (_) => MissionParticipatePage(
                         remainDate: 14-timeDiffer,
-                        topimage: 'missionparticipate_image',
+                        topimage: widget.topimage,
                         //average reward도 데이터베이스에서 끌고오기
                         mission_id: widget.mission_id,
                         title: widget.title, duration: widget.duration, totaluser: widget.totaluser, avgreward: int.parse(widget.mission_data['average']))),
