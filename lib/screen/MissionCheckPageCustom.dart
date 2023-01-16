@@ -48,13 +48,15 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
           //IconButton(icon: Icon(Icons.search), onPressed: null),
-          IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => NoticePage()),
-                );
-              }),
+
+          //알림 확인
+          // IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (_) => NoticePage()),
+          //       );
+          //     }),
 
           InkWell(
             onTap: () {
