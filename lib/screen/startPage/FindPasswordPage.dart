@@ -2,14 +2,11 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:daycus/backend/UserDatabase.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:daycus/screen/startPage/PasswordResetPage.dart';
 
 String stored_code = '';

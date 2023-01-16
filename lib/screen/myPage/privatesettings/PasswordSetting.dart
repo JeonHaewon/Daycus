@@ -158,8 +158,16 @@ class _PasswordSettingState extends State<PasswordSetting> {
                 String cur_pass = user_data['user_password'];
                 if (cur_pass == generateMd5(cur)){
                   if (want == want_real) {
-                    update_information_password();
-                    Fluttertoast.showToast(msg: "성공적으로 변경되었습니다!");
+                    if (want.length < 10 || want.length > 16){
+                      Fluttertoast.showToast(msg: "비밀번호는 10~16자리로 변경해주세요!");
+                    }
+                    else if (((RegExp(r'(\d+)').hasMatch(want) ? 1:0)+(RegExp(r'[a-zA-Z]').hasMatch(want) ? 1:0)+(RegExp(r'[@$!%*#?&]').hasMatch(want) ? 1:0))<2){
+                      Fluttertoast.showToast(msg: "영문/숫자/특수문자 중 2가지를 조합하여 변경해주세요!");
+                    }
+                    else {
+                      update_information_password();
+                      Fluttertoast.showToast(msg: "성공적으로 변경되었습니다!");
+                    }
                   }
                   else {
                     Fluttertoast.showToast(msg: "새로운 비밀번호 입력이 일치하지 않습니다.");
