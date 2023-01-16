@@ -16,6 +16,8 @@ import 'dart:math';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:daycus/widget/advertisement.dart';
+
 
 
 
@@ -628,6 +630,7 @@ class _MyPageState extends State<MyPage> {
           ),
         ),
       ),
+      bottomNavigationBar: Advertisement()
     );
   }
 }

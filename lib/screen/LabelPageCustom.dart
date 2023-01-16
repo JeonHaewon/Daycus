@@ -9,6 +9,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 
+import 'package:daycus/widget/advertisement.dart';
+
 
 
 class LabelPage extends StatefulWidget {
@@ -122,6 +124,9 @@ class _LabelPageState extends State<LabelPage> {
             )
         ),
       ),
+
+      bottomNavigationBar: Advertisement()
+
     );
   }
 }

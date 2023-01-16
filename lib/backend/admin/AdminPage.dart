@@ -628,20 +628,39 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
 
-              Center(
-                child: Container(
-                  child: AdmobBanner(
-                    adUnitId: admobBannerId,
-                    adSize: AdmobBannerSize.BANNER,
-                    onBannerCreated:
-                    (AdmobBannerController controller){},
-                  )
-                )
-              )
+              // Center(
+              //   child: Container(
+              //     child: AdmobBanner(
+              //       adUnitId: admobBannerId,
+              //       adSize: AdmobBannerSize.BANNER,
+              //       onBannerCreated:
+              //       (AdmobBannerController controller){},
+              //     )
+              //   )
+              // )
+
             ],
           ),
         ),
+
       ),
+
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              child: AdmobBanner(
+                adUnitId: admobBannerId,
+                adSize: AdmobBannerSize.BANNER,
+                onBannerCreated:
+                    (AdmobBannerController controller){},
+              )
+            )
+          ],
+        )
+      ),
+
     );
   }
 }

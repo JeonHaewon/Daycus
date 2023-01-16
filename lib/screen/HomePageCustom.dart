@@ -25,6 +25,8 @@ import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:daycus/screen/MissionAddPage.dart';
 
+import 'package:daycus/widget/advertisement.dart';
+
 late ScrollController _scrollController = ScrollController();
 //late ScrollController _scrollController1 = ScrollController();
 
@@ -700,6 +702,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
 
       ),
+
+      bottomNavigationBar: Advertisement()
 
 
     );

@@ -8,6 +8,8 @@ import 'package:daycus/screen/eachMission/AllMission.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 
+import 'package:daycus/widget/advertisement.dart';
+
 class MissionPage extends StatelessWidget {
   const MissionPage({Key? key}) : super(key: key);
 
@@ -79,6 +81,8 @@ class MissionPage extends StatelessWidget {
 
           ],
         ),
+
+        bottomNavigationBar: Advertisement()
       ),
     );
   }
