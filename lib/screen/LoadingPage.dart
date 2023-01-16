@@ -22,17 +22,17 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    print("init");
+    //print("init");
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
-    Fluttertoast.showToast(msg: "init");
+    //Fluttertoast.showToast(msg: "init");
     LoginAsyncMethod(storage, context, false);
   }
 
   @override
   Widget build(BuildContext context) {
-    Fluttertoast.showToast(msg: "build");
-    print("build");
+    //Fluttertoast.showToast(msg: "build");
+    //print("build");
     return Scaffold(
       body: Stack(
         children: [
@@ -44,7 +44,7 @@ class _LoadingPageState extends State<LoadingPage> {
             child: Column(
               children: [
                 SizedBox(height: 720.h,),
-                Text("로딩이 지속될 경우\n앱을 완전히 껐다가 켜주세요", textAlign: TextAlign.center,),
+                Text("로딩이 1분 이상 지속될 경우\n앱을 완전히 종료한 후 재부팅 해주세요", textAlign: TextAlign.center,),
                 SizedBox(height: 20.h,),
                 SizedBox(
                   width: 30.w, height: 30.h,

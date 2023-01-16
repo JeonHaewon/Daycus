@@ -140,26 +140,30 @@ afterLogin() async {
 
 // keep login - 유저 정보 들고오기
 LoginAsyncMethod(storage, BuildContext context, bool reload) async {
-  Fluttertoast.showToast(msg: "LoginAsyncMethod");
+  //Fluttertoast.showToast(msg: "LoginAsyncMethod");
 
   String connection = await checkConnectionStatus(context);
   if (connection=="ConnectivityResult.none"){
     Navigator.push(context, MaterialPageRoute(builder: (_) => ReConnection()));
   }
   else {
-    Fluttertoast.showToast(msg: "LoginAsyncMethod - else");
+    //Fluttertoast.showToast(msg: "LoginAsyncMethod - else");
     dynamic userInfo = '';
 
     // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
     // 데이터가 없을때는 null을 반환
-    userInfo = await storage.read(key: 'login');
-    print(userInfo);
+    try {
+      userInfo = await storage.read(key: 'login');
+      print(userInfo);
+    }catch (e){
+    //Fluttertoast.showToast(msg: "error : ${e}");
+    }
 
-    Fluttertoast.showToast(msg: "context ${context} && reload ${reload}");
+    //Fluttertoast.showToast(msg: "context ${context} && reload ${reload}");
 
     // 자동로그인이 필요한 경우, reload 시
     if ((userInfo != null && user_data == null) || reload) {
-      Fluttertoast.showToast(msg: "자동로그인이 필요한 경우");
+      //Fluttertoast.showToast(msg: "자동로그인이 필요한 경우");
       var userDecode = jsonDecode(userInfo);
 
       print(userDecode);
@@ -179,7 +183,7 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
       }
     } // 자동로그인이 필요하지 않은 경우
     else if (userInfo != null && user_data != null) {
-      Fluttertoast.showToast(msg: "자동로그인이 필요하지 않은 경우");
+      //Fluttertoast.showToast(msg: "자동로그인이 필요하지 않은 경우");
       // 다 닫고 ㄱㄱ
       if (context!=null && reload==false) {
         Navigator.pushAndRemoveUntil(context,
@@ -188,7 +192,7 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
     }
     else {
       if (context!=null && reload==false) {
-        Fluttertoast.showToast(msg: "로그인이 필요한 경우");
+        //Fluttertoast.showToast(msg: "로그인이 필요한 경우");
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (_) => LoginPageCustom()), (
                 route) => false);
