@@ -3,6 +3,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
+import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -623,6 +624,15 @@ class _AdminScreenState extends State<AdminScreen> {
                       context,
                       MaterialPageRoute(builder: (_) => LoadingPage()));
                 },
+              ),
+              
+              AdminButton(
+                  title: "이미지 다운로드",
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ImageDownload()));
+                  },
               ),
 
               // Center(

@@ -1,5 +1,5 @@
 // 버전
-const String version = "1.0.2 + 2.6";
+const String version = "1.0.2 + 2.7";
 
 
 const String comingSoonString = "곧 만나요 !";

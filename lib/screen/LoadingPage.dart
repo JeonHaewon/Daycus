@@ -117,10 +117,10 @@ class _LoadingPageState extends State<LoadingPage> {
                       checkUserState();
                       profileImage = null; downloadProfileImage = null; profileDegree = 0;
 
-
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
                           LoginPageCustom()),
                               (route) => false);
+
                     },
                     child: Text("로그인 페이지로"),
                   ),

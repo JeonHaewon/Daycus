@@ -130,11 +130,11 @@ class _ToDeveloperState extends State<ToDeveloper> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
 
-                  Align(
-                    child: Text("개발자 이메일 : ${adminEmail}",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    alignment: Alignment.centerLeft,
-                  ),
+                  // Align(
+                  //   child: Text("개발자 이메일 : ${adminEmail}",
+                  //       style: TextStyle(fontWeight: FontWeight.bold)),
+                  //   alignment: Alignment.centerLeft,
+                  // ),
 
 
 
@@ -199,8 +199,8 @@ class _ToDeveloperState extends State<ToDeveloper> {
 
                   SizedBox(height: 10.h,),
 
-                  Text(" * Gmail 어플 이외에는 메일 문의가 어렵습니다 ",
-                      style: TextStyle(color: Colors.black, fontSize: 12.sp, fontWeight: FontWeight.bold)),
+                  // Text(" * Gmail 어플 이외에는 메일 문의가 어렵습니다 ",
+                  //     style: TextStyle(color: Colors.black, fontSize: 12.sp, fontWeight: FontWeight.bold)),
 
                   SizedBox(height: 30.h,),
 
@@ -269,8 +269,8 @@ class _ToDeveloperState extends State<ToDeveloper> {
 
                   SizedBox(height: 10.h,),
 
-                  Text(" * 메일 문의 시 이미지 첨부가 취소됩니다 ",
-                      style: TextStyle(color: Colors.black, fontSize: 12.sp, fontWeight: FontWeight.bold)),
+                  // Text(" * 메일 문의 시 이미지 첨부가 취소됩니다 ",
+                  //     style: TextStyle(color: Colors.black, fontSize: 12.sp, fontWeight: FontWeight.bold)),
 
                   SizedBox(height: 30.h,),
 

@@ -711,7 +711,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                         Container(
                           child : Text("※ 코딩하다 산책하기 미션은 어플을 종료 시 만보기가 초기화됩니다.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
-
                         ),
 
                         Container(
@@ -936,7 +935,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                 // print("미션 성공한 갯수 :  : ${mission_result}");
 
                 // 미션 끝 : 정산하기
-                if (todayBlockCnt > missionDate) {
+                if (todayBlockCnt > missionDate|| (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) {
                   mission_complete(
                       todayBlockCnt,
                       widget.do_mission_data,
@@ -971,7 +970,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     showModalBottomSheet(context: context, builder: ((builder) => cameraOrGallery));
 
                     // 만보기
-                  } else if (widget.mission_data['certify_tool'] == 'pedometer'){
+                  } else if (widget.mission_data['certify_tool']=='pedometer'){
                     print("만보기");
                     print("$PedometerSteps ${widget.mission_data['condition']}");
                     if((int.parse(PedometerSteps) >= int.parse(widget.mission_data['condition']))){
@@ -995,9 +994,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                       Fluttertoast.showToast(msg: "${(int.parse(widget.mission_data['condition'])-int.parse(PedometerSteps))} 걸음 남았습니다");
                     }
 
-
-
-                    
                   }
                   else {
                     todayMissionCertify(do_i, "camera");
@@ -1005,7 +1001,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                 }
 
                 // 시작 날짜의 14일보다 넘어가면 미션 정산하기로 바뀐다.
-              }, child: Text( (todayBlockCnt > missionDate) ? '미션 정산하기'
+              }, child: Text( (todayBlockCnt>missionDate || (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) ? '미션 정산하기'
                 // 남은 날 다 인증해도 미션을 수행할 수 있을 때 (좌) : 없을 때 (우)
                   : ((15-todayBlockCnt >= toCertify-mission_result) || (widget.do_mission_data['bet_reward']!='0'))
                     ? '오늘 미션 인증하기' : '미션 포기하기',
