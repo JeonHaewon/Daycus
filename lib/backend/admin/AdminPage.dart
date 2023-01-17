@@ -4,6 +4,7 @@ import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/backend/admin/imageDownload.dart';
+import 'package:daycus/backend/admin/importRanking.dart';
 import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -633,6 +634,14 @@ class _AdminScreenState extends State<AdminScreen> {
                         context,
                         MaterialPageRoute(builder: (_) => ImageDownload()));
                   },
+              ),
+              AdminButton(
+                title: "123등 불러오기",
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => ImportRanking()));
+                },
               ),
 
               // Center(

@@ -33,3 +33,5 @@ String? profileImageReNamed;
 int profileDegree = 0;
 
 List? rankingList = null;
+
+var topRankingList = null;
