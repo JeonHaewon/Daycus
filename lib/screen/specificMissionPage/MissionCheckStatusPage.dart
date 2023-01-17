@@ -721,6 +721,65 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     ),
 
 
+                  SizedBox(height: 18.h,),
+
+                  Container(
+                    child: RichText(
+                      text: TextSpan(
+                        text: " ※ 미션 종료 후(15일차)에 반드시 ",
+                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',color: Colors.black) ,
+                        children: <TextSpan>[
+                          TextSpan(text: "'정산하기'", style: TextStyle(color: Colors.red)),
+                          TextSpan(text: " 버튼을 눌러야 포인트가 지급됩니다.", style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 4.h,),
+
+                  Container(
+                    child: RichText(
+                      text: TextSpan(
+                        text: " ※ 단, ",
+                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',color: Colors.black) ,
+                        children: <TextSpan>[
+                          TextSpan(text: "14일차에 인증", style: TextStyle(color: Colors.red)),
+                          TextSpan(text: "을 하는 경우 인증 이후 바로 정산이 가능합니다.", style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 4.h,),
+
+                  Container(
+                    child: RichText(
+                      text: TextSpan(
+                        text: " ※ 미션 종료 후 ",
+                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',color: Colors.black) ,
+                        children: <TextSpan>[
+                          TextSpan(text: "2주 내에 정산을 받지 않을 경우", style: TextStyle(color: Colors.red)),
+                          TextSpan(text: " 리워드를 지급받지 못합니다.", style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+                  // Container(
+                  //   child: Text(" ※ 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러야 포인트가 지급됩니다.",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.black) ),
+                  // ),
+                  // SizedBox(height: 5.h,),
+                  // Container(
+                  //   child: Text(" ※ 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.black) ),
+                  // ),
+                  // SizedBox(height: 5.h,),
+                  // Container(
+                  //   child: Text(" ※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.black) ),
+                  // ),
+
+
+
+
 
                   SizedBox(height: 30.h,),
 

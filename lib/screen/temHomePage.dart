@@ -89,7 +89,7 @@ class _TemHomePageState extends State<TemHomePage> {
                       currentIndex: controller.currentBottomNavItemIndex.value,
                       showUnselectedLabels: true,
                       onTap: controller.switchBetweenBottomNavigationItems,
-                      fixedColor: AppColor.lightBlack,
+                      fixedColor: AppColor.happyblue,
                       items: AppData.bottomNavigationItems
                           .map(
                             (element) => BottomNavigationBarItem(
