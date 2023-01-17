@@ -75,7 +75,7 @@ class _TemHomePageState extends State<TemHomePage> {
       child: Scaffold(
         bottomNavigationBar: Container(
           constraints: BoxConstraints(
-            maxHeight: 112.5.h
+            maxHeight: 116.h,
           ),
           child: Obx(
                   () {
