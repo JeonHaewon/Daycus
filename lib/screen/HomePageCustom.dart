@@ -353,6 +353,271 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                 ),
                               ),
 
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(28.w, 4.h, 28.w, 5.h),
+                                child: Container(
+
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+
+                                      Column(
+                                        children: [
+                                          Container(
+                                            width: 35.w,
+                                            height: 35.w,
+                                            decoration: BoxDecoration(
+                                                color:Colors.grey,
+                                                //borderRadius: BorderRadius.circular(10),
+                                                shape: BoxShape.circle
+                                            ),
+                                          ),
+                                          Stack(
+                                            alignment: Alignment.topCenter,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 8.h, 0, 0),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      width:94.w,
+                                                      //height:55.h,
+                                                      decoration: BoxDecoration(
+                                                        color:Colors.indigo[50],
+                                                        borderRadius: BorderRadius.vertical(
+                                                            top : Radius.circular(5)
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding: EdgeInsets.fromLTRB(5.w, 12.h, 3.w, 6.h),
+                                                        child: Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: 17.h,
+                                                              width: 80.w,
+                                                              child: FittedBox(
+                                                                alignment: Alignment.center,
+                                                                fit: BoxFit.contain,
+
+                                                                child: Text("kdkkdjkj", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, )),
+                                                              ),
+                                                            ),
+                                                            SizedBox(height: 2.h,),
+                                                            SizedBox(
+                                                              height: 16.h,
+                                                              width: 80.w,
+                                                              child: FittedBox(
+                                                                  alignment: Alignment.center,
+                                                                  fit: BoxFit.contain,
+
+                                                                  child:Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    children: [
+                                                                      Icon(Icons.control_point_duplicate,size:16.w),
+                                                                      SizedBox(width: 3.w,),
+                                                                      Text("0.3", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, )),
+                                                                    ],
+                                                                  )
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    Container(
+                                                      width:94.w,
+                                                      height:6.h,
+                                                      decoration: BoxDecoration(
+                                                        color:Colors.grey[400],
+                                                      ),
+                                                    ),
+                                                  ],
+
+                                                ),
+                                              ),
+                                              Image.asset('assets/image/silver_medal.png', height: 18.w,),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+
+                                      Column(
+                                        children: [
+                                          Container(
+                                            width: 35.w,
+                                            height: 35.w,
+                                            decoration: BoxDecoration(
+                                              color:Colors.grey,
+                                              //borderRadius: BorderRadius.circular(10),
+                                              shape: BoxShape.circle
+                                            ),
+                                          ),
+                                          Stack(
+                                            alignment: Alignment.topCenter,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 8.h, 0, 0),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      width:94.w,
+                                                      //height:55.h,
+                                                      decoration: BoxDecoration(
+                                                        color:Colors.indigo[50],
+                                                        borderRadius: BorderRadius.vertical(
+                                                            top : Radius.circular(5)
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding: EdgeInsets.fromLTRB(5.w, 18.h, 3.w, 6.h),
+                                                        child: Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: 17.h,
+                                                              width: 80.w,
+                                                              child: FittedBox(
+                                                                alignment: Alignment.center,
+                                                                fit: BoxFit.contain,
+
+                                                                child: Text("kdkkdjkj", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, )),
+                                                              ),
+                                                            ),
+                                                            SizedBox(height: 4.h,),
+                                                            SizedBox(
+                                                              height: 16.h,
+                                                              width: 80.w,
+                                                              child: FittedBox(
+                                                                  alignment: Alignment.center,
+                                                                  fit: BoxFit.contain,
+
+                                                                  child:Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    children: [
+                                                                      Icon(Icons.control_point_duplicate,size:16.w),
+                                                                      SizedBox(width: 3.w,),
+                                                                      Text("0.3", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, )),
+                                                                    ],
+                                                                  )
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    Container(
+                                                      width:94.w,
+                                                      height:6.h,
+                                                      decoration: BoxDecoration(
+                                                        color:Colors.yellow[600],
+                                                      ),
+                                                    ),
+
+                                                  ],
+
+                                                ),
+                                              ),
+                                              Image.asset('assets/image/gold_medal.png', height: 18.w,),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+
+
+                                      Column(
+                                        children: [
+                                          Container(
+                                            width: 35.w,
+                                            height: 35.w,
+                                            decoration: BoxDecoration(
+                                                color:Colors.grey,
+                                                //borderRadius: BorderRadius.circular(10),
+                                                shape: BoxShape.circle
+                                            ),
+                                          ),
+                                          Stack(
+                                            alignment: Alignment.topCenter,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(0, 8.h, 0, 0),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      width:94.w,
+                                                      //height:55.h,
+                                                      decoration: BoxDecoration(
+                                                        color:Colors.indigo[50],
+                                                        borderRadius: BorderRadius.vertical(
+                                                            top : Radius.circular(5)
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding: EdgeInsets.fromLTRB(5.w, 12.h, 3.w, 6.h),
+                                                        child: Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: 17.h,
+                                                              width: 80.w,
+                                                              child: FittedBox(
+                                                                alignment: Alignment.center,
+                                                                fit: BoxFit.contain,
+
+                                                                child: Text("kdkkdjkj", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, )),
+                                                              ),
+                                                            ),
+
+                                                            SizedBox(
+                                                              height: 16.h,
+                                                              width: 80.w,
+                                                              child: FittedBox(
+                                                                  alignment: Alignment.center,
+                                                                  fit: BoxFit.contain,
+
+                                                                  child:Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    children: [
+                                                                      Icon(Icons.control_point_duplicate,size:16.w),
+                                                                      SizedBox(width: 3.w,),
+                                                                      Text("0.3", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, )),
+                                                                    ],
+                                                                  )
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    Container(
+                                                      width:94.w,
+                                                      height:6.h,
+                                                      decoration: BoxDecoration(
+                                                        color:Colors.brown[300],
+                                                      ),
+                                                    ),
+
+
+                                                  ],
+
+                                                ),
+                                              ),
+                                              Image.asset('assets/image/bronze_medal.png', height: 18.w,),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+
+                                    ],
+                                  )
+                                ),
+                              ),
+
+
                               Container(
                                 width : 300.w,
                                 height: 20.h,
