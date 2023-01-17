@@ -16,6 +16,7 @@ import 'package:daycus/screen/MyPageCustom.dart';
 
 import 'package:daycus/core/app_controller.dart';
 
+import 'package:daycus/widget/advertisement.dart';
 
 
 final OfficeFurnitureController controller =
@@ -74,26 +75,35 @@ class _TemHomePageState extends State<TemHomePage> {
       child: Scaffold(
         bottomNavigationBar: Container(
           constraints: BoxConstraints(
-            maxHeight: kBottomNavigationBarHeight+additionalBottomPadding,
+            maxHeight: 112.5.h
           ),
           child: Obx(
-                () {
-              return BottomNavigationBar(
-                unselectedItemColor: Colors.grey,
-                currentIndex: controller.currentBottomNavItemIndex.value,
-                showUnselectedLabels: true,
-                onTap: controller.switchBetweenBottomNavigationItems,
-                fixedColor: AppColor.lightBlack,
-                items: AppData.bottomNavigationItems
-                    .map(
-                      (element) => BottomNavigationBarItem(
-                      icon: element.icon, label: element.label),
-                )
-                    .toList(),
-              );
-            },
-          ),
+                  () {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Advertisement(),
+
+                    BottomNavigationBar(
+                      unselectedItemColor: Colors.grey,
+                      currentIndex: controller.currentBottomNavItemIndex.value,
+                      showUnselectedLabels: true,
+                      onTap: controller.switchBetweenBottomNavigationItems,
+                      fixedColor: AppColor.lightBlack,
+                      items: AppData.bottomNavigationItems
+                          .map(
+                            (element) => BottomNavigationBarItem(
+                            icon: element.icon, label: element.label),
+                      )
+                          .toList(),
+                    ),
+                  ],
+
+                );
+              },
+            ),
         ),
+
         body: Obx(() => screens[controller.currentBottomNavItemIndex.value]),
       ),
     );
