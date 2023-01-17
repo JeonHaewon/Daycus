@@ -35,3 +35,9 @@ int profileDegree = 0;
 List? rankingList = null;
 
 var topRankingList = null;
+
+Map<int, dynamic> topRankingProfile = {
+  0 : null,
+  1 : null,
+  3 : null,
+};

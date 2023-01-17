@@ -114,6 +114,12 @@ afterLogin() async {
   // 검토 필요
   import_ranking();
 
+  // top ranking 불러오기
+  topRankingList = await select_request(
+      "select user_name, reward, Ranking, user_id, profile From user_table WHERE (1<=Ranking) AND (Ranking<=3) ORDER BY Ranking limit 3;",
+      null,
+      false);
+
   print("로그인에 성공하였습니다.");
 
   // 미션 불러오기
