@@ -155,11 +155,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-
-                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 0),
-                  height: 200.h,
+                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 20.h),
+                  //height: 200.h,
                   child: Column(
-
                     children: [
 
                       Column(
@@ -183,8 +181,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                       ),
 
                       SizedBox(height: 20.h,),
-
-
 
                     ],
                   )
@@ -244,11 +240,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                 ],
               ),
 
-
             ],
-
           ),
-
           // shape: RoundedRectangleBorder(
           //   borderRadius: BorderRadius.circular(10),
           // ),
