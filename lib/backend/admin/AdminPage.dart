@@ -92,6 +92,121 @@ class _AdminScreenState extends State<AdminScreen> {
       await storage.delete(key: 'login');
     }
 
+    getfriend_fromdb(String id) async {
+      try {
+        var select_res = await http.post(Uri.parse(API.select), body: {
+          'update_sql': "select friends from user_table where user_id = '$id' "
+        });
+        if (select_res.statusCode == 200 ) {
+          var resUser = jsonDecode(select_res.body);
+          var friendsdb = resUser['data'][0]['friends'];
+          if (friendsdb == null){
+            friendsdb = {};
+            return friendsdb;
+          }
+          return jsonDecode(friendsdb);
+        }
+      } on Exception catch (e) {
+        print("에러발생 : ${e}");
+        return false;
+        //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
+
+    add_friend_fromdb(String id) async {
+      try {
+        var original_friends = await getfriend_fromdb(user_data['user_id']);
+        original_friends[id] = '0';
+        var select_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'"
+        });
+        if (select_res.statusCode == 200 ) {
+          var resUser = jsonDecode(select_res.body);
+          if (resUser['success'] == true) {
+            Fluttertoast.showToast(msg: "친구 요청이 완료되었습니다 !");
+          }
+          else {
+            Fluttertoast.showToast(msg: "시도 중 오류가 발견되었습니다");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생 : ${e}");
+        //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
+
+    accepted_friend(String id) async {
+      try {
+        var original_friends = await getfriend_fromdb(id);
+        original_friends[user_data['user_id']] = '1';
+        var select_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '$id'"
+        });
+        if (select_res.statusCode == 200 ) {
+          var resUser = jsonDecode(select_res.body);
+          if (resUser['success'] == true) {
+            Fluttertoast.showToast(msg: "친구 요청이 완료되었습니다 !");
+          }
+          else {
+            Fluttertoast.showToast(msg: "시도 중 오류가 발견되었습니다");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생 : ${e}");
+        //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
+
+    accept_friend() async {
+      try {
+        var original_friends = await getfriend_fromdb(user_data['user_id']);
+        for (var item in original_friends.keys){
+          if (original_friends[item] == '-1'){
+            original_friends[item] = '1';
+            await accepted_friend(item);
+          }
+        }
+        var update_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          if (resMission['success'] == true) {
+            print("성공~~~");
+            Fluttertoast.showToast(msg: "성공적으로 친구 요청을 받았습니다!");
+          } else {
+            print("에러발생");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
+
+    requesting_friend(String id) async {
+      try {
+        var original_friends = await getfriend_fromdb(id);
+        original_friends[user_data['user_id']] = '-1';
+        var update_res = await http.post(Uri.parse(API.update), body: {
+          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '$id'",
+        });
+
+        if (update_res.statusCode == 200 ) {
+          var resMission = jsonDecode(update_res.body);
+          if (resMission['success'] == true) {
+            print("성공~~~");
+          } else {
+            print("에러발생");
+          }
+        }
+      } on Exception catch (e) {
+        print("에러발생");
+        Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
+      }
+    }
+
     checkUserState() async {
       userInfo = await storage.read(key: 'login');
       if (userInfo == null) {
@@ -166,6 +281,7 @@ class _AdminScreenState extends State<AdminScreen> {
         Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
       }
     }
+
     without_json() async {
       try {
         var update_res = await http.post(Uri.parse(API.select), body: {
@@ -642,6 +758,19 @@ class _AdminScreenState extends State<AdminScreen> {
                       context,
                       MaterialPageRoute(builder: (_) => ImportRanking()));
                 },
+              ),
+              AdminButton(
+                title: "친구 요청 보내기 버튼",
+                onPressed: () {
+                  add_friend_fromdb('20');
+                  requesting_friend('20');
+                }
+              ),
+              AdminButton(
+                  title: "친구 요청 다 받기 버튼",
+                  onPressed: () {
+                    accept_friend();
+                  }
               ),
 
               // Center(
