@@ -137,6 +137,126 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
       _asyncMethod();
     });
     WidgetsBinding.instance?.addObserver(this);
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => new AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("미션 인증 방법",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+
+                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 0),
+                  height: 200.h,
+                  child: Column(
+
+                    children: [
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("1. 인증빈도",
+                              style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                          SizedBox(height: 3.h,),
+                          Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                              style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                          SizedBox(height: 15.h,),
+
+                          Text("2. 인증방법",
+                              style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                          SizedBox(height: 3.h,),
+                          Text("${widget.mission_data['content']}",
+                              style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                        ],
+                      ),
+
+                      SizedBox(height: 20.h,),
+
+
+
+                    ],
+                  )
+
+              ),
+
+              Container(
+                width: 412.w,
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                ),
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                children: [
+                  
+                  InkWell(
+                    onTap:(){},
+                    child: Container(
+                      width: 165.w,
+                      height: 50.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+
+                        //borderRadius: BorderRadius.circular(4),
+                      ),
+                      child:  Text("일주일간 보지 않기",
+                          style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                    ),
+                  ),
+                  
+                  InkWell(
+                    onTap:(){Navigator.of(context).pop();},
+                    child: Container(
+                      width: 165.w,
+                      height: 50.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+
+                          left: BorderSide(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        //borderRadius: BorderRadius.circular(4),
+                      ),
+                      child:  Text("확인",
+                          style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                    ),
+                  ),
+                ],
+              ),
+
+
+            ],
+
+          ),
+
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(10),
+          // ),
+        ),
+      );
+    });
+
+
   }
 
   cnt_done(){
@@ -278,6 +398,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
+
             Container(
               padding: EdgeInsets.fromLTRB(30.w, 15.h, 30.w, 0),
               child: Column(
@@ -383,166 +504,82 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                   //   ),
                   // ),
 
-
-
-
-                  Container(
-                      width: 500.w,
-                      height: 90.h,
-                      padding: EdgeInsets.fromLTRB(14.w, 0, 15.w,0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                            child: RichText(
-                              overflow: TextOverflow.clip,
-                              maxLines: 2,
-                              text: TextSpan(
-                                  text: "• 인증 빈도  :  ${widget.mission_data['term']}주 동안 1주일에 ${widget.mission_data['frequency']}번",
-                                  style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-                            )
-                        ),
-
-                        Flexible(
-                            child: RichText(
-                              overflow: TextOverflow.clip,
-                              maxLines: 2,
-                              text: TextSpan(
-                                  text: "• 총    횟수   :  ${toCertify}회",
-                                  style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-                            )
-                        ),
-
-                        Flexible(
-                            child: RichText(
-                              overflow: TextOverflow.clip,
-                              maxLines: 2,
-                              text: TextSpan(
-                                  text: "• 인증 방법  :  ${widget.mission_data['content']}",
-                                  style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-                            )
-                        ),
-                      ],
-                    )
-                  ),
-
-
-
-
-
-                  if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10.w, 10.h, 0,0),
-                    child: Column(
-                      children: [
-                        Text("※ 미션 인증 시 사람이 나오지 않도록 주의해주세요",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
-                      ],
-                    ),
-                  ),
-
-
-                  SizedBox(height: 20.h,),
-
-                  Text("미션 참여방법",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
+                  SizedBox(height: 10.h,),
 
                   Container(
                     width: 500.w,
-                    //height: 90.h,
-                    //padding: EdgeInsets.fromLTRB(14.w, 0, 15.w,0),
+                    //height: 20.h,
+                    padding: EdgeInsets.fromLTRB(14.w, 0, 14.w,0),
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-
-                        SizedBox(height: 5.h,),
-
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(14.w, 0, 15.w,0),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: rules_list_cnt,
-
-                            itemBuilder: (_, index) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(rule.split("\\n")[index],
-                                      style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',) ),
-
-                                  // 맨 마지막 SizedBox는 빼기
-                                  if (index < rules_list_cnt-1)
-                                    SizedBox(height: 2.h,),
-                                ],
-                              );
-                            },
-
-                          ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
                         ),
-
-                        SizedBox(height: 20.h,),
-
                       ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(14.w, 20.h, 14.w, 20.h),
+                      child: Column(
+                        children: [
+                          Text("주의사항",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+
+                          SizedBox(height: 15.h,),
+
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+
+                                Text("1. 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러주세요!",
+                                    style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                SizedBox(height: 3.h,),
+                                Text("15일차에 '정산하기' 버튼을 눌러 포인트를 지급받을 수 있습니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
+                                    style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                SizedBox(height: 2.h,),
+                                Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
+                                    style: TextStyle(fontSize: 8.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                SizedBox(height: 15.h,),
+                                Text("2. 주 ${widget.mission_data['frequency']}회, ${widget.mission_data['term']}주간, 총 ${toCertify}회!",
+                                    style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                SizedBox(height: 3.h,),
+                                Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                                    style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 15.h,),
+                                      Text("3. 미션 인증 시 사람이 나오지 않게 주의해주세요!",
+                                          style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                      SizedBox(height: 3.h,),
+                                      Text("개인정보 보호를 위해 본인을 포함하여 특정 인물을 나타낼 수 있는 모습이 사진에 나타나지 않도록 주의해주세요.",
+                                          style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                    ],
+                                  ),
+
+                              ],
+                            ),
+                          ),
+
+
+
+
+                        ],
+                      ),
                     ),
                   ),
 
 
+
+                  SizedBox(height: 25.h,),
+
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
-
-
-                  //------만보기 필요 없는 미션
-                  //SizedBox(height: 3.h,),
-                  //Text(duration,style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
-
-
-
-
-                  //------만보기 필요한 미션
-
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Text(duration,style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
-                  //     InkWell(
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(builder: (_)
-                  //           => WalkCountPage(walkNumber: int.parse(widget.mission_data['condition']),)),
-                  //         );
-                  //       },
-                  //       child: Padding(
-                  //         padding: EdgeInsets.fromLTRB(0, 0, 5.w, 2.h),
-                  //         child: Container(
-                  //           width: 100.w,
-                  //           height: 30.h,
-                  //           decoration: BoxDecoration(
-                  //             color: Colors.indigo[100],
-                  //             borderRadius: BorderRadius.circular(20),
-                  //           ),
-                  //           child: Container(
-                  //             child: Row(
-                  //               crossAxisAlignment: CrossAxisAlignment.center,
-                  //               mainAxisAlignment: MainAxisAlignment.center,
-                  //               children: [
-                  //                 Icon(Icons.directions_run,size: 18.w,color: AppColor.happyblue,),
-                  //                 Text('현재 걸음 수 >',
-                  //                 style: TextStyle(color: AppColor.happyblue, fontSize: 10.sp, fontFamily: 'korean',) ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //
-                  //   ],
-                  // ),
 
 
 
@@ -721,113 +758,68 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     ),
 
 
-                  SizedBox(height: 18.h,),
+                  SizedBox(height: 40.h,),
 
-                  Container(
-                    child: RichText(
-                      text: TextSpan(
-                        text: " ※ 미션 종료 후(15일차)에 반드시 ",
-                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',color: Colors.black) ,
-                        children: <TextSpan>[
-                          TextSpan(text: "'정산하기'", style: TextStyle(color: Colors.red)),
-                          TextSpan(text: " 버튼을 눌러야 포인트가 지급됩니다.", style: TextStyle(color: Colors.black)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 4.h,),
 
-                  Container(
-                    child: RichText(
-                      text: TextSpan(
-                        text: " ※ 단, ",
-                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',color: Colors.black) ,
-                        children: <TextSpan>[
-                          TextSpan(text: "14일차에 인증", style: TextStyle(color: Colors.red)),
-                          TextSpan(text: "을 하는 경우 인증 이후 바로 정산이 가능합니다.", style: TextStyle(color: Colors.black)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 4.h,),
-
-                  Container(
-                    child: RichText(
-                      text: TextSpan(
-                        text: " ※ 미션 종료 후 ",
-                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',color: Colors.black) ,
-                        children: <TextSpan>[
-                          TextSpan(text: "2주 내에 정산을 받지 않을 경우", style: TextStyle(color: Colors.red)),
-                          TextSpan(text: " 리워드를 지급받지 못합니다.", style: TextStyle(color: Colors.black)),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
 
+            Container(
+              padding: EdgeInsets.fromLTRB(30.w, 20.h, 40.w,0),
+              decoration: BoxDecoration(
+                color: Colors.white
+              ),
+              child: Column(
 
-                  // Container(
-                  //   child: Text(" ※ 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러야 포인트가 지급됩니다.",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.black) ),
-                  // ),
-                  // SizedBox(height: 5.h,),
-                  // Container(
-                  //   child: Text(" ※ 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.black) ),
-                  // ),
-                  // SizedBox(height: 5.h,),
-                  // Container(
-                  //   child: Text(" ※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',color: Colors.black) ),
-                  // ),
+                crossAxisAlignment: CrossAxisAlignment.start,
 
-
-
-
-
-                  SizedBox(height: 30.h,),
-
+                children: [
                   Text("나의 미션 리포트",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
 
-                   if (return_reward>=1)
-                  Container(
-                    margin: EdgeInsets.only(left: 8.w, top: 7.h, bottom: 3.h),
-                    width: 395.w,
-                    height: 80.h,
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey[50],
-                      borderRadius: BorderRadius.circular(5),
+                  if (return_reward>=1)
+                    Container(
+                      margin: EdgeInsets.only(left: 8.w, top: 7.h, bottom: 3.h),
+                      width: 395.w,
+                      height: 80.h,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey[50],
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+
+                          Container(
+                            height: 70.h,
+                            width: 35.w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 10.w,),
+                                Icon(Icons.notifications_rounded, color: Colors.blueGrey[400], size: 25.h,),
+
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            height: 70.h,
+                            width: 275.w,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("미션 총 횟수(인증률 100%)를 넘어도\n미션 기간 동안 계속해서 인증할 수 있습니다.\n꾸준히 여러분의 갓생을 기록해보세요!",
+                                    style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
                     ),
-                    child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-
-                            Container(
-                              height: 70.h,
-                              width: 35.w,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(width: 10.w,),
-                                  Icon(Icons.notifications_rounded, color: Colors.blueGrey[400], size: 25.h,),
-
-                                ],
-                              ),
-                            ),
-
-                            Container(
-                              height: 70.h,
-                              width: 275.w,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("미션 총 횟수(인증률 100%)를 넘어도\n미션 기간 동안 계속해서 인증할 수 있습니다.\n꾸준히 여러분의 갓생을 기록해보세요!",
-                                      style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                  ),
 
                   SizedBox(height: 7.h,),
 
@@ -889,20 +881,20 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                           ),
 
                         if (widget.do_mission_data['bet_reward']!='0')
-                        SizedBox(height: 5.h,),
+                          SizedBox(height: 5.h,),
 
                         if (widget.do_mission_data['bet_reward']!='0')
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("${rewardName} 증가율",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                            Text("${widget.mission_data['reward_percent']} % ",
-                                style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                          ],
-                        ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${rewardName} 증가율",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text("${widget.mission_data['reward_percent']} % ",
+                                  style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            ],
+                          ),
 
                         if (widget.do_mission_data['bet_reward']!='0')
-                        SizedBox(height: 5.h,),
+                          SizedBox(height: 5.h,),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -910,14 +902,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                             Text("예상 환급 ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                             // 건 리워드가 없을 경우
                             if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt >= toCertify-mission_result))
-                            Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 없을 경우 & 실패했을 경우
                             if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt < toCertify-mission_result) )
-                            Text(" - ",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              Text(" - ",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 있을 경우
-                           if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-mission_result) )
+                            if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-mission_result) )
                               Text("+ ${((return_reward*14)+int.parse(widget.do_mission_data['bet_reward'])/100*int.parse(widget.mission_data['reward_percent'])).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 있을 경우 & 실패했을 경우
@@ -961,18 +953,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                       ],
                     ),
                   ),
-
-
-
-
-                  SizedBox(height: 30.h,),
-
-
-
-
                 ],
               ),
             ),
+
+            SizedBox(height: 40.h,),
+
+
           ],
         ),
       ),
@@ -1283,19 +1270,4 @@ class YetMissionBlock extends StatelessWidget {
             : Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
