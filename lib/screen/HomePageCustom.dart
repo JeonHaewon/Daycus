@@ -25,6 +25,7 @@ import 'package:daycus/widget/RankingBar.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:daycus/screen/MissionAddPage.dart';
+import 'package:daycus/screen/Friend/FriendPage.dart';
 
 
 
@@ -129,6 +130,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             //       );
             //     }
             // ),
+
+            //친구 추가
+            IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => FriendPage()),
+                  );
+                }
+            ),
+
 
             InkWell(
               onTap: () {
