@@ -364,7 +364,7 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                             null);
 
                         // 돌아가면 홈으로 이동.
-                        controller.currentBottomNavItemIndex.value = 2;
+                        controller.currentBottomNavItemIndex.value = 0;
 
                         // 페이지 다 닫고 이동
                         Navigator.pushAndRemoveUntil(

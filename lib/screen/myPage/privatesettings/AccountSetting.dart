@@ -452,10 +452,10 @@ class _AccountSettingState extends State<AccountSetting> {
 
                       // 이름 수정
                       if (is_change_name){
-                        // 이름이 가능하면 : 10글자 이하
+                        // 이름이 가능하면 : 20글자 이하
                         if (nameCtrl.text
                             .trim()
-                            .length <= 10 && nameCtrl.text.trim().replaceAll(RegExp('\\s'), "") == nameCtrl.text.trim() &&
+                            .length <= 20 && nameCtrl.text.trim().replaceAll(RegExp('\\s'), "") == nameCtrl.text.trim() &&
                             nameCtrl.text.trim() ==
                                 nameCtrl.text.trim().replaceAll(
                                     RegExp('[^a-zA-Z0-9가-힣\\s]'), "")) {

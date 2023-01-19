@@ -2,6 +2,7 @@ import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/core/app_bottom.dart';
 import 'package:daycus/screen/CheckConnection.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
 import 'package:daycus/screen/ReConnection.dart';
@@ -62,7 +63,7 @@ userLogin(String email, String password, bool reload) async{
 
 
           Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
-          controller.currentBottomNavItemIndex.value = 2;
+          controller.currentBottomNavItemIndex.value = AppScreen.home;
         }
 
 
@@ -113,6 +114,13 @@ afterLogin() async {
 
   // 검토 필요
   import_ranking();
+
+  // done_mission 대입하기
+  done_mission = await select_request(
+      "select do_id, mission_id, mission_start, bet_reward, get_reward from Done_mission where user_email='${user_data['user_email']}' order by mission_start desc;",
+      null,
+      false);
+  print("done_mission : ${done_mission}");
 
   // top ranking 불러오기
   topRankingList = await select_request(
@@ -185,7 +193,7 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
             MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
 
         // 홈페이지가 기본 !
-        controller.currentBottomNavItemIndex.value = 2;
+        controller.currentBottomNavItemIndex.value = AppScreen.home;
       }
     } // 자동로그인이 필요하지 않은 경우
     else if (userInfo != null && user_data != null) {

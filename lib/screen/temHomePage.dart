@@ -1,5 +1,6 @@
 import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/core/app_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,20 +31,28 @@ class TemHomePage extends StatefulWidget {
 }
 
 // 뒤로버튼을 한번 더 누르면 종료됨.
-onWillPop() {
-  DateTime now = DateTime.now();
-  if (currentBackPressTime == null ||
-      now.difference(currentBackPressTime!) > const Duration(milliseconds: 1500)) {
-    currentBackPressTime = now;
-    Fluttertoast.showToast(
-        msg: "뒤로 버튼을 한 번 더 누르시면 종료됩니다.",
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: const Color(0xff6E6E6E),
-        fontSize: 14.sp,
-        toastLength: Toast.LENGTH_SHORT);
+onWillPop(int nowScreen) {
+  //Fluttertoast.showToast(msg: "뒤로가기 버튼이 눌려졌습니다 !");
+  if (nowScreen == 0){
+    return true;
+  } else {
+    // 홈으로 이동
+    controller.currentBottomNavItemIndex.value = AppScreen.home;
     return false;
   }
-  return true;
+  // DateTime now = DateTime.now();
+  // if (currentBackPressTime == null ||
+  //     now.difference(currentBackPressTime!) > const Duration(milliseconds: 1500)) {
+  //   currentBackPressTime = now;
+  //   Fluttertoast.showToast(
+  //       msg: "뒤로 버튼을 한 번 더 누르시면 종료됩니다.",
+  //       gravity: ToastGravity.BOTTOM,
+  //       backgroundColor: const Color(0xff6E6E6E),
+  //       fontSize: 14.sp,
+  //       toastLength: Toast.LENGTH_SHORT);
+  //   return false;
+  // }
+  // return true;
 }
 
 
@@ -53,11 +62,14 @@ class _TemHomePageState extends State<TemHomePage> {
   // 하지만 UI는 뜨지 않음.
 
   final List<Widget> screens = const [
-    LabelPage(),
-    MissionCheckPage(),
     HomePage(),
+
     MissionPage(),
-    MyPage()
+    MissionCheckPage(),
+    // HomePage(),
+
+    LabelPage(),
+    MyPage(),
   ];
 
   // 항상 첫 화면 홈페이지가 되도록 바꾸어야할 듯
@@ -69,7 +81,7 @@ class _TemHomePageState extends State<TemHomePage> {
 
     return WillPopScope(
       onWillPop: () async {
-        bool result = onWillPop();
+        bool result = onWillPop(controller.currentBottomNavItemIndex.value);
         return await Future.value(result);
       },
       child: Scaffold(

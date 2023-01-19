@@ -1,4 +1,5 @@
 import 'package:daycus/backend/login/login.dart';
+import 'package:daycus/core/app_bottom.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -11,6 +12,7 @@ import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
+import 'package:daycus/core/app_bottom.dart';
 
 
 
@@ -126,7 +128,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                     if(do_mission==null)
                     // 미션란으로 이동 !
                       NowNoMissionButton(onTap: (){
-                        controller.currentBottomNavItemIndex.value = 3;
+                        controller.currentBottomNavItemIndex.value = AppScreen.mission;
                       },),
 
                     // 진행중인 미션이 있을 때

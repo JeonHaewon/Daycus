@@ -16,6 +16,7 @@ var leveling = null;
 //Map<String, List<dynamic>> missions_category = {};
 
 var do_mission = null;
+var done_mission = null;
 
 double lv_percent = 0;
 double lv_start = 1;
@@ -35,6 +36,8 @@ int profileDegree = 0;
 List? rankingList = null;
 
 var topRankingList = null;
+
+
 
 Map<int, dynamic> topRankingProfile = {
   0 : null,

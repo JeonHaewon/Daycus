@@ -464,33 +464,33 @@ class _MyPageState extends State<MyPage> {
 
                           // 미션 피드 - 다음에 만나요 ㅎㅎ
 
-                          // ElevatedButton(
-                          //   style: ElevatedButton.styleFrom(
-                          //     shape: RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.circular(10)
-                          //     ),
-                          //     primary: Colors.white,
-                          //     onPrimary: Colors.black,
-                          //     minimumSize: Size(365.w, 50.h),
-                          //     textStyle: TextStyle(fontSize: 18.sp),
-                          //   ),
-                          //
-                          //   onPressed: () {
-                          //     Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(builder: (_) => MissionFeed()),
-                          //     );
-                          //   },
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //     children: [
-                          //       Text(" 미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                          //       Image.asset('assets/image/arrow-right1.png' )
-                          //     ],
-                          //   ),
-                          // ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                              ),
+                              primary: Colors.white,
+                              onPrimary: Colors.black,
+                              minimumSize: Size(365.w, 50.h),
+                              textStyle: TextStyle(fontSize: 18.sp),
+                            ),
 
-                          //SizedBox(height: 15.h,),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => MissionFeed()),
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(" 미션피드",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 16.sp) ),
+                                Image.asset('assets/image/arrow-right1.png' )
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(height: 15.h,),
 
 
 
