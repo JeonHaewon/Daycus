@@ -35,8 +35,8 @@ send_email_to_user(String email, String code) async {
     var update_res = await http.post(Uri.parse(API.sendEmail),
         body: {
           "user_email" : "$email",
-          "title" : "이것은 제목",
-          "content" : "$code",
+          "title" : "DayCus 비밀번호 찾기 인증번호 안내",
+          "content" : "아래의 코드를 DayCus 앱에 입력해주세요. \n $code",
         });
 
     if (update_res.statusCode == 200) {

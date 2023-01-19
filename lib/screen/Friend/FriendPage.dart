@@ -14,6 +14,7 @@ import '../../backend/UserDatabase.dart';
 var namedb;
 
 bool searched = false;
+ScrollController scroller = ScrollController();
 
 TextEditingController checkCtrl = TextEditingController();
 class FriendPage extends StatefulWidget {
@@ -29,6 +30,8 @@ class _FriendPageState extends State<FriendPage>
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
+    check_who_request_friend();
+    print(who_requested);
   }
 
   @override
@@ -185,7 +188,85 @@ add_friend_fromdb(String id) async {
   }
 }
 
+accepted_friend(String id) async {
+  try {
+    var original_friends = await getfriend_fromdb(id);
+    original_friends[user_data['user_id']] = '1';
+    var select_res = await http.post(Uri.parse(API.update), body: {
+      'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '$id'"
+    });
+    if (select_res.statusCode == 200 ) {
+      var resUser = jsonDecode(select_res.body);
+      if (resUser['success'] == true) {
+      }
+      else {
+      }
+    }
+  } on Exception catch (e) {
+    print("에러발생 : ${e}");
+  }
+}
 
+var who_requested = [];
+var original_friends;
+
+check_who_request_friend() async {
+  original_friends = await getfriend_fromdb(user_data['user_id']);
+  who_requested = [];
+  for (var item in original_friends.keys) {
+    if (original_friends[item] == '-1') {
+      who_requested.add(item);
+    }
+  }
+}
+
+accept_particular_friend(int idx) async {
+  try {
+    await accepted_friend(who_requested[idx]);
+    original_friends[who_requested[idx]] = '1';
+    var update_res = await http.post(Uri.parse(API.update), body: {
+      'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
+    });
+
+    if (update_res.statusCode == 200 ) {
+      var resMission = jsonDecode(update_res.body);
+      if (resMission['success'] == true) {
+        print("성공~~~");
+        Fluttertoast.showToast(msg: "성공적으로 친구 요청을 받았습니다!");
+      } else {
+        print("에러발생");
+      }
+    }
+  } on Exception catch (e) {
+    print("에러발생");
+    Fluttertoast.showToast(msg: "수락하는 도중 문제가 발생했습니다.");
+  }
+}
+
+accept_all_friend() async {
+  try {
+    for (var item in who_requested) {
+      await accepted_friend(item);
+      original_friends[item] = '1';
+    }
+    var update_res = await http.post(Uri.parse(API.update), body: {
+      'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
+    });
+
+    if (update_res.statusCode == 200 ) {
+      var resMission = jsonDecode(update_res.body);
+      if (resMission['success'] == true) {
+        print("성공~~~");
+        Fluttertoast.showToast(msg: "성공적으로 친구 요청을 받았습니다!");
+      } else {
+        print("에러발생");
+      }
+    }
+  } on Exception catch (e) {
+    print("에러발생");
+    Fluttertoast.showToast(msg: "수락하는 도중 문제가 발생했습니다.");
+  }
+}
 
 
 class AddFriend extends StatefulWidget {
@@ -196,6 +277,8 @@ class AddFriend extends StatefulWidget {
 }
 
 class _AddFriendState extends State<AddFriend> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -319,6 +402,7 @@ class _AddFriendState extends State<AddFriend> {
                             height: 170.h,
 
                             child: Scrollbar(
+                              controller: scroller,
                               isAlwaysShown: true,
                               thickness: 8,
                               radius: Radius.circular(10),
@@ -329,71 +413,81 @@ class _AddFriendState extends State<AddFriend> {
                                   return false;
                                 },
                                 child: SingleChildScrollView(
+                                  controller: scroller,
 
                                   child: Column(
                                     children: [
+                                      for (int idx = 0; idx < who_requested.length; idx ++)
+                                        Container(
+                                          width: 260.w,
+                                          height: 45.h,
+                                          decoration: BoxDecoration(
+                                            color: Colors.blueGrey[50],
+                                            borderRadius: BorderRadius.circular(
+                                                15),
+                                          ),
+                                          child: Row(
 
+                                            children: [
 
-                                      Container(
-                                        width: 260.w,
-                                        height: 45.h,
-                                        decoration: BoxDecoration(
-                                          color: Colors.blueGrey[50],
-                                          borderRadius: BorderRadius.circular(15),
-                                        ),
-                                        child: Row(
-
-                                          children: [
-                                            
-                                            SizedBox(
-                                              width: 165.w,
-                                              height: 24.h,
-                                              child: FittedBox(
-                                                alignment: Alignment.center,
-                                                fit: BoxFit.contain,
-                                                child: Text("djkgjkdjgkjk",
-                                                    style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
-                                              ),
-                                            ),
-
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10)
+                                              SizedBox(
+                                                width: 165.w,
+                                                height: 24.h,
+                                                child: FittedBox(
+                                                  alignment: Alignment.center,
+                                                  fit: BoxFit.contain,
+                                                  child: Text(who_requested[idx],
+                                                      style: TextStyle(
+                                                        fontSize: 16.sp,
+                                                        fontFamily: 'korean',
+                                                        fontWeight: FontWeight
+                                                            .bold,)),
                                                 ),
-                                                primary: Colors.indigo[600],
-                                                onPrimary: Colors.white,
-                                                minimumSize: Size(20.w, 28.h),
-                                                textStyle: TextStyle(fontSize: 18.sp),
                                               ),
 
-                                              onPressed: () { },
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text("요청 수락",style: TextStyle(fontFamily: 'korean', fontSize: 10.sp) ),
-                                                ],
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius
+                                                          .circular(10)
+                                                  ),
+                                                  primary: Colors.indigo[600],
+                                                  onPrimary: Colors.white,
+                                                  minimumSize: Size(20.w, 28.h),
+                                                  textStyle: TextStyle(
+                                                      fontSize: 18.sp),
+                                                ),
+
+                                                onPressed: () {
+                                                  accept_particular_friend(idx);
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    Text("요청 수락",
+                                                        style: TextStyle(
+                                                            fontFamily: 'korean',
+                                                            fontSize: 10.sp)),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
 
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 10.h,),
+                                        SizedBox(height: 10.h,),
 
-                                      Container(
-                                        width: 260.w,
-                                        height: 45.h,
-                                        decoration: BoxDecoration(
-                                          color: Colors.blueGrey[50],
-                                          borderRadius: BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      SizedBox(height: 10.h,),
-
-
-
-
+                                        // Container(
+                                        //   width: 260.w,
+                                        //   height: 45.h,
+                                        //   decoration: BoxDecoration(
+                                        //     color: Colors.blueGrey[50],
+                                        //     borderRadius: BorderRadius.circular(
+                                        //         15),
+                                        //   ),
+                                        // ),
+                                        // SizedBox(height: 10.h,),
                                     ],
                                   ),
                                 ),

@@ -172,6 +172,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     if (real_not_see != null && DateTime.now().difference(DateTime.parse(real_not_see)).inDays < 7){
       return;
     }
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await showDialog<String>(
         context: context,

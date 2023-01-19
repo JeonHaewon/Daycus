@@ -146,10 +146,8 @@ class _AdminScreenState extends State<AdminScreen> {
         if (select_res.statusCode == 200 ) {
           var resUser = jsonDecode(select_res.body);
           if (resUser['success'] == true) {
-            Fluttertoast.showToast(msg: "친구 요청이 완료되었습니다 !");
           }
           else {
-            Fluttertoast.showToast(msg: "시도 중 오류가 발견되었습니다");
           }
         }
       } on Exception catch (e) {

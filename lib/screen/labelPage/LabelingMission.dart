@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 var fromdb;
 int ccnt = 0;
+int button_clicked = 0;
 
 Map <String, dynamic> real_cnt_data={};
 
@@ -165,7 +166,7 @@ class _LabelingMissionState extends State<LabelingMission> {
       print(jsonDecode(fromdb));
       print(real_cnt_data);
       if (select_res.statusCode == 200 ) {
-        if (ccnt != 0) {
+        if (button_clicked != 0) {
           Fluttertoast.showToast(msg: "라벨링 업데이트가 완료되었습니다 !");
         }
         else return print("변함 없음");
@@ -208,6 +209,33 @@ class _LabelingMissionState extends State<LabelingMission> {
       //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
     }
   }
+  from_db_label_cnt() async {
+    try {
+      var select_res = await http.post(Uri.parse(API.select), body: {
+        'update_sql': "select this_week_label_cnt from user_table where user_email = '${user_data['user_email']}'",
+      });
+
+      if (select_res.statusCode == 200 ) {
+        var resMission = jsonDecode(select_res.body);
+        print(resMission);
+        if (resMission['success'] == true) {
+          if (resMission['data'][0]['this_week_label_cnt'] == null){
+            ccnt = 0;
+          }
+          else{
+            ccnt = int.parse(resMission['data'][0]['this_week_label_cnt']);
+          }
+          print("잘 불러옴");
+        } else {
+          print("못 불러옴");
+        }
+
+      }
+    } on Exception catch (e) {
+      print("에러발생 : ${e}");
+      return false;
+    }
+  }
 
   get_data() async {
     real_cnt_data = await from_jsondata();
@@ -217,7 +245,7 @@ class _LabelingMissionState extends State<LabelingMission> {
   void initState() {
     super.initState();
     get_data();
-    ccnt = 0;
+    from_db_label_cnt();
 
     label_category_list = widget.label_category.split(", ");
     label_cnt = label_category_list!.length;
@@ -247,6 +275,7 @@ class _LabelingMissionState extends State<LabelingMission> {
     super.dispose();
     storing_json();
     update_json();
+    update_request("update user_table set this_week_label_cnt = '$ccnt' where user_email = '${user_data['user_email']}'",null);
   }
   // 로딩을 위한 key
   bool is_load = false;
@@ -319,7 +348,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("이번주 라벨링 횟수",style: TextStyle(color: Colors.black, fontSize: 10.sp), textAlign: TextAlign.center,),
-                          Text("007 / 700",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
+                          Text("${ccnt.toString()} / 700",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
 
                         ],
                       )
@@ -598,6 +627,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                               update_map(index, label_category_list[i*2]);
                               do_label(label_category_list[i*2]);
                               ccnt += 1;
+                              button_clicked += 1;
                             },
                             child: Text(label_category_list[extraindex]),
                             style: ElevatedButton.styleFrom(
@@ -618,6 +648,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                                 update_map(index, label_category_list[2*i+1]);
                                 do_label(label_category_list[2*i+1]);
                                 ccnt += 1;
+                                button_clicked += 1;
                               },
                               child: Text(label_category_list[extraindex+1]),
                               style: ElevatedButton.styleFrom(
