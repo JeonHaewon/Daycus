@@ -130,7 +130,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
 
 
+
   @override
+
   void initState () {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
@@ -151,96 +153,100 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
               Text("미션 인증 방법",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 20.h),
-                  //height: 200.h,
-                  child: Column(
-                    children: [
+          content: Container(
+            width: 300.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
 
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("1. 인증빈도",
-                              style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                          SizedBox(height: 3.h,),
-                          Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
-                              style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                Container(
+                    padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 20.h),
 
-                          SizedBox(height: 15.h,),
+                    //height: 200.h,
+                    child: Column(
+                      children: [
 
-                          Text("2. 인증방법",
-                              style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                          SizedBox(height: 3.h,),
-                          Text("${widget.mission_data['content']}",
-                              style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("1. 인증빈도",
+                                style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                            SizedBox(height: 3.h,),
+                            Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                                style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
-                        ],
-                      ),
+                            SizedBox(height: 15.h,),
 
-                      SizedBox(height: 20.h,),
+                            Text("2. 인증방법",
+                                style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                            SizedBox(height: 3.h,),
+                            Text("${widget.mission_data['content']}",
+                                style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
-                    ],
-                  )
-
-              ),
-
-              Container(
-                width: 412.w,
-                height: 1,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                ),
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                children: [
-                  
-                  InkWell(
-                    onTap:(){},
-                    child: Container(
-                      width: 165.w,
-                      height: 50.h,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-
-                        //borderRadius: BorderRadius.circular(4),
-                      ),
-                      child:  Text("일주일간 보지 않기",
-                          style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
-                    ),
-                  ),
-                  
-                  InkWell(
-                    onTap:(){Navigator.of(context).pop();},
-                    child: Container(
-                      width: 165.w,
-                      height: 50.h,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-
-                          left: BorderSide(
-                            color: Colors.grey,
-                            width: 1,
-                          ),
+                          ],
                         ),
-                        //borderRadius: BorderRadius.circular(4),
-                      ),
-                      child:  Text("확인",
-                          style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
-                    ),
-                  ),
-                ],
-              ),
 
-            ],
+                        SizedBox(height: 20.h,),
+
+                      ],
+                    )
+
+                ),
+
+                Container(
+                  width: 412.w,
+                  height: 1,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                  ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: [
+
+                    InkWell(
+                      onTap:(){},
+                      child: Container(
+                        width: 150.w,
+                        height: 50.h,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+
+                          //borderRadius: BorderRadius.circular(4),
+                        ),
+                        child:  Text("일주일간 보지 않기",
+                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                      ),
+                    ),
+
+                    InkWell(
+                      onTap:(){Navigator.of(context).pop();},
+                      child: Container(
+                        width: 150.w,
+                        height: 50.h,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                            left: BorderSide(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                          ),
+                          //borderRadius: BorderRadius.circular(4),
+                        ),
+                        child:  Text("확인",
+                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                      ),
+                    ),
+                  ],
+                ),
+
+              ],
+            ),
           ),
           // shape: RoundedRectangleBorder(
           //   borderRadius: BorderRadius.circular(10),
