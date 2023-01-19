@@ -259,13 +259,13 @@ class CheckFriend extends StatelessWidget {
 
                                 SizedBox(
                                   width: 70.w,
-                                  height: 25.h,
+                                  height: 22.h,
                                   child: FittedBox(
                                     alignment: Alignment.center,
                                     fit: BoxFit.contain,
                                     child: Row(
                                       children: [
-                                        Icon(Icons.control_point_duplicate, size: 15.w,color: AppColor.happyblue,),
+                                        Icon(Icons.control_point_duplicate, size: 14.w,color: AppColor.happyblue,),
                                         SizedBox(width: 3.w,),
                                         Text("5.0",
                                             style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: AppColor.happyblue, ) ),
@@ -324,13 +324,13 @@ class CheckFriend extends StatelessWidget {
 
                                 SizedBox(
                                   width: 70.w,
-                                  height: 25.h,
+                                  height: 22.h,
                                   child: FittedBox(
                                     alignment: Alignment.center,
                                     fit: BoxFit.contain,
                                     child: Row(
                                       children: [
-                                        Icon(Icons.control_point_duplicate, size: 15.w,color: AppColor.happyblue,),
+                                        Icon(Icons.control_point_duplicate, size: 14.w,color: AppColor.happyblue,),
                                         SizedBox(width: 3.w,),
                                         Text("5.0",
                                             style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: AppColor.happyblue, ) ),

@@ -370,61 +370,85 @@ class _MyPageState extends State<MyPage> {
 
                           //SizedBox(height: 15.h,),
 
-                          // 현재 참여 빈도
-                          if (cnt1>0)
-                            Container(
-                              width: 365.w,
-                              //height:260.h,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              margin: EdgeInsets.symmetric(horizontal: 2.w),
-                              padding: EdgeInsets.only(left: 25.w, right: 25.w),
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 20.h,),
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("현재 미션 참여현황",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-
-                                        // 회원가입 날짜로부터
-                                        //Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 13.sp, fontFamily: 'korean') ),
-
-                                      ],
-                                    ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (cnt1>0)
+                                Container(
+                                  width: 170.w,
+                                  //height:260.h,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
+                                  margin: EdgeInsets.symmetric(horizontal: 2.w),
+                                  padding: EdgeInsets.only(left: 20.w, right: 5.w),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 10.h,),
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
 
-                                  SizedBox(height: 15.h,),
+                                            SizedBox(
+                                              width: 110.w,
+                                              height: 40.h,
+                                              child: FittedBox(
+                                                alignment: Alignment.centerLeft,
+                                                fit: BoxFit.contain,
+                                                child: Text("현재 미션 현황",
+                                                    style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)  ),
+                                              ),
+                                            ),
 
-                                  ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0], initialValue: _isInitialValue,),
+                                            //Text("현재 미션 참여현황",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
-                                  SizedBox(height: 8.h,),
+                                            // 회원가입 날짜로부터
+                                            //Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 13.sp, fontFamily: 'korean') ),
 
-                                  ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1], initialValue: _isInitialValue,),
+                                          ],
+                                        ),
+                                      ),
 
+                                      SizedBox(height: 12.h,),
 
-                                  SizedBox(height: 8.h,),
+                                      ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0], initialValue: _isInitialValue,),
 
-                                  ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2], initialValue: _isInitialValue,),
+                                      SizedBox(height: 8.h,),
 
-                                  SizedBox(height: 8.h,),
+                                      ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1], initialValue: _isInitialValue,),
 
-                                  ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3], initialValue: _isInitialValue,),
+                                      SizedBox(height: 8.h,),
 
-                                  SizedBox(height: 8.h,),
+                                      ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2], initialValue: _isInitialValue,),
 
-                                  ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4], initialValue: _isInitialValue,),
+                                      SizedBox(height: 8.h,),
 
-                                  SizedBox(height: 20.h,),
+                                      ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3], initialValue: _isInitialValue,),
 
+                                      SizedBox(height: 8.h,),
 
+                                      ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4], initialValue: _isInitialValue,),
 
-                                ],
-                              ),
-                            ), //주간랭킹
+                                      SizedBox(height: 20.h,),
+
+                                    ],
+                                  ),
+                                ), // 현재 참여
+
+                              Container(
+                                width: 170.w,
+                                height:205.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),// 빈도
+
+                            ],
+                          ),
+
 
                           SizedBox(height: 15.h,),
 
@@ -767,7 +791,7 @@ class ParticipateBar extends StatelessWidget {
 
           AnimatedContainer(
             duration: Duration(milliseconds: 500),
-            width:  initialValue ? 0 : (190.w)*(graphWidth/cnt),
+            width:  initialValue ? 0 : (72.w)*(graphWidth/cnt),
             height: 10.h,
             decoration: BoxDecoration(
                 color: AppColor.happyblue,
@@ -793,6 +817,7 @@ class ParticipateBar extends StatelessWidget {
           // 갯수, 0이면 포함 안함.
           if (graphWidth.toStringAsFixed(0)!="0")
             Text("${graphWidth.toStringAsFixed(0)}", style: TextStyle(fontSize: 12.sp, ),),
+
         ],
       ),
     );
