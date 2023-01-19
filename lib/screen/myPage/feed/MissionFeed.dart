@@ -1,4 +1,5 @@
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/widget/feedpage/feedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,14 +34,13 @@ class MissionFeed extends StatelessWidget {
             child: Column(
               children: [
 
-
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 0),
+                  padding: EdgeInsets.fromLTRB(20.w, 20.h, 10.w, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        width: 350.w,
+                        width: 370.w,
                         // height:310.h,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -52,12 +52,12 @@ class MissionFeed extends StatelessWidget {
                           children: [
 
                             Padding(
-                              padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 0),
+                              padding: EdgeInsets.fromLTRB(5.w, 18.h, 5.w, 0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("2022. 10",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  SizedBox(height: 12.h,),
+                                  // Text("2022. 10",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                  // SizedBox(height: 12.h,),
 
                                   // Container(
                                   //
@@ -79,12 +79,19 @@ class MissionFeed extends StatelessWidget {
                                       //int mission_index = int.parse(source)
                                       return Column(
                                         children: [
-                                          MissionFeedButton(
-                                            title : "${all_missions[_index]['title']}",
-                                            duration:"${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
-                                            image: "feedimage" ,
-                                            percent: int.parse(done_mission[index]['get_reward']),
-                                            reward: 1200,),
+                                          // MissionFeedButton(
+                                          //   title : "${all_missions[_index]['title']}",
+                                          //   duration:"${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
+                                          //   image: "${all_missions[_index]['thumbnail']}" ,
+                                          //   percent: int.parse(done_mission[index]['get_reward']),
+                                          //   reward: 1200,),
+                                          FeedButton(
+                                              title: "${all_missions[_index]['title']}",
+                                              duration: "${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
+                                              image: "${all_missions[_index]['thumbnail']}",
+                                              percent: double.parse(done_mission[index]['percent']),
+                                          ),
+
                                           SizedBox(height: 12.h,),
                                         ],
                                       );

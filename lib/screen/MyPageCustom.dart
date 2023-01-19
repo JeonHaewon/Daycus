@@ -120,6 +120,8 @@ class _MyPageState extends State<MyPage> {
       setState(() { });
     };
 
+    int do_mission_cnt = do_mission==null ? 0 : do_mission.length;
+
     Widget toDeveloperBottomSheet = bottomPopWidget(
         context,
         // 메일 문의
@@ -370,6 +372,7 @@ class _MyPageState extends State<MyPage> {
 
                           //SizedBox(height: 15.h,),
 
+                          if (do_mission_cnt>0)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

@@ -117,7 +117,7 @@ afterLogin() async {
 
   // done_mission 대입하기
   done_mission = await select_request(
-      "select do_id, mission_id, mission_start, bet_reward, get_reward from Done_mission where user_email='${user_data['user_email']}' order by mission_start desc;",
+      "select do_id, mission_id, mission_start, bet_reward, percent from Done_mission where user_email='${user_data['user_email']}' order by mission_start desc;",
       null,
       false);
   print("done_mission : ${done_mission}");

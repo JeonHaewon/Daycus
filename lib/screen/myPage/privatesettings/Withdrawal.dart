@@ -35,6 +35,7 @@ class _WithdrawalState extends State<Withdrawal> {
       user_data = null;
       all_missions = null;
       do_mission = null;
+      done_mission = null;
 
       await storage.delete(key: 'login');
     }

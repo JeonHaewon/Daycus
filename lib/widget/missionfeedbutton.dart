@@ -68,7 +68,7 @@ class MissionFeedButton extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white60,
                       image: DecorationImage(
-                          image: AssetImage('assets/image/$image.png') ,
+                          image: AssetImage('assets/image/thumbnail/${image}') ,
                           fit: BoxFit.cover
                       ),
                     ),

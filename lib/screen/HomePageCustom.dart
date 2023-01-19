@@ -305,7 +305,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     child: Container(
                                         height: 210.h,
                                         width: 150.w,
-                                        child: Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h)),
+                                        child: Image.asset('assets/image/character.png' , fit: BoxFit.fill, height: 220.h)),
                                   ),
 
                                   //Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h),
