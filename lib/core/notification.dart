@@ -1,8 +1,15 @@
+import 'dart:convert';
+
 import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:http/http.dart' as http;
+
+import '../backend/Api.dart';
+
 
 final notifications = FlutterLocalNotificationsPlugin();
 
@@ -23,7 +30,28 @@ initNotification() async {
     //onSelectNotification: 함수명추가
   );
 }
-showNotification() async {
+get_name_from_id(String id) async{
+  try {
+    var update_res = await http.post(Uri.parse(API.select), body: {
+      'update_sql': "select user_name from user_table where user_id = '$id'",
+    });
+
+    if (update_res.statusCode == 200 ) {
+      var resMission = jsonDecode(update_res.body);
+      if (resMission['success'] == true) {
+        return resMission['data'][0]['user_name'];
+      } else {
+        print("에러발생");
+        print(resMission);
+        Fluttertoast.showToast(msg: "다시 시도해주세요");
+      }
+    }
+  } on Exception catch (e) {
+    print("에러발생");
+    Fluttertoast.showToast(msg: "업데이트 중 문제가 발생했습니다.");
+  }
+}
+showNotification(String name) async {
 
   var androidDetails = AndroidNotificationDetails(
     '유니크한 알림 채널 ID',
@@ -37,8 +65,8 @@ showNotification() async {
   // 알림 id, 제목, 내용 맘대로 채우기
   notifications.show(
       1,
-      '제목1',
-      '내용1',
+      '$name 님과 친구가 되셨습니다 !',
+      '지금 친구의 활동을 확인해보세요 !',
       NotificationDetails(android: androidDetails),
       payload:'부가정보' // 부가정보
   );

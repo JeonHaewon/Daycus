@@ -5,6 +5,7 @@ import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/backend/admin/importRanking.dart';
+import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -768,8 +769,9 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
               AdminButton(
                   title: "친구 요청 다 받기 버튼",
-                  onPressed: () {
+                  onPressed: () async {
                     accept_friend();
+                    showNotification(await get_name_from_id('19'));
                   }
               ),
 

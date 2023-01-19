@@ -512,28 +512,28 @@ class _LabelingMissionState extends State<LabelingMission> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
-                InkWell(
-                  onTap: () async {
-                    if (index == 0){
-                      Fluttertoast.showToast(msg: "처음입니다");}
-                    else{
-                      index -= 1;
-                      await image_download(widget.folder, imageList[index]['image']);
-                      setState(() { is_load = true; });
-                    }
-                  },
-                  child: Container(
-                    height: 85.h,
-                    width: 40.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/image/labelingmission/arrow_left.png' ),
-                      ],
-                    ),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () async {
+                //     if (index == 0){
+                //       Fluttertoast.showToast(msg: "처음입니다");}
+                //     else{
+                //       index -= 1;
+                //       await image_download(widget.folder, imageList[index]['image']);
+                //       setState(() { is_load = true; });
+                //     }
+                //   },
+                //   child: Container(
+                //     height: 85.h,
+                //     width: 40.w,
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Image.asset('assets/image/labelingmission/arrow_left.png' ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
                 Container(
                     alignment: Alignment.center, width: 310.w,
