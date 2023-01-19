@@ -295,6 +295,125 @@ class _AddFriendState extends State<AddFriend> {
                 ),
               ),
 
+              SizedBox(height: 160.h,),
+
+              Container(
+
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  children: [
+
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10.w, 15.h, 10.w, 10.h),
+                      child: Column(
+                        children: [
+                          Text("친구 요청 확인",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 15.sp) ),
+
+                          SizedBox(height: 15.h,),
+
+                          Container(
+                            width : 280.w,
+                            height: 170.h,
+
+                            child: Scrollbar(
+                              isAlwaysShown: true,
+                              thickness: 8,
+                              radius: Radius.circular(10),
+                              //scrollbarOrientation: ScrollbarOrientation.right,
+                              child: NotificationListener<OverscrollIndicatorNotification>(
+                                onNotification: (OverscrollIndicatorNotification overScroll) {
+                                  overScroll.disallowGlow();
+                                  return false;
+                                },
+                                child: SingleChildScrollView(
+
+                                  child: Column(
+                                    children: [
+
+
+                                      Container(
+                                        width: 260.w,
+                                        height: 45.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.blueGrey[50],
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        child: Row(
+
+                                          children: [
+                                            
+                                            SizedBox(
+                                              width: 165.w,
+                                              height: 24.h,
+                                              child: FittedBox(
+                                                alignment: Alignment.center,
+                                                fit: BoxFit.contain,
+                                                child: Text("djkgjkdjgkjk",
+                                                    style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
+                                              ),
+                                            ),
+
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10)
+                                                ),
+                                                primary: Colors.indigo[600],
+                                                onPrimary: Colors.white,
+                                                minimumSize: Size(20.w, 28.h),
+                                                textStyle: TextStyle(fontSize: 18.sp),
+                                              ),
+
+                                              onPressed: () { },
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text("요청 수락",style: TextStyle(fontFamily: 'korean', fontSize: 10.sp) ),
+                                                ],
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h,),
+
+                                      Container(
+                                        width: 260.w,
+                                        height: 45.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.blueGrey[50],
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h,),
+
+
+
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+
+
+                        ],
+                      ),
+                    ),
+
+
+                  ],
+                ),
+              ),
+
+
+
             ],
           ),
         ),
