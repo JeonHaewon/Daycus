@@ -298,6 +298,41 @@ class _LabelingMissionState extends State<LabelingMission> {
         backgroundColor: Colors.white,
         title: Text('라벨링 미션',
             style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+        actions: [
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Container(
+                      width: 110.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                          color: Colors.indigo[100],
+
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("이번주 라벨링 횟수",style: TextStyle(color: Colors.black, fontSize: 10.sp), textAlign: TextAlign.center,),
+                          Text("007 / 700",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
+
+                        ],
+                      )
+                  ),
+
+                  SizedBox(width: 10.w,)
+                ],
+              )
+
+            ],
+          )
+
+        ],
       ),
 
       body: SingleChildScrollView(
@@ -305,6 +340,8 @@ class _LabelingMissionState extends State<LabelingMission> {
           mainAxisAlignment: MainAxisAlignment.center,
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+
 
 
             Padding(
@@ -402,7 +439,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                 children: [
 
                   Container(
-                    width: 290.w,
+                    width: 295.w,
                     height: 30.h,
                     decoration: BoxDecoration(
                       color: Colors.deepOrange[100],
