@@ -362,239 +362,412 @@ class _AddFriendState extends State<AddFriend> {
     return Scaffold(
       backgroundColor: AppColor.background,
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(0, 20.h, 0, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+        child: Container(
+          alignment: Alignment.center,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 30.h, 0, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 10.w,),
 
-                  SizedBox(
-                    height: 80.h,
-                    width: 260.w,
-                    child : TextFormField(
-                      controller: checkCtrl,
-                      decoration: InputDecoration(
-                          hintText: "추가하고 싶은 친구의 닉네임을 입력하세요",
-                          hintStyle: TextStyle(fontFamily: 'korean',fontSize: 11.sp )
+                Container(
+                  width: 320.w,
+                  //height: 300.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 5,
                       ),
-                    ),
+                    ],
                   ),
 
-                  SizedBox(width: 8.w,),
-
-                  IconButton(
-                      icon: Icon(Icons.search),color: Colors.black,
-                    onPressed: () async {
-                      await check_exist_user(checkCtrl.text.trim().split('@')[0], checkCtrl.text.trim().split('@')[1]);
-                      setState(() {
-                      });
-                    }
-                  ),
-
-                ],
-              ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
 
 
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(25.w, 22.h, 25.w, 0),
+                        child: Container(
+                          width: 320.w,
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("친구 검색하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 18.sp) ),
+                              SizedBox(height: 3.h,),
+                              Text("친구와 함께 미션을 수행해보세요",style: TextStyle(fontFamily: 'korean',  fontSize: 10.sp, color: AppColor.happyblue) ),
+                              SizedBox(height: 15.h,),
 
-              Container(
-                width: 300.w,
-                height: 50.h,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: searched ? [
-
-                    SizedBox(
-                      width: 160.w,
-                      height: 25.h,
-                      child: FittedBox(
-                        alignment: Alignment.center,
-                        fit: BoxFit.contain,
-
-                        child: Text(checkCtrl.text.trim().split('@')[0],
-                            style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
-                      ),
-                    ),
-
-
-                    SizedBox(width: 12.w,),
-
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
+                              Container(
+                                width: 320.w,
+                                height: 1.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300]
+                                ),
+                              )
+                            ],
+                          )
                         ),
-                        primary: Colors.indigo[600],
-                        onPrimary: Colors.white,
-                        minimumSize: Size(20.w, 28.h),
-                        textStyle: TextStyle(fontSize: 18.sp),
                       ),
 
-                      onPressed: () {
-                        if (names_from_id.contains(checkCtrl.text.trim().split('@')[0]) == false) {
-                          add_friend_fromdb(checkCtrl.text.trim().split(
-                              '@')[1]);
-                          requesting_friend(checkCtrl.text.trim().split(
-                              '@')[1]);
-                        }
-                        else{
-                          Fluttertoast.showToast(msg: "이미 친구로 등록되어 있습니다.");
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(height: 20.h,),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("친구 요청",style: TextStyle(fontFamily: 'korean', fontSize: 10.sp) ),
+                          Icon(Icons.lightbulb, size: 12.w,),
+                          Text(" 검색방법 : 친구의 '닉네임+@사용자 코드'를 입력하세요",style: TextStyle(fontFamily: 'korean',  fontSize: 10.sp, ) ),
+
                         ],
                       ),
-                    ),
+
+                      Text("ex) 친구의 닉네임이 roy, 사용자 코드가 01인 경우 'roy@01' 입력",style: TextStyle(fontFamily: 'korean',  fontSize: 8.sp, ) ),
+                      SizedBox(height: 10.h,),
 
 
-                  ] : [Container()],
-                ),
-              ),
-
-              SizedBox(height: 160.h,),
-
-              Container(
-
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Column(
-                  children: [
-
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10.w, 15.h, 10.w, 10.h),
-                      child: Column(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("친구 요청 확인",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 15.sp) ),
+                          SizedBox(width: 20.w,),
 
-                          SizedBox(height: 15.h,),
+                          SizedBox(
+                            height: 60.h,
+                            width: 220.w,
+                            child : TextFormField(
+                              controller: checkCtrl,
+                              decoration: InputDecoration(
+                                  hintText: "친구의 닉네임과 사용자 코드를 입력하세요",
+                                  hintStyle: TextStyle(fontFamily: 'korean',fontSize: 10.sp )
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8.w,),
 
-                          Container(
-                            width : 280.w,
-                            height: 170.h,
+                          IconButton(
+                            constraints: BoxConstraints(),
+                            icon: Icon(Icons.search),color: Colors.black,
+                            onPressed: () async {
+                              await check_exist_user(checkCtrl.text.trim().split('@')[0], checkCtrl.text.trim().split('@')[1]);
+                              setState(() {
+                              });
+                            }
+                          ),
 
-                            child: Scrollbar(
-                              controller: scroller,
-                              isAlwaysShown: true,
-                              thickness: 8,
-                              radius: Radius.circular(10),
-                              //scrollbarOrientation: ScrollbarOrientation.right,
-                              child: NotificationListener<OverscrollIndicatorNotification>(
-                                onNotification: (OverscrollIndicatorNotification overScroll) {
-                                  overScroll.disallowGlow();
-                                  return false;
-                                },
-                                child: SingleChildScrollView(
-                                  controller: scroller,
+                        ],
+                      ),
 
-                                  child: Column(
-                                    children: [
-                                      for (int idx = 0; idx < who_requested.length; idx ++)
-                                        Container(
-                                          width: 260.w,
-                                          height: 45.h,
-                                          decoration: BoxDecoration(
-                                            color: Colors.blueGrey[50],
-                                            borderRadius: BorderRadius.circular(
-                                                15),
-                                          ),
-                                          child: Row(
 
+                      SizedBox(height: 10.h,),
+
+
+                      Container(
+                        width: 250.w,
+                        height: 48.h,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: searched ? [
+
+                            SizedBox(width: 5.w,),
+                            SizedBox(
+                              width: 140.w,
+                              height: 24.h,
+                              child: FittedBox(
+                                alignment: Alignment.center,
+                                fit: BoxFit.contain,
+
+                                child: Text(checkCtrl.text.trim().split('@')[0],
+                                    style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
+                              ),
+                            ),
+
+
+                            SizedBox(width: 8.w,),
+
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                primary: Colors.indigo[600],
+                                onPrimary: Colors.white,
+                                minimumSize: Size(18.w, 28.h),
+                                textStyle: TextStyle(fontSize: 18.sp),
+                              ),
+
+                              onPressed: () {
+                                if (names_from_id.contains(checkCtrl.text.trim().split('@')[0]) == false) {
+                                  add_friend_fromdb(checkCtrl.text.trim().split(
+                                      '@')[1]);
+                                  requesting_friend(checkCtrl.text.trim().split(
+                                      '@')[1]);
+                                }
+                                else{
+                                  Fluttertoast.showToast(msg: "이미 친구로 등록되어 있습니다.");
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("친구 요청",style: TextStyle(fontFamily: 'korean', fontSize: 10.sp) ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(width: 4.w,),
+
+
+
+                          ] : [Container()],
+                        ),
+                      ),
+
+                      // Container(
+                      //   width: 250.w,
+                      //   height: 48.h,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.grey[300],
+                      //     borderRadius: BorderRadius.circular(5),
+                      //   ),
+                      //   child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //
+                      //         SizedBox(width: 5.w,),
+                      //         SizedBox(
+                      //           width: 140.w,
+                      //           height: 24.h,
+                      //           child: FittedBox(
+                      //             alignment: Alignment.center,
+                      //             fit: BoxFit.contain,
+                      //             child: Text("dgdgdgd",
+                      //                 style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
+                      //           ),
+                      //         ),
+                      //         SizedBox(width: 8.w,),
+                      //         ElevatedButton(
+                      //           style: ElevatedButton.styleFrom(
+                      //             shape: RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(10)
+                      //             ),
+                      //             primary: Colors.indigo[600],
+                      //             onPrimary: Colors.white,
+                      //             minimumSize: Size(18.w, 28.h),
+                      //             textStyle: TextStyle(fontSize: 18.sp),
+                      //           ),
+                      //           onPressed: () {},
+                      //           child: Row(
+                      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //             children: [
+                      //               Text("친구 요청",style: TextStyle(fontFamily: 'korean', fontSize: 10.sp) ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ]
+                      //   ),
+                      // ),
+
+                      SizedBox(height: 28.h,),
+
+                    ],
+                  ),
+                ),
+
+
+
+
+                SizedBox(height: 30.h,),
+
+                Container(
+                  width: 320.w,
+                  //height: 300.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(25.w, 22.h, 25.w, 0),
+                        child: Container(
+                            width: 320.w,
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("친구 요청 확인하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 18.sp) ),
+                                SizedBox(height: 3.h,),
+                                Text("친구가 보낸 요청을 확인해보세요",style: TextStyle(fontFamily: 'korean',  fontSize: 10.sp, color: AppColor.happyblue) ),
+                                SizedBox(height: 15.h,),
+
+                                Container(
+                                  width: 320.w,
+                                  height: 1.h,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[300]
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                      ),
+                      
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10.w, 15.h, 10.w, 30.h),
+                        child: Column(
+                          children: [
+
+
+                            Container(
+                              width : 280.w,
+                              height: 180.h,
+
+                              child: Scrollbar(
+                                controller: scroller,
+                                isAlwaysShown: true,
+                                thickness: 8,
+                                radius: Radius.circular(10),
+                                //scrollbarOrientation: ScrollbarOrientation.right,
+                                child: NotificationListener<OverscrollIndicatorNotification>(
+                                  onNotification: (OverscrollIndicatorNotification overScroll) {
+                                    overScroll.disallowGlow();
+                                    return false;
+                                  },
+                                  child: SingleChildScrollView(
+                                    controller: scroller,
+
+                                    child: Column(
+                                      children: [
+
+                                        for (int idx = 0; idx < who_requested.length; idx ++)
+                                          Column(
                                             children: [
-
-                                              SizedBox(
-                                                width: 165.w,
-                                                height: 24.h,
-                                                child: FittedBox(
-                                                  alignment: Alignment.center,
-                                                  fit: BoxFit.contain,
-                                                  child: Text(names_from_id[idx],
-                                                      style: TextStyle(
-                                                        fontSize: 16.sp,
-                                                        fontFamily: 'korean',
-                                                        fontWeight: FontWeight
-                                                            .bold,)),
+                                              Container(
+                                                width: 250.w,
+                                                height: 48.h,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blueGrey[50],
+                                                  borderRadius: BorderRadius.circular(10),
                                                 ),
-                                              ),
-
-                                              ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius
-                                                          .circular(10)
-                                                  ),
-                                                  primary: Colors.indigo[600],
-                                                  onPrimary: Colors.white,
-                                                  minimumSize: Size(20.w, 28.h),
-                                                  textStyle: TextStyle(
-                                                      fontSize: 18.sp),
-                                                ),
-
-                                                onPressed: () {
-                                                  accept_particular_friend(idx);
-                                                  showNotification(names_from_id[idx]);
-                                                },
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment
-                                                      .spaceBetween,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-                                                    Text("요청 수락",
-                                                        style: TextStyle(
-                                                            fontFamily: 'korean',
-                                                            fontSize: 10.sp)),
+
+                                                    SizedBox(width: 5.w,),
+
+                                                    SizedBox(
+                                                      width: 140.w,
+                                                      height: 24.h,
+                                                      child: FittedBox(
+                                                        alignment: Alignment.center,
+                                                        fit: BoxFit.contain,
+                                                        child: Text(names_from_id[idx],
+                                                            style: TextStyle(
+                                                              fontSize: 16.sp,
+                                                              fontFamily: 'korean',
+                                                              fontWeight: FontWeight
+                                                                  .bold,)),
+                                                      ),
+                                                    ),
+
+                                                    SizedBox(width: 8.w,),
+
+                                                    ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius
+                                                                .circular(10)
+                                                        ),
+                                                        primary: Colors.indigo[600],
+                                                        onPrimary: Colors.white,
+                                                        minimumSize: Size(18.w, 28.h),
+                                                        textStyle: TextStyle(
+                                                            fontSize: 18.sp),
+                                                      ),
+
+                                                      onPressed: () {
+                                                        accept_particular_friend(idx);
+                                                        showNotification(names_from_id[idx]);
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Text("요청 수락",
+                                                              style: TextStyle(
+                                                                  fontFamily: 'korean',
+                                                                  fontSize: 10.sp)),
+                                                        ],
+                                                      ),
+                                                    ),
+
+                                                    SizedBox(width: 4.w,),
+
                                                   ],
                                                 ),
                                               ),
+                                              SizedBox(height: 5.h,),
+
 
                                             ],
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.h,),
 
-                                        // Container(
-                                        //   width: 260.w,
-                                        //   height: 45.h,
-                                        //   decoration: BoxDecoration(
-                                        //     color: Colors.blueGrey[50],
-                                        //     borderRadius: BorderRadius.circular(
-                                        //         15),
-                                        //   ),
-                                        // ),
-                                        // SizedBox(height: 10.h,),
-                                    ],
+                                          ),
+
+
+
+
+                                          SizedBox(height: 20.h,),
+
+                                          // Container(
+                                          //   width: 260.w,
+                                          //   height: 45.h,
+                                          //   decoration: BoxDecoration(
+                                          //     color: Colors.blueGrey[50],
+                                          //     borderRadius: BorderRadius.circular(
+                                          //         15),
+                                          //   ),
+                                          // ),
+                                          // SizedBox(height: 10.h,),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
 
 
 
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
 
 
-            ],
+              ],
+            ),
           ),
         ),
       ),

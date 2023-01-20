@@ -186,7 +186,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
             ],
           ),
           content: Container(
-            width: 300.w,
+            width: 304.w,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -250,7 +250,16 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                           //borderRadius: BorderRadius.circular(4),
                         ),
                         child:  Text("일주일간 보지 않기",
-                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                            style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                      ),
+                    ),
+
+
+                    Container(
+                      width: 1.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
                       ),
                     ),
 
@@ -262,17 +271,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border(
 
-                            left: BorderSide(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                          ),
                           //borderRadius: BorderRadius.circular(4),
                         ),
                         child:  Text("확인",
-                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                            style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
                       ),
                     )
                   ],
