@@ -46,6 +46,11 @@ update_information_password(String want) async {
 class PasswordResetPage extends StatelessWidget {
   const PasswordResetPage({Key? key}) : super(key: key);
 
+  void dispose(){
+    want_password.clear();
+    want_real_password.clear();
+  }
+
 
   @override
   Widget build(BuildContext context) {

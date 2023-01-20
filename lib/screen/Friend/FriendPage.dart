@@ -17,6 +17,7 @@ bool searched = false;
 ScrollController scroller = ScrollController();
 
 TextEditingController checkCtrl = TextEditingController();
+
 class FriendPage extends StatefulWidget {
   @override
   _FriendPageState createState() => _FriendPageState();
@@ -31,7 +32,12 @@ class _FriendPageState extends State<FriendPage>
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
     check_who_request_friend();
+    check_who_are_friend();
+    get_user_name_from_id();
+    get_reward_from_id();
     print(who_requested);
+    print(who_are_friends_already);
+    print(names_from_id);
   }
 
   @override
@@ -206,9 +212,63 @@ accepted_friend(String id) async {
     print("에러발생 : ${e}");
   }
 }
+var names_from_id = [];
+preget_user_name_from_id(String id) async {
+  try {
+    var select_res = await http.post(Uri.parse(API.select), body: {
+      'update_sql': "select user_name from user_table where user_id = '$id'"
+    });
+    if (select_res.statusCode == 200 ) {
+      var resUser = jsonDecode(select_res.body);
+      if (resUser['success'] == true) {
+        return resUser['data'][0]['user_name'];
+      }
+      else {
+        return null;
+      }
+    }
+  } on Exception catch (e) {
+    print("에러발생 : ${e}");
+  }
+}
+get_user_name_from_id() async {
+  names_from_id = [];
+  for (var item in who_are_friends_already){
+    var gaboza = await preget_user_name_from_id(item);
+    names_from_id.add(gaboza);
+  }
+}
+var rewards_from_id = [];
+preget_reward_from_id(String id) async {
+  try {
+    var select_res = await http.post(Uri.parse(API.select), body: {
+      'update_sql': "select reward from user_table where user_id = '$id'"
+    });
+    if (select_res.statusCode == 200 ) {
+      var resUser = jsonDecode(select_res.body);
+      if (resUser['success'] == true) {
+        return resUser['data'][0]['reward'];
+      }
+      else {
+        return null;
+      }
+    }
+  } on Exception catch (e) {
+    print("에러발생 : ${e}");
+  }
+}
+get_reward_from_id() async {
+  rewards_from_id = [];
+  for (var item in who_are_friends_already){
+    var gaboza = await preget_reward_from_id(item);
+    rewards_from_id.add(gaboza);
+  }
+}
+
 
 var who_requested = [];
 var original_friends;
+var who_are_friends_already = [];
 
 check_who_request_friend() async {
   original_friends = await getfriend_fromdb(user_data['user_id']);
@@ -216,6 +276,16 @@ check_who_request_friend() async {
   for (var item in original_friends.keys) {
     if (original_friends[item] == '-1') {
       who_requested.add(item);
+    }
+  }
+}
+
+check_who_are_friend() async {
+  original_friends = await getfriend_fromdb(user_data['user_id']);
+  who_are_friends_already = [];
+  for (var item in original_friends.keys) {
+    if (original_friends[item] == '1') {
+      who_are_friends_already.add(item);
     }
   }
 }
@@ -530,16 +600,15 @@ class CheckFriend extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-
-                  InkWell(
+              child: Wrap(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(who_are_friends_already.length, (index) {
+                  return InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => FriendMissionCheckPage()),
+                        MaterialPageRoute(
+                            builder: (_) => FriendMissionCheckPage()),
                       );
                     },
                     child: Container(
@@ -564,16 +633,16 @@ class CheckFriend extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-
-
                                 SizedBox(
                                   width: 70.w,
                                   height: 25.h,
                                   child: FittedBox(
                                     alignment: Alignment.center,
                                     fit: BoxFit.contain,
-                                    child: Text("kdjkgjkjdk",
-                                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
+                                    child: Text(names_from_id[index],
+                                        style: TextStyle(fontSize: 10.sp,
+                                          fontFamily: 'korean',
+                                          fontWeight: FontWeight.bold,)),
                                   ),
                                 ),
 
@@ -587,10 +656,15 @@ class CheckFriend extends StatelessWidget {
                                     fit: BoxFit.contain,
                                     child: Row(
                                       children: [
-                                        Icon(Icons.control_point_duplicate, size: 14.w,color: AppColor.happyblue,),
+                                        Icon(Icons.control_point_duplicate,
+                                          size: 14.w,
+                                          color: AppColor.happyblue,),
                                         SizedBox(width: 3.w,),
-                                        Text("5.0",
-                                            style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: AppColor.happyblue, ) ),
+                                        Text(rewards_from_id[index],
+                                            style: TextStyle(fontSize: 10.sp,
+                                              fontFamily: 'korean',
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColor.happyblue,)),
                                       ],
                                     ),
                                   ),
@@ -604,78 +678,79 @@ class CheckFriend extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      width: 150.w,
-                      height: 80.h,
-                      decoration: BoxDecoration(
-                        color: Colors.white60,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(width: 4.w,),
-                          CircleAvatar(
-                            radius: 25.h,
-                            backgroundColor: Colors.grey,
-                          ),
-                          Container(
-                            width: 80.w,
-                            height: 60.h,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                  );
 
+                  // InkWell(
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     width: 150.w,
+                  //     height: 80.h,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.white60,
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         SizedBox(width: 4.w,),
+                  //         CircleAvatar(
+                  //           radius: 25.h,
+                  //           backgroundColor: Colors.grey,
+                  //         ),
+                  //         Container(
+                  //           width: 80.w,
+                  //           height: 60.h,
+                  //           child: Column(
+                  //             crossAxisAlignment: CrossAxisAlignment.center,
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             children: [
+                  //
+                  //
+                  //               SizedBox(
+                  //                 width: 70.w,
+                  //                 height: 25.h,
+                  //                 child: FittedBox(
+                  //                   alignment: Alignment.center,
+                  //                   fit: BoxFit.contain,
+                  //                   child: Text("kdjkgjkjdk",
+                  //                       style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
+                  //                 ),
+                  //               ),
+                  //
+                  //               SizedBox(height: 3.h,),
+                  //
+                  //               SizedBox(
+                  //                 width: 70.w,
+                  //                 height: 22.h,
+                  //                 child: FittedBox(
+                  //                   alignment: Alignment.center,
+                  //                   fit: BoxFit.contain,
+                  //                   child: Row(
+                  //                     children: [
+                  //                       Icon(Icons.control_point_duplicate, size: 14.w,color: AppColor.happyblue,),
+                  //                       SizedBox(width: 3.w,),
+                  //                       Text("5.0",
+                  //                           style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: AppColor.happyblue, ) ),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //
+                  //
+                  //             ],
+                  //           ),
+                  //         ),
+                  //         SizedBox(width: 4.w,),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
 
-                                SizedBox(
-                                  width: 70.w,
-                                  height: 25.h,
-                                  child: FittedBox(
-                                    alignment: Alignment.center,
-                                    fit: BoxFit.contain,
-                                    child: Text("kdjkgjkjdk",
-                                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, ) ),
-                                  ),
-                                ),
-
-                                SizedBox(height: 3.h,),
-
-                                SizedBox(
-                                  width: 70.w,
-                                  height: 22.h,
-                                  child: FittedBox(
-                                    alignment: Alignment.center,
-                                    fit: BoxFit.contain,
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.control_point_duplicate, size: 14.w,color: AppColor.happyblue,),
-                                        SizedBox(width: 3.w,),
-                                        Text("5.0",
-                                            style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: AppColor.happyblue, ) ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-
-
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 4.w,),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                ],
+                }
               ),
             ),
 
-          ],
+            )],
         ),
       ),
 
