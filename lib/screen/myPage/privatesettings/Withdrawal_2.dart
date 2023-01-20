@@ -13,23 +13,24 @@ import 'package:daycus/screen/myPage/privatesettings/AccountSetting.dart';
 import 'package:daycus/screen/myPage/privatesettings/PasswordSetting.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:daycus/screen/myPage/privatesettings/Withdrawal_2.dart';
 
 
 
-class Withdrawal extends StatefulWidget {
-  const Withdrawal({Key? key}) : super(key: key);
+class Withdrawal2 extends StatefulWidget {
+  const Withdrawal2({Key? key}) : super(key: key);
 
   @override
-  State<Withdrawal> createState() => _WithdrawalState();
+  State<Withdrawal2> createState() => _WithdrawalState();
 }
 
 
-class _WithdrawalState extends State<Withdrawal> {
+class _WithdrawalState extends State<Withdrawal2> {
   static final storage = FlutterSecureStorage();
   dynamic userInfo = '';
 
   final TextEditingController passwordCtrl = TextEditingController();
+
+  bool? _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -124,24 +125,23 @@ class _WithdrawalState extends State<Withdrawal> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("▣ 회원탈퇴 정책",style: TextStyle(fontSize: 14.w, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                              Text("▣ 다시 한 번 확인해주세요!",style: TextStyle(fontSize: 14.w, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
                               SizedBox(height: 12.h,),
-                              Text("탈퇴하고 한 달 이후 사용하고 계신 아이디는 재사용 및 복구가 불가능합니다. 탈퇴한 아이디는 본인과 타인 모두 재사용 및 복구가 불가하오니 신중하게 선택하시기를 바랍니다.",style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
 
-                              // Container(
-                              //   padding: EdgeInsets.fromLTRB(8.w, 10.h, 7.w, 8.h),
-                              //
-                              //   child: Column(
-                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                              //
-                              //     children: [
-                              //       Text("• 탈퇴한 아이디는 한 달 내로 복구할 수 있습니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
-                              //       SizedBox(height: 2.h,),
-                              //       Text("• 단, 탈퇴한 동안 미션 참여를 하지 않은 것으로 간주되며, 재로그인 했을 시 미션 참여현황이 반영되니 신중하게 선택하시기를 바랍니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
-                              //     ],
-                              //
-                              //   ),
-                              // ),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(8.w, 10.h, 7.w, 15.h),
+
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                                  children: [
+                                    Text("• 탈퇴한 아이디는 한 달 내로 복구할 수 있습니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
+                                    SizedBox(height: 2.h,),
+                                    Text("• 단, 탈퇴한 동안 미션 참여를 하지 않은 것으로 간주되며, 재로그인 했을 시 미션 참여현황이 반영되니 신중하게 선택하시기를 바랍니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
+                                  ],
+
+                                ),
+                              ),
 
 
                             ],
@@ -153,46 +153,33 @@ class _WithdrawalState extends State<Withdrawal> {
                         // ),
 
                         Container(
-                          padding: EdgeInsets.fromLTRB(50.w, 18.h, 50.w, 0),
-                          child: Column(
-                            children: [
-                              Text("회원탈퇴를 누르면 안내사항을 모두 확인하였으며, 이에 동의한 것으로 간주됩니다.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
-                            ],
-                          ),
-                        ),
-
-                        Container(
                           alignment: Alignment.center,
-                          padding: EdgeInsets.fromLTRB(0, 15.h, 0, 20.h),
                           child: Column(
                             children: [
-                              Text("회원탈퇴를 위해 비밀번호를 다시 한 번 입력해 주세요.",style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',), textAlign: TextAlign.center, ),
+                              Text("정말 탈퇴하시겠습니까?",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
+                              SizedBox(height: 5.h,),
 
-                              SizedBox(height: 8.h,),
-
-                              SizedBox(
-                                width: 240.w,
-                                height: 45.h,
-                                child : TextFormField(
-                                  textInputAction: TextInputAction.done,
-                                  controller: passwordCtrl,
-                                  autofocus: false,
-                                  decoration: InputDecoration(
-                                      hintText: '비밀번호를 입력해주세요',
-                                      contentPadding: EdgeInsets.fromLTRB(15.w, 0, 0, 0),
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0), ),
-                                      hintStyle: TextStyle(fontSize: 10.sp, fontFamily: 'korean',)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 20.h,
+                                    width: 28.w,
+                                    child: Checkbox(
+                                        value: _isChecked,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _isChecked = value;
+                                          });
+                                        }
+                                    ),
                                   ),
-                                  cursorColor: AppColor.happyblue,
-                                  obscureText: true,
-                                  validator: (String? value){
-                                    if (value!.isEmpty) {
-                                      return '비밀번호를 입력해주세요.';
-                                    }
-                                    return null;
-                                  },),
+                                  Text("위 내용을 확인했으며, 탈퇴를 진행합니다.",style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',),  ),
+
+                                ],
                               ),
 
+                              SizedBox(height: 20.h,),
 
                             ],
                           ),
@@ -215,9 +202,16 @@ class _WithdrawalState extends State<Withdrawal> {
 
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => Withdrawal2()));
+                          // 탈퇴와 취소 반대로
+                          PopPage("회원 탈퇴", context,
+                            Text("정말 탈퇴하시겠습니까?"),
+                            "취소", "탈퇴",
+                                (){
+                              Navigator.pop(context);
+                            },
+                                (){
+                              remove_user();
+                            },);
                         },
 
                         child: Container(
@@ -231,7 +225,7 @@ class _WithdrawalState extends State<Withdrawal> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("탈퇴하기",
+                              Text("회원탈퇴",
                                   style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )
                               ),
                             ],
@@ -264,8 +258,6 @@ class _WithdrawalState extends State<Withdrawal> {
 
                     ],
                   ),
-
-                  
 
                 ],
               ),
