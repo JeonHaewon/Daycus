@@ -120,6 +120,9 @@ class _PrivateSettingsState extends State<PrivateSettings> {
                   SizedBox(height: 10.h,),
                   Text("${user_data['user_name']}",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
 
+                  SizedBox(height: 5.h,),
+                  Text("사용자 코드 : ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean') ),
+
                   SizedBox(height: 30.h,),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
