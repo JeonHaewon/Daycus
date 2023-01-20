@@ -23,6 +23,13 @@ class FriendPage extends StatefulWidget {
   _FriendPageState createState() => _FriendPageState();
 }
 
+all_in_one_init() async {
+  await check_who_request_friend();
+  await check_who_are_friend();
+  await get_user_name_from_id();
+  await get_reward_from_id();
+}
+
 class _FriendPageState extends State<FriendPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
@@ -31,11 +38,9 @@ class _FriendPageState extends State<FriendPage>
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
-    check_who_request_friend();
-    check_who_are_friend();
-    get_user_name_from_id();
-    get_reward_from_id();
-    print(who_requested);
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      all_in_one_init();
+    });
     print(who_are_friends_already);
     print(names_from_id);
   }
