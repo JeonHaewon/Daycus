@@ -81,6 +81,7 @@ class PasswordResetPage extends StatelessWidget {
                     height: 80.h,
                     child : TextFormField(
                       controller: want_password,
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: '비밀번호',
                         hintText: '새로운 비밀번호를 입력해주세요',
@@ -93,6 +94,7 @@ class PasswordResetPage extends StatelessWidget {
                     height: 80.h,
                     child : TextFormField(
                       controller: want_real_password,
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: '비밀번호 재입력',
                         hintText: '새로운 비밀번호를 확인해주세요',

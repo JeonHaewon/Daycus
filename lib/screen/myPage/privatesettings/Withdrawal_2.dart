@@ -188,6 +188,8 @@ class _WithdrawalState extends State<Withdrawal2> {
 
 
 
+    
+
 
                       ],
                     ),
@@ -202,16 +204,24 @@ class _WithdrawalState extends State<Withdrawal2> {
 
                       TextButton(
                         onPressed: () {
+
+                          if (_isChecked==false){
+                            Fluttertoast.showToast(msg: "내용을 확인해주세요");
+                          }
+
+                          else {
+                            PopPage("회원 탈퇴", context,
+                              Text("정말 탈퇴하시겠습니까?"),
+                              "취소", "탈퇴",
+                                  (){
+                                Navigator.pop(context);
+                              },
+                                  (){
+                                remove_user();
+                              },);
+                          }
                           // 탈퇴와 취소 반대로
-                          PopPage("회원 탈퇴", context,
-                            Text("정말 탈퇴하시겠습니까?"),
-                            "취소", "탈퇴",
-                                (){
-                              Navigator.pop(context);
-                            },
-                                (){
-                              remove_user();
-                            },);
+
                         },
 
                         child: Container(
