@@ -215,9 +215,15 @@ class _WithdrawalState extends State<Withdrawal> {
 
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => Withdrawal2()));
+                          if (generateMd5(passwordCtrl.text.trim()) == user_data['user_password']) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => Withdrawal2()));
+                          }
+                          else{
+                            Fluttertoast.showToast(msg: "비밀번호가 일치하지 않습니다.");
+                          }
                         },
 
                         child: Container(

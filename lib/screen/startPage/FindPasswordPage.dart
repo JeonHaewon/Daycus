@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/screen/startPage/PasswordResetPage.dart';
 
-String stored_code = '';
+String stored_code = '1';
 var stored_email = '';
 
 
@@ -23,8 +23,8 @@ Future<void> sendPasswordResetEmail(String email) async{
 
 making_new_code() {
   String random_num = '';
-  for (int i = 0; i < 6; i++){
-    random_num += (Random().nextInt(6) + 1).toString();
+  for (int i = 0; i < 5; i++){
+    random_num += (Random().nextInt(5) + 1).toString();
   }
   stored_code = random_num;
   return stored_code;

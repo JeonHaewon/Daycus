@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,16 +24,16 @@ class FriendPage extends StatefulWidget {
   _FriendPageState createState() => _FriendPageState();
 }
 
-all_in_one_init() async {
-  await check_who_request_friend();
-  await check_who_are_friend();
-  await get_user_name_from_id();
-  await get_reward_from_id();
-}
 
 class _FriendPageState extends State<FriendPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  all_in_one_init() async {
+    await check_who_request_friend();
+    await check_who_are_friend();
+    await get_user_name_from_id();
+    await get_reward_from_id();
+  }
 
   @override
   void initState() {
@@ -49,6 +50,8 @@ class _FriendPageState extends State<FriendPage>
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    searched = false;
+    checkCtrl.clear();
   }
 
   @override
@@ -437,8 +440,15 @@ class _AddFriendState extends State<AddFriend> {
                       ),
 
                       onPressed: () {
-                        add_friend_fromdb(checkCtrl.text.trim().split('@')[1]);
-                        requesting_friend(checkCtrl.text.trim().split('@')[1]);
+                        if (names_from_id.contains(checkCtrl.text.trim().split('@')[0]) == false) {
+                          add_friend_fromdb(checkCtrl.text.trim().split(
+                              '@')[1]);
+                          requesting_friend(checkCtrl.text.trim().split(
+                              '@')[1]);
+                        }
+                        else{
+                          Fluttertoast.showToast(msg: "이미 친구로 등록되어 있습니다.");
+                        }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -449,7 +459,7 @@ class _AddFriendState extends State<AddFriend> {
                     ),
 
 
-                  ] : [],
+                  ] : [Container()],
                 ),
               ),
 
@@ -511,7 +521,7 @@ class _AddFriendState extends State<AddFriend> {
                                                 child: FittedBox(
                                                   alignment: Alignment.center,
                                                   fit: BoxFit.contain,
-                                                  child: Text(who_requested[idx],
+                                                  child: Text(names_from_id[idx],
                                                       style: TextStyle(
                                                         fontSize: 16.sp,
                                                         fontFamily: 'korean',
@@ -535,6 +545,7 @@ class _AddFriendState extends State<AddFriend> {
 
                                                 onPressed: () {
                                                   accept_particular_friend(idx);
+                                                  showNotification(names_from_id[idx]);
                                                 },
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment
@@ -593,8 +604,14 @@ class _AddFriendState extends State<AddFriend> {
   }
 }
 
-class CheckFriend extends StatelessWidget {
+class CheckFriend extends StatefulWidget {
   const CheckFriend({Key? key}) : super(key: key);
+
+  @override
+  State<CheckFriend> createState() => _CheckFriendState();
+}
+
+class _CheckFriendState extends State<CheckFriend> {
 
   @override
   Widget build(BuildContext context) {
