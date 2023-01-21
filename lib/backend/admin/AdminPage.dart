@@ -773,6 +773,14 @@ class _AdminScreenState extends State<AdminScreen> {
                   }
               ),
 
+              AdminButton(
+                  title: "친구가 하고 있는 미션 다 불러오기",
+                  onPressed: (){
+                    
+                  },
+              ),
+
+
               // Center(
               //   child: Container(
               //     child: AdmobBanner(
