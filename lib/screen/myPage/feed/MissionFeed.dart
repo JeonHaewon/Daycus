@@ -1,3 +1,5 @@
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/widget/feedpage/feedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +12,9 @@ class MissionFeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    int doneMissionCnt = done_mission==null ? 0 : done_mission.length;
+
     return ScreenUtilInit(
       designSize: Size(412, 892),
       builder: (context, child) {
@@ -29,15 +34,14 @@ class MissionFeed extends StatelessWidget {
             child: Column(
               children: [
 
-
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 0),
+                  padding: EdgeInsets.fromLTRB(20.w, 20.h, 10.w, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        width: 350.w,
-                        height:310.h,
+                        width: 370.w,
+                        // height:310.h,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
@@ -48,78 +52,50 @@ class MissionFeed extends StatelessWidget {
                           children: [
 
                             Padding(
-                              padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 0),
+                              padding: EdgeInsets.fromLTRB(5.w, 18.h, 5.w, 0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("2022. 10",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  SizedBox(height: 12.h,),
+                                  // Text("2022. 10",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                  // SizedBox(height: 12.h,),
 
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children:[
-                                        MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200,),
-                                        MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200, ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 350.w,
-                        height:540.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        margin: EdgeInsets.symmetric(horizontal: 2.w),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                                  // Container(
+                                  //
+                                  //   child: Row(
+                                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  //     children:[
+                                  //       MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200,),
+                                  //       MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200, ),
+                                  //     ],
+                                  //   ),
+                                  // ),
 
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("2022. 09",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  SizedBox(height: 12.h,),
+                                  Wrap(
+                                    children: List.generate(doneMissionCnt, (index) {
 
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children:[
-                                        MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200, ),
-                                        MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200, ),
-                                      ],
-                                    ),
-                                  ),
+                                      //int mission_id = int.parse(done_mission[index]['mission_id']);
+                                      int _index = all_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id']);
 
-                                  SizedBox(height: 12.h,),
+                                      //int mission_index = int.parse(source)
+                                      return Column(
+                                        children: [
+                                          // MissionFeedButton(
+                                          //   title : "${all_missions[_index]['title']}",
+                                          //   duration:"${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
+                                          //   image: "${all_missions[_index]['thumbnail']}" ,
+                                          //   percent: int.parse(done_mission[index]['get_reward']),
+                                          //   reward: 1200,),
+                                          FeedButton(
+                                              title: "${all_missions[_index]['title']}",
+                                              duration: "${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
+                                              image: "${all_missions[_index]['thumbnail']}",
+                                              percent: double.parse(done_mission[index]['percent']),
+                                          ),
 
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children:[
-                                        MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200,),
-                                        Container(
-                                          width: 150.w,
-                                          height: 195.h,
-                                        ),
-                                      ],
+                                          SizedBox(height: 12.h,),
+                                        ],
+                                      );
+                                    }
                                     ),
                                   ),
 
@@ -133,49 +109,6 @@ class MissionFeed extends StatelessWidget {
                   ),
                 ),
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 350.w,
-                        height:310.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        margin: EdgeInsets.symmetric(horizontal: 2.w),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("2022. 08",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  SizedBox(height: 12.h,),
-
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children:[
-                                        MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200, ),
-                                        MissionFeedButton(title :"일찍 일어나기", duration:"10.01 ~ 10.10",image: "feedimage" ,percent: 90, reward: 1200,),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 SizedBox(height: 20.h,),
               ],
             ),

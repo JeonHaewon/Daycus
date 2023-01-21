@@ -39,6 +39,7 @@ class _WithdrawalState extends State<Withdrawal> {
       user_data = null;
       all_missions = null;
       do_mission = null;
+      done_mission = null;
 
       await storage.delete(key: 'login');
     }
@@ -260,7 +261,7 @@ class _WithdrawalState extends State<Withdrawal> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("취소",
+                              Text("뒤로가기",
                                   style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )
                               ),
                             ],
@@ -271,7 +272,7 @@ class _WithdrawalState extends State<Withdrawal> {
                     ],
                   ),
 
-                  
+
 
                 ],
               ),

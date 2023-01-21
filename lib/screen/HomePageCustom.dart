@@ -2,6 +2,7 @@ import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
+import 'package:daycus/core/app_bottom.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/CheckConnection.dart';
@@ -26,13 +27,13 @@ import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:daycus/screen/MissionAddPage.dart';
 import 'package:daycus/screen/Friend/FriendPage.dart';
-
+import 'package:daycus/core/app_data.dart';
 
 
 late ScrollController _scrollController = ScrollController();
 //late ScrollController _scrollController1 = ScrollController();
 
-DateTime? currentBackPressTime;
+//DateTime? currentBackPressTime;
 
 
 
@@ -304,7 +305,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     child: Container(
                                         height: 210.h,
                                         width: 150.w,
-                                        child: Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h)),
+                                        child: Image.asset('assets/image/character.png' , fit: BoxFit.fill, height: 220.h)),
                                   ),
 
                                   //Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h),
@@ -503,7 +504,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     // 미션 더보기
                                     TextButton(
                                         onPressed: (){
-                                          controller.currentBottomNavItemIndex.value = 1;
+                                          controller.currentBottomNavItemIndex.value = AppScreen.missionCertify;
                                         },
                                         style: TextButton.styleFrom(
                                           padding: EdgeInsets.zero,
@@ -522,7 +523,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           if(do_mission==null)
                           // 미션란으로 이동 !
                             NowNoMissionButton(onTap: (){
-                              controller.currentBottomNavItemIndex.value = 3;
+                              controller.currentBottomNavItemIndex.value = AppScreen.mission;
                             },),
 
                           // 진행중인 미션이 있을 때
@@ -570,7 +571,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                       InkWell(
                         onTap: () {
-                          controller.currentBottomNavItemIndex.value = 1;
+                          controller.currentBottomNavItemIndex.value = AppScreen.missionCertify;
                         },
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(0, 15.h,0, 0),

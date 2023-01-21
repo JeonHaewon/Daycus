@@ -61,9 +61,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
         returnReward =
             (mission_result / toCertify) * mission_week + (bet_reward / 2);
         popContent = missionSuccessAndBetString +
-            "\n${((mission_result / toCertify) * 100).toStringAsFixed(
-                1)}% 달성하여 ${returnReward.toStringAsFixed(
-                1)}포인트가 지급됩니다.\n다른 미션에 도전해보세요!";
+            "\n${((mission_result / toCertify) * 100).toStringAsFixed(1)}% 달성하여\n${returnReward.toStringAsFixed(1)}포인트가 지급됩니다.\n다른 미션에 도전해보세요!";
       }
     }
 

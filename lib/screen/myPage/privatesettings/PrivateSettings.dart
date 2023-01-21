@@ -194,7 +194,7 @@ class _PrivateSettingsState extends State<PrivateSettings> {
                           "로그아웃", context,
                           Text("로그아웃 하시겠습니까?"),
                           "로그아웃",
-                          "취소",
+                          "뒤로가기",
                           () async {
                             // 기획에서 어떻게 인사할건지 정하기
                             Fluttertoast.showToast(msg: "정상적으로 로그아웃 되었습니다.");
