@@ -12,8 +12,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 
-TextStyle _hintStyleGray = TextStyle(color: Colors.grey, fontSize: 17);
-TextStyle _hintStyleBlack = TextStyle(color: Colors.black, fontSize: 17);
+TextStyle _hintStyleGray = TextStyle(color: Colors.grey, fontSize: 15.sp);
+TextStyle _hintStyleBlack = TextStyle(color: Colors.black, fontSize: 15.sp);
 
 TextStyle _hintStyle = _hintStyleGray;
 
@@ -65,7 +65,7 @@ double _basicMoney = init_reward;
 String _basicText = "";
 double rewardPercent = 100;
 String _rewardCalculResert = _basicText;
-String progress = "donebutton";
+String progress = "defaultbutton";
 
 class _SpecificMissionPageState extends State<SpecificMissionPage> {
   var f = NumberFormat('###,###,###,###');
@@ -113,7 +113,6 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
      });
 
 
-
   }
 
   @override
@@ -122,6 +121,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
       _basicMoney = init_reward;
       _basicText = "${_basicMoney*(rewardPercent+100)/100} ${rewardName}";
       _rewardCalculResert = _basicText;
+      progress = "defaultbutton";
   }
 
   @override
@@ -180,7 +180,27 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                     child: Row(
                       children: [
                         SizedBox(width: 8.w,),
-                        Text(widget.title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                        Container(
+                            width: 360.w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                    child: RichText(
+                                      overflow: TextOverflow.clip,
+                                      maxLines: 3,
+                                      text: TextSpan(
+                                          text: widget.title,
+                                          style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                    )
+                                ),
+                              ],
+                            )
+                        ),
+
+                        //Text(widget.title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
                       ],
                     ),
                   ),
@@ -278,12 +298,12 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                   Container(
                     child: Row(
                       children: [
-                        Text('예상 리워드',style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Text('예상 ${rewardName}',style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                       ],
                     ),
                   ),
                   SizedBox(height: 8.h,),
-                  Text('자신이 걸 리워드를 입력하세요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
+                  Text('자신이 걸 ${rewardName}를 입력하세요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
                   SizedBox(height: 15.h,),
 
                 ],
@@ -306,6 +326,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                       width: 150.w, height: 30.h,
                       // '미션 참여 금액' 아래의 텍스트 박스
                       child: TextFormField(
+                        style: TextStyle(fontSize: 15.sp),
                         keyboardType: TextInputType.number,
                         onChanged: (text){
                           setState(() {
@@ -349,7 +370,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(width: 1.w, color: Colors.grey),
                       ),
-                      child: Text(_rewardCalculResert, style: TextStyle(color: Colors.black,fontSize: 17.sp,), textAlign: TextAlign.center,),
+                      child: Text(_rewardCalculResert, style: TextStyle(color: Colors.black,fontSize: 15.sp,), textAlign: TextAlign.center,),
                     ),
                   ],
                 ),
@@ -362,6 +383,28 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
             ),
 
 
+
+            Padding(
+              padding: EdgeInsets.fromLTRB(228.w, 5.h, 0, 0),
+              child: Column(
+                children: [
+                  Text('예상 ${rewardName} 증가율 : 150%',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
+                ],
+              ),
+            ),
+
+
+            Padding(
+              padding: EdgeInsets.fromLTRB(25.w, 6.h, 0, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('※ 한 미션에 걸 수 있는 최대 ${rewardName}는 ${limit_bet_reward}${rewardName}입니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+
+                  Text('※ 미션 성공시 14${rewardName}를 추가로 지급합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                ],
+              ),
+            ),
 
 
 
@@ -484,7 +527,8 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => MissionParticipatePage(
-                        topimage: 'missionparticipate_image',
+                        remainDate: 14-timeDiffer,
+                        topimage: widget.topimage,
                         //average reward도 데이터베이스에서 끌고오기
                         mission_id: widget.mission_id,
                         title: widget.title, duration: widget.duration, totaluser: widget.totaluser, avgreward: int.parse(widget.mission_data['average']))),
@@ -515,8 +559,11 @@ _rewardCalcul(String? money, double percent, String basicText){
   else{
     try{
       double money_int = double.parse(money);
-      if (money_int > limit_bet_reward){
+      if (money_int == limit_bet_reward){
         return "최대입니다";
+      }
+      if (money_int > limit_bet_reward){
+        return "최대를 초과했습니다";
       }
       // 소숫점 몇쨋자리 이런 기준이 필요함.
       return "${money_int*(percent)/100} ${rewardName}";

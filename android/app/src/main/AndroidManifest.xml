@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.happycircuit.daycus">
+
 
     <queries>
         <intent>
@@ -9,16 +11,20 @@
     </queries>
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
    <application
-        android:label="daycus"
+        android:label="DayCus"
         android:name="androidx.multidex.MultiDexApplication"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
-        <activity
+           android:allowBackup="false"
+           android:fullBackupContent="false"
+           android:usesCleartextTraffic="true">
+       <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
@@ -27,6 +33,7 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize"
             android:turnScreenOn="true">
+
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -36,14 +43,42 @@
               android:resource="@style/NormalTheme"
               />
             <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+
+
+       <receiver
+           android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
+           android:exported="true"
+           tools:replace="android:exported"
+           />
+       <!--재부팅시,업데이트시,재시작시 -->
+       <receiver
+           android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+           android:exported="true"
+           tools:replace="android:exported"
+           >
+           <intent-filter>
+               <action android:name="android.intent.action.BOOT_COMPLETED"/>
+               <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+               <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+               <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+           </intent-filter>
+       </receiver>
+
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-3339242274230109~9542705721"/>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-    </application>
+   </application>
 </manifest>
+

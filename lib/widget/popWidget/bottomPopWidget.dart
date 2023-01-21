@@ -24,12 +24,20 @@ Widget bottomPopWidget(
               TextButton.icon(
                 icon: Icon(icon1, size: 30.sp, color: Colors.black,),
                 onPressed: onPressed1,
-                label: Text(title1, style: TextStyle(fontSize: 17.sp, color: Colors.black),),
+                label: Column(
+                  children: [
+                    Text(title1, style: TextStyle(fontSize: 17.sp, color: Colors.black),),
+                  ],
+                ),
               ),
               TextButton.icon(
                 icon: Icon(icon2, size: 30.sp, color: Colors.black,),
                 onPressed: onPressed2,
-                label: Text(title2, style: TextStyle(fontSize: 17.sp, color: Colors.black),),
+                label: Column(
+                  children: [
+                    Text(title2, style: TextStyle(fontSize: 17.sp, color: Colors.black),),
+                  ],
+                ),
               )
             ],
           )

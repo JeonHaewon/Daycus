@@ -7,10 +7,12 @@ class HomePageUserInfoBar extends StatelessWidget {
     Key? key,
     required this.leftContent,
     required this.rightContent,
+    required this.icon,
   }) : super(key: key);
 
   final String leftContent;
   final String rightContent;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +45,11 @@ class HomePageUserInfoBar extends StatelessWidget {
               ],
             ),
           ),
-
-
-          // 하임 : 주간 > 전체로 변경
           SizedBox(width: 30.w,),
+
+          Icon(icon,color: AppColor.happyblue,),
+          // 하임 : 주간 > 전체로 변경
+          SizedBox(width: 10.w,),
           Text(rightContent,
             style: TextStyle(color: AppColor.happyblue, fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
         ],

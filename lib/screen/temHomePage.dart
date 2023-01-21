@@ -1,4 +1,8 @@
+import 'package:daycus/backend/ImportData/imageDownload.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'package:daycus/core/app_data.dart';
@@ -12,6 +16,7 @@ import 'package:daycus/screen/MyPageCustom.dart';
 
 import 'package:daycus/core/app_controller.dart';
 
+import 'package:daycus/widget/advertisement.dart';
 
 
 final OfficeFurnitureController controller =
@@ -23,6 +28,24 @@ class TemHomePage extends StatefulWidget {
   @override
   State<TemHomePage> createState() => _TemHomePageState();
 }
+
+// 뒤로버튼을 한번 더 누르면 종료됨.
+onWillPop() {
+  DateTime now = DateTime.now();
+  if (currentBackPressTime == null ||
+      now.difference(currentBackPressTime!) > const Duration(milliseconds: 1500)) {
+    currentBackPressTime = now;
+    Fluttertoast.showToast(
+        msg: "뒤로 버튼을 한 번 더 누르시면 종료됩니다.",
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: const Color(0xff6E6E6E),
+        fontSize: 14.sp,
+        toastLength: Toast.LENGTH_SHORT);
+    return false;
+  }
+  return true;
+}
+
 
 class _TemHomePageState extends State<TemHomePage> {
 
@@ -41,25 +64,48 @@ class _TemHomePageState extends State<TemHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      bottomNavigationBar: Obx(
-            () {
-          return BottomNavigationBar(
-            unselectedItemColor: Colors.grey,
-            currentIndex: controller.currentBottomNavItemIndex.value,
-            showUnselectedLabels: true,
-            onTap: controller.switchBetweenBottomNavigationItems,
-            fixedColor: AppColor.lightBlack,
-            items: AppData.bottomNavigationItems
-                .map(
-                  (element) => BottomNavigationBarItem(
-                  icon: element.icon, label: element.label),
-            )
-                .toList(),
-          );
-        },
+    Size m = MediaQuery.of(context).size;
+    double additionalBottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return WillPopScope(
+      onWillPop: () async {
+        bool result = onWillPop();
+        return await Future.value(result);
+      },
+      child: Scaffold(
+        bottomNavigationBar: Container(
+          constraints: BoxConstraints(
+            maxHeight: (additionalBottomPadding+kBottomNavigationBarHeight)*2,
+          ),
+          child: Obx(
+                  () {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Advertisement(),
+
+                    BottomNavigationBar(
+                      unselectedItemColor: Colors.grey,
+                      currentIndex: controller.currentBottomNavItemIndex.value,
+                      showUnselectedLabels: true,
+                      onTap: controller.switchBetweenBottomNavigationItems,
+                      fixedColor: AppColor.happyblue,
+                      items: AppData.bottomNavigationItems
+                          .map(
+                            (element) => BottomNavigationBarItem(
+                            icon: element.icon, label: element.label),
+                      )
+                          .toList(),
+                    ),
+                  ],
+
+                );
+              },
+            ),
+        ),
+
+        body: Obx(() => screens[controller.currentBottomNavItemIndex.value]),
       ),
-      body: Obx(() => screens[controller.currentBottomNavItemIndex.value]),
     );
   }
 }

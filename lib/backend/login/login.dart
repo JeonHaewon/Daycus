@@ -1,5 +1,10 @@
 import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
+import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/screen/CheckConnection.dart';
+import 'package:daycus/screen/LoginPageCustom.dart';
+import 'package:daycus/screen/ReConnection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +13,7 @@ import 'KeepLogin.dart';
 import 'dart:convert';
 import 'package:daycus/backend/UserDatabase.dart';
 import '../../screen/temHomePage.dart';
+import 'package:daycus/backend/ImportData/importElse.dart';
 
 
 userLogin(String email, String password, bool reload) async{
@@ -25,22 +31,52 @@ userLogin(String email, String password, bool reload) async{
 
       var resLogin = jsonDecode(user_res.body);
       if (resLogin['success'] == true) {
-        // 나중에 멘트 "~님 환영합니다" 이런걸로 바꾸기 (또는 논의해서 바꾸기)
         //print("로그인에 성공하였습니다.");
         user_data = resLogin['userData'];
-        print("{$user_data}");
+        if (user_data['register_date']==null){
+          update_request(
+              "UPDATE user_table SET register_date = '${DateTime.now()}' where user_email = '${user_data['user_email']}'",null
+          );
+          user_data['register_date'] = DateTime.now().toString();
+        }
+        print("${user_data['register_date']}");
 
-        // 첫 로그인 시에만 인사해줌
-        if (reload==false){
+        // 첫 로그인 시에만 인사해줌 - 앱을 나갔다 들어올때도 아래가 실행됨.
+        if (reload==false && user_data['user_state']!='withdrawing'){
+          DateTime today = await NowTime(null);
+          print("today : ${today.toString().substring(0,10)}");
+
+          if (user_data['last_login']!=null){
+            if(user_data['last_login'].substring(0,10) != today.toString().substring(0,10)){
+              // 추가 로그인 일수 플러스
+              update_request(
+                  "UPDATE user_table SET attendance = attendance + 1 where user_email = '${user_data['user_email']}'", null);
+              user_data['attendance'] = (int.parse(user_data['attendance'])+1).toString();
+              print("오늘 처음으로 출석하셨네요 !");
+            }
+          }
+
+          // 마지막 로그인 업데이트
+          update_request(
+              "UPDATE user_table SET last_login='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
+
+
           Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
+          controller.currentBottomNavItemIndex.value = 2;
         }
 
 
         return true;
 
       } else {
-        // 계정이 없다는 멘트도 띄워야할듯?
-        Fluttertoast.showToast(msg: "이메일 또는 비밀번호가 올바르지 않습니다.");
+        if (reload){
+          Fluttertoast.showToast(msg: "오류가 발생했습니다. 로그아웃 후 다시 로그인해주세요.");
+        }
+        else {
+          // 계정이 없다는 멘트도 띄워야할듯?
+          Fluttertoast.showToast(msg: "이메일 또는 비밀번호가 올바르지 않습니다.");
+        }
+
         print("이메일 또는 비밀번호가 올바르지 않습니다.");
 
         return false;
@@ -49,7 +85,7 @@ userLogin(String email, String password, bool reload) async{
   }
   catch (e) {
     print(e.toString());
-    Fluttertoast.showToast(msg: e.toString());
+    //Fluttertoast.showToast(msg: e.toString());
 
     return null;
 
@@ -72,62 +108,134 @@ keepLogin (name, email, password, storage) async {
 }
 
 afterLogin() async {
+
+  level_update();
+
+  // 검토 필요
+  import_ranking();
+
+  // top ranking 불러오기
+  topRankingList = await select_request(
+      "select user_name, reward, Ranking, user_id, profile From user_table WHERE (1<=Ranking) AND (Ranking<=3) ORDER BY Ranking limit 3;",
+      null,
+      false);
+
   print("로그인에 성공하였습니다.");
 
   // 미션 불러오기
   await missionImport();
   // 카테고리별 미션 불러오기
-  await importMissionByCategory();
+  //await importMissionByCategory();
   // 하고있는 미션 불러오기
   await doMissionImport();
 
   missions_cnt = all_missions?.length;
   //print("미션 개수 : $missions_cnt");
 
+  doMissionSave();
   // 백그라운드 실행
-  if (do_mission != null) {
-    doMissionSave();
+  // if (do_mission != null) {
+  //   doMissionSave();
+  // }
+
+}
+
+
+
+
+
+// keep login - 유저 정보 들고오기
+LoginAsyncMethod(storage, BuildContext context, bool reload) async {
+  //Fluttertoast.showToast(msg: "LoginAsyncMethod");
+
+  String connection = await checkConnectionStatus(context);
+  if (connection=="ConnectivityResult.none"){
+    Navigator.push(context, MaterialPageRoute(builder: (_) => ReConnection()));
+  }
+  else {
+    //Fluttertoast.showToast(msg: "LoginAsyncMethod - else");
+    dynamic userInfo = '';
+
+    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+    // 데이터가 없을때는 null을 반환
+    try {
+      userInfo = await storage.read(key: 'login');
+      print(userInfo);
+    }catch (e){
+    //Fluttertoast.showToast(msg: "error : ${e}");
+    }
+
+    //Fluttertoast.showToast(msg: "context ${context} && reload ${reload}");
+
+    // 자동로그인이 필요한 경우, reload 시
+    if ((userInfo != null && user_data == null) || reload) {
+      //Fluttertoast.showToast(msg: "자동로그인이 필요한 경우");
+      var userDecode = jsonDecode(userInfo);
+
+      print(userDecode);
+      await userLogin(userDecode['user_email'], userDecode['password'], reload);
+      //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
+
+      // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
+      await afterLogin();
+      // 다 닫고 ㄱㄱ
+
+      if (context!=null && reload==false) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+
+        // 홈페이지가 기본 !
+        controller.currentBottomNavItemIndex.value = 2;
+      }
+    } // 자동로그인이 필요하지 않은 경우
+    else if (userInfo != null && user_data != null) {
+      //Fluttertoast.showToast(msg: "자동로그인이 필요하지 않은 경우");
+      // 다 닫고 ㄱㄱ
+      if (context!=null && reload==false) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+      }
+    }
+    else {
+      if (context!=null && reload==false) {
+        //Fluttertoast.showToast(msg: "로그인이 필요한 경우");
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => LoginPageCustom()), (
+                route) => false);
+      }
+      print('로그인이 필요합니다');
+    }
   }
 }
 
-// keep login - 유저 정보 들고오기
-LoginAsyncMethod(storage, BuildContext? context, bool reload) async {
-
-  dynamic userInfo = '';
-
-  // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-  // 데이터가 없을때는 null을 반환
-  userInfo = await storage.read(key:'login');
-  print(userInfo);
-
-  // 자동로그인이 필요한 경우, reload 시
-  if ((userInfo!=null && user_data==null) || reload) {
-    var userDecode = jsonDecode(userInfo);
-
-    print(userDecode);
-    await userLogin(userDecode['user_email'], userDecode['password'], reload);
-    //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
-
-    // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
-    await afterLogin();
-    // 다 닫고 ㄱㄱ
-
-    if (context!=null) {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
-
-      // 홈페이지가 기본 !
-      controller.currentBottomNavItemIndex.value = 2;
-    }
-  } // 자동로그인이 필요하지 않은 경우
-  else if (userInfo!=null && user_data!=null) {
-    // 다 닫고 ㄱㄱ
-    if (context!=null) {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
-    }
+// 현재 레벨에서 다음 레벨까지 필요한 리워드를 받아옴
+level_update() async {
+  if (leveling==null){
+    leveling = await select_request("SELECT * from leveling", null, true);
+    print("leveling : ${leveling}");
   }
-  else {
-    print('로그인이 필요합니다');
-  }
+
+  int user_lv = int.parse(user_data['user_lv']);
+  double user_reward = double.parse(user_data['reward']);
+
+  lv_start = double.parse(leveling[user_lv-1]['reward']);
+  lv_end = double.parse(leveling[user_lv]['reward']);
+
+  lv_percent = (user_reward - lv_start)/(lv_end-lv_start);
+  //print("lv_percent : $lv_percent");
+  if(lv_percent<0){lv_percent=0;}
+  if(lv_percent>1){lv_percent=1;}
+
+  // 레벨 변경
+  // if (user_reward >= lv_end){
+  //   update_request(
+  //       "UPDATE user_table SET user_lv = user_lv + 14 where user_email = '${user_data['user_email']}'",
+  //       "레벨업 !! ${user_lv}레벨이 되었습니다.");
+  // }
+  //
+  // if (user_reward < lv_start){
+  //   update_request(
+  //       "UPDATE user_table SET user_lv = user_lv + 14 where user_email = '${user_data['user_email']}'",
+  //       "리워드를 사용하여  ${user_lv}레벨이 되었습니다.");
+  // }
 }

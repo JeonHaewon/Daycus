@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+8
+version: 1.0.2+27
 
 environment:
   # 버전 18에서 17로 내림. (하임)
@@ -35,7 +35,7 @@ dependencies:
 
   get:
   flutter_screenutil:
-  simple_animations:
+  simple_animations: ^4.0.1
   http:
   fluttertoast:
   intl:
@@ -57,7 +57,17 @@ dependencies:
   pedometer:
   health:
   shared_preferences:
-
+  local_auth:
+  admob_flutter:
+  firebase_messaging:
+  firebase_core:
+  permission_handler:
+  firebase_auth:
+  in_app_review: ^2.0.6
+  device_info_plus:
+  sound_stream:
+  url_launcher:
+  connectivity:
 
 
 dev_dependencies:
@@ -84,6 +94,7 @@ flutter:
     - assets/image/settings/
     - assets/image/labelingmission/
     - assets/image/thumbnail/
+    - assets/image/Signup_terms/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -94,6 +105,9 @@ flutter:
     - family: korean
       fonts:
         - asset: assets/fonts/SpoqaHanSansNeo-Regular.otf
+    - family: koreantwo
+      fonts:
+        - asset: assets/fonts/NanumPen.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

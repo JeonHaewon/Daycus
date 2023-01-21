@@ -9,16 +9,18 @@ class BigMissionButton extends StatelessWidget {
     Key? key,
     required this.title,
     required this.duration,
-    required this.totalUser,
+    required this.currentUser,
     required this.certifiUser,
+    required this.totalUser,
     required this.image,
     this.onTap,
   }) : super(key: key);
 
   final String title;
-  final int duration;
-  final int totalUser;
+  final String duration;
+  final int currentUser;
   final int certifiUser;
+  final int totalUser;
   final String image;
   final onTap;
 
@@ -55,8 +57,42 @@ class BigMissionButton extends StatelessWidget {
 
             SizedBox(height: 10.h,),
 
-            Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-            Text('$duration주 동안',style: TextStyle(fontSize: 16.sp, fontFamily: 'korean') ),
+
+            //Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,), ),
+
+
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   width: 170.w,
+            //   height: 24.h,
+            //   child: FittedBox(
+            //     fit: BoxFit.scaleDown,
+            //     child:Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,), ),
+            //   ),
+            // ),
+
+            Container(
+                width: 170.w,
+                height: 24.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                        child: RichText(
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          text: TextSpan(
+                              text:
+                              title,
+                              style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: Colors.black),),
+                        )),
+                  ],
+                )
+            ),
+
+
+
+            Text('$duration',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
 
             SizedBox(height: 5.h,),
 
@@ -74,8 +110,8 @@ class BigMissionButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("${f.format(totalUser)}명 참여중",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
-                  Text("${f.format(certifiUser)}명 인증",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
+                  Text("${f.format(currentUser)}명 참여중",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
+                  Text("누적 ${f.format(totalUser)}명 참여",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
 
 
                 ],

@@ -20,7 +20,7 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
-
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -56,14 +56,14 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         // minSdkVersion flutter.minSdkVersion
-        minSdkVersion 18
-        targetSdkVersion flutter.targetSdkVersion
-        versionCode 8//flutterVersionCode.toInteger()
+        minSdkVersion 21
+        targetSdkVersion 31
+        versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled = true
     }
 
-    // 출시 시
+     //출시 시
 //    signingConfigs {
 //
 //        release {
@@ -77,6 +77,8 @@ android {
     buildTypes {
         build{
             signingConfig signingConfigs.debug
+            minifyEnabled false
+            shrinkResources false
         }
         // 빌드 시와 릴리스 시를 나누어 구성하는 것이 좋다. : 어떻게 나눔? 애뮬레이터 돌릴때도 release 내를 실행하는 것 같은데
         // https://black-jin0427.tistory.com/89
@@ -89,6 +91,8 @@ android {
             // 출시 속성으로 변경
 //            signingConfig signingConfigs.release
             signingConfig signingConfigs.debug
+//            minifyEnabled false
+//            shrinkResources false
 
             // 프로가드 활성화
 //            minifyEnabled true
@@ -106,4 +110,10 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation("androidx.multidex:multidex:2.0.1")
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.5'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 }
+
+//test {
+//    useJUnitPlatform()
+//}

@@ -189,7 +189,7 @@ class _ImageDownloadState extends State<ImageDownload> {
             ),
 
             Text("folder : ${folder}, index : ${index}, "),
-            Text("folder : ${imageList[index]['image']}, "),
+            Text("folder : ${imageList==null ?"null" : imageList[index]['image']}, "),
 
             Container(
               width: 300.w, height: 600.w,

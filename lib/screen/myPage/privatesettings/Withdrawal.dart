@@ -1,3 +1,4 @@
+import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
 import 'package:daycus/core/app_color.dart';
@@ -12,6 +13,7 @@ import 'package:daycus/screen/myPage/privatesettings/AccountSetting.dart';
 import 'package:daycus/screen/myPage/privatesettings/PasswordSetting.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:daycus/screen/myPage/privatesettings/Withdrawal_2.dart';
 
 
 
@@ -26,6 +28,9 @@ class Withdrawal extends StatefulWidget {
 class _WithdrawalState extends State<Withdrawal> {
   static final storage = FlutterSecureStorage();
   dynamic userInfo = '';
+
+  final TextEditingController passwordCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
 
@@ -50,6 +55,8 @@ class _WithdrawalState extends State<Withdrawal> {
         print('로그인 중');
       }
     }
+
+    // 회원 탈퇴를 적어주기만함. 실제 탈퇴는 데이터베이스에서 !
     remove_user() async {
       try{
         String cur = await NowTime('yyyy-MM-dd - HH:mm:ss');
@@ -63,13 +70,14 @@ class _WithdrawalState extends State<Withdrawal> {
           if (resLogin['success'] == true) {
             logout();
             checkUserState();
+            Fluttertoast.showToast(msg: "탈퇴가 완료되었습니다.\nDayCus는 당신의 갓생을 응원합니다.");
           } else {
             // 이름을 바꿀 수 없는 상황?
           }
         }
       } catch (e) {
         print(e.toString());
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(msg: "다시 시도해주세요");
       }
     }
 
@@ -95,7 +103,7 @@ class _WithdrawalState extends State<Withdrawal> {
 
                   Container(
                     width: 500.w,
-                    height: 220.h,
+                    //height: 265.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -120,19 +128,69 @@ class _WithdrawalState extends State<Withdrawal> {
                               SizedBox(height: 12.h,),
                               Text("탈퇴하고 한 달 이후 사용하고 계신 아이디는 재사용 및 복구가 불가능합니다. 탈퇴한 아이디는 본인과 타인 모두 재사용 및 복구가 불가하오니 신중하게 선택하시기를 바랍니다.",style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
 
-                              Container(
-                                padding: EdgeInsets.fromLTRB(8.w, 10.h, 7.w, 8.h),
+                              // Container(
+                              //   padding: EdgeInsets.fromLTRB(8.w, 10.h, 7.w, 8.h),
+                              //
+                              //   child: Column(
+                              //     crossAxisAlignment: CrossAxisAlignment.start,
+                              //
+                              //     children: [
+                              //       Text("• 탈퇴한 아이디는 한 달 내로 복구할 수 있습니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
+                              //       SizedBox(height: 2.h,),
+                              //       Text("• 단, 탈퇴한 동안 미션 참여를 하지 않은 것으로 간주되며, 재로그인 했을 시 미션 참여현황이 반영되니 신중하게 선택하시기를 바랍니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
+                              //     ],
+                              //
+                              //   ),
+                              // ),
 
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
 
-                                  children: [
-                                    Text("• 탈퇴한 아이디는 한 달 내로 복구할 수 있습니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
-                                    SizedBox(height: 2.h,),
-                                    Text("• 단, 탈퇴한 동안 미션 참여를 하지 않은 것으로 간주되며, 재로그인 했을 시 미션 참여현황이 반영되니 신중하게 선택하시기를 바랍니다.",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean') ),
-                                  ],
+                            ],
+                          ),
+                        ),
 
-                                ),
+                        // Container(
+                        //   height: 1.h,color: Colors.grey[400], margin: EdgeInsets.all(5),
+                        // ),
+
+                        Container(
+                          padding: EdgeInsets.fromLTRB(50.w, 18.h, 50.w, 0),
+                          child: Column(
+                            children: [
+                              Text("회원탈퇴를 누르면 안내사항을 모두 확인하였으며, 이에 동의한 것으로 간주됩니다.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.fromLTRB(0, 15.h, 0, 20.h),
+                          child: Column(
+                            children: [
+                              Text("회원탈퇴를 위해 비밀번호를 다시 한 번 입력해 주세요.",style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',), textAlign: TextAlign.center, ),
+
+                              SizedBox(height: 8.h,),
+
+                              SizedBox(
+                                width: 240.w,
+                                height: 45.h,
+                                child : TextFormField(
+                                  textInputAction: TextInputAction.done,
+                                  controller: passwordCtrl,
+                                  autofocus: false,
+                                  decoration: InputDecoration(
+                                      hintText: '비밀번호를 입력해주세요',
+                                      contentPadding: EdgeInsets.fromLTRB(15.w, 0, 0, 0),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0), ),
+                                      hintStyle: TextStyle(fontSize: 10.sp, fontFamily: 'korean',)
+                                  ),
+                                  cursorColor: AppColor.happyblue,
+                                  obscureText: true,
+                                  validator: (String? value){
+                                    if (value!.isEmpty) {
+                                      return '비밀번호를 입력해주세요.';
+                                    }
+                                    return null;
+                                  },),
                               ),
 
 
@@ -140,18 +198,9 @@ class _WithdrawalState extends State<Withdrawal> {
                           ),
                         ),
 
-                        Container(
-                          height: 1.h,color: Colors.grey[400], margin: EdgeInsets.all(5),
-                        ),
 
-                        Container(
-                          padding: EdgeInsets.fromLTRB(50.w, 7.h, 50.w, 0),
-                          child: Column(
-                            children: [
-                              Text("회원탈퇴를 누르면 안내사항을 모두 확인하였으며, 이에 동의한 것으로 간주됩니다.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean'), textAlign: TextAlign.center, ),
-                            ],
-                          ),
-                        ),
+
+
 
                       ],
                     ),
@@ -166,7 +215,15 @@ class _WithdrawalState extends State<Withdrawal> {
 
                       TextButton(
                         onPressed: () {
-                          remove_user();
+                          if (generateMd5(passwordCtrl.text.trim()) == user_data['user_password']) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => Withdrawal2()));
+                          }
+                          else{
+                            Fluttertoast.showToast(msg: "비밀번호가 일치하지 않습니다.");
+                          }
                         },
 
                         child: Container(
@@ -174,12 +231,13 @@ class _WithdrawalState extends State<Withdrawal> {
                           height: 40.h,
                           decoration: BoxDecoration(
                             color: Colors.grey[400],
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("회원탈퇴",
+                              Text("탈퇴하기",
                                   style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )
                               ),
                             ],
@@ -196,12 +254,13 @@ class _WithdrawalState extends State<Withdrawal> {
                           height: 40.h,
                           decoration: BoxDecoration(
                             color: AppColor.happyblue,
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("뒤로가기",
+                              Text("취소",
                                   style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )
                               ),
                             ],
@@ -211,6 +270,8 @@ class _WithdrawalState extends State<Withdrawal> {
 
                     ],
                   ),
+
+                  
 
                 ],
               ),

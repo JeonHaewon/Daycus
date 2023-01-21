@@ -9,17 +9,19 @@ class NowMissionButton extends StatelessWidget {
     Key? key,
     required this.image,
     required this.title,
-    required this.totalUser,
+    required this.currentUser,
     required this.rank,
-    required this.reward,
+    required this.percent,
+    required this.duration,
     this.onTap,
   }) : super(key: key);
 
   final String image;
   final String title;
-  final int totalUser;
+  final int currentUser;
   final int rank;
-  final int reward;
+  final double percent;
+  final String duration;
   final onTap;
 
   var f = NumberFormat('###,###,###,###');
@@ -42,88 +44,163 @@ class NowMissionButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         margin: EdgeInsets.symmetric(horizontal: 30.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+        child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-            Container(
-              child:Row(
-                children: [
-                  SizedBox(width: 20.w,),
+              children: [
 
-                  Stack(
-                    alignment: Alignment.center,
+                Container(
+                  child:Row(
                     children: [
+                      SizedBox(width: 20.w,),
 
-                      CircleAvatar(
-                        radius: 35.h,
-                        backgroundImage: image!=null
-                        // 사진이 있으면
-                            ? AssetImage('assets/image/thumbnail/$image')
-                            : AssetImage('assets/image/thumbnail/missionbackground.png'),
-                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 12.h),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
 
-                      Opacity(
-                        opacity: 0.25,
-                        child: Container(
-                          width: 68.w,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle
-                          ),
+                            CircleAvatar(
+                              radius: 35.h,
+                              backgroundImage: image!=null
+                              // 사진이 있으면
+                                  ? AssetImage('assets/image/thumbnail/$image')
+                                  : AssetImage('assets/image/thumbnail/missionbackground.png'),
+                            ),
+
+                            Opacity(
+                              opacity: 0.25,
+                              child: Container(
+                                width: 66.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  shape: BoxShape.circle
+                                ),
+                              ),
+                            ),
+
+                          ],
                         ),
                       ),
 
+
+                      SizedBox(width: 15.w,),
+
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20.h),
+
+
+                            Container(
+                              width: 240.w,
+                              //height: 28.h,
+
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                      child: RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        text: TextSpan(
+                                            text: title,
+                                            style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                      )
+                                  ),
+                                ],
+                              )
+                            ),
+
+
+
+
+                            //Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                            Container(
+                              child: Row(
+                                children: [
+                                  Text(f.format(currentUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
+                                  Text("명 참여중 ",style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
+                                  //Text(f.format(rank),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+                                  //Text("위",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
+
+                                ],
+                              ),
+                            ),
+
+
+                            SizedBox(height: 3.h),
+
+
+                            Row(
+                             children: [
+
+                               Stack(
+                                 children: [
+
+                                   Container(
+                                     width: (100.w)*1.45,
+                                     height: 8.h,
+                                     decoration: BoxDecoration(
+                                       color: Colors.grey[300],
+                                       borderRadius: BorderRadius.circular(10),
+                                     ),
+
+                                   ),
+
+                                   Container(
+                                     width: ((percent).w)*1.45,
+                                     height: 8.h,
+                                     decoration: BoxDecoration(
+                                       color: AppColor.happyblue,
+                                       borderRadius: BorderRadius.circular(10),
+                                     ),
+                                   ),
+
+                                 ],
+
+                               ),
+
+
+                               SizedBox(width: 9.w),
+
+                               Container(
+                                 child:  Container(
+                                   child: Row(
+                                     mainAxisAlignment: MainAxisAlignment.end,
+                                     children: [
+                                       //Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
+                                       Text("진행률 ",style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
+                                       Text(percent.toStringAsFixed(1),style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
+                                       Text(" %    ",style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
+                                     ],
+                                   ),
+                                 ),
+                               ),
+
+                             ],
+                           ),
+
+
+
+
+                          ],
+                        ),
+                      ),
                     ],
                   ),
+                ),
 
 
-                  SizedBox(width: 15.w,),
 
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 20.h),
-                        Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Container(
-                          child: Row(
-                            children: [
-                              Text(f.format(totalUser),style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
-                              Text(" 참여중 ",style: TextStyle(color: Colors.grey, fontSize: 14.sp, fontFamily: 'korean') ),
-                              //Text(f.format(rank),style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                              //Text("위",style: TextStyle(color: AppColor.happyblue, fontSize: 14.sp, fontFamily: 'korean') ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+
+              ],
             ),
 
-            Container(
-
-              child: Column(
-                children: [
-                  SizedBox(height: 60.h),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-
-                        Text("+",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                        Text(f.format(reward),style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                        Text("원     ",style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean') ),
-                      ],
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
 
 
           ],

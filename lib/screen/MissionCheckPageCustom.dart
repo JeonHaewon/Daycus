@@ -9,6 +9,8 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/widget/NowNoMission.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:math';
+import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 
 
 
@@ -29,9 +31,10 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
 
     int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
     Size m = MediaQuery.of(context).size;
+    String misson_cnt = do_mission_cnt.toString();
 
     Future<void> refresh() async {
-      await LoginAsyncMethod(MissionCheckPage.storage, null, true);
+      await LoginAsyncMethod(MissionCheckPage.storage, context, true);
       setState(() { });
     };
 
@@ -42,91 +45,144 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
         title: Text('미션인증',
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(icon: Icon(Icons.search), onPressed: null),
-          IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => NoticePage()),
-                );
-              }),
+          //IconButton(icon: Icon(Icons.search), onPressed: null),
+
+          //알림 확인
+          // IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (_) => NoticePage()),
+          //       );
+          //     }),
+
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PrivateSettings()),
+              );
+            },
+
+            child: Container(
+                padding: EdgeInsets.all(14.sp),
+                child: (profileImage==null)
+                // 고른 프로필 사진이 없을 때
+                    ? (user_data['profile']==null || downloadProfileImage==null)
+                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
+                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                    : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+            ),
+          ),
+
+
 
         ],
         automaticallyImplyLeading: false,
       ),
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        color: AppColor.happyblue,
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Container(
-            constraints: BoxConstraints(
-              minHeight: m.height,
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30.w, 30.h, 0, 0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20.h,),
-                      Text("진행 중인 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                    ],
-                  ),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          RefreshIndicator(
+            onRefresh: refresh,
+            color: AppColor.happyblue,
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: m.height,
                 ),
+                child: Column(
 
-                SizedBox(height: 20.h,),
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(30.w, 30.h,30.w, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
 
-                // 진행중인 미션이 없을 때
-                if(do_mission==null)
-                // 미션란으로 이동 !
-                  NowNoMissionButton(onTap: (){
-                    controller.currentBottomNavItemIndex.value = 3;
-                  },),
+                          Text("진행 중인 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          SizedBox(width: 20.w,),
 
-                // 진행중인 미션이 있을 때
-                if(do_mission!=null)
-                  Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: do_mission_cnt,
-                      itemBuilder: (_, index) {
-                        //id가 1부터 시작한다.
-                        int _index = int.parse(do_mission[index]['mission_id'])-1;
-                        //print("${_index}, ${_index.runtimeType}");
-                        //print(all_missions[_index]);
-                        return Column(
-                          children: [
-                            NowMissionButton(image: all_missions[_index]['thumbnail']==''
-                                ? 'missionbackground.png' : all_missions[_index]['thumbnail'],
-                              title: all_missions[_index]['title'],
-                              totalUser: int.parse(all_missions[_index]['total_user']),
-                              rank: 1,
-                              reward: int.parse(do_mission[index]['get_reward']),
-                              onTap: MissionCheckStatusPage(
-                                mission_index: _index,
-                                mission_data: all_missions[_index],
-                                do_mission_data: do_mission[index],
-                              ),),
+                          Container(
+                            height: 34.h,
+                            child: Row(
 
-                            SizedBox(height: 7.h,),
-                          ],
-                        );
-                      },
+                              children: [
+                                Text(misson_cnt,style: TextStyle(color: Colors.grey[700],fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                Text("개 미션 참여 중",style: TextStyle(color: Colors.grey[700],fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      ),
                     ),
-                  )
+
+                    SizedBox(height: 15.h,),
+
+                    // 진행중인 미션이 없을 때
+                    if(do_mission==null)
+                    // 미션란으로 이동 !
+                      NowNoMissionButton(onTap: (){
+                        controller.currentBottomNavItemIndex.value = 3;
+                      },),
+
+                    // 진행중인 미션이 있을 때
+                    if(do_mission!=null)
+                      Container(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: do_mission_cnt,
+                          itemBuilder: (_, index) {
+                            //id가 1부터 시작한다.
+                            //print("do_mission : ${do_mission[index]['mission_index']}");
+                            int _index = do_mission[index]['mission_index'];
+                            //print("${_index}, ${_index.runtimeType}");
+                            //print(all_missions[_index]);
+                            return Column(
+                              children: [
+                                NowMissionButton(
+                                  duration: all_missions[_index]['start_date']==null
+                                      ? "미션 종료" : ((all_missions[_index]['start_date']).substring(5,10)+" ~ "+(all_missions[_index]['end_date']).substring(5,10)),
+                                  image: all_missions[_index]['thumbnail']==''
+                                      ? 'missionbackground.png' : all_missions[_index]['thumbnail'],
+                                  title: all_missions[_index]['title'],
+                                  currentUser: int.parse(all_missions[_index]['now_user']),
+                                  rank: 1,
+                                  percent: double.parse(do_mission[index]['percent']),
+                                  onTap: MissionCheckStatusPage(
+                                    mission_index: _index,
+                                    mission_data: all_missions[_index],
+                                    do_mission_data: do_mission[index],
+                                  ),
+                                ),
+
+                                SizedBox(height: 7.h,),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
 
 
+                    SizedBox(height: 60.h,),
 
-              ],
+                  ],
+                ),
+              ),
+
             ),
           ),
+          //Advertisement(),
+        ],
 
-        ),
       ), //진행중인 미션
 
-        );
+
+
+    );
   }
 }

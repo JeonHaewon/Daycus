@@ -55,34 +55,46 @@ class LabelButton extends StatelessWidget {
 
             SizedBox(height: 10.h,),
 
-            Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+            Container(
+              alignment: Alignment.centerLeft,
+              width: 168.w,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child:Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+              ),
+            ),
+
+
+            //Text(title,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
             // 하임 : ~동안을 기간으로 바꿈 int > String / 16.sp > 13.sp
+
             Text('$duration',style: TextStyle(fontSize: 13.sp, fontFamily: 'korean') ),
 
             SizedBox(height: 10.h,),
 
 
-            Container(
-              width: 170.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("나의 참여 현황",style: TextStyle(color: AppColor.happyblue,fontSize: 12.sp, fontFamily: 'korean') ),
-                  Text("${f.format(totalUser)}/${f.format(myparticipation)}",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
-                ],
-              ),
-            ),
-
-
-
-            SizedBox(height: 5.h,),
-
-            Container(
-              width: 100.w,
-              height: 10.h,
-              color: AppColor.happyblue,
-
-            ),
+            // Container(
+            //   width: 170.w,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text("나의 참여 현황",style: TextStyle(color: AppColor.happyblue,fontSize: 12.sp, fontFamily: 'korean') ),
+            //       Text("${f.format(totalUser)}/${f.format(myparticipation)}",style: TextStyle(color: Colors.grey,fontSize: 12.sp, fontFamily: 'korean') ),
+            //     ],
+            //   ),
+            // ),
+            //
+            //
+            //
+            // SizedBox(height: 5.h,),
+            //
+            // Container(
+            //   width: 100.w,
+            //   height: 10.h,
+            //   color: AppColor.happyblue,
+            //
+            // ),
 
 
           ],

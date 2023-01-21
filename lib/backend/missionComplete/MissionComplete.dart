@@ -7,9 +7,10 @@ import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:daycus/backend/UserDatabase.dart';
 
 mission_complete(int todayBlockCnt, do_mission_data,
-    int toCertify, BuildContext context, String user_email) {
+    int toCertify, BuildContext context, String user_email, int mission_result) {
   // 14일이 지났을 때
 
     // 정산 변수 초기화
@@ -20,13 +21,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
     String popContent = "";
     double bet_reward = double.parse((do_mission_data['bet_reward']).toString());
 
-    // 성공 개수 카운트
-    int mission_result = 0;
-    for (int i = 1; i <= mission_week; i++) {
-      if (do_mission_data['d${i}'] != null)
-        mission_result++;
-    }
-    print("미션 성공한 갯수 :  : ${mission_result}");
+
 
     // 최대 100%
     if (mission_result > toCertify) {
@@ -76,7 +71,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
 
     // 이후 공통 - pop 페이지 띄우기
     PopPage(popTitle, context, Text(popContent),
-        "확인", null, () async {
+        "확인", "돌아가기", () async {
           // do_mission > Done_mission row 이동 - 공통 작업
           success[0] = await update_request(
               "INSERT INTO Done_mission  select * from (select * from do_mission where (do_id = '${do_mission_data['do_id']}')) dating",
@@ -89,16 +84,19 @@ mission_complete(int todayBlockCnt, do_mission_data,
               // 환급 리워드가 있다면, 리워드 업데이트
               if (returnReward > 0) {
                 success[2] = await update_request(
-                    "UPDATE user_table SET reward = reward + ${returnReward
-                        .toStringAsFixed(
-                        1)} where user_email = '${user_email}'",
-                    null);
-              }
+                    "UPDATE user_table SET reward = reward + ${returnReward.toStringAsFixed(1)} where user_email = '${user_email}'",
+                    null);}
             }
           }
 
           // 모든 프로세스 종료 시 나갈 수 있음.
           if (success[0] && success[1] && success[2]) {
+
+            // 삭제해야할수도 있음
+            // 랭킹 업그레이드
+            update_request("call update_ranking();", null);
+            // 레벨 업데이트
+            update_request("call update_level5('${user_data['user_email']}');", null);
 
             // 데이터를 다 업데이트 한 후에 페이지를 다시 불러옴
             await afterLogin();
@@ -119,5 +117,7 @@ mission_complete(int todayBlockCnt, do_mission_data,
               Fluttertoast.showToast(msg: missionFailToastString);
             }
           }
-        });
+        },
+      null,
+    );
 }

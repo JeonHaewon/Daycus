@@ -19,12 +19,11 @@ userDataImport() async{
           print("에러발생");
           Fluttertoast.showToast(msg: "사용자 정보를 불러오는 도중 오류가 발생했습니다");
         }
-
       }
 
 
   } catch (e) {
     print(e.toString());
-    Fluttertoast.showToast(msg: e.toString());
+    //Fluttertoast.showToast(msg: e.toString());
   }
 }

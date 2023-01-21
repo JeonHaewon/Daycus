@@ -5,6 +5,10 @@ import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/screen/eachMission/AllMission.dart';
+import 'dart:math';
+import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
+
+
 
 class MissionPage extends StatelessWidget {
   const MissionPage({Key? key}) : super(key: key);
@@ -20,14 +24,35 @@ class MissionPage extends StatelessWidget {
           title: Text(' 미션',
               style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
           actions: [
-            IconButton(icon: Icon(Icons.search), onPressed: null),
-            IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => NoticePage()),
-                  );
-                }),
+            //IconButton(icon: Icon(Icons.search), onPressed: null),
+
+            //알림 확인
+            // IconButton(icon: Icon(Icons.notifications), color: Colors.grey,
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (_) => NoticePage()),
+            //       );
+            //     }),
+
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => PrivateSettings()),
+                );
+              },
+
+              child: Container(
+                  padding: EdgeInsets.all(14.sp),
+                  child: (profileImage==null)
+                  // 고른 프로필 사진이 없을 때
+                      ? (user_data['profile']==null || downloadProfileImage==null)
+                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
+                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                      : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+              ),
+            ),
 
           ],
           automaticallyImplyLeading: false,
@@ -46,18 +71,28 @@ class MissionPage extends StatelessWidget {
           ),
 
         ),
-        body:TabBarView(
-
+        body:Stack(
+          alignment: Alignment.bottomCenter,
           children: [
-            AllMission(),
-            CategoryMission(page_category: missions_health),
-            CategoryMission(page_category: missions_study),
-            CategoryMission(page_category: missions_exer),
-            CategoryMission(page_category: missions_life),
-            CategoryMission(page_category: missions_hobby),
+            TabBarView(
 
+              children: [
+                AllMission(),
+                CategoryMission(page_category: "건강"),
+                CategoryMission(page_category: "공부"),
+                CategoryMission(page_category: "운동"),
+                CategoryMission(page_category: "생활"),
+                CategoryMission(page_category: "취미"),
+
+              ],
+            ),
+
+            //Advertisement(),
           ],
+
         ),
+
+
       ),
     );
   }

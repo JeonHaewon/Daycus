@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +15,10 @@ import 'package:daycus/backend/Api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/User.dart';
 import 'package:daycus/screen/temHomePage.dart';
+import 'package:daycus/screen/startPage/PrivacyStatement_2.dart';
+import 'package:daycus/screen/startPage/TermsOfService_1.dart';
+import 'package:daycus/screen/startPage/Marketing_3.dart';
+
 
 
 Map agree = {
@@ -59,8 +67,25 @@ class _signupPage extends State<SignupPage> {
     }
   }
 
+  Future<bool> createUser(String email, String pw) async{
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+          email: email,
+          password: pw);
+    } on FirebaseException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        Fluttertoast.showToast(msg: '이미 존재하는 이메일입니다!');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+      return false;
+    }
+    return true;
+  }
+
   saveInfo() async{
-    User userModel = User(
+    Userr userModel = Userr(
       1,
       emailCtrl.text.trim(),
       passwordCtrl.text.trim(),
@@ -82,6 +107,10 @@ class _signupPage extends State<SignupPage> {
         if (resSignUp['success'] == true) {
           print("$agree");
           Fluttertoast.showToast(msg: "성공적으로 가입 되었습니다.");
+          Future<bool> is_update_in_firebase = createUser(emailCtrl.text.trim(),passwordCtrl.text.trim());
+
+          // 랭킹 업그레이드
+          update_request("call update_ranking();", null);
 
           bool? is_login = await userLogin(
             emailCtrl.text.trim(),
@@ -138,6 +167,8 @@ class _signupPage extends State<SignupPage> {
   final TextEditingController passwordCtrl = TextEditingController();
   final TextEditingController passwordCheckCtrl = TextEditingController();
 
+  final TextEditingController customMissionCtrl = TextEditingController();
+
   var agree_all = Icons.check_box_outline_blank;
   var agree_1 = Icons.check_box_outline_blank;
   var agree_2 = Icons.check_box_outline_blank;
@@ -147,11 +178,11 @@ class _signupPage extends State<SignupPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     passwordCtrl.clear();
     passwordCheckCtrl.clear();
     emailCtrl.clear();
+    customMissionCtrl.clear();
   }
 
   @override
@@ -173,118 +204,114 @@ class _signupPage extends State<SignupPage> {
 
 
               Padding(
-                padding: EdgeInsets.fromLTRB(30.w, 50.h, 30.w, 0),
+                padding: EdgeInsets.fromLTRB(45.w, 50.h, 45.w, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     Text("회원가입",style: TextStyle(fontSize: 22.sp, fontFamily: 'korean', ) ),
-                    SizedBox(height: 20.h,),
-                    
-                    // 이메일 검증
-                    TextFormField(
-                      controller: emailCtrl,
-                      validator: (String? value){
-                        if (value!.isEmpty) {// == null or isEmpty
-                          return '이메일을 입력해주세요.';}
-                        else if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)!=true){
-                          return '올바른 이메일 형식을 입력해주세요.';
-                        }
-                        return null;
-                      },
-                      
-                      decoration: InputDecoration(
-                        labelText: '이메일',
-                        hintText: '이메일을 입력해주세요',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    SizedBox(height: 20.h,),
+                    SizedBox(height: 35.h,),
 
-                    TextFormField(
-                      controller: passwordCtrl,
-                      obscureText: true,
-                      validator: (String? value){
-                        // 비밀번호 검증
-                        if (value!.isEmpty) {// == null or isEmpty
-                          return '비밀번호를 입력해주세요.';
-                        }
-                        else if (value.length<10 || value.length>16){
-                          return '비밀번호는 10~16자로 설정해주세요.';}
-                        // 숫자 : RegExp(r'(\d+)')
-                        // 알파벳 : RegExp(r'[a-zA-Z]')
-                        // 특수문자 : RegExp(r'[@$!%*#?&]')
-                        else if(((RegExp(r'(\d+)').hasMatch(value) ? 1:0)+(RegExp(r'[a-zA-Z]').hasMatch(value) ? 1:0)+(RegExp(r'[@$!%*#?&]').hasMatch(value) ? 1:0))<2){
-                          return '영문/숫자/특수문자 중 2가지 이상 조합하여 주세요.';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: '비밀번호',
-                        hintText: '영문/숫자/특수문자 중 2가지 이상, 8~16자 입력',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20.h,),
 
-                    TextFormField(
-                      controller: passwordCheckCtrl,
-                      obscureText: true,
-                      validator: (String? value){
-                        // 비밀번호 검증
-                        if (value != passwordCtrl.text) {// == null or isEmpty
-                        return '비밀번호가 일치하지 않습니다.';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: '비밀번호 확인',
-                        hintText: '비밀번호 재입력',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
+
+                    Text("이메일", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
+
+                    SizedBox(
+                      height: 80.h,
+                      child : TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        controller: emailCtrl,
+                        decoration: InputDecoration(
+                          hintText: '이메일 입력',
+                          hintStyle: TextStyle(fontSize: 12.sp),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1.w, color: Colors.grey),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
+                        cursorColor: AppColor.happyblue,
+                        // 이메일 검증
+                        validator: (String? value){
+                          if (value!.isEmpty) {// == null or isEmpty
+                            return '이메일을 입력해주세요.';}
+                          else if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)!=true){
+                            return '올바른 이메일 형식을 입력해주세요.';
+                          }
+                          return null;
+                        },
                       ),
                     ),
 
-                    SizedBox(height: 20.h,),
+
+                    Text("비밀번호", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
+
+                    SizedBox(
+                      height: 80.h,
+                      child : TextFormField(
+                        textInputAction: TextInputAction.next,
+                        controller: passwordCtrl,
+                        decoration: InputDecoration(
+                          hintText: '영문/숫자/특수문자 중 2가지 이상, 8~16자 입력',
+                          hintStyle: TextStyle(fontSize: 12.sp),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
+                        ),
+                        cursorColor: AppColor.happyblue,
+                        obscureText: true,
+                        validator: (String? value){
+                          // 비밀번호 검증
+                          if (value!.isEmpty) {// == null or isEmpty
+                            return '비밀번호를 입력해주세요.';
+                          }
+                          else if (value.length<10 || value.length>16){
+                            return '비밀번호는 10~16자로 설정해주세요.';}
+                          // 숫자 : RegExp(r'(\d+)')
+                          // 알파벳 : RegExp(r'[a-zA-Z]')
+                          // 특수문자 : RegExp(r'[@$!%*#?&]')
+                          else if(((RegExp(r'(\d+)').hasMatch(value) ? 1:0)+(RegExp(r'[a-zA-Z]').hasMatch(value) ? 1:0)+(RegExp(r'[@$!%*#?&]').hasMatch(value) ? 1:0))<2){
+                            return '영문/숫자/특수문자 중 2가지 이상 조합하여 주세요.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+
+
+                    Text("비밀번호 확인", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', ),),
+
+                    SizedBox(
+                      height: 80.h,
+                      child : TextFormField(
+                        textInputAction: TextInputAction.done,
+                        controller: passwordCheckCtrl,
+                        decoration: InputDecoration(
+                          hintText: '비밀번호 재입력',
+                          hintStyle: TextStyle(fontSize: 12.sp),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                          ),
+                        ),
+                        cursorColor: AppColor.happyblue,
+                        obscureText: true,
+                        validator: (String? value){
+                          // 비밀번호 검증
+                          if (value != passwordCtrl.text) {// == null or isEmpty
+                            return '비밀번호가 일치하지 않습니다.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(3.w, 0,0, 0),
+                      padding: EdgeInsets.fromLTRB(0, 0,0, 0),
                       child: Column(
                         children: [
                           Row(
                             children: [
+
                               TextButton.icon(onPressed: (){
                                 setState(() {
                                   if(agree_all==Icons.check_box_outline_blank){
@@ -295,13 +322,19 @@ class _signupPage extends State<SignupPage> {
                                     agree["이용약관"]=false; agree["개인정보 취급방침"]=false; agree["마케팅 정보"]=false;
                                   }
                                 });
-                              }, icon: Icon(agree_all, color: Colors.black), label: Text("모두 동의합니다",style: TextStyle(fontSize: 17.sp,  color: Colors.black),),),
+                              }, icon: Icon(agree_all, color: Colors.black), label: Text("모두 동의합니다",style: TextStyle(fontSize: 15.sp,  color: Colors.black),),
+                                style: TextButton.styleFrom(
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.zero,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                              ),
 
                             ],
                           ),
 
                           // 세부 이용약관
-                          Padding(padding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                          Padding(padding: EdgeInsets.fromLTRB(15.w, 6.h, 10.w, 0),
                             child: Column(
                               children: [
                                 Row(
@@ -318,13 +351,49 @@ class _signupPage extends State<SignupPage> {
                                             agree["이용약관"]=false;
                                           }
                                         });
-                                      }, icon: Icon(agree_1, color: Colors.black), label: Text("이용약관 동의 [필수]",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),),
+                                      }, icon: Icon(agree_1, color: Colors.black), label: Text("이용약관 동의 [필수]",style: TextStyle(fontSize: 12.sp,  color: Colors.black),),
+                                      style: TextButton.styleFrom(
+                                        minimumSize: Size.zero,
+                                        padding: EdgeInsets.zero,
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      ),),
 
-                                    TextButton(onPressed: (){
 
-                                    }, child: Text("보기 >",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),)
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (_) => TermsOfService()),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 54.w,
+                                        height: 22.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        child: Container(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text("보기 >",style: TextStyle(fontSize: 11.sp,  color: Colors.grey[800], fontWeight: FontWeight.bold)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+
+
+                                    ),
+
+
                                   ],
                                 ),
+
+
+
+                                SizedBox(height: 3.h,),
 
 
                                 Row(
@@ -340,11 +409,48 @@ class _signupPage extends State<SignupPage> {
                                           agree["개인정보 취급방침"]=false;
                                         }
                                       });
-                                    }, icon: Icon(agree_2, color: Colors.black,), label: Text("개인정보 취급방침 동의 [필수]",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),),
+                                    }, icon: Icon(agree_2, color: Colors.black,), label: Text("개인정보 취급방침 동의 [필수]",style: TextStyle(fontSize: 12.sp,  color: Colors.black)),
+                                      style: TextButton.styleFrom(
+                                        minimumSize: Size.zero,
+                                        padding: EdgeInsets.zero,
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      ),),
 
-                                    TextButton(onPressed: (){}, child: Text("보기 >",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),)
+
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (_) => PrivacyStatement()),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 54.w,
+                                        height: 22.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        child: Container(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text("보기 >",style: TextStyle(fontSize: 11.sp,  color: Colors.grey[800], fontWeight: FontWeight.bold)),
+                                            ],
+                                          ),
+
+                                        ),
+                                      ),
+
+                                    ),
+
+
                                   ],
                                 ),
+
+                                SizedBox(height: 3.h,),
+
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -357,13 +463,40 @@ class _signupPage extends State<SignupPage> {
                                           agree_3 = Icons.check_box_outline_blank;
                                           agree["마케팅 정보"]=false;}
                                       });
-                                    }, icon: Icon(agree_3, color: Colors.black), label: Text("마케팅 정보 수신 동의 [선택]",style: TextStyle(fontSize: 14.sp,  color: Colors.black)),),
+                                    }, icon: Icon(agree_3, color: Colors.black), label: Text("마케팅 정보 수신 동의 [선택]",style: TextStyle(fontSize: 12.sp,  color: Colors.black)),
+                                      style: TextButton.styleFrom(
+                                        minimumSize: Size.zero,
+                                        padding: EdgeInsets.zero,
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      ),),
 
-                                    TextButton(
-                                      onPressed: (){
-                                        Navigator.of(context).pushNamed('/TnCPage');
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (_) => Marketing()),
+                                        );
                                       },
-                                      child: Text("보기 >",style: TextStyle(fontSize: 14.sp,  color: Colors.black)), )
+                                      child: Container(
+                                        width: 54.w,
+                                        height: 22.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        child: Container(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text("보기 >",style: TextStyle(fontSize: 11.sp,  color: Colors.grey[800], fontWeight: FontWeight.bold)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+
+
+                                    ),
                                   ],
                                 ),
 
@@ -374,6 +507,67 @@ class _signupPage extends State<SignupPage> {
 
                       ),
                     ),
+
+
+                    SizedBox(height: 25.h,),
+
+                    Text("추가하고 싶은 \"나만의 미션\"이 있나요?", style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',),),
+
+                    SizedBox(height: 8.h,),
+
+
+                    Container(
+                      width: 400.w,
+
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("DayCus에서는 갓생을 위한 미션을 수행할 수 있습니다. 현재 '하루 물 한컵 마시기', '아침 9시 기상', '만보 걷기' 등의 미션이 있습니다. 하고 싶은 미션이 있다면 아래에 적어주세요! 빠른 시간 내에 여러분의 의견을 반영하여 미션을 추가하겠습니다 :)\n",
+                                    style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',) ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 10.h,),
+
+
+                    TextField(
+                      controller: customMissionCtrl,
+                      maxLines: 4,
+                      decoration: InputDecoration(
+                        hintText: "추가하고 싶은 새로운 미션이 있나요?",
+                        hintStyle: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                        fillColor: Colors.white,
+                        filled: true,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.happyblue),//<-- SEE HERE
+                        ),
+                      ),
+                      cursorColor: AppColor.happyblue,
+                    ),
+
+
+                    SizedBox(height: 25.h,),
 
 
 
@@ -403,10 +597,23 @@ class _signupPage extends State<SignupPage> {
               width: 412.w,
               child:TextButton(onPressed: () async {
                 // 동의 안했으면 회원가입 불가
-                if(_formKey.currentState!.validate()){
+                if(_formKey.currentState!.validate() && agree['이용약관'] && agree['개인정보 취급방침']){
                   await checkUserEmail();
-                }
 
+                  // 새로운 미션 추천받기 !
+                  if (customMissionCtrl.text!=null){
+                    DateTime today = await NowTime(null);
+                    update_request(
+                        "INSERT INTO to_developer (content, error_message, user_email, datetime, error_image) VALUES ('${customMissionCtrl.text.trim().replaceAll("'", "`")}', '테스터의 추천 미션', '${user_data['user_email']}', '${today.toString().substring(0,23)}', null);",
+                        null);
+                  }
+                }
+                else if (_formKey.currentState!.validate()==false){
+                  // 이메일 입력을 안했을 때
+                }
+                else if (agree['이용약관']==false || agree['개인정보 취급방침']==false){
+                  Fluttertoast.showToast(msg: "필수 약관을 동의해주세요 !");
+                }
               }, child: Text('회원가입',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],

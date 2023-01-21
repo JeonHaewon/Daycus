@@ -1,3 +1,4 @@
+import 'package:daycus/core/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -159,7 +160,7 @@ class MissionFeedButton extends StatelessWidget {
                               child: Column(
                                 children: [
                                   SizedBox(height: 2.h,),
-                                  Text("획득 리워드", style: TextStyle(
+                                  Text("획득 ${rewardName}", style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 8.sp,
                                       fontFamily: 'korean')),

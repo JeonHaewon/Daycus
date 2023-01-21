@@ -1,19 +1,30 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
+import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
+import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/NowTime.dart';
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UploadImage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/missionComplete/MissionComplete.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
+import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'package:daycus/backend/Api.dart';
+import 'package:daycus/screen/specificMissionPage/WalkCountPage.dart';
 
 class MissionCheckStatusPage extends StatefulWidget {
   MissionCheckStatusPage({
@@ -33,16 +44,48 @@ class MissionCheckStatusPage extends StatefulWidget {
 
 }
 
+class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with WidgetsBindingObserver {
 
 
-class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   switch(state){
+  //     case AppLifecycleState.resumed:
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       break;
+  //   }
+  // }
 
   double _textSpacing = 10.w;
+
+  // 하임 1220 : 미션 시작일로부터 지난 날짜 (초기화)
+  int todayBlockCnt = 0;
+  int missionDate = 0;
+
+  int _oneWeek = 7;
+  double return_reward = 0;
+  int toCertify = 14;
+
+  String returnRewardString = "0";
+
+  int mission_result = 0;
+
+  bool is_load = false;
+
+  var real_not_see;
+
 
   todayMissionCertify(int do_i, String source) async {
 
     String todayString = await NowTime('yyyyMMddHHmmss');
     String imageName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
+
 
     if (source=='gallery'){
       await getImage(imageName, ImageSource.gallery);
@@ -50,6 +93,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     else if (source == 'camera'){
       await getImage(imageName, ImageSource.camera);
     }
+
+    setState(() {
+      is_load = true;
+    });
 
 
     // 갤러리로 찍을 경우 다시 보여준다
@@ -72,23 +119,46 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
       todayBlockCnt,
     );
 
-    setState(() {
-      do_mission[do_i]["d$todayBlockCnt"] = true;
-      return_reward = doneCnt/toCertify>1 ? 1 : doneCnt/toCertify;
-    });
+    do_mission[do_i]["d$todayBlockCnt"] = imageReNamed;
+    setState(() { is_load = false; });
+    // result 개수 다시 업데이트
+    cnt_done();
+    return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
+
+
 
     Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
   }
 
-  // 하임 1220 : 미션 시작일로부터 지난 날짜 (초기화)
-  int todayBlockCnt = 0;
-  int missionDate = 0;
+  get_not_see(String id) async{
+    try {
+      var update_res = await http.post(Uri.parse(API.select), body: {
+        'update_sql': "select not_see from do_mission where do_id = '$id';",
+      });
 
-  int _oneWeek = 7;
-  double return_reward = 0;
-  int toCertify = 14;
+      if (update_res.statusCode == 200 ) {
+        var resMission = jsonDecode(update_res.body);
+        // print(resMission);
+        if (resMission['success'] == true) {
+          real_not_see = resMission['data'][0]['not_see'];
+          print(real_not_see);
 
-  String returnRewardString = "0";
+        } else {
+          print("에러발생");
+          print(resMission);
+          Fluttertoast.showToast(msg: "다시 시도해주세요");
+        }
+      }
+    } on Exception catch (e) {
+      print("에러발생");
+      Fluttertoast.showToast(msg: "업데이트를 진행하는 도중 문제가 발생했습니다.");
+    }
+  }
+  get_not_seee() async {
+    await get_not_see(widget.do_mission_data['do_id']);
+  }
+
+
 
   @override
   void initState () {
@@ -96,16 +166,154 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     WidgetsBinding.instance.addPostFrameCallback((_){
       _asyncMethod();
     });
+    WidgetsBinding.instance?.addObserver(this);
+    get_not_seee();
+    print(real_not_see);
+    if (real_not_see != null && DateTime.now().difference(DateTime.parse(real_not_see)).inDays < 7){
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("미션 인증 방법",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+            ],
+          ),
+          content: Container(
+            width: 304.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                    padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 20.h),
+                    //height: 200.h,
+                    child: Column(
+                      children: [
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("1. 인증빈도",
+                                style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                            SizedBox(height: 3.h,),
+                            Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                                style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                            SizedBox(height: 15.h,),
+
+                            Text("2. 인증방법",
+                                style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                            SizedBox(height: 3.h,),
+                            Text("${widget.mission_data['content']}",
+                                style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                          ],
+                        ),
+
+                        SizedBox(height: 20.h,),
+
+                      ],
+                    )
+
+                ),
+
+                Container(
+                  width: 412.w,
+                  height: 1,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                  ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: [
+                    InkWell(
+                      onTap:(){
+                        update_request("update do_mission set not_see = '${DateTime.now()}' where do_id = '${widget.do_mission_data['do_id']}'", null);
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        width: 150.w,
+                        height: 50.h,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+
+                          //borderRadius: BorderRadius.circular(4),
+                        ),
+                        child:  Text("일주일간 보지 않기",
+                            style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                      ),
+                    ),
+
+
+                    Container(
+                      width: 1.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                      ),
+                    ),
+
+                    InkWell(
+                      onTap:(){Navigator.of(context).pop();},
+                      child: Container(
+                        width: 150.w,
+                        height: 50.h,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+
+                          //borderRadius: BorderRadius.circular(4),
+                        ),
+                        child:  Text("확인",
+                            style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
+                      ),
+                    )
+                  ],
+                ),
+
+              ],
+            ),
+          ),
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(10),
+          // ),
+        ),
+      );
+    });
+
+
+  }
+
+  cnt_done(){
+    mission_result = 0;
+    for (int i = 1; i <= mission_week; i++) {
+      if (widget.do_mission_data['d${i}'] != null)
+        mission_result++;
+    } print(mission_result);
   }
 
   // 하임 1220: 미션 시작일로부터 지난 날짜 계산 후 set state
   _asyncMethod() async {
+    cnt_done();
+
     print("init");
     // 하임 1220 : now_time = yy/MM/dd 형태
     String now_time = await NowTime("yyyyMMdd");
     //print(now_time);
     //print("mission_data : ${widget.mission_data}");
     //print("end date : "+widget.mission_data['end_date']);
+
+    print("날짜 --  : ${DateTime.parse(now_time).difference((DateTime.parse(widget.mission_data['start_date']))).inDays + 1}");
 
       setState(() {
         todayBlockCnt = DateTime.parse(now_time)
@@ -114,7 +322,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
         missionDate = int.parse(widget.mission_data['term'])*_oneWeek;
         toCertify = int.parse(widget.mission_data['frequency']) * int.parse(widget.mission_data['term']);
-        return_reward = doneCnt/toCertify>1 ? 1 : doneCnt/toCertify;
+        return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
 
         print("todayBlockCnt : ${todayBlockCnt}");
 
@@ -130,6 +338,35 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
 
   int doneCnt = 0;
 
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
+
+    print("return_reward : $return_reward");
+
+    update_request(
+        "UPDATE do_mission SET percent='${(return_reward*100).toStringAsFixed(2)}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
+        null);
+
+    // +0원 계산하기
+    // if (widget.do_mission_data['bet_reward']=='0' && (15-mission_result >= toCertify-doneCnt)){
+    //   return_reward = double.parse(mission_result.toString());}
+    // else if ()
+    //   Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+    //
+    // // 건 리워드가 없을 경우 & 실패했을 경우
+    // if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt < toCertify-doneCnt) )
+    // Text(" - ",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+    //
+    // // 건 리워드가 있을 경우
+    // if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-doneCnt) )
+    // Text("+ ${((return_reward*14)+int.parse(widget.do_mission_data['bet_reward'])/100*int.parse(widget.mission_data['reward_percent'])).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+    //
+    // // 건 리워드가 있을 경우 & 실패했을 경우
+    // if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-doneCnt) )
+    // Text("+ ${((return_reward*14)+(int.parse(widget.do_mission_data['bet_reward'])/2)).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +379,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
     String duration = '${widget.mission_data['start_date']} ~ ${widget.mission_data['end_date']}';
     int totaluser = int.parse(widget.mission_data['total_user']);
     // int certifiuser = int.parse(widget.mission_data['certifi_user']);
+    String rule = widget.mission_data['rules'];
+
 
     // 크기 안맞아서 변경
     // height 35.h > 35.w, sp 15.sp > 12.w
@@ -170,6 +409,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
         "카메라", "갤러리",
         Icons.camera_alt, Icons.photo);
 
+    List rules_list = rule.split("\\n");
+    int rules_list_cnt = rules_list.length;
+
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -179,16 +422,17 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
         backgroundColor: Colors.white,
         title: Text('인증 현황',
             style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
-        actions: [
-          IconButton(icon: Icon(Icons.search), onPressed: null),
-          IconButton(icon: Icon(Icons.notifications), onPressed: null),
-        ],
+        // actions: [
+        //   IconButton(icon: Icon(Icons.search), onPressed: null),
+        //   IconButton(icon: Icon(Icons.notifications), onPressed: null),
+        // ],
       ),
 
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
 
             Container(
               padding: EdgeInsets.fromLTRB(30.w, 15.h, 30.w, 0),
@@ -199,7 +443,28 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                      Container(
+                          width: 240.w,
+
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                  child: RichText(
+                                    overflow: TextOverflow.clip,
+                                    maxLines: 3,
+                                    text: TextSpan(
+                                        text: title,
+                                        style: TextStyle(fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                  )
+                              ),
+                            ],
+                          )
+                      ),
+
+                      //Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
 
                       Column(
                         verticalDirection: VerticalDirection.up,
@@ -243,41 +508,121 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                   ),
                   //SizedBox(height: 15.h,),
 
+
+
+                  //해원 0109_원래 안내 페이지
+                  // Container(
+                  //   width: 500.w,
+                  //   height: 85.h,
+                  //   padding: EdgeInsets.fromLTRB(14.w, 0, 0,0),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Text("• 인증 빈도  :  ${widget.mission_data['term']}주 동안 1주일에 ${widget.mission_data['frequency']}번",
+                  //           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                  //
+                  //       SizedBox(height: 2.h,),
+                  //
+                  //       Text("• 총    횟수   :  ${toCertify}회",
+                  //           style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                  //
+                  //       SizedBox(height: 2.h,),
+                  //
+                  //       Text("• 인증 방법  :  ${widget.mission_data['content']}",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
+                  //
+                  //     ],
+                  //   ),
+                  // ),
+
+                  SizedBox(height: 10.h,),
+
                   Container(
                     width: 500.w,
-                    height: 85.h,
-                    padding: EdgeInsets.fromLTRB(14.w, 0, 0,0),
+                    //height: 20.h,
+                    padding: EdgeInsets.fromLTRB(14.w, 0, 14.w,0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("• 인증 빈도  :  ${widget.mission_data['term']}주 동안 1주일에 ${widget.mission_data['frequency']}번",
-                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-                        
-                        SizedBox(height: 2.h,),
-                    
-                        Text("• 총    횟수   :  ${toCertify}회",
-                            style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-
-                        SizedBox(height: 2.h,),
-
-                        Text("• 인증 방법  :  ${widget.mission_data['content']}",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.grey[800]) ),
-
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                        ),
                       ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(14.w, 20.h, 14.w, 20.h),
+                      child: Column(
+                        children: [
+                          Text("주의사항",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+
+                          SizedBox(height: 15.h,),
+
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+
+                                Text("1. 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러주세요!",
+                                    style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                SizedBox(height: 3.h,),
+                                Text("15일차에 '정산하기' 버튼을 눌러 포인트를 지급받을 수 있습니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
+                                    style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                SizedBox(height: 2.h,),
+                                Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
+                                    style: TextStyle(fontSize: 8.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                SizedBox(height: 15.h,),
+                                Text("2. 주 ${widget.mission_data['frequency']}회, ${widget.mission_data['term']}주간, 총 ${toCertify}회!",
+                                    style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                SizedBox(height: 3.h,),
+                                Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                                    style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 15.h,),
+                                      Text("3. 미션 인증 시 사람이 나오지 않게 주의해주세요!",
+                                          style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                      SizedBox(height: 3.h,),
+                                      Text("개인정보 보호를 위해 본인을 포함하여 특정 인물을 나타낼 수 있는 모습이 사진에 나타나지 않도록 주의해주세요.",
+                                          style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                    ],
+                                  ),
+
+                              ],
+                            ),
+                          ),
+
+
+
+
+                        ],
+                      ),
                     ),
                   ),
 
 
-                  SizedBox(height: 25.h,),
-                  Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
-                  SizedBox(height: 5.h,),
-                  Text(duration,style: TextStyle(fontSize: 18.sp, fontFamily: 'korean') ),
-                  SizedBox(height: 15.h,),
 
+                  SizedBox(height: 25.h,),
+
+                  Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
+
+
+
+
+
+
+
+                  SizedBox(height: 10.h,),
 
                   // 하임 : height 175.h > 155.w
                   // 이거 휴대폰마다 다른지 확인 필요
@@ -301,7 +646,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                       children: [
 
                         Container(
-                          padding: EdgeInsets.fromLTRB(20.w, 17.w, 20.w, 0),
+                          padding: EdgeInsets.fromLTRB(25.w, 17.w, 25.w, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -360,13 +705,17 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                               ? (todayBlockCnt <= date ?
                                                                   // 날짜가 지나지 않았으면
                                                                   YetMissionBlock(i: index_i, j: index_j, sp: _sp,
+                                                                    isLoad: is_load, is_today: (todayBlockCnt==date),
                                                                   onPressed: () async {
                                                                     if (date == todayBlockCnt){
                                                                       if (widget.mission_data['certify_tool'] == 'gallery'){
                                                                         showModalBottomSheet(context: context,
                                                                             builder: ((builder) => cameraOrGallery
                                                                             ));
-                                                                      } else {
+                                                                      } else if(widget.mission_data['certify_tool'] == 'pedometer'){
+                                                                        Fluttertoast.showToast(msg: "아직 미션이 완료되지 않았습니다");
+                                                                      } 
+                                                                      else {
                                                                         todayMissionCertify(do_i, "camera");
                                                                       }
                                                                     } else {
@@ -376,8 +725,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                                                               : FailMissionBlock(sp: _sp)
                                                           )
                                                           // 인증 완료된 날짜 블럭
-                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp,
-                                                            image: image, date: date,)
+                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
+                                                            is_today: (todayBlockCnt==date), isLoad : is_load,
+
+                                                            folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
                                                         ),
                                                         if(index_j != _oneWeek-1)
                                                           SizedBox(
@@ -412,12 +763,101 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                     ),
                   ),
 
+                  if (widget.mission_data['certify_tool']=='pedometer')
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 40.h,),
+
+                        Text("현재 걸음 수",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                        SizedBox(height: 5.h,),
+
+                        Row(
+                          children: [
+                            Text("※ 미션 완료 시 ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                            Text("오늘 미션 인증하기",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                            Text(" 버튼을 눌러주세요.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                          ],
+                        ),
+
+                        Container(
+                          child : Text("※ 코딩하다 산책하기 미션은 어플을 종료 시 만보기가 초기화됩니다.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                        ),
+
+                        Container(
+                            padding: EdgeInsets.fromLTRB(17.w, 14.h, 17.w, 0),
+                            width: 600.w, height: 200.h,
+                            child: WalkCountWidget(walkNumber: int.parse(widget.mission_data['condition']))),
+                      ],
+                    ),
 
 
-                  SizedBox(height: 30.h,),
+                  SizedBox(height: 40.h,),
 
+
+                      ],
+                    ),
+                  ),
+
+            Container(
+              padding: EdgeInsets.fromLTRB(30.w, 20.h, 40.w,0),
+              decoration: BoxDecoration(
+                color: Colors.white
+              ),
+              child: Column(
+
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
                   Text("나의 미션 리포트",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+
+                  if (return_reward>=1)
+                    Container(
+                      margin: EdgeInsets.only(left: 8.w, top: 7.h, bottom: 3.h),
+                      width: 395.w,
+                      height: 80.h,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey[50],
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+
+                          Container(
+                            height: 70.h,
+                            width: 35.w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 10.w,),
+                                Icon(Icons.notifications_rounded, color: Colors.blueGrey[400], size: 25.h,),
+
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            height: 70.h,
+                            width: 275.w,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("미션 총 횟수(인증률 100%)를 넘어도\n미션 기간 동안 계속해서 인증할 수 있습니다.\n꾸준히 여러분의 갓생을 기록해보세요!",
+                                    style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    ),
+
                   SizedBox(height: 7.h,),
+
 
                   Padding(
                     padding: EdgeInsets.only(left: _textSpacing),
@@ -427,7 +867,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("나의 인증 수",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                            Text("${doneCnt}/${toCertify}회",
+                            Text("${mission_result}/${toCertify}회",
                                 style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                           ],
                         ),
@@ -469,46 +909,46 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("나의 참여 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text("나의 참여 ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                               Text("${widget.do_mission_data['bet_reward']} ${rewardName} ",
                                   style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                             ],
                           ),
 
                         if (widget.do_mission_data['bet_reward']!='0')
-                        SizedBox(height: 5.h,),
+                          SizedBox(height: 5.h,),
 
                         if (widget.do_mission_data['bet_reward']!='0')
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${rewardName} 증가율",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                              Text("${widget.mission_data['reward_percent']} % ",
+                                  style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            ],
+                          ),
+
+                        if (widget.do_mission_data['bet_reward']!='0')
+                          SizedBox(height: 5.h,),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("리워드 증가율",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                            Text("${widget.mission_data['reward_percent']} % ",
-                                style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                          ],
-                        ),
-
-                        if (widget.do_mission_data['bet_reward']!='0')
-                        SizedBox(height: 5.h,),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("예상 환급 리워드",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                            Text("예상 환급 ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                             // 건 리워드가 없을 경우
-                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt >= toCertify-doneCnt))
-                            Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt >= toCertify-mission_result))
+                              Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 없을 경우 & 실패했을 경우
-                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt < toCertify-doneCnt) )
-                            Text(" - ",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt < toCertify-mission_result) )
+                              Text(" - ",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 있을 경우
-                           if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-doneCnt) )
+                            if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt >= toCertify-mission_result) )
                               Text("+ ${((return_reward*14)+int.parse(widget.do_mission_data['bet_reward'])/100*int.parse(widget.mission_data['reward_percent'])).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                             // 건 리워드가 있을 경우 & 실패했을 경우
-                            if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-doneCnt) )
+                            if (widget.do_mission_data['bet_reward']!='0' && (15-todayBlockCnt < toCertify-mission_result) )
                               Text("+ ${((return_reward*14)+(int.parse(widget.do_mission_data['bet_reward'])/2)).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                           ],
                         ),
@@ -536,7 +976,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                           ],
                         ),
 
-                        SizedBox(height: 5.h,),
+                        SizedBox(height: 20.h,),
 
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -548,12 +988,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
                       ],
                     ),
                   ),
-
-
-
                 ],
               ),
             ),
+
+            SizedBox(height: 40.h,),
+
+
           ],
         ),
       ),
@@ -566,31 +1007,85 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: () async {
+                // 성공 개수 카운트
+                // int mission_result = 0;
+                // for (int i = 1; i <= mission_week; i++) {
+                //   if (widget.do_mission_data['d${i}'] != null)
+                //     mission_result++;
+                // }
+                // print("미션 성공한 갯수 :  : ${mission_result}");
+
                 // 미션 끝 : 정산하기
-                if (todayBlockCnt > missionDate) {
+                if (todayBlockCnt > missionDate|| (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) {
                   mission_complete(
                       todayBlockCnt,
                       widget.do_mission_data,
                       toCertify,
                       context,
-                      user_data['user_email']);
-                  // 아직 미션 기간이 되지 않았을 때
-                } else if(todayBlockCnt <= 0){
+                      user_data['user_email'],
+                      mission_result
+                  );
+                }
+
+                // 미션 포기가 가능할 때
+                else if (((15-todayBlockCnt >= toCertify-mission_result) || (widget.do_mission_data['bet_reward']!='0'))==false){
+                  mission_complete(
+                      todayBlockCnt,
+                      widget.do_mission_data,
+                      toCertify,
+                      context,
+                      user_data['user_email'],
+                      mission_result
+                  );
+                }
+
+                // 아직 미션 기간이 되지 않았을 때
+                else if(todayBlockCnt <= 0){
                   Fluttertoast.showToast(msg: "아직 미션 기간이 아닙니다.");
                 }
+
+
                 // 14일이 넘어가지 않았을 경우 : 미션 인증
                  else{
                   if (widget.mission_data['certify_tool'] == 'gallery'){
                     showModalBottomSheet(context: context, builder: ((builder) => cameraOrGallery));
-                  } else {
+
+                    // 만보기
+                  } else if (widget.mission_data['certify_tool']=='pedometer'){
+                    print("만보기");
+                    print("$PedometerSteps ${widget.mission_data['condition']}");
+                    if((int.parse(PedometerSteps) >= int.parse(widget.mission_data['condition']))){
+                      // 미션 인증
+                      bool success = await update_request(
+                          "UPDATE do_mission SET d${todayBlockCnt}='${PedometerSteps}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
+                          null);
+                      if (success){
+                        setState(() {
+                          do_mission[do_i]["d$todayBlockCnt"] = PedometerSteps;
+                        });
+                        // result 개수 다시 업데이트
+                        cnt_done();
+                        return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
+                        Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
+                      }
+                    } else if (do_mission[do_i]["d$todayBlockCnt"]!=null){
+                      Fluttertoast.showToast(msg: "미션을 이미 인증하셨습니다");
+                    }
+                    else {
+                      Fluttertoast.showToast(msg: "${(int.parse(widget.mission_data['condition'])-int.parse(PedometerSteps))} 걸음 남았습니다");
+                    }
+
+                  }
+                  else {
                     todayMissionCertify(do_i, "camera");
                   }
                 }
 
                 // 시작 날짜의 14일보다 넘어가면 미션 정산하기로 바뀐다.
-              }, child: Text( (todayBlockCnt > missionDate) ? '미션 정산하기'
+              }, child: Text( (todayBlockCnt>missionDate || (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) ? '미션 정산하기'
                 // 남은 날 다 인증해도 미션을 수행할 수 있을 때 (좌) : 없을 때 (우)
-                  : ((15-todayBlockCnt >= toCertify-doneCnt) || (widget.do_mission_data['bet_reward']!='0')) ? '오늘 미션 인증하기' : '미션 포기하기',
+                  : ((15-todayBlockCnt >= toCertify-mission_result) || (widget.do_mission_data['bet_reward']!='0'))
+                    ? '오늘 미션 인증하기' : '미션 포기하기',
                   style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
@@ -601,20 +1096,102 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> {
   }
 }
 
-void showAlertDialog(BuildContext context, File? file, int date) async {
+void showPedometerAlertDialog(BuildContext context, int date, String? pedometerNum) async {
+  var f = NumberFormat('###,###,###,###');
   String result = await showDialog(
     context: context, // user must tap button!
     builder: (BuildContext context) {
       return BackdropFilter(
         child: AlertDialog(
           // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
-          title: Text("${date}일째 인증 사진",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-          content: InkWell(
-            onTap: (){Navigator.of(context).pop();},
-            child: file == null ?
-                Text("이미지를 불러올 수 없습니다 :(") :
-                Image.file(File(file.path)),
-            //Image.asset('assets/image/specificmissionpage/downimage1.png', fit: BoxFit.fill),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${date}일째 걸음 수",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+              InkWell(
+                onTap:(){Navigator.of(context).pop();},
+                child: Icon(Icons.clear),
+              )
+            ],
+          ),
+          content: Container(
+            height: 80.h,
+            child: pedometerNum != null
+            ? Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.directions_run, size: 60.w, color: AppColor.happyblue,),
+                  SizedBox(width: 6.w,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("갓생에 성공하셨군요!",style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
+                      Row(
+                        children: [
+
+                          Container(
+                            alignment: Alignment.center,
+                            height: 40.h,
+                            child: Text("${f.format(int.parse(pedometerNum))}", style: TextStyle(fontSize: 28.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          ),
+
+
+                          Container(
+                            alignment: Alignment.center,
+                            height: 40.h,
+                            child: Text(" 걸음",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean',), ),
+                          ),
+
+
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 15.w,),
+                ],
+              ),
+            )
+            : Text("데이터를 불러올 수 없습니다", style: TextStyle(fontSize: 28.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+          ),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        filter: ImageFilter.blur(
+          sigmaX : 6,
+          sigmaY : 6,
+        ),
+      );
+    },
+  );
+}
+
+void showAlertDialog(BuildContext context, int date, Image? downloadImage, int degree) async {
+
+  String result = await showDialog(
+    context: context, // user must tap button!
+    builder: (BuildContext context) {
+      return BackdropFilter(
+        child: AlertDialog(
+          // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${date}일째 인증 사진",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+              InkWell(
+                onTap:(){Navigator.of(context).pop();},
+                child: Icon(Icons.clear),
+              )
+            ],
+          ),
+          content: Container(
+            height: 300.h,
+            child: downloadImage!=null
+                ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
+                : Text("이미지를 불러올 수 없습니다 :(", textAlign: TextAlign.center,),
           ),
 
           shape: RoundedRectangleBorder(
@@ -657,26 +1234,44 @@ class DoneMissionBlock extends StatelessWidget {
     required this.i,
     required this.j,
     required this.sp,
-    required this.image,
     required this.date,
+    required this.folder,
+    required this.do_mission_data,
+    required this.tool,
+    required this.isLoad,
+    required this.is_today,
   }) : super(key: key);
 
   final int i;
   final int j;
   final double sp;
-  final File? image;
   final int date;
+  final String folder;
+  final do_mission_data;
+  final String tool;
+  final bool isLoad;
+  final bool is_today;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: (){
-          // 이미지 다운로드가 될 때까지는 이렇게 있자.
-          //showAlertDialog(context, image, date);
-          },
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
+        onPressed: () async {
+          if (tool=="camera" || tool=='gallery') {
+            var image_data = await image_download(folder, do_mission_data["d${date}"]);
+
+            Image? downloadImage = image_data[0];
+            int degree = image_data[1];
+
+    showAlertDialog(context, date, downloadImage, degree);
+  } else if (tool=="pedometer"){
+  showPedometerAlertDialog(context, date, do_mission_data["d${date}"]);
+  }
+},
+style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
         // child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
-        child: Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        child: (isLoad && is_today)
+            ? CircularProgressIndicator()
+            : Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
     );
   }
 }
@@ -687,35 +1282,27 @@ class YetMissionBlock extends StatelessWidget {
     required this.i,
     required this.j,
     required this.sp,
+    required this.is_today,
     this.onPressed,
+    required this.isLoad,
   }) : super(key: key);
 
   final int i;
   final int j;
   final double sp;
   final onPressed;
+  final bool isLoad;
+  final bool is_today;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: onPressed,
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
-        child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
+        // 블럭이 오늘을 가리키고, isload가 true이면.
+        child: (isLoad && is_today)
+            ? CircularProgressIndicator()
+            : Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

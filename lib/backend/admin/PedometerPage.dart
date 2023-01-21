@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
@@ -7,6 +8,7 @@ import 'dart:async';
 import 'package:pedometer/pedometer.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var prefs;
@@ -15,7 +17,6 @@ int suc = 0;
 int increased = 0;
 var really;
 bool isupgrade = false;
-bool isAppInactive = false;
 List<int> dap = [];
 
 String formatDate(DateTime d) {
@@ -30,7 +31,6 @@ class PedometerPage extends StatefulWidget {
 }
 
 class _PedometerPageState extends State<PedometerPage> {
-
 
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
@@ -57,7 +57,6 @@ class _PedometerPageState extends State<PedometerPage> {
     print(event);
     if (isupgrade==false){
       really = await updating_info(event);
-      Fluttertoast.showToast(msg: "만보기 시작");
       isupgrade = true;
     }
     setState(() {
@@ -89,7 +88,8 @@ class _PedometerPageState extends State<PedometerPage> {
     });
   }
 
-  void initPlatformState() {
+  void initPlatformState () async {
+    if (await Permission.activityRecognition.request().isGranted) {
     _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
     _pedestrianStatusStream
         .listen(onPedestrianStatusChanged)
@@ -97,7 +97,7 @@ class _PedometerPageState extends State<PedometerPage> {
 
     _stepCountStream = Pedometer.stepCountStream;
     _stepCountStream.listen(onStepCount).onError(onStepCountError);
-
+    }
     if (!mounted) return;
   }
 
