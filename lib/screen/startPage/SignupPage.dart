@@ -601,7 +601,7 @@ class _signupPage extends State<SignupPage> {
                   await checkUserEmail();
 
                   // 새로운 미션 추천받기 !
-                  if (customMissionCtrl.text!=null){
+                  if (customMissionCtrl.text.trim()!=''){
                     DateTime today = await NowTime(null);
                     update_request(
                         "INSERT INTO to_developer (content, error_message, user_email, datetime, error_image) VALUES ('${customMissionCtrl.text.trim().replaceAll("'", "`")}', '테스터의 추천 미션', '${user_data['user_email']}', '${today.toString().substring(0,23)}', null);",

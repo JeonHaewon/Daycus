@@ -14,6 +14,8 @@ class MissionFeed extends StatelessWidget {
   Widget build(BuildContext context) {
 
     int doneMissionCnt = done_mission==null ? 0 : done_mission.length;
+    String temMonth = "";
+    String month = "0000-00";
 
     return ScreenUtilInit(
       designSize: Size(412, 892),
@@ -34,8 +36,27 @@ class MissionFeed extends StatelessWidget {
             child: Column(
               children: [
 
+                // ListView.builder(
+                //   shrinkWrap: true,
+                //   physics: NeverScrollableScrollPhysics(),
+                //   itemCount: doneMissionCnt,
+                //   itemBuilder: (_, index) {
+                //     index ++;
+                //     return Container(
+                //
+                //       color: Colors.white,
+                //       padding: EdgeInsets.fromLTRB(20.w, 20.h, 10.w, 0),
+                //       child: Column(
+                //         children: [
+                //           Text("1"),
+                //         ],
+                //       ),
+                //     );
+                //   },
+                // ),
+
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20.w, 20.h, 10.w, 0),
+                  padding: EdgeInsets.fromLTRB(20.w, 0, 10.w, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -43,7 +64,7 @@ class MissionFeed extends StatelessWidget {
                         width: 370.w,
                         // height:310.h,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          //color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
                         ),
                         margin: EdgeInsets.symmetric(horizontal: 2.w),
@@ -69,33 +90,71 @@ class MissionFeed extends StatelessWidget {
                                   //     ],
                                   //   ),
                                   // ),
+                                  if (doneMissionCnt==0)
+                                    Column(
+                                      children: [
+                                        Text("완료한 미션이 없습니다"),
+                                        SizedBox(height: 20.h,),
+                                      ],
+                                    ),
 
-                                  Wrap(
-                                    children: List.generate(doneMissionCnt, (index) {
+                                  if (doneMissionCnt>0)
+                                  Container(
+                                    width: 400.w,
+                                    child: Wrap(
+                                      alignment: WrapAlignment.start,
+                                      children: List.generate(doneMissionCnt, (index) {
 
-                                      //int mission_id = int.parse(done_mission[index]['mission_id']);
-                                      int _index = all_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id']);
+                                        if (month != temMonth){
+                                          temMonth = month;
+                                        }
 
-                                      //int mission_index = int.parse(source)
-                                      return Column(
-                                        children: [
-                                          // MissionFeedButton(
-                                          //   title : "${all_missions[_index]['title']}",
-                                          //   duration:"${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
-                                          //   image: "${all_missions[_index]['thumbnail']}" ,
-                                          //   percent: int.parse(done_mission[index]['get_reward']),
-                                          //   reward: 1200,),
-                                          FeedButton(
-                                              title: "${all_missions[_index]['title']}",
-                                              duration: "${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
-                                              image: "${all_missions[_index]['thumbnail']}",
-                                              percent: double.parse(done_mission[index]['percent']),
-                                          ),
+                                        //int mission_id = int.parse(done_mission[index]['mission_id']);
+                                        int _index = all_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id']);
+                                        month = done_mission[index]['mission_start'].substring(0,7);
 
-                                          SizedBox(height: 12.h,),
-                                        ],
-                                      );
-                                    }
+                                        //int mission_index = int.parse(source)
+                                        return (month != temMonth) ?
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 10.w, bottom: 10.h, top: 20.h),
+                                            child: Container(
+                                              padding: EdgeInsets.only(left: 20.w, ),
+                                                width: 340.w,
+                                                height: 55.h,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(15),
+                                                ),
+                                                child: Align(
+                                                  alignment: Alignment.centerLeft,
+                                                    child: Text("${month}",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ))), )
+                                        : Column(
+                                          children: [
+
+                                            // MissionFeedButton(
+                                            //   title : "${all_missions[_index]['title']}",
+                                            //   duration:"${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
+                                            //   image: "${all_missions[_index]['thumbnail']}" ,
+                                            //   percent: int.parse(done_mission[index]['get_reward']),
+                                            //   reward: 1200,),
+                                            FeedButton(
+                                                title: "${all_missions[_index]['title']}",
+
+                                                // duration 안씀
+                                                duration: "${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
+                                                endTime : all_missions[_index]['end_date'].substring(5),
+                                                image: "${all_missions[_index]['thumbnail']}",
+                                                percent: double.parse(done_mission[index]['percent']),
+                                                startTime: done_mission[index]['mission_start'].substring(5,10),
+                                            ),
+
+                                            SizedBox(height: 12.h,),
+                                          ],
+                                        );
+
+
+                                      }
+                                      ),
                                     ),
                                   ),
 

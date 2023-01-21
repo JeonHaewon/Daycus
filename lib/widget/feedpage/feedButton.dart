@@ -11,6 +11,8 @@ class FeedButton extends StatelessWidget {
     required this.duration,
     required this.image,
     required this.percent,
+    required this.startTime,
+    required this.endTime,
     this.onTap,
   }) : super(key: key);
 
@@ -18,23 +20,27 @@ class FeedButton extends StatelessWidget {
   final String duration;
   final String image;
   final double percent;
+  final String startTime;
+  final String endTime;
   final onTap;
 
   var f = NumberFormat('###,###,###,###');
 
+  double width = 150.w;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 12.w, left: 12.w),
+      padding: EdgeInsets.only(right: 12.w, left: 15.w),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => onTap),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (_) => onTap),
+          // );
         },
         child: Container(
-          width: 155.w,
+          width: width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
 
@@ -89,7 +95,8 @@ class FeedButton extends StatelessWidget {
 
 
 
-              Text('$duration',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+              //Text('미션 시작 : $startTime',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+              Text('$startTime ~ $endTime',style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
 
               SizedBox(height: 5.h,),
 
@@ -109,7 +116,7 @@ class FeedButton extends StatelessWidget {
                     children: [
 
                       Container(
-                        width: (155.w),
+                        width: width,
                         height: 8.h,
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
@@ -119,7 +126,7 @@ class FeedButton extends StatelessWidget {
                       ),
 
                       Container(
-                        width: (percent/100)*155.w,
+                        width: (percent/100)*width,
                         height: 8.h,
                         decoration: BoxDecoration(
                           color: AppColor.happyblue,

@@ -379,7 +379,7 @@ class _MyPageState extends State<MyPage> {
                               if (cnt1>0)
                                 Container(
                                   width: 170.w,
-                                  //height:260.h,
+                                  height:200.h,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(15),
@@ -442,12 +442,114 @@ class _MyPageState extends State<MyPage> {
 
                               Container(
                                 width: 170.w,
-                                height:205.h,
+                                height:200.h,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
-                              ),// 빈도
+                                margin: EdgeInsets.symmetric(horizontal: 2.w),
+                                padding: EdgeInsets.only(left: 20.w, right: 5.w),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 10.h,),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+
+                                          SizedBox(
+                                            width: 110.w,
+                                            height: 40.h,
+                                            child: FittedBox(
+                                              alignment: Alignment.centerLeft,
+                                              fit: BoxFit.contain,
+                                              child: Text("누적 미션 현황",
+                                                  style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)  ),
+                                            ),
+                                          ),
+
+                                          //Text("현재 미션 참여현황",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+
+                                          // 회원가입 날짜로부터
+                                          //Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 13.sp, fontFamily: 'korean') ),
+
+                                        ],
+                                      ),
+                                    ),
+
+                                    // 준비중
+                                    Container(
+                                      margin: EdgeInsets.only(top: 43.h, right: 15.w),
+                                      width: 90.w,
+                                      height: 35.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,//Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+
+                                          SizedBox(width: 6.w,),
+                                          Icon(Icons.bar_chart, color: Colors.grey[700],size: 25.w,),
+
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+
+
+
+                                              //Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
+
+                                              Container(
+                                                alignment: Alignment.center,
+                                                width: 42.w,
+                                                height: 16.h,
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text("준비중", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.grey[700],),),
+                                                ),
+                                              ),
+
+                                              //Text("${user_data['attendance']}일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+                                            ],
+                                          ),
+
+                                          SizedBox(width: 10.w,),
+                                        ],
+                                      ),
+
+                                    ),
+
+
+
+                                    // SizedBox(height: 12.h,),
+                                    //
+                                    // ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0], initialValue: _isInitialValue,),
+                                    //
+                                    // SizedBox(height: 8.h,),
+                                    //
+                                    // ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1], initialValue: _isInitialValue,),
+                                    //
+                                    // SizedBox(height: 8.h,),
+                                    //
+                                    // ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2], initialValue: _isInitialValue,),
+                                    //
+                                    // SizedBox(height: 8.h,),
+                                    //
+                                    // ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3], initialValue: _isInitialValue,),
+                                    //
+                                    // SizedBox(height: 8.h,),
+                                    //
+                                    // ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4], initialValue: _isInitialValue,),
+                                    //
+                                    // SizedBox(height: 20.h,),
+
+                                  ],
+                                ),
+                              ), // 현재 참여
+
 
                             ],
                           ),
@@ -465,8 +567,9 @@ class _MyPageState extends State<MyPage> {
 
                           SizedBox(height: 15.h,),
 
-                          // 미션 피드 - 다음에 만나요 ㅎㅎ
 
+
+                          // 미션 피드
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -587,7 +690,7 @@ class _MyPageState extends State<MyPage> {
                                           },
                                           child: Container(
                                             width: 250.w,
-                                            height: 38.h,
+                                            height: 30.h,
                                             decoration: BoxDecoration(
                                               color: Colors.grey[300],
                                             ),
@@ -609,10 +712,10 @@ class _MyPageState extends State<MyPage> {
                                         ),
                                       ),
 
-                                      SizedBox(height: 6.h,),
+                                      SizedBox(height: 4.h,),
 
                                       Container(
-                                        width: 380.w,
+                                        width: 370.w,
 
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -644,7 +747,7 @@ class _MyPageState extends State<MyPage> {
                                         ),
                                       ),
 
-                                      SizedBox(height: 15.h,),
+                                      SizedBox(height: 13.h,),
 
                                     ],
                                   ),
@@ -652,7 +755,7 @@ class _MyPageState extends State<MyPage> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 60.h,),
+                          SizedBox(height: 40.h,),
 
 
                         ],
