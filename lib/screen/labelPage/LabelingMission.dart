@@ -167,7 +167,9 @@ class _LabelingMissionState extends State<LabelingMission> {
       print(real_cnt_data);
       if (select_res.statusCode == 200 ) {
         if (button_clicked != 0) {
-          Fluttertoast.showToast(msg: "라벨링 업데이트가 완료되었습니다 !");
+          // 0121 하임 : 토스트 너무 많이 나오는 것 같아서 지웠어요
+          print("라벨링 업데이트가 완료되었습니다");
+          //Fluttertoast.showToast(msg: "라벨링 업데이트가 완료되었습니다 !");
         }
         else return print("변함 없음");
       }

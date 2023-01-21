@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:daycus/screen/specificMissionPage/notSeeForWeek.dart';
 import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/NowTime.dart';
@@ -130,33 +131,35 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
   }
 
-  get_not_see(String id) async{
-    try {
-      var update_res = await http.post(Uri.parse(API.select), body: {
-        'update_sql': "select not_see from do_mission where do_id = '$id';",
-      });
+  // 하임 0121 : 데이터베이스에 있습니다 !
+  // get_not_see(String id) async{
+  //   try {
+  //     var update_res = await http.post(Uri.parse(API.select), body: {
+  //       'update_sql': "select not_see from do_mission where do_id = '$id';",
+  //     });
+  //
+  //     if (update_res.statusCode == 200 ) {
+  //       var resMission = jsonDecode(update_res.body);
+  //       // print(resMission);
+  //       if (resMission['success'] == true) {
+  //         real_not_see = resMission['data'][0]['not_see'];
+  //         print(real_not_see);
+  //
+  //       } else {
+  //         print("에러발생");
+  //         print(resMission);
+  //         Fluttertoast.showToast(msg: "다시 시도해주세요");
+  //       }
+  //     }
+  //   } on Exception catch (e) {
+  //     print("에러발생");
+  //     Fluttertoast.showToast(msg: "업데이트를 진행하는 도중 문제가 발생했습니다.");
+  //   }
+  // }
 
-      if (update_res.statusCode == 200 ) {
-        var resMission = jsonDecode(update_res.body);
-        // print(resMission);
-        if (resMission['success'] == true) {
-          real_not_see = resMission['data'][0]['not_see'];
-          print(real_not_see);
-
-        } else {
-          print("에러발생");
-          print(resMission);
-          Fluttertoast.showToast(msg: "다시 시도해주세요");
-        }
-      }
-    } on Exception catch (e) {
-      print("에러발생");
-      Fluttertoast.showToast(msg: "업데이트를 진행하는 도중 문제가 발생했습니다.");
-    }
-  }
-  get_not_seee() async {
-    await get_not_see(widget.do_mission_data['do_id']);
-  }
+  // get_not_seee() async {
+  //   await get_not_see(widget.do_mission_data['do_id']);
+  // }
 
 
 
@@ -166,130 +169,16 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     WidgetsBinding.instance.addPostFrameCallback((_){
       _asyncMethod();
     });
-    WidgetsBinding.instance?.addObserver(this);
-    get_not_seee();
-    print(real_not_see);
-    if (real_not_see != null && DateTime.now().difference(DateTime.parse(real_not_see)).inDays < 7){
-      return;
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          contentPadding: EdgeInsets.zero,
-          // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("미션 인증 방법",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-            ],
-          ),
-          content: Container(
-            width: 304.w,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                    padding: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 20.h),
-                    //height: 200.h,
-                    child: Column(
-                      children: [
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("1. 인증빈도",
-                                style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                            SizedBox(height: 3.h,),
-                            Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
-                                style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
-
-                            SizedBox(height: 15.h,),
-
-                            Text("2. 인증방법",
-                                style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                            SizedBox(height: 3.h,),
-                            Text("${widget.mission_data['content']}",
-                                style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
-
-                          ],
-                        ),
-
-                        SizedBox(height: 20.h,),
-
-                      ],
-                    )
-
-                ),
-
-                Container(
-                  width: 412.w,
-                  height: 1,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                  children: [
-                    InkWell(
-                      onTap:(){
-                        update_request("update do_mission set not_see = '${DateTime.now()}' where do_id = '${widget.do_mission_data['do_id']}'", null);
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        width: 150.w,
-                        height: 50.h,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-
-                          //borderRadius: BorderRadius.circular(4),
-                        ),
-                        child:  Text("일주일간 보지 않기",
-                            style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
-                      ),
-                    ),
+    // 하임 0121 : 이거 뭐에요??
+    //WidgetsBinding.instance?.addObserver(this);
+    //get_not_seee();
+    //print(real_not_see);
+    // 하임 0121 : DateTime.now로 하면 시간이 서울 기준으로 찍히나요?
+    // if (real_not_see != null && DateTime.now().difference(DateTime.parse(real_not_see)).inDays < 7){
+    //   return;
+    // }
 
 
-                    Container(
-                      width: 1.w,
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                      ),
-                    ),
-
-                    InkWell(
-                      onTap:(){Navigator.of(context).pop();},
-                      child: Container(
-                        width: 150.w,
-                        height: 50.h,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-
-                          //borderRadius: BorderRadius.circular(4),
-                        ),
-                        child:  Text("확인",
-                            style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',  color: Colors.grey[800]) ),
-                      ),
-                    )
-                  ],
-                ),
-
-              ],
-            ),
-          ),
-          // shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.circular(10),
-          // ),
-        ),
-      );
-    });
 
 
   }
@@ -327,6 +216,16 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
         print("todayBlockCnt : ${todayBlockCnt}");
 
       });
+
+    var now = DateTime.now();
+    // 일주일간 보기 기록이 없거나, not_see로부터 일주일이 넘었으면
+    if (widget.do_mission_data['not_see']==null){
+      NotSeeWeek(context, widget.do_mission_data, widget.mission_data, now);
+      // 일주일이 넘었으면은 null이 아닌 경우이기 때문에, else if로 해주어야 Datetime.parse에서 에러가 나지 않는다
+    }
+    // else if(now.difference(DateTime.parse(widget.do_mission_data['not_see'])).inDays > 7){
+    //   NotSeeWeek(context, widget.do_mission_data, widget.mission_data);
+    // }
 
 
   }
