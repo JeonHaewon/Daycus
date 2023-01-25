@@ -265,8 +265,6 @@ class _MyPageState extends State<MyPage> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
 
-
-
                                             Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
 
                                             Container(
@@ -293,42 +291,6 @@ class _MyPageState extends State<MyPage> {
                                   SizedBox(width: 15.w,)
                                 ],
                               ),
-
-
-                              // Stack(
-                              //   alignment: Alignment.topLeft,
-                              //   children: [
-                              //     Padding(
-                              //       padding: EdgeInsets.fromLTRB(15.w, 15.h, 0, 0),
-                              //       child: Container(
-                              //         width: 100.w,
-                              //         height: 60.h,
-                              //         decoration: BoxDecoration(
-                              //           color: Colors.yellow[100],
-                              //         ),
-                              //         child: Column(
-                              //           crossAxisAlignment: CrossAxisAlignment.center,
-                              //           mainAxisAlignment: MainAxisAlignment.center,
-                              //           children: [
-                              //             Text("갓생", style: TextStyle(fontSize: 14, fontFamily: 'koreantwo'),),
-                              //             Text("4일차", style: TextStyle(fontSize: 18, fontFamily: 'koreantwo', fontWeight: FontWeight.bold),),
-                              //
-                              //           ],
-                              //         ),
-                              //       ),
-                              //     ),
-                              //     Transform.rotate(
-                              //       angle: 320 * pi / 180,
-                              //       child: IconButton(
-                              //         icon: Icon(Icons.push_pin, color: Colors.red[900],),
-                              //         onPressed: null,
-                              //       ),
-                              //     ),
-                              //     //Icon(Icons.push_pin, color: Colors.red[900],),
-                              //   ],
-                              // ),
-
-
 
                             ],
                           ),
@@ -379,7 +341,7 @@ class _MyPageState extends State<MyPage> {
                               if (cnt1>0)
                                 Container(
                                   width: 170.w,
-                                  height:200.h,
+                                  //height:200.h,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(15),
@@ -442,7 +404,7 @@ class _MyPageState extends State<MyPage> {
 
                               Container(
                                 width: 170.w,
-                                height:200.h,
+                                height:195.h,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),

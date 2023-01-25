@@ -693,8 +693,7 @@ class _AddFriendState extends State<AddFriend> {
                                                             style: TextStyle(
                                                               fontSize: 16.sp,
                                                               fontFamily: 'korean',
-                                                              fontWeight: FontWeight
-                                                                  .bold,)),
+                                                              fontWeight: FontWeight.bold,)),
                                                       ),
                                                     ),
 

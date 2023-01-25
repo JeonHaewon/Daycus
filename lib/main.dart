@@ -10,9 +10,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:daycus/backend/admin/AdminPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 FlutterLocalNotificationsPlugin fltNotification = FlutterLocalNotificationsPlugin();
+
 
 void pushFCMtoken() async {
   String? token=await messaging.getToken();
@@ -54,6 +56,7 @@ class MyApp extends StatelessWidget {
 
 
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return ScreenUtilInit(
       designSize: Size(412, 892),
       builder: (context, child) {
@@ -63,6 +66,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
+          builder: (context, widget) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: widget!,
+            );
+          },
           // 그냥 로고 화면으로 갔다가 로그인이 필요한 경우에만 로그인 페이지로 가게끔 구현이 필요하다.
           home: LoadingPage(),
           // LoginPageCustom(),
