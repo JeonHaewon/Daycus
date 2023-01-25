@@ -239,6 +239,7 @@ preget_user_name_from_id(String id) async {
     print("에러발생 : ${e}");
   }
 }
+
 get_user_name_from_id() async {
   names_from_id = [];
   for (var item in who_are_friends_already){
@@ -246,6 +247,7 @@ get_user_name_from_id() async {
     names_from_id.add(gaboza);
   }
 }
+
 var rewards_from_id = [];
 preget_reward_from_id(String id) async {
   try {
@@ -679,7 +681,7 @@ class _AddFriendState extends State<AddFriend> {
                                                       child: FittedBox(
                                                         alignment: Alignment.center,
                                                         fit: BoxFit.contain,
-                                                        child: Text(names_from_id[idx],
+                                                        child: Text(who_requested[idx],
                                                             style: TextStyle(
                                                               fontSize: 16.sp,
                                                               fontFamily: 'korean',
@@ -705,7 +707,7 @@ class _AddFriendState extends State<AddFriend> {
 
                                                       onPressed: () {
                                                         accept_particular_friend(idx);
-                                                        showNotification(names_from_id[idx]);
+                                                        showNotification(who_requested[idx]);
                                                       },
                                                       child: Row(
                                                         mainAxisAlignment: MainAxisAlignment

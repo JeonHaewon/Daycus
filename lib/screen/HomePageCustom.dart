@@ -134,14 +134,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
             //친구 추가
             // 0121 하임 : 친구추가 프로세스가 더 확실해지면 그 때 추가하는걸로 합시다 ! (28 업데이트 시에는 보류)
-            // IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
-            //     onPressed: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (_) => FriendPage()),
-            //       );
-            //     }
-            // ),
+            IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => FriendPage()),
+                  );
+                }
+            ),
 
 
             InkWell(
