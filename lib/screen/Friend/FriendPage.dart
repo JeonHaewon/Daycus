@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import '../../backend/UserDatabase.dart';
 
 var namedb;
+bool waitingsuccess = false;
 
 bool searched = false;
 ScrollController scroller = ScrollController();
@@ -33,12 +34,17 @@ class _FriendPageState extends State<FriendPage>
     await check_who_are_friend();
     await get_user_name_from_id();
     await get_reward_from_id();
+    waitingsuccess = true;
+    setState(() {
+      waitingsuccess = waitingsuccess;
+    });
   }
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
+    waitingsuccess = false;
     WidgetsBinding.instance.addPostFrameCallback((_){
       all_in_one_init();
     });
@@ -220,6 +226,7 @@ accepted_friend(String id) async {
     print("에러발생 : ${e}");
   }
 }
+
 var names_from_id = [];
 preget_user_name_from_id(String id) async {
   try {
@@ -817,7 +824,7 @@ class _CheckFriendState extends State<CheckFriend> {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: waitingsuccess ? [
                           SizedBox(width: 4.w,),
                           CircleAvatar(
                             radius: 25.h,
@@ -872,7 +879,7 @@ class _CheckFriendState extends State<CheckFriend> {
                             ),
                           ),
                           SizedBox(width: 4.w,),
-                        ],
+                        ] : [],
                       ),
                     ),
                   );
