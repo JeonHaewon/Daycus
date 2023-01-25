@@ -25,13 +25,11 @@ class FriendPage extends StatefulWidget {
   _FriendPageState createState() => _FriendPageState();
 }
 
-
 class _FriendPageState extends State<FriendPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   all_in_one_init() async {
-    await check_who_request_friend();
-    await check_who_are_friend();
+    await check_friend();
     await get_user_name_from_id();
     await get_reward_from_id();
     waitingsuccess = true;
@@ -287,22 +285,25 @@ var who_requested = [];
 var original_friends;
 var who_are_friends_already = [];
 
-check_who_request_friend() async {
-  original_friends = await getfriend_fromdb(user_data['user_id']);
-  who_requested = [];
-  for (var item in original_friends.keys) {
-    if (original_friends[item] == '-1') {
-      who_requested.add(item);
-    }
-  }
-}
+// check_who_request_friend() async {
+//   original_friends = await getfriend_fromdb(user_data['user_id']);
+//   who_requested = [];
+//   for (var item in original_friends.keys) {
+//     if (original_friends[item] == '-1') {
+//       who_requested.add(item);
+//     }
+//   }
+// }
 
-check_who_are_friend() async {
+check_friend() async {
   original_friends = await getfriend_fromdb(user_data['user_id']);
   who_are_friends_already = [];
   for (var item in original_friends.keys) {
     if (original_friends[item] == '1') {
       who_are_friends_already.add(item);
+    }
+    else if (original_friends[item] == '-1'){
+      who_requested.add(item);
     }
   }
 }
