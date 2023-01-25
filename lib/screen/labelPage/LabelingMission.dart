@@ -529,12 +529,6 @@ class _LabelingMissionState extends State<LabelingMission> {
                             ),
                           ),
 
-                          // Container(
-                          //   height: 6.h,
-                          //   decoration: BoxDecoration(
-                          //     color: Colors.grey[350],
-                          //   ),
-                          // ),
 
                         ],
                       ),

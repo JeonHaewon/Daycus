@@ -16,6 +16,7 @@ Future<dynamic> PopPage(String? title, BuildContext context, Widget content,
   const _hintStyle = TextStyle(color: Colors.grey);
 
   return showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext btx){
       return AlertDialog(

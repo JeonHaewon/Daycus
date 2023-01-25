@@ -27,7 +27,7 @@ class Marketing extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
 
-            SvgPicture.asset('assets/image/Signup_terms/terms3.svg' , fit: BoxFit.fill, ),
+            SvgPicture.asset('assets/image/Signup_terms/terms3.svg' , fit: BoxFit.fill, alignment: Alignment.center, ),
 
 
           ],
