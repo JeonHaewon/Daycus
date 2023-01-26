@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/Api.dart';
+import '../../screen/myPage/privatesettings/PrivateSettings.dart';
 import 'KeepLogin.dart';
 import 'dart:convert';
 import 'package:daycus/backend/UserDatabase.dart';
@@ -34,6 +35,13 @@ userLogin(String email, String password, bool reload) async{
       if (resLogin['success'] == true) {
         //print("로그인에 성공하였습니다.");
         user_data = resLogin['userData'];
+        var isloginPossible = await select_request("select login_ing from user_table where user_email = '${user_data['user_email']}'", null, true);
+
+        if (!reload && isloginPossible[0]['login_ing'] == '1'){
+          Fluttertoast.showToast(msg: "이미 다른 기기에 로그인되어있습니다. 로그아웃 하신 후 진행해주세요.");
+          return false;
+        }
+
         if (user_data['register_date']==null){
           update_request(
               "UPDATE user_table SET register_date = '${DateTime.now()}' where user_email = '${user_data['user_email']}'",null
@@ -44,6 +52,7 @@ userLogin(String email, String password, bool reload) async{
 
         // 첫 로그인 시에만 인사해줌 - 앱을 나갔다 들어올때도 아래가 실행됨.
         if (reload==false && user_data['user_state']!='withdrawing'){
+          update_request("update user_table set login_ing = 1 where user_email = '${user_data['user_email']}'", null);
           DateTime today = await NowTime(null);
           print("today : ${today.toString().substring(0,10)}");
 
@@ -106,6 +115,16 @@ keepLogin (name, email, password, storage) async {
     key: 'login',
     value: login_infor,
   );
+}
+
+logout() async {
+  // 유저 정보 삭제 - 어플 내
+  update_request("update user_table set login_ing = 0 where user_email = '${user_data['user_email']}'", null);
+  user_data = null;
+  all_missions = null;
+  do_mission = null;
+
+  await PrivateSettings.storage.delete(key: 'login');
 }
 
 afterLogin() async {
@@ -181,21 +200,25 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
       var userDecode = jsonDecode(userInfo);
 
       print(userDecode);
-      await userLogin(userDecode['user_email'], userDecode['password'], reload);
+
+      await userLogin(
+          userDecode['user_email'], userDecode['password'], reload);
       //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
 
       // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
       await afterLogin();
       // 다 닫고 ㄱㄱ
 
-      if (context!=null && reload==false) {
+      if (context != null && reload == false) {
         Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+            MaterialPageRoute(builder: (_) => TemHomePage()), (
+                route) => false);
 
         // 홈페이지가 기본 !
         controller.currentBottomNavItemIndex.value = AppScreen.home;
       }
-    } // 자동로그인이 필요하지 않은 경우
+    }
+     // 자동로그인이 필요하지 않은 경우
     else if (userInfo != null && user_data != null) {
       //Fluttertoast.showToast(msg: "자동로그인이 필요하지 않은 경우");
       // 다 닫고 ㄱㄱ

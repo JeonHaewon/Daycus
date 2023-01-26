@@ -111,6 +111,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
     logout() async {
       // 유저 정보 삭제 - 어플 내
+      update_request("update user_table set login_ing = 0 where user_email = '${user_data['user_email']}'", null);
       user_data = null;
       all_missions = null;
       do_mission = null;

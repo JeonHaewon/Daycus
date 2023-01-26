@@ -160,21 +160,25 @@ class KeepLoginPage extends State<LoginPageCustom> {
                     }
                     // 로그인 버튼 눌렀을 때
                     if (_formKey.currentState!.validate()){
+
                       bool? is_login = await userLogin(
                           emailCtrl.text.trim(),
                           passwordCtrl.text.trim(),
                           false,
                       );
 
+                      if (user_data['login_ing'] == '1'){
+                        Fluttertoast.showToast(msg: "이미 다른 기기에서 로그인 되어있는 계정입니다.");
+                      }
+
                       // - 로그인 성공
-                      if ((is_login == true)&&(user_data['user_state']!='withdrawing')) {
+                      else if ((is_login == true)&&(user_data['user_state']!='withdrawing')) {
                         keepLogin(
                             user_data['user_name'],
                             emailCtrl.text.trim(),
                             passwordCtrl.text.trim(),
                             storage);
                         await afterLogin();
-
                         // 다 닫고 감.
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
