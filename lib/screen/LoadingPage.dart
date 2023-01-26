@@ -22,6 +22,8 @@ class LoadingPage extends StatefulWidget {
 
 class _LoadingPageState extends State<LoadingPage> {
 
+  bool auto = true;
+
   dynamic userInfo = '';
 
   static final storage = FlutterSecureStorage();

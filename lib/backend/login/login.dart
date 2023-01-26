@@ -17,8 +17,7 @@ import 'package:daycus/backend/UserDatabase.dart';
 import '../../screen/temHomePage.dart';
 import 'package:daycus/backend/ImportData/importElse.dart';
 
-
-userLogin(String email, String password, bool reload) async{
+userLogin(String email, String password, bool reload, {bool auto = false}) async{
   try {
     print("1");
     var user_res = await http.post(
@@ -37,7 +36,7 @@ userLogin(String email, String password, bool reload) async{
         user_data = resLogin['userData'];
         var isloginPossible = await select_request("select login_ing from user_table where user_email = '${user_data['user_email']}'", null, true);
 
-        if (!reload && isloginPossible[0]['login_ing'] == '1'){
+        if (!auto && !reload && isloginPossible[0]['login_ing'] == '1'){
           Fluttertoast.showToast(msg: "이미 다른 기기에 로그인되어있습니다. 로그아웃 하신 후 진행해주세요.");
           return false;
         }
@@ -202,7 +201,7 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
       print(userDecode);
 
       await userLogin(
-          userDecode['user_email'], userDecode['password'], reload);
+          userDecode['user_email'], userDecode['password'], reload, auto: true);
       //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
 
       // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
