@@ -73,7 +73,7 @@ class BigMissionButton extends StatelessWidget {
 
             Container(
                 width: 170.w,
-                height: 24.h,
+                //height: 24.h,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

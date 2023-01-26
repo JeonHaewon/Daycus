@@ -17,6 +17,13 @@ import 'dart:math';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:daycus/core/app_bottom.dart';
+import 'package:daycus/core/app_controller.dart';
+import 'package:get/get.dart';
+
+
+final OfficeFurnitureController controller =  Get.put(OfficeFurnitureController());
+
 
 
 
@@ -341,11 +348,8 @@ class _MyPageState extends State<MyPage> {
                             children: [
                               if (cnt1>0)
                                 InkWell(
-                                  onTap: () async {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => MissionCheckPage()),
-                                    );
+                                  onTap: () {
+                                    controller.currentBottomNavItemIndex.value = AppScreen.missionCertify;
                                   },
                                 child : Container(
                                   width: 170.w,

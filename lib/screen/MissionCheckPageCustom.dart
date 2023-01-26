@@ -97,11 +97,47 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                 child: Column(
 
                   children: [
+
+                    SizedBox(height: 30.h,),
+
+
+                    Container(
+                      width: 330.w,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.grey.withOpacity(0.2),
+                        //     spreadRadius: 5,
+                        //     blurRadius: 7,
+                        //   ),
+                        // ],
+                      ),
+                      child: Padding(
+                            padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 15.h),
+                            child: Column(
+                              children: [
+                                Text("미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러야 포인트가 지급됩니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
+                                    style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.black) ),
+                                SizedBox(height: 5.h,),
+
+                                Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
+                                    style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),
+                              ],
+                            ),
+                          ),
+
+                    ),
+
+
                     Padding(
-                      padding: EdgeInsets.fromLTRB(30.w, 30.h,30.w, 0),
+                      padding: EdgeInsets.fromLTRB(30.w, 20.h,30.w, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+
+
 
                           Text("진행 중인 미션",style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                           SizedBox(width: 20.w,),
