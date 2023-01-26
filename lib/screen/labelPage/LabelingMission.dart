@@ -799,6 +799,13 @@ class _LabelingMissionState extends State<LabelingMission> {
                               do_label(label_category_list[i*2]);
                               ccnt += 1;
                               button_clicked += 1;
+                              if (ccnt % 10 == 0){
+                                Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
+                              }
+                              if (index+1 >= imageListCnt){
+                                Navigator.of(context).pop();
+                                Fluttertoast.showToast(msg: "모든 이미지 라벨링이 끝이 났습니다 !");
+                              }
                             },
                             child: Text(label_category_list[extraindex]),
                             style: ElevatedButton.styleFrom(
@@ -820,6 +827,13 @@ class _LabelingMissionState extends State<LabelingMission> {
                                 do_label(label_category_list[2*i+1]);
                                 ccnt += 1;
                                 button_clicked += 1;
+                                if (ccnt % 10 == 0){
+                                  Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
+                                }
+                                if (index+1 >= imageListCnt){
+                                  Navigator.of(context).pop();
+                                  Fluttertoast.showToast(msg: "모든 이미지 라벨링이 끝이 났습니다 !");
+                                }
                               },
                               child: Text(label_category_list[extraindex+1]),
                               style: ElevatedButton.styleFrom(

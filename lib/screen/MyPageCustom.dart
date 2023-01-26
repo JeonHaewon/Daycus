@@ -1,6 +1,7 @@
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/screen/MissionCheckPageCustom.dart';
 import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -339,7 +340,14 @@ class _MyPageState extends State<MyPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               if (cnt1>0)
-                                Container(
+                                InkWell(
+                                  onTap: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => MissionCheckPage()),
+                                    );
+                                  },
+                                child : Container(
                                   width: 170.w,
                                   //height:200.h,
                                   decoration: BoxDecoration(
@@ -400,7 +408,7 @@ class _MyPageState extends State<MyPage> {
 
                                     ],
                                   ),
-                                ), // 현재 참여
+                                )), // 현재 참여
 
                               Container(
                                 width: 170.w,

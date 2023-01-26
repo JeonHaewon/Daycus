@@ -46,8 +46,6 @@ class _FriendPageState extends State<FriendPage>
     WidgetsBinding.instance.addPostFrameCallback((_){
       all_in_one_init();
     });
-    print(who_are_friends_already);
-    print(names_from_id);
   }
 
   @override

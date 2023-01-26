@@ -80,7 +80,7 @@ class FindPasswordPage extends StatelessWidget {
       try {
         var select_res = await http.post(Uri.parse(API.select), body: {
           // 이거 'update_sql'로 바꾸어야함.
-          'update_sql': "SELECT * FROM user_table WHERE user_email = '${texting}'",
+          'update_sql': "SELECT * FROM user_table WHERE user_email = '$texting'",
         });
 
         if (select_res.statusCode == 200 ) {

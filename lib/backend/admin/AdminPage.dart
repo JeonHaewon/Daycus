@@ -29,6 +29,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/screen/specificMissionPage/RecordingPage.dart';
 
+var imageFromDb;
 var admobBannerId = 'ca-app-pub-3339242274230109/7848999030';
 _launchURL() async {
   const url = 'https://blog.naver.com/happy-circuit';
@@ -36,6 +37,29 @@ _launchURL() async {
     await launch(url);
   } else {
     throw 'Could not launch $url';
+  }
+}
+
+get_no_data() async {
+  try {
+    var select_res = await http.post(Uri.parse(API.select), body: {
+      'update_sql': "select image from image_data where labeled = '인증불가'"
+    });
+    if (select_res.statusCode == 200 ) {
+      var resUser = jsonDecode(select_res.body);
+      var imagedb = [];
+      if (imagedb == null){
+        imageFromDb = [];
+      }
+      for (var item in resUser['data']){
+        imagedb.add(item.values);
+      }
+      imageFromDb = imagedb;
+    }
+  } on Exception catch (e) {
+    print("에러발생 : ${e}");
+    return [];
+    //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
   }
 }
 
@@ -80,9 +104,10 @@ class _AdminScreenState extends State<AdminScreen> {
   bool _isAuthenticating = false;
 
 
-
   @override
   Widget build(BuildContext context) {
+
+
 
     logout() async {
       // 유저 정보 삭제 - 어플 내
@@ -93,118 +118,6 @@ class _AdminScreenState extends State<AdminScreen> {
       await storage.delete(key: 'login');
     }
 
-    getfriend_fromdb(String id) async {
-      try {
-        var select_res = await http.post(Uri.parse(API.select), body: {
-          'update_sql': "select friends from user_table where user_id = '$id' "
-        });
-        if (select_res.statusCode == 200 ) {
-          var resUser = jsonDecode(select_res.body);
-          var friendsdb = resUser['data'][0]['friends'];
-          if (friendsdb == null){
-            friendsdb = {};
-            return friendsdb;
-          }
-          return jsonDecode(friendsdb);
-        }
-      } on Exception catch (e) {
-        print("에러발생 : ${e}");
-        return false;
-        //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
-      }
-    }
-
-    add_friend_fromdb(String id) async {
-      try {
-        var original_friends = await getfriend_fromdb(user_data['user_id']);
-        original_friends[id] = '0';
-        var select_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'"
-        });
-        if (select_res.statusCode == 200 ) {
-          var resUser = jsonDecode(select_res.body);
-          if (resUser['success'] == true) {
-            Fluttertoast.showToast(msg: "친구 요청이 완료되었습니다 !");
-          }
-          else {
-            Fluttertoast.showToast(msg: "시도 중 오류가 발견되었습니다");
-          }
-        }
-      } on Exception catch (e) {
-        print("에러발생 : ${e}");
-        //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
-      }
-    }
-
-    accepted_friend(String id) async {
-      try {
-        var original_friends = await getfriend_fromdb(id);
-        original_friends[user_data['user_id']] = '1';
-        var select_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '$id'"
-        });
-        if (select_res.statusCode == 200 ) {
-          var resUser = jsonDecode(select_res.body);
-          if (resUser['success'] == true) {
-          }
-          else {
-          }
-        }
-      } on Exception catch (e) {
-        print("에러발생 : ${e}");
-        //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
-      }
-    }
-
-    accept_friend() async {
-      try {
-        var original_friends = await getfriend_fromdb(user_data['user_id']);
-        for (var item in original_friends.keys){
-          if (original_friends[item] == '-1'){
-            original_friends[item] = '1';
-            await accepted_friend(item);
-          }
-        }
-        var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
-        });
-
-        if (update_res.statusCode == 200 ) {
-          var resMission = jsonDecode(update_res.body);
-          if (resMission['success'] == true) {
-            print("성공~~~");
-            Fluttertoast.showToast(msg: "성공적으로 친구 요청을 받았습니다!");
-          } else {
-            print("에러발생");
-          }
-        }
-      } on Exception catch (e) {
-        print("에러발생");
-        Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
-      }
-    }
-
-    requesting_friend(String id) async {
-      try {
-        var original_friends = await getfriend_fromdb(id);
-        original_friends[user_data['user_id']] = '-1';
-        var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '$id'",
-        });
-
-        if (update_res.statusCode == 200 ) {
-          var resMission = jsonDecode(update_res.body);
-          if (resMission['success'] == true) {
-            print("성공~~~");
-          } else {
-            print("에러발생");
-          }
-        }
-      } on Exception catch (e) {
-        print("에러발생");
-        Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
-      }
-    }
 
     checkUserState() async {
       userInfo = await storage.read(key: 'login');
@@ -429,34 +342,33 @@ class _AdminScreenState extends State<AdminScreen> {
       }
     }
 
-    from_sql_d() async {
+    from_sql_d(String image) async {
       try {
         var select_res = await http.post(Uri.parse(API.select), body: {
-          'select_sql': "call looping()",
+          'update_sql': "call looping('$image')"
         });
-
+        print("잘 됨");
+        var resMission = jsonDecode(select_res.body);
+        print(resMission);
         if (select_res.statusCode == 200 ) {
-          var resMission = jsonDecode(select_res.body);
-          // print(resMission);
           if (resMission['success'] == true) {
             changing_idx = resMission['data'][0]['nm'];
-
+            Fluttertoast.showToast(msg: "성공!");
           } else {
-            print("에러발생");;
-            Fluttertoast.showToast(msg: "다시 시도해주세요");
+            print("에러발생");
+            Fluttertoast.showToast(msg: "다시 시도해");
           }
-
         }
       } on Exception catch (e) {
         print("에러발생");
-        Fluttertoast.showToast(msg: "삭제를 진행하는 도중 문제가 발생했습니다.");
+        print("error : $e");
       }
     }
 
-    remove_sql_image(String idx) async {
+    remove_sql_image(String idx, String image) async {
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "update do_mission_1 set ${idx} = 0 where do_id = (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('8_20230102_074532_16_112.jpg', '.', 1), '_', -1))",
+          'update_sql': "update do_mission_1 set ${idx} = 0 where do_id = (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('$image', '.', 1), '_', -1))",
         });
 
         if (update_res.statusCode == 200 ) {
@@ -465,7 +377,7 @@ class _AdminScreenState extends State<AdminScreen> {
             Fluttertoast.showToast(msg: "됐다 !!!!!!");
           } else {
             print("에러발생!!!!!!");
-            Fluttertoast.showToast(msg: "다시 시도해주세요");
+            Fluttertoast.showToast(msg: "다시 시도해주");
           }
 
         }
@@ -656,13 +568,13 @@ class _AdminScreenState extends State<AdminScreen> {
                   Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
                 },
               ),
-              AdminButton(
-                title: "가져와봐 버튼",
-                onPressed: (){
-                  from_sql_d();
-                  remove_sql_image(changing_idx);
-                },
-              ),
+              // AdminButton(
+              //   title: "가져와봐 버튼",
+              //   onPressed: (){
+              //     from_sql_d();
+              //     remove_sql_image(changing_idx);
+              //   },
+              // ),
               AdminButton(
                 title: "녹음을 한 번 해봅시다 !",
                 onPressed: (){
@@ -758,26 +670,25 @@ class _AdminScreenState extends State<AdminScreen> {
                       MaterialPageRoute(builder: (_) => ImportRanking()));
                 },
               ),
-              AdminButton(
-                title: "친구 요청 보내기 버튼",
-                onPressed: () {
-                  add_friend_fromdb('20');
-                  requesting_friend('20');
-                }
-              ),
-              AdminButton(
-                  title: "친구 요청 다 받기 버튼",
-                  onPressed: () async {
-                    accept_friend();
-                    showNotification(await get_name_from_id('19'));
-                  }
-              ),
 
               AdminButton(
                   title: "친구가 하고 있는 미션 다 불러오기",
                   onPressed: (){
                     
                   },
+              ),
+              AdminButton(
+                title: "불러와봐",
+                onPressed: () async {
+                  await get_no_data();
+                  for (var item in imageFromDb!) {
+                    item = item.toString();
+                    item = item.substring(1,item.length-1);
+                    print(item);
+                    await from_sql_d(item);
+                    await remove_sql_image(changing_idx, item);
+                  }
+                }
               ),
 
 
