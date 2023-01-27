@@ -124,7 +124,7 @@ class _PrivateSettingsState extends State<PrivateSettings> {
                   Text("${user_data['user_name']}",style: TextStyle(fontSize: 24.sp, fontFamily: 'korean') ),
 
                   SizedBox(height: 5.h,),
-                  Text("사용자 고유 id : ${user_data['user_id']}",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean') ),
+                  Text("사용자 코드 : ${user_data['user_id']}",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean') ),
 
                   SizedBox(height: 30.h,),
                   ElevatedButton(

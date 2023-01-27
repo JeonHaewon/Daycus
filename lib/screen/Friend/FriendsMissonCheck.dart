@@ -6,8 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/PopPage.dart';
+import 'package:like_button/like_button.dart';
 
 
+Future<bool> onLikeButtonTapped(bool isLiked) async{
+  //0127 소셜 기능
+
+  return !isLiked;
+}
 
 class FriendMissionCheckPage extends StatefulWidget {
   FriendMissionCheckPage({
@@ -342,6 +348,36 @@ class FriendMissionButton extends StatelessWidget {
                           SizedBox(height: 3.h),
 
 
+
+                          //0127 소셜기능
+                          LikeButton(
+                            onTap: onLikeButtonTapped,
+                            size: 20.w,
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                Icons.favorite,
+                                size: 20.w,
+                                color: isLiked ? Colors.red : Colors.grey,
+                              );
+                            },
+                            likeCount: 10,
+                            countBuilder: (int? count, bool isLiked, String text) {
+                              var color = isLiked? Colors.red : Colors.grey;
+                              Widget result;
+                              if(count == 0) {
+                                result = Text("like", style: TextStyle(color: color),);
+                              }
+                              else {
+                                result = Text(text, style: TextStyle(color: color),);
+                                return result;
+                              }
+                            },
+
+                          ),
+
+                          SizedBox(height: 4.h,),
+
+
                           Row(
                             children: [
 
@@ -387,8 +423,11 @@ class FriendMissionButton extends StatelessWidget {
                                 ),
                               ),
 
+
+
                             ],
                           ),
+
 
 
                         ],

@@ -488,10 +488,21 @@ class _AddFriendState extends State<AddFriend> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.lightbulb, size: 12.w,),
-                          Text(" 검색방법 : 친구의 '닉네임+@사용자 코드'를 입력하세요",style: TextStyle(fontFamily: 'korean',  fontSize: 10.sp, ) ),
+                          Text(" 검색방법  :  친구의 '닉네임 + @사용자 코드'를 입력하세요",style: TextStyle(fontFamily: 'korean',  fontSize: 10.sp, ) ),
 
                         ],
                       ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.lightbulb, size: 12.w,),
+                          Text(" 사용자 코드는 마이페이지>개인정보 설정에서 확인하세요 ",style: TextStyle(fontFamily: 'korean',  fontSize: 10.sp, ) ),
+
+                        ],
+                      ),
+
+                      SizedBox(height: 3.h,),
 
                       Text("ex) 친구의 닉네임이 roy, 사용자 코드가 01인 경우 'roy@01' 입력",style: TextStyle(fontFamily: 'korean',  fontSize: 8.sp, ) ),
                       SizedBox(height: 10.h,),

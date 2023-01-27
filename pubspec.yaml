@@ -68,6 +68,7 @@ dependencies:
   sound_stream:
   url_launcher:
   connectivity:
+  like_button:
 
 
 dev_dependencies:
