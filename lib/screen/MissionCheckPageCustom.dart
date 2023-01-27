@@ -29,6 +29,9 @@ class MissionCheckPage extends StatefulWidget {
 }
 
 class _MissionCheckPageState extends State<MissionCheckPage> {
+
+  String? _chosenValue;
+
   @override
   Widget build(BuildContext context) {
 
@@ -45,8 +48,59 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
       backgroundColor: AppColor.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('미션인증',
-            style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
+        title: Row(
+          children: [
+
+            SizedBox(
+              //width: 170.w,
+              height: 30.h,
+              child: FittedBox(
+                alignment: Alignment.topLeft,
+                fit: BoxFit.contain,
+                child:Text(' 미션인증',
+                    style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
+              ),
+            ),
+
+            SizedBox(width: 12.w,),
+
+            Container(
+              padding: EdgeInsets.zero,
+              child: DropdownButton<String>(
+                value: _chosenValue,
+                //elevation: 5,
+                style: TextStyle(color: Colors.black),
+
+                items: <String>[
+                  '일부공개',
+                  '친구공개',
+                  '비공개',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                hint: Text(
+                  "공개범위 선택",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600),
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    _chosenValue = value;
+                  });
+                },
+              ),
+            ),
+
+          ],
+        ),
+
+
+
         actions: [
           IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
               onPressed: () {
@@ -67,25 +121,25 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
           //       );
           //     }),
 
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => PrivateSettings()),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.all(9.0),
+            child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => PrivateSettings()),
+                  );
+                },
 
-            child: Container(
-                padding: EdgeInsets.all(14.sp),
                 child: (profileImage==null)
                 // 고른 프로필 사진이 없을 때
                     ? (user_data['profile']==null || downloadProfileImage==null)
-                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
-                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
+                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
                     : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+
             ),
           ),
-
 
 
         ],

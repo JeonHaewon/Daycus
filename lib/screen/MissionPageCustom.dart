@@ -22,8 +22,20 @@ class MissionPage extends StatelessWidget {
         backgroundColor: AppColor.background,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text(' 미션',
-              style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
+          title: SizedBox(
+            //width: 170.w,
+            height: 30.h,
+            child: FittedBox(
+              alignment: Alignment.topLeft,
+              fit: BoxFit.contain,
+
+              child:Text(' 미션',
+                  style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
+
+            ),
+          ),
+
+
           actions: [
 
             IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
@@ -45,22 +57,23 @@ class MissionPage extends StatelessWidget {
             //       );
             //     }),
 
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => PrivateSettings()),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.all(9.0),
+              child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => PrivateSettings()),
+                    );
+                  },
 
-              child: Container(
-                  padding: EdgeInsets.all(14.sp),
                   child: (profileImage==null)
                   // 고른 프로필 사진이 없을 때
                       ? (user_data['profile']==null || downloadProfileImage==null)
-                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
-                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
+                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
                       : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+
               ),
             ),
 

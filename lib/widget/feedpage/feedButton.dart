@@ -76,7 +76,7 @@ class FeedButton extends StatelessWidget {
               // ),
 
               Container(
-                  height: 24.h,
+                  //height: 24.h,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

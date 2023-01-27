@@ -117,8 +117,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         backgroundColor: AppColor.background,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text('DAYCUS',
-              style: TextStyle(color: Colors.black, fontSize: 25.sp)),
+          title: SizedBox(
+            //width: 170.w,
+            height: 30.h,
+            child: FittedBox(
+              alignment: Alignment.topLeft,
+              fit: BoxFit.contain,
+
+              child:Text('DAYCUS', style: TextStyle(color: Colors.black, fontSize: 25.sp)),
+
+            ),
+          ),
+
           actions: [
           //IconButton(icon: Icon(Icons.search), onPressed: null),
 
@@ -144,22 +154,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ),
 
 
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => PrivateSettings()),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.all(9.0),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => PrivateSettings()),
+                  );
+                },
 
-              child: Container(
-                  padding: EdgeInsets.all(14.sp),
-                  child: (profileImage==null)
-                  // 고른 프로필 사진이 없을 때
-                      ? (user_data['profile']==null || downloadProfileImage==null)
-                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
-                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
-                      : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+                child: (profileImage==null)
+                // 고른 프로필 사진이 없을 때
+                    ? (user_data['profile']==null || downloadProfileImage==null)
+                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
+                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                    : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+
               ),
             ),
 
@@ -306,7 +317,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     child: Container(
                                         height: 210.h,
                                         width: 150.w,
-                                        child: Image.asset('assets/image/character.png' , fit: BoxFit.fill, height: 220.h)),
+                                        child: Image.asset('assets/image/character.png' , fit: BoxFit.contain, height: 220.h)),
                                   ),
 
                                   //Image.asset('assets/image/character.png' , fit: BoxFit.fill,height: 220.h),

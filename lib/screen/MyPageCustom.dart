@@ -156,8 +156,18 @@ class _MyPageState extends State<MyPage> {
       backgroundColor: AppColor.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('마이페이지',
-            style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
+        title: SizedBox(
+          //width: 170.w,
+          height: 30.h,
+          child: FittedBox(
+            alignment: Alignment.topLeft,
+            fit: BoxFit.contain,
+
+            child: Text(' 마이페이지',
+                style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
+          ),
+        ),
+
         actions: [
           IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
               onPressed: () {
@@ -178,22 +188,23 @@ class _MyPageState extends State<MyPage> {
           //       );
           //     }),
 
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => PrivateSettings()),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.all(9.0),
+            child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => PrivateSettings()),
+                  );
+                },
 
-            child: Container(
-                padding: EdgeInsets.all(14.sp),
                 child: (profileImage==null)
                 // 고른 프로필 사진이 없을 때
                     ? (user_data['profile']==null || downloadProfileImage==null)
-                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png"), radius: 13.sp,)
-                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
+                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
                     : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
+
             ),
           ),
 
@@ -216,7 +227,7 @@ class _MyPageState extends State<MyPage> {
                   children: [
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 0),
+                      padding: EdgeInsets.fromLTRB(30.w, 30.h, 30.w, 20.h),
                       child: Column(
                         children: [
 
@@ -282,7 +293,7 @@ class _MyPageState extends State<MyPage> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
 
-                                            Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
+
 
                                             Container(
                                               alignment: Alignment.center,
@@ -290,7 +301,19 @@ class _MyPageState extends State<MyPage> {
                                               height: 16.h,
                                               child: FittedBox(
                                                 fit: BoxFit.scaleDown,
-                                                child: Text("${user_data['attendance']}일차", style: TextStyle(fontSize: 11, fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
+                                                child: Text("갓생", style: TextStyle(fontFamily: 'korean', color: AppColor.happyblue,),),
+
+                                              ),
+                                            ),
+
+                                            Container(
+
+                                              alignment: Alignment.center,
+                                              width: 42.w,
+                                              height: 16.h,
+                                              child: FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Text("${user_data['attendance']}일차", style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, color: AppColor.happyblue,),),
                                               ),
                                             ),
 
@@ -658,8 +681,8 @@ class _MyPageState extends State<MyPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
 
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 0),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(20.w, 15.h, 20.w, 13.h),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -673,19 +696,20 @@ class _MyPageState extends State<MyPage> {
                                           },
                                           child: Container(
                                             width: 250.w,
-                                            height: 30.h,
+                                            //height: 30.h,
                                             decoration: BoxDecoration(
                                               color: Colors.grey[300],
                                             ),
-                                            child: Container(
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(0, 5.h, 0, 5.h),
                                               child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
 
-                                                  Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                                                  Text("개발자에게 문의하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 14.sp)),
                                                   SizedBox(width: 8.w,),
-                                                  Icon(Icons.chat, color: Colors.grey[850],size: 25.w,),
+                                                  Icon(Icons.chat, color: Colors.grey[850],size: 20.w,),
 
                                                 ],
                                               ),
@@ -730,7 +754,6 @@ class _MyPageState extends State<MyPage> {
                                         ),
                                       ),
 
-                                      SizedBox(height: 13.h,),
 
                                     ],
                                   ),
@@ -738,7 +761,7 @@ class _MyPageState extends State<MyPage> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 40.h,),
+
 
 
                         ],
