@@ -126,7 +126,7 @@ class topRankingBlock extends StatelessWidget {
                                   children: [
                                     Icon(Icons.control_point_duplicate,size:16.w),
                                     SizedBox(width: 3.w,),
-                                    Text("${topRankingList[index]['reward']}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, )),
+                                    Text("${(double.parse(topRankingList[index]['reward'])).toStringAsFixed(1)}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, )),
                                   ],
                                 )
                             ),

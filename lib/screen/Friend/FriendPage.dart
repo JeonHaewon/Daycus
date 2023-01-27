@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/core/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -25,17 +26,79 @@ class FriendPage extends StatefulWidget {
   _FriendPageState createState() => _FriendPageState();
 }
 
+var MyFriendsData = null;
+var Requested = null;
+
 class _FriendPageState extends State<FriendPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  all_in_one_init() async {
+
+  String who_are_friends_string = '';
+  String who_requested_string = '';
+
+  var friendIndexes;
+
+  check_friend() async {
+    original_friends = await getfriend_fromdb(user_data['user_id']);
+    who_are_friends_already = [];
+    for (var item in original_friends.keys) {
+      if (original_friends[item] == '1') {
+        who_are_friends_already.add(item);
+        if (who_are_friends_string==''){
+          who_are_friends_string += "$item";
+        } else {
+          who_are_friends_string += ", $item";
+        }
+
+      }
+      else if (original_friends[item] == '-1'){
+        who_requested.add(item);
+        if (who_requested_string==''){
+          who_requested_string += "$item";
+        } else {
+          who_requested_string += ", $item";
+        }
+
+      }
+    }
+
+    friendIndexes =
+    {"friends":who_are_friends_string,
+      "requested": who_requested_string}; //print("${who_are_friends_string} / ${who_requested_string}");
+
+    print("${who_are_friends_string} / ${who_requested_string}");
+  }
+
+
+
+  select_friends_information() async {
+    // 다시 불러오기 위한 초기화
+    MyFriendsData = null;
+
     await check_friend();
-    await get_user_name_from_id();
-    await get_reward_from_id();
-    waitingsuccess = true;
-    setState(() {
-      waitingsuccess = waitingsuccess;
-    });
+    print(friendIndexes["friends"]);
+    Requested = friendIndexes["requested"];
+    print(Requested);
+
+    MyFriendsData = await select_request(
+        "SELECT user_id, user_name, user_email, reward, Ranking FROM DayCus.user_table where user_id in (${friendIndexes["friends"]}) order by Ranking;",
+        null,
+        true);
+    print(MyFriendsData);
+
+    //MyFriendsData = MyFriendsRes["friends"];
+  }
+
+  all_in_one_init() async {
+    await select_friends_information();
+    setState(() { waitingsuccess = true; });
+    // await check_friend();
+    // await get_user_name_from_id();
+    // await get_reward_from_id();
+    // waitingsuccess = true;
+    // setState(() {
+    //   waitingsuccess = waitingsuccess;
+    // });
   }
 
   @override
@@ -46,6 +109,8 @@ class _FriendPageState extends State<FriendPage>
     WidgetsBinding.instance.addPostFrameCallback((_){
       all_in_one_init();
     });
+    // print(who_are_friends_already);
+    // print(names_from_id);
   }
 
   @override
@@ -293,18 +358,7 @@ var who_are_friends_already = [];
 //   }
 // }
 
-check_friend() async {
-  original_friends = await getfriend_fromdb(user_data['user_id']);
-  who_are_friends_already = [];
-  for (var item in original_friends.keys) {
-    if (original_friends[item] == '1') {
-      who_are_friends_already.add(item);
-    }
-    else if (original_friends[item] == '-1'){
-      who_requested.add(item);
-    }
-  }
-}
+
 
 accept_particular_friend(int idx) async {
   try {
@@ -367,6 +421,9 @@ class _AddFriendState extends State<AddFriend> {
 
   @override
   Widget build(BuildContext context) {
+
+    int RequestedCnt = Requested==null ? 0 : Requested.length;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       body: SingleChildScrollView(
@@ -637,7 +694,7 @@ class _AddFriendState extends State<AddFriend> {
                             )
                         ),
                       ),
-                      
+
                       Padding(
                         padding: EdgeInsets.fromLTRB(10.w, 15.h, 10.w, 30.h),
                         child: Column(
@@ -665,78 +722,86 @@ class _AddFriendState extends State<AddFriend> {
                                     child: Column(
                                       children: [
 
-                                        for (int idx = 0; idx < who_requested.length; idx ++)
-                                          Column(
-                                            children: [
-                                              Container(
-                                                width: 250.w,
-                                                height: 48.h,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.blueGrey[50],
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-
-                                                    SizedBox(width: 5.w,),
-
-                                                    SizedBox(
-                                                      width: 140.w,
-                                                      height: 24.h,
-                                                      child: FittedBox(
-                                                        alignment: Alignment.center,
-                                                        fit: BoxFit.contain,
-                                                        child: Text(who_requested[idx],
-                                                            style: TextStyle(
-                                                              fontSize: 16.sp,
-                                                              fontFamily: 'korean',
-                                                              fontWeight: FontWeight.bold,)),
-                                                      ),
+                                        Container(
+                                          child: Column(
+                                            children: List.generate(RequestedCnt, (index) {
+                                              return   Column(
+                                                children: [
+                                                  Container(
+                                                    width: 250.w,
+                                                    height: 48.h,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.blueGrey[50],
+                                                      borderRadius: BorderRadius.circular(10),
                                                     ),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
 
-                                                    SizedBox(width: 8.w,),
+                                                        SizedBox(width: 5.w,),
 
-                                                    ElevatedButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius
-                                                                .circular(10)
-                                                        ),
-                                                        primary: Colors.indigo[600],
-                                                        onPrimary: Colors.white,
-                                                        minimumSize: Size(18.w, 28.h),
-                                                        textStyle: TextStyle(
-                                                            fontSize: 18.sp),
-                                                      ),
-
-                                                      onPressed: () {
-                                                        accept_particular_friend(idx);
-                                                        showNotification(who_requested[idx]);
-                                                      },
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment
-                                                            .spaceBetween,
-                                                        children: [
-                                                          Text("요청 수락",
-                                                              style: TextStyle(
+                                                        SizedBox(
+                                                          width: 140.w,
+                                                          height: 24.h,
+                                                          child: FittedBox(
+                                                            alignment: Alignment.center,
+                                                            fit: BoxFit.contain,
+                                                            child: Text(Requested[index],
+                                                                style: TextStyle(
+                                                                  fontSize: 16.sp,
                                                                   fontFamily: 'korean',
-                                                                  fontSize: 10.sp)),
-                                                        ],
-                                                      ),
+                                                                  fontWeight: FontWeight.bold,)),
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 8.w,),
+
+                                                        ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius
+                                                                    .circular(10)
+                                                            ),
+                                                            primary: Colors.indigo[600],
+                                                            onPrimary: Colors.white,
+                                                            minimumSize: Size(18.w, 28.h),
+                                                            textStyle: TextStyle(
+                                                                fontSize: 18.sp),
+                                                          ),
+
+                                                          onPressed: () {
+                                                            accept_particular_friend(index);
+                                                            showNotification(Requested[index]);
+                                                          },
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment
+                                                                .spaceBetween,
+                                                            children: [
+                                                              Text("요청 수락",
+                                                                  style: TextStyle(
+                                                                      fontFamily: 'korean',
+                                                                      fontSize: 10.sp)),
+                                                            ],
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 4.w,),
+
+                                                      ],
                                                     ),
-
-                                                    SizedBox(width: 4.w,),
-
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(height: 5.h,),
+                                                  ),
+                                                  SizedBox(height: 5.h,),
 
 
-                                            ],
+                                                ],
 
-                                          ),
+                                              );
+                                            }),
+                                          )
+                                        ),
+
+                                        // for (int idx = 0; idx < who_requested.length; idx ++)
+
 
 
 
@@ -795,27 +860,31 @@ class _CheckFriendState extends State<CheckFriend> {
 
   @override
   Widget build(BuildContext context) {
+
+    int FriendCnt = MyFriendsData==null ? 0 : MyFriendsData.length;
+
     return Scaffold(
       backgroundColor: AppColor.background,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w),
+              padding: EdgeInsets.only(top: 20.h, left: 0, right: 0),
               child: Wrap(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(who_are_friends_already.length, (index) {
+                children: List.generate(FriendCnt, (index) {
                   return InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => FriendMissionCheckPage()),
-                      );
+                            builder: (_) =>
+                                FriendMissionCheckPage(userData: MyFriendsData[index],)));
                     },
                     child: Container(
-                      width: 150.w,
-                      height: 80.h,
+                      width: 155.w, height: 80.h,
+                      padding: EdgeInsets.only(right: 6.w, left: 6.w),
+                      margin: EdgeInsets.only(right: 12.w, left: 12.w, bottom: 10.h),
                       decoration: BoxDecoration(
                         color: Colors.white60,
                         borderRadius: BorderRadius.circular(10),
@@ -841,7 +910,7 @@ class _CheckFriendState extends State<CheckFriend> {
                                   child: FittedBox(
                                     alignment: Alignment.center,
                                     fit: BoxFit.contain,
-                                    child: Text(names_from_id[index],
+                                    child: Text(MyFriendsData[index]['user_name'],
                                         style: TextStyle(fontSize: 10.sp,
                                           fontFamily: 'korean',
                                           fontWeight: FontWeight.bold,)),
@@ -862,7 +931,7 @@ class _CheckFriendState extends State<CheckFriend> {
                                           size: 14.w,
                                           color: AppColor.happyblue,),
                                         SizedBox(width: 3.w,),
-                                        Text(rewards_from_id[index],
+                                        Text((double.parse(MyFriendsData[index]['reward'])).toStringAsFixed(1),
                                             style: TextStyle(fontSize: 10.sp,
                                               fontFamily: 'korean',
                                               fontWeight: FontWeight.bold,
