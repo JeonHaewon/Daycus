@@ -7,6 +7,7 @@ import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/screen/eachMission/AllMission.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
+import 'package:daycus/screen/Friend/FriendPage.dart';
 
 
 
@@ -24,6 +25,15 @@ class MissionPage extends StatelessWidget {
           title: Text(' 미션',
               style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
           actions: [
+
+            IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => FriendPage()),
+                  );
+                }
+            ),
             //IconButton(icon: Icon(Icons.search), onPressed: null),
 
             //알림 확인

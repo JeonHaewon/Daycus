@@ -1,5 +1,6 @@
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_bottom.dart';
+import 'package:daycus/screen/Friend/FriendPage.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -47,6 +48,14 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
         title: Text('미션인증',
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
+          IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => FriendPage()),
+                );
+              }
+          ),
           //IconButton(icon: Icon(Icons.search), onPressed: null),
 
           //알림 확인

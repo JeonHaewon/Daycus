@@ -1,6 +1,7 @@
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/screen/Friend/FriendPage.dart';
 import 'package:daycus/screen/MissionCheckPageCustom.dart';
 import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
@@ -158,6 +159,14 @@ class _MyPageState extends State<MyPage> {
         title: Text('마이페이지',
             style: TextStyle(color: Colors.black, fontSize: 22.sp, fontWeight: FontWeight.bold)),
         actions: [
+          IconButton(icon: Icon(Icons.person_add_alt_1_rounded),color: Colors.grey,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => FriendPage()),
+                );
+              }
+          ),
           //IconButton(icon: Icon(Icons.search), color: Colors.grey, onPressed: (){}),
 
           //알림 확인
