@@ -64,6 +64,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
 
             SizedBox(width: 12.w,),
 
+            //0127 소셜기능
             Container(
               padding: EdgeInsets.zero,
               child: DropdownButton<String>(

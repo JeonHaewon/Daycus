@@ -867,8 +867,10 @@ class _CheckFriendState extends State<CheckFriend> {
       backgroundColor: AppColor.background,
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
+              alignment: Alignment.center,
               padding: EdgeInsets.only(top: 20.h, left: 0, right: 0),
               child: Wrap(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -882,71 +884,75 @@ class _CheckFriendState extends State<CheckFriend> {
                                 FriendMissionCheckPage(userData: MyFriendsData[index],)));
                     },
                     child: Container(
-                      width: 155.w, height: 80.h,
+                      width: 155.w,
+                      //height: 80.h,
                       padding: EdgeInsets.only(right: 6.w, left: 6.w),
-                      margin: EdgeInsets.only(right: 12.w, left: 12.w, bottom: 10.h),
+                      margin: EdgeInsets.only(right: 5.w, left: 5.w, bottom: 10.h),
                       decoration: BoxDecoration(
                         color: Colors.white60,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: waitingsuccess ? [
-                          SizedBox(width: 4.w,),
-                          CircleAvatar(
-                            radius: 25.h,
-                            backgroundColor: Colors.grey,
-                          ),
-                          Container(
-                            width: 80.w,
-                            height: 60.h,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 70.w,
-                                  height: 25.h,
-                                  child: FittedBox(
-                                    alignment: Alignment.center,
-                                    fit: BoxFit.contain,
-                                    child: Text(MyFriendsData[index]['user_name'],
-                                        style: TextStyle(fontSize: 10.sp,
-                                          fontFamily: 'korean',
-                                          fontWeight: FontWeight.bold,)),
-                                  ),
-                                ),
-
-                                SizedBox(height: 3.h,),
-
-                                SizedBox(
-                                  width: 70.w,
-                                  height: 22.h,
-                                  child: FittedBox(
-                                    alignment: Alignment.center,
-                                    fit: BoxFit.contain,
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.control_point_duplicate,
-                                          size: 14.w,
-                                          color: AppColor.happyblue,),
-                                        SizedBox(width: 3.w,),
-                                        Text((double.parse(MyFriendsData[index]['reward'])).toStringAsFixed(1),
-                                            style: TextStyle(fontSize: 10.sp,
-                                              fontFamily: 'korean',
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColor.happyblue,)),
-                                      ],
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 6.h, 0, 6.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: waitingsuccess ? [
+                            SizedBox(width: 4.w,),
+                            CircleAvatar(
+                              radius: 25.h,
+                              backgroundColor: Colors.grey,
+                            ),
+                            Container(
+                              width: 80.w,
+                              height: 60.h,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 70.w,
+                                    height: 25.h,
+                                    child: FittedBox(
+                                      alignment: Alignment.center,
+                                      fit: BoxFit.contain,
+                                      child: Text(MyFriendsData[index]['user_name'],
+                                          style: TextStyle(fontSize: 10.sp,
+                                            fontFamily: 'korean',
+                                            fontWeight: FontWeight.bold,)),
                                     ),
                                   ),
-                                ),
+
+                                  SizedBox(height: 3.h,),
+
+                                  SizedBox(
+                                    width: 70.w,
+                                    height: 22.h,
+                                    child: FittedBox(
+                                      alignment: Alignment.center,
+                                      fit: BoxFit.contain,
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.control_point_duplicate,
+                                            size: 14.w,
+                                            color: AppColor.happyblue,),
+                                          SizedBox(width: 3.w,),
+                                          Text((double.parse(MyFriendsData[index]['reward'])).toStringAsFixed(1),
+                                              style: TextStyle(fontSize: 10.sp,
+                                                fontFamily: 'korean',
+                                                fontWeight: FontWeight.bold,
+                                                color: AppColor.happyblue,)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
 
 
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 4.w,),
-                        ] : [],
+                            SizedBox(width: 4.w,),
+                          ] : [],
+                        ),
                       ),
                     ),
                   );
