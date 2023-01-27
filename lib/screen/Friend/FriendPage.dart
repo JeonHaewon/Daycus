@@ -965,6 +965,8 @@ class _CheckFriendState extends State<CheckFriend> {
                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),
             ),
 
+
+
             Container(
               alignment: Alignment.center,
               padding: EdgeInsets.only(top: 20.h, left: 0, right: 0),
