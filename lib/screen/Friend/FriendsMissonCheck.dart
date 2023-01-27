@@ -37,7 +37,7 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
   @override
   void initState() {
 
-    print("친구의 미션 import");
+    //print("친구의 미션 import");
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_){
@@ -52,7 +52,7 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
         null,
         false);
 
-    MissionOfFriendCnt = MissionOfFriend==null ? 0 : MissionOfFriend.length;
+    MissionOfFriendCnt = (MissionOfFriend==null || MissionOfFriendCnt==false) ? 0 : MissionOfFriend.length;
 
     setState(() {});
 
@@ -75,7 +75,23 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 25.h, 0, 0),
-          child: Column(
+          child: MissionOfFriendCnt==0
+                ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RichText(
+                        text: TextSpan(
+                            style: TextStyle(color: Colors.black), //default
+                            children: [
+                              TextSpan(text: '현재 '),
+                              TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                              TextSpan(text: '님이 진행 중인 미션이 없습니다'),
+                            ])
+                    ),
+                    //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
+                  ],
+                )
+                : Column(
             children: [
 
               Container(
@@ -393,15 +409,15 @@ class FriendMissionButton extends StatelessWidget {
 
                                   ),
 
-                                  Container(
-                                    width: (int.parse(doMission['percent']).w)*1.45,
-                                    //width: (100.w)*1.45,
-                                    height: 8.h,
-                                    decoration: BoxDecoration(
-                                      color: AppColor.happyblue,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                Container(
+                                  width: (double.parse(doMission['percent']).w)*1.45,
+                                  //width: (100.w)*1.45,
+                                  height: 8.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.happyblue,
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
+                                ),
 
                                 ],
                               ),

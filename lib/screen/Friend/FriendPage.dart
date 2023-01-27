@@ -27,69 +27,82 @@ class FriendPage extends StatefulWidget {
 }
 
 var MyFriendsData = null;
-var Requested = null;
+var RequestedList = null;
+var FriendList = null;
+var RequestFriend = null;
+
+String who_are_friends_string = '';
+String who_requested_string = '';
+
+var friendIndexes;
+
+check_friend() async {
+  original_friends = await getfriend_fromdb(user_data['user_id']);
+  who_are_friends_already = [];
+  for (var item in original_friends.keys) {
+    if (original_friends[item] == '1') {
+      //who_are_friends_already.add(item);
+      if (who_are_friends_string==''){
+        who_are_friends_string += "$item";
+      } else {
+        who_are_friends_string += ",$item";
+      }
+
+    }
+    else if (original_friends[item] == '-1'){
+      //who_requested.add(item);
+      if (who_requested_string==''){
+        who_requested_string += "$item";
+      } else {
+        who_requested_string += ",$item";
+      }
+
+    }
+  }
+
+  friendIndexes =
+  {"friends":who_are_friends_string,
+    "requested": who_requested_string}; //print("${who_are_friends_string} / ${who_requested_string}");
+
+  print("${who_are_friends_string} / ${who_requested_string}");
+}
+
+
+
+select_friends_information() async {
+
+  await check_friend();
+
+  RequestedList = friendIndexes["requested"].split(",");
+  FriendList =  friendIndexes["friends"].split(",");
+  print("받은 요청 : ${RequestedList} 친구 : ${FriendList}");
+
+  // 친구가 0명일때도 다시시도해달라고 해서 false로 처리
+  MyFriendsData = await select_request(
+      "SELECT user_id, user_name, user_email, reward, Ranking FROM DayCus.user_table where user_id in (${friendIndexes["friends"]}) order by Ranking;",
+      null,
+      false);
+  //print(MyFriendsData);
+
+  RequestFriend = await select_request(
+      "SELECT user_id, user_name from user_table where user_id in (${friendIndexes["requested"]});",
+      null,
+      false);
+
+  //MyFriendsData = MyFriendsRes["friends"];
+}
 
 class _FriendPageState extends State<FriendPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  String who_are_friends_string = '';
-  String who_requested_string = '';
-
-  var friendIndexes;
-
-  check_friend() async {
-    original_friends = await getfriend_fromdb(user_data['user_id']);
-    who_are_friends_already = [];
-    for (var item in original_friends.keys) {
-      if (original_friends[item] == '1') {
-        who_are_friends_already.add(item);
-        if (who_are_friends_string==''){
-          who_are_friends_string += "$item";
-        } else {
-          who_are_friends_string += ", $item";
-        }
-
-      }
-      else if (original_friends[item] == '-1'){
-        who_requested.add(item);
-        if (who_requested_string==''){
-          who_requested_string += "$item";
-        } else {
-          who_requested_string += ", $item";
-        }
-
-      }
-    }
-
-    friendIndexes =
-    {"friends":who_are_friends_string,
-      "requested": who_requested_string}; //print("${who_are_friends_string} / ${who_requested_string}");
-
-    print("${who_are_friends_string} / ${who_requested_string}");
-  }
-
-
-
-  select_friends_information() async {
-    // 다시 불러오기 위한 초기화
-    MyFriendsData = null;
-
-    await check_friend();
-    print(friendIndexes["friends"]);
-    Requested = friendIndexes["requested"];
-    print(Requested);
-
-    MyFriendsData = await select_request(
-        "SELECT user_id, user_name, user_email, reward, Ranking FROM DayCus.user_table where user_id in (${friendIndexes["friends"]}) order by Ranking;",
-        null,
-        true);
-    print(MyFriendsData);
-
-    //MyFriendsData = MyFriendsRes["friends"];
-  }
 
   all_in_one_init() async {
+
+    // 변수 초기화
+    MyFriendsData = null;RequestedList = null;FriendList = null;RequestFriend = null;
+    who_are_friends_string = '';who_requested_string = '';friendIndexes = null;
+    
     await select_friends_information();
     setState(() { waitingsuccess = true; });
     // await check_friend();
@@ -158,12 +171,14 @@ class _FriendPageState extends State<FriendPage>
                 tabs: [
 
                   Tab(
-                    text: '친구 추가하기',
+                    text: '친구의 미션',
                   ),
 
                   Tab(
-                    text: '친구의 미션',
+                    text: '친구 추가하기',
                   ),
+
+
                 ],
               ),
             ),
@@ -172,8 +187,10 @@ class _FriendPageState extends State<FriendPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  AddFriend(),
+
                   CheckFriend(),
+
+                  AddFriend(),
                 ],
               ),
             ),
@@ -184,6 +201,7 @@ class _FriendPageState extends State<FriendPage>
   }
 }
 
+// 사용자가 있는지 확인
 check_exist_user(String name, String id) async{
   try {
     var update_res = await http.post(Uri.parse(API.select), body: {
@@ -206,67 +224,106 @@ check_exist_user(String name, String id) async{
     Fluttertoast.showToast(msg: "업데이트를 진행하는 도중 문제가 발생했습니다.");
   }
 }
+
 getfriend_fromdb(String id) async {
-  try {
-    var select_res = await http.post(Uri.parse(API.select), body: {
-      'update_sql': "select friends from user_table where user_id = '$id' "
-    });
-    if (select_res.statusCode == 200 ) {
-      var resUser = jsonDecode(select_res.body);
-      var friendsdb = resUser['data'][0]['friends'];
-      if (friendsdb == null){
-        friendsdb = {};
-        return friendsdb;
-      }
-      return jsonDecode(friendsdb);
-    }
-  } on Exception catch (e) {
-    print("에러발생 : ${e}");
-    return false;
-    //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+  var resultDecode = null;
+  var result = await select_request(
+      "select friends from user_table where user_id = '$id' ",
+      null, false);
+
+  //print("result : ${result[0]['friends']}");
+
+  if (result[0]['friends']!=null){
+    resultDecode = jsonDecode(result[0]['friends']);
+  } else {
+    resultDecode = {};
   }
+
+  return resultDecode;
+
+  // try {
+  //   var select_res = await http.post(Uri.parse(API.select), body: {
+  //     'update_sql':
+  //   });
+  //   if (select_res.statusCode == 200 ) {
+  //     var resUser = jsonDecode(select_res.body);
+  //     var friendsdb = resUser['data'][0]['friends'];
+  //     if (friendsdb == null){
+  //       friendsdb = {};
+  //       return friendsdb;
+  //     }
+  //     return jsonDecode(friendsdb);
+  //   }
+  // } on Exception catch (e) {
+  //   print("에러발생 : ${e}");
+  //   return false;
+  //   //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+  // }
 }
 requesting_friend(String id) async {
-  try {
-    var original_friends = await getfriend_fromdb(id);
-    original_friends[user_data['user_id']] = '-1';
-    var update_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '$id'",
-    });
+  var original_friends = await getfriend_fromdb(id);
+  original_friends[user_data['user_id']] = '-1';
 
-    if (update_res.statusCode == 200 ) {
-      var resMission = jsonDecode(update_res.body);
-      if (resMission['success'] == true) {
-        print("성공~~~");
-      } else {
-        print("에러발생");
-      }
-    }
-  } on Exception catch (e) {
-    print("에러발생");
-    Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
-  }
+  bool result = await update_request(
+      "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '$id'",
+      null);
+
+  return result;
+
+  // try {
+  //
+  //
+  //   var update_res = await http.post(Uri.parse(API.update), body: {
+  //     'update_sql': ,
+  //   });
+  //
+  //   if (update_res.statusCode == 200 ) {
+  //     var resMission = jsonDecode(update_res.body);
+  //     if (resMission['success'] == true) {
+  //       print("성공~~~");
+  //     } else {
+  //       print("에러발생");
+  //     }
+  //   }
+  // } on Exception catch (e) {
+  //   print("에러발생");
+  //   Fluttertoast.showToast(msg: "정산을 신청하는 도중 문제가 발생했습니다.");
+  // }
 }
+
+
 add_friend_fromdb(String id) async {
-  try {
+
     var original_friends = await getfriend_fromdb(user_data['user_id']);
     original_friends[id] = '0';
-    var select_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'"
-    });
-    if (select_res.statusCode == 200 ) {
-      var resUser = jsonDecode(select_res.body);
-      if (resUser['success'] == true) {
-        Fluttertoast.showToast(msg: "친구 요청이 완료되었습니다 !");
-      }
-      else {
-        Fluttertoast.showToast(msg: "시도 중 오류가 발견되었습니다");
-      }
+    bool result = await update_request(
+        "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
+        "친구 요청이 완료되었습니다 !");
+
+    // 키보드 숨기기
+    if (result){
+      FocusManager.instance.primaryFocus?.unfocus();
     }
-  } on Exception catch (e) {
-    print("에러발생 : ${e}");
-    //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
-  }
+
+    return result;
+
+  // try {
+  //   var select_res = await http.post(Uri.parse(API.update), body: {
+  //     'update_sql':
+  //   });
+  //   if (select_res.statusCode == 200 ) {
+  //     var resUser = jsonDecode(select_res.body);
+  //     if (resUser['success'] == true) {
+  //       Fluttertoast.showToast(msg: "친구 요청이 완료되었습니다 !");
+  //     }
+  //     else {
+  //       Fluttertoast.showToast(msg: "시도 중 오류가 발견되었습니다");
+  //     }
+  //   }
+  // } on Exception catch (e) {
+  //   print("에러발생 : ${e}");
+  //   //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+  // }
 }
 
 accepted_friend(String id) async {
@@ -288,60 +345,63 @@ accepted_friend(String id) async {
   }
 }
 
-var names_from_id = [];
-preget_user_name_from_id(String id) async {
-  try {
-    var select_res = await http.post(Uri.parse(API.select), body: {
-      'update_sql': "select user_name from user_table where user_id = '$id'"
-    });
-    if (select_res.statusCode == 200 ) {
-      var resUser = jsonDecode(select_res.body);
-      if (resUser['success'] == true) {
-        return resUser['data'][0]['user_name'];
-      }
-      else {
-        return null;
-      }
-    }
-  } on Exception catch (e) {
-    print("에러발생 : ${e}");
-  }
-}
+// var names_from_id = [];
 
-get_user_name_from_id() async {
-  names_from_id = [];
-  for (var item in who_are_friends_already){
-    var gaboza = await preget_user_name_from_id(item);
-    names_from_id.add(gaboza);
-  }
-}
+// preget_user_name_from_id(String id) async {
+//   try {
+//     var select_res = await http.post(Uri.parse(API.select), body: {
+//       'update_sql': "select user_name from user_table where user_id = '$id'"
+//     });
+//     if (select_res.statusCode == 200 ) {
+//       var resUser = jsonDecode(select_res.body);
+//       if (resUser['success'] == true) {
+//         return resUser['data'][0]['user_name'];
+//       }
+//       else {
+//         return null;
+//       }
+//     }
+//   } on Exception catch (e) {
+//     print("에러발생 : ${e}");
+//   }
+// }
 
-var rewards_from_id = [];
-preget_reward_from_id(String id) async {
-  try {
-    var select_res = await http.post(Uri.parse(API.select), body: {
-      'update_sql': "select reward from user_table where user_id = '$id'"
-    });
-    if (select_res.statusCode == 200 ) {
-      var resUser = jsonDecode(select_res.body);
-      if (resUser['success'] == true) {
-        return resUser['data'][0]['reward'];
-      }
-      else {
-        return null;
-      }
-    }
-  } on Exception catch (e) {
-    print("에러발생 : ${e}");
-  }
-}
-get_reward_from_id() async {
-  rewards_from_id = [];
-  for (var item in who_are_friends_already){
-    var gaboza = await preget_reward_from_id(item);
-    rewards_from_id.add(gaboza);
-  }
-}
+//
+// get_user_name_from_id() async {
+//   names_from_id = [];
+//   for (var item in who_are_friends_already){
+//     var gaboza = await preget_user_name_from_id(item);
+//     names_from_id.add(gaboza);
+//   }
+// }
+
+// var rewards_from_id = [];
+// preget_reward_from_id(String id) async {
+//   try {
+//     var select_res = await http.post(Uri.parse(API.select), body: {
+//       'update_sql': "select reward from user_table where user_id = '$id'"
+//     });
+//     if (select_res.statusCode == 200 ) {
+//       var resUser = jsonDecode(select_res.body);
+//       if (resUser['success'] == true) {
+//         return resUser['data'][0]['reward'];
+//       }
+//       else {
+//         return null;
+//       }
+//     }
+//   } on Exception catch (e) {
+//     print("에러발생 : ${e}");
+//   }
+// }
+
+// get_reward_from_id() async {
+//   rewards_from_id = [];
+//   for (var item in who_are_friends_already){
+//     var gaboza = await preget_reward_from_id(item);
+//     rewards_from_id.add(gaboza);
+//   }
+// }
 
 
 var who_requested = [];
@@ -359,54 +419,45 @@ var who_are_friends_already = [];
 // }
 
 
+// 친구 요청 수락
+accept_particular_friend(String user_id) async {
 
-accept_particular_friend(int idx) async {
-  try {
-    await accepted_friend(who_requested[idx]);
-    original_friends[who_requested[idx]] = '1';
-    var update_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
-    });
+    await accepted_friend(user_id);
+    original_friends[user_id] = '1';
 
-    if (update_res.statusCode == 200 ) {
-      var resMission = jsonDecode(update_res.body);
-      if (resMission['success'] == true) {
-        print("성공~~~");
-        Fluttertoast.showToast(msg: "성공적으로 친구 요청을 받았습니다!");
-      } else {
-        print("에러발생");
-      }
-    }
-  } on Exception catch (e) {
-    print("에러발생");
-    Fluttertoast.showToast(msg: "수락하는 도중 문제가 발생했습니다.");
-  }
+    bool result = await update_request(
+        "update user_table set friends = '${jsonEncode(
+            original_friends)}' where user_id = '${user_data['user_id']}'",
+        "친구 요청을 받았습니다");
+
+    return result;
 }
 
-accept_all_friend() async {
-  try {
-    for (var item in who_requested) {
-      await accepted_friend(item);
-      original_friends[item] = '1';
-    }
-    var update_res = await http.post(Uri.parse(API.update), body: {
-      'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
-    });
-
-    if (update_res.statusCode == 200 ) {
-      var resMission = jsonDecode(update_res.body);
-      if (resMission['success'] == true) {
-        print("성공~~~");
-        Fluttertoast.showToast(msg: "성공적으로 친구 요청을 받았습니다!");
-      } else {
-        print("에러발생");
-      }
-    }
-  } on Exception catch (e) {
-    print("에러발생");
-    Fluttertoast.showToast(msg: "수락하는 도중 문제가 발생했습니다.");
-  }
-}
+// 모든 친구 요청 수락
+// accept_all_friend() async {
+//   try {
+//     for (var item in who_requested) {
+//       await accepted_friend(item);
+//       original_friends[item] = '1';
+//     }
+//     var update_res = await http.post(Uri.parse(API.update), body: {
+//       'update_sql': "update user_table set friends = '${jsonEncode(original_friends)}' where user_id = '${user_data['user_id']}'",
+//     });
+//
+//     if (update_res.statusCode == 200 ) {
+//       var resMission = jsonDecode(update_res.body);
+//       if (resMission['success'] == true) {
+//         print("성공~~~");
+//         Fluttertoast.showToast(msg: "성공적으로 친구 요청을 받았습니다!");
+//       } else {
+//         print("에러발생");
+//       }
+//     }
+//   } on Exception catch (e) {
+//     print("에러발생");
+//     Fluttertoast.showToast(msg: "수락하는 도중 문제가 발생했습니다.");
+//   }
+// }
 
 
 class AddFriend extends StatefulWidget {
@@ -422,7 +473,7 @@ class _AddFriendState extends State<AddFriend> {
   @override
   Widget build(BuildContext context) {
 
-    int RequestedCnt = Requested==null ? 0 : Requested.length;
+    int RequestedCnt = (RequestFriend==null || RequestFriend==false) ? 0 : RequestFriend.length;
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -582,15 +633,21 @@ class _AddFriendState extends State<AddFriend> {
                               ),
 
                               onPressed: () {
-                                if (names_from_id.contains(checkCtrl.text.trim().split('@')[0]) == false) {
+                                if (FriendList.contains(checkCtrl.text.trim().split('@')[1]) == false) {
                                   add_friend_fromdb(checkCtrl.text.trim().split(
                                       '@')[1]);
                                   requesting_friend(checkCtrl.text.trim().split(
                                       '@')[1]);
+
                                 }
                                 else{
                                   Fluttertoast.showToast(msg: "이미 친구로 등록되어 있습니다.");
                                 }
+
+                                checkCtrl.clear();
+                                setState(() {
+                                  searched = false;
+                                });
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -757,7 +814,7 @@ class _AddFriendState extends State<AddFriend> {
                                                           child: FittedBox(
                                                             alignment: Alignment.center,
                                                             fit: BoxFit.contain,
-                                                            child: Text(Requested[index],
+                                                            child: Text("${RequestFriend[index]['user_name']}",
                                                                 style: TextStyle(
                                                                   fontSize: 16.sp,
                                                                   fontFamily: 'korean',
@@ -780,9 +837,30 @@ class _AddFriendState extends State<AddFriend> {
                                                                 fontSize: 18.sp),
                                                           ),
 
-                                                          onPressed: () {
-                                                            accept_particular_friend(index);
-                                                            showNotification(Requested[index]);
+                                                          onPressed: () async {
+                                                            bool success1 = false;
+                                                            print("요청 받는 친구의 id : ${RequestFriend[index]['user_id']}");
+                                                            success1 = await accept_particular_friend(RequestFriend[index]['user_id']);
+                                                            
+                                                            if (success1){
+                                                              // 알람 보내기
+                                                              showNotification(RequestFriend[index]['user_name']);
+                                                              
+                                                              setState(() {
+                                                                RequestFriend.removeAt(index);
+                                                              });
+                                                              // 수락 후 다시 데이터 불러오기
+                                                              MyFriendsData = null;RequestedList = null;FriendList = null;RequestFriend = null;
+                                                              who_are_friends_string = '';who_requested_string = '';friendIndexes=null;
+
+                                                              await select_friends_information();
+
+                                                               setState(() {
+
+                                                               });
+                                                            }
+
+
                                                           },
                                                           child: Row(
                                                             mainAxisAlignment: MainAxisAlignment
@@ -872,7 +950,7 @@ class _CheckFriendState extends State<CheckFriend> {
   @override
   Widget build(BuildContext context) {
 
-    int FriendCnt = MyFriendsData==null ? 0 : MyFriendsData.length;
+    int FriendCnt = (MyFriendsData==null || MyFriendsData==false) ? 0 : MyFriendsData.length;
 
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -880,10 +958,31 @@ class _CheckFriendState extends State<CheckFriend> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            if (FriendCnt!=0)
+            Padding(
+              padding: EdgeInsets.only(top: 16.h),
+              child: Text("※ 프로필 사진은 추후 업데이트에서 반영됩니다",
+                  style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),
+            ),
+
             Container(
               alignment: Alignment.center,
               padding: EdgeInsets.only(top: 20.h, left: 0, right: 0),
-              child: Wrap(
+              child: (FriendCnt==0)
+                  ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black), //default
+                              children: [
+                                TextSpan(text: '친구 추가하기', style: TextStyle(fontWeight: FontWeight.bold,)),
+                                TextSpan(text: ' 페이지에서 친구를 추가해 보세요 !'),
+                              ])
+                      ),
+                    ],
+                  )
+                  : Wrap(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(FriendCnt, (index) {
                   return InkWell(
@@ -911,7 +1010,9 @@ class _CheckFriendState extends State<CheckFriend> {
                             SizedBox(width: 4.w,),
                             CircleAvatar(
                               radius: 25.h,
-                              backgroundColor: Colors.grey,
+                              //backgroundColor: Colors.grey,
+                              backgroundImage: AssetImage("assets/image/non_profile.png",) ,
+
                             ),
                             Container(
                               width: 80.w,
