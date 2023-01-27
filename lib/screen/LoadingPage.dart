@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:store_redirect/store_redirect.dart';
 import 'dart:async';
 
 import '../backend/UpdateRequest.dart';
@@ -37,6 +38,39 @@ class _LoadingPageState extends State<LoadingPage> {
 
   bool _visible = false;
 
+  // show force update dialog
+
+  // show force update dialog
+  void showForceUpdateDialog(bool forceUpdate) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: Text(forceUpdate ? '업데이트가 필요' : '새로운 버전 출시'),
+              content: Text(forceUpdate ? '중요한 변경으로 인해 업데이트를 해야만 앱을 이용할 수 있어요.' : '업데이트를 하고 새로운 기능을 만나보세요.'),
+              actions: [
+                if (!forceUpdate)
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('나중에')),
+                TextButton(
+                    onPressed: () async {
+                      // Navigator.pop(context);
+                      // 앱 업데이트
+                      StoreRedirect.redirect(androidAppId: 'com.happycircuit.daycus',);
+                    },
+                    child: const Text('업데이트'))
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -55,6 +89,11 @@ class _LoadingPageState extends State<LoadingPage> {
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
     //Fluttertoast.showToast(msg: "init");
+    WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+        showForceUpdateDialog(true);
+      },
+    );
     LoginAsyncMethod(storage, context, false);
   }
 

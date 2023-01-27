@@ -169,7 +169,6 @@ afterLogin() async {
 
 
 
-
 // keep login - 유저 정보 들고오기
 LoginAsyncMethod(storage, BuildContext context, bool reload) async {
   //Fluttertoast.showToast(msg: "LoginAsyncMethod");

@@ -59,15 +59,14 @@ dependencies:
   shared_preferences:
   local_auth:
   admob_flutter:
-  firebase_messaging:
-  firebase_core:
   permission_handler:
-  firebase_auth:
   in_app_review: ^2.0.6
   device_info_plus:
   sound_stream:
   url_launcher:
   connectivity:
+  store_redirect:
+  google_mobile_ads: ^0.13.6
   like_button:
 
 

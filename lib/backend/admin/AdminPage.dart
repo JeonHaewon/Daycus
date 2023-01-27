@@ -9,6 +9,7 @@ import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,6 +32,47 @@ import 'package:daycus/screen/specificMissionPage/RecordingPage.dart';
 
 var imageFromDb;
 var admobBannerId = 'ca-app-pub-3339242274230109/7848999030';
+
+RewardedAd? _rewardedAd;
+_callRewardScreendAd() async {
+  await RewardedAd.load(
+      adUnitId: 'ca-app-pub-3940256099942544/5354046379',
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (RewardedAd ad) {
+          print('$ad loaded.');
+          print("여긴 됐는데?");
+          // Keep a reference to the ad so you can show it later.
+          _rewardedAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('RewardedAd failed to load: $error');
+        },
+      )
+  );
+
+  if (_rewardedAd == null){
+    print("엄...");
+  }
+
+  _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
+    onAdShowedFullScreenContent: (RewardedAd ad) =>
+        print('$ad onAdShowedFullScreenContent.'),
+    onAdDismissedFullScreenContent: (RewardedAd ad) {
+      print('$ad onAdDismissedFullScreenContent.');
+      ad.dispose();
+    },
+    onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+      print('$ad onAdFailedToShowFullScreenContent: $error');
+      ad.dispose();
+    },
+    onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
+  );
+  _rewardedAd?.show(onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
+    update_request("update user_table set reward = reward + 1 where user_email = '${user_data['user_email']}'", null);
+  });
+}
+
 _launchURL() async {
   const url = 'https://blog.naver.com/happy-circuit';
   if (await canLaunch(url)) {
@@ -57,7 +99,7 @@ get_no_data() async {
       imageFromDb = imagedb;
     }
   } on Exception catch (e) {
-    print("에러발생 : ${e}");
+    print("에러발생~~ : ${e}");
     return [];
     //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
   }
@@ -106,8 +148,6 @@ class _AdminScreenState extends State<AdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
 
     logout() async {
       // 유저 정보 삭제 - 어플 내
@@ -369,7 +409,7 @@ class _AdminScreenState extends State<AdminScreen> {
     remove_sql_image(String idx, String image) async {
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
-          'update_sql': "update do_mission_1 set ${idx} = 0 where do_id = (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('$image', '.', 1), '_', -1))",
+          'update_sql': "update do_mission set ${idx} = 0 where do_id = (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('$image', '.', 1), '_', -1))",
         });
 
         if (update_res.statusCode == 200 ) {
@@ -677,6 +717,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   onPressed: (){
                     
                   },
+              ),
+              AdminButton(
+                title: "리워드 광고 슛 !",
+                onPressed: (){
+                  _callRewardScreendAd();
+                },
               ),
               AdminButton(
                 title: "불러와봐",

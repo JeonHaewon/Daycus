@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -82,30 +80,42 @@ makeDate(hour, min, sec){
   }
 }
 
-// time_showNotification() async {
-//
-//   tz.initializeTimeZones();
-//
-//   var androidDetails = const AndroidNotificationDetails(
-//     '유니크한 알림 ID',
-//     '알림종류 설명',
-//     priority: Priority.high,
-//     importance: Importance.max,
-//     color: Color.fromARGB(255, 255, 0, 0)
-//   );
-//
-//   notifications.zonedSchedule(
-//       2,
-//       '제목2',
-//       '랭킹 업데이트가 반영되었습니다! 확인해보세요!',
-//       tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
-//       NotificationDetails(android: androidDetails),
-//       androidAllowWhileIdle: true,
-//       uiLocalNotificationDateInterpretation:
-//       UILocalNotificationDateInterpretation.absoluteTime,
-//       matchDateTimeComponents: DateTimeComponents.time
-//   );
-// }
+time_showNotification() async {
+
+  tz.initializeTimeZones();
+
+  var androidDetails = const AndroidNotificationDetails(
+    '유니크한 알림 ID',
+    '알림종류 설명',
+    priority: Priority.high,
+    importance: Importance.max,
+    color: Color.fromARGB(255, 255, 0, 0)
+  );
+
+  notifications.periodicallyShow(
+      2,
+      '오늘도 활기찬 하루를 Daycus와 시작해봅시다!',
+      '지금 앱에 접속하여 오늘의 미션을 확인해보세요!',
+      RepeatInterval.daily,
+      NotificationDetails(android: androidDetails,),
+      androidAllowWhileIdle: true
+  );
+
+  print("됐습니다!");
+
+  // notifications.zonedSchedule(
+  //     2,
+  //     '오늘 하루도 Daycus와 함께 시작해보실까요 !?',
+  //     '앱에 접속하여 오늘의 미션을 확인해보세요!',
+  //     tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
+  //     NotificationDetails(android: androidDetails),
+  //     androidAllowWhileIdle: true,
+  //     uiLocalNotificationDateInterpretation:
+  //     UILocalNotificationDateInterpretation.absoluteTime,
+  //     matchDateTimeComponents: DateTimeComponents.time
+  // );
+}
+
 // continue_showNotification() async {
 //
 //   var androidDetails = const AndroidNotificationDetails(

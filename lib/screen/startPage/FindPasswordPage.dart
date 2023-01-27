@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -16,10 +15,6 @@ var stored_email = '';
 final TextEditingController emailCtrl = TextEditingController();
 final TextEditingController codeCtrl = TextEditingController();
 
-Future<void> sendPasswordResetEmail(String email) async{
-  await FirebaseAuth.instance.setLanguageCode("kr");
-  await FirebaseAuth.instance.sendPasswordResetEmail(email:email);
-}
 
 making_new_code() {
   String random_num = '';
