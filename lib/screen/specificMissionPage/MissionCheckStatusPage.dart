@@ -444,182 +444,183 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                   // ),
 
 
-                  //0127 소셜기능
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      Row(
-                        children: [
-
-                          SizedBox(width: 10.w,),
-
-                          Container(
-                            padding: EdgeInsets.zero,
-                            child: DropdownButton<String>(
-                              value: _chosenValue,
-                              //elevation: 5,
-                              style: TextStyle(color: Colors.black),
-
-                              items: <String>[
-                                '친구공개',
-                                '비공개',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              hint: Text(
-                                "공개범위 선택",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onChanged: (String? value) {
-                                setState(() {
-                                  _chosenValue = value;
-                                });
-                              },
-                            ),
-                          ),
-
-                          SizedBox(width: 15.w,),
-
-                          Icon(Icons.favorite_sharp, color: Colors.red, size: 18.w,),
-                          SizedBox(width: 2.w,),
-                          Text("21",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.red) ),
-
-                        ],
-                      ),
-
-                      TextButton(
-                          onPressed: (){
-
-                            showDialog(context: context, builder: (BuildContext context) {
-                              return BackdropFilter(
-                                filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
-                                child: AlertDialog(
-                                  title: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("친구를 미션에 초대할 수 있습니다",style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                      InkWell(
-                                        onTap:(){Navigator.of(context).pop();},
-                                        child: Icon(Icons.clear),
-                                      )
-                                    ],
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-
-                                    children: [
-                                      Container(
-                                        width : 300.w,
-                                        height: 200.h,
-                                        child: Scrollbar(
-                                          controller: _scrollController,
-                                          isAlwaysShown: true,
-                                          thickness: 8,
-                                          radius: Radius.circular(10),
-                                          //scrollbarOrientation: ScrollbarOrientation.right,
-                                          child: NotificationListener<OverscrollIndicatorNotification>(
-                                            onNotification: (OverscrollIndicatorNotification overScroll) {
-                                              overScroll.disallowGlow();
-                                              return false;
-                                            },
-                                            child: SingleChildScrollView(
-                                              controller: _scrollController,
-                                              child: Column(
-                                                children: [
-
-
-
-
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.indigo[50],
-                                                      borderRadius: BorderRadius.circular(10),
-                                                    ),
-                                                    width : 300.w,
-                                                    height: 45.h,
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-
-                                                        SizedBox(width: 6.w,),
-
-                                                        Container(
-
-                                                          width: 110.w,
-                                                          child: FittedBox(
-                                                            fit: BoxFit.scaleDown,
-                                                            child:Text("초코하임프라페한잔주세요", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
-                                                          )
-                                                        ),
-
-                                                        Container(
-                                                            width: 50.w,
-                                                            child: FittedBox(
-                                                              fit: BoxFit.scaleDown,
-                                                              child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
-                                                            )
-                                                        ),
-
-                                                        ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(10)
-                                                            ),
-                                                            primary: Colors.indigo[600],
-                                                            onPrimary: Colors.white,
-                                                            minimumSize: Size(18.w, 28.h),
-                                                            textStyle: TextStyle(fontSize: 18.sp),
-                                                          ),
-
-                                                          onPressed: () {},
-                                                          child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-                                                              Text("초대하기",
-                                                                  style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
-                                                            ],
-                                                          ),
-                                                        ),
-
-                                                        SizedBox(width: 6.w,),
-
-                                                      ],
-                                                    ),
-                                                  ),
-
-
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              );
-                            });
-                          },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                          ),
-                          //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                          child: Text('친구와 함께하기',style: TextStyle(color: Colors.grey[700], fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,) ) ),
-
-                    ],
-                  ),
+                  //0127 소셜기능 - 친구와 함께하기
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //
+                  //     Row(
+                  //       children: [
+                  //
+                  //         SizedBox(width: 10.w,),
+                  //
+                  //         Container(
+                  //           padding: EdgeInsets.zero,
+                  //           child: DropdownButton<String>(
+                  //             value: _chosenValue,
+                  //             //elevation: 5,
+                  //             style: TextStyle(color: Colors.black),
+                  //
+                  //             items: <String>[
+                  //               '친구공개',
+                  //               '비공개',
+                  //             ].map<DropdownMenuItem<String>>((String value) {
+                  //               return DropdownMenuItem<String>(
+                  //                 value: value,
+                  //                 child: Text(value),
+                  //               );
+                  //             }).toList(),
+                  //             hint: Text(
+                  //               "공개범위 선택",
+                  //               style: TextStyle(
+                  //                   color: Colors.black,
+                  //                   fontSize: 14.sp,
+                  //                   fontWeight: FontWeight.w600),
+                  //             ),
+                  //             onChanged: (String? value) {
+                  //               setState(() {
+                  //                 _chosenValue = value;
+                  //               });
+                  //             },
+                  //           ),
+                  //         ),
+                  //
+                  //         SizedBox(width: 15.w,),
+                  //
+                  //         Icon(Icons.favorite_sharp, color: Colors.red, size: 18.w,),
+                  //         SizedBox(width: 2.w,),
+                  //         Text("21",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.red) ),
+                  //
+                  //       ],
+                  //     ),
+                  //
+                  //     TextButton(
+                  //         onPressed: (){
+                  //
+                  //           showDialog(context: context, builder: (BuildContext context) {
+                  //             return BackdropFilter(
+                  //               filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                  //               child: AlertDialog(
+                  //                 title: Row(
+                  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //                   children: [
+                  //                     Text("친구를 미션에 초대할 수 있습니다",style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  //                     InkWell(
+                  //                       onTap:(){Navigator.of(context).pop();},
+                  //                       child: Icon(Icons.clear),
+                  //                     )
+                  //                   ],
+                  //                 ),
+                  //                 content: Column(
+                  //                   mainAxisSize: MainAxisSize.min,
+                  //
+                  //                   children: [
+                  //                     Container(
+                  //                       width : 300.w,
+                  //                       height: 200.h,
+                  //                       child: Scrollbar(
+                  //                         controller: _scrollController,
+                  //                         isAlwaysShown: true,
+                  //                         thickness: 8,
+                  //                         radius: Radius.circular(10),
+                  //                         //scrollbarOrientation: ScrollbarOrientation.right,
+                  //                         child: NotificationListener<OverscrollIndicatorNotification>(
+                  //                           onNotification: (OverscrollIndicatorNotification overScroll) {
+                  //                             overScroll.disallowGlow();
+                  //                             return false;
+                  //                           },
+                  //                           child: SingleChildScrollView(
+                  //                             controller: _scrollController,
+                  //                             child: Column(
+                  //                               children: [
+                  //
+                  //
+                  //
+                  //
+                  //                                 Container(
+                  //                                   decoration: BoxDecoration(
+                  //                                     color: Colors.indigo[50],
+                  //                                     borderRadius: BorderRadius.circular(10),
+                  //                                   ),
+                  //                                   width : 300.w,
+                  //                                   height: 45.h,
+                  //                                   child: Row(
+                  //                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //                                     children: [
+                  //
+                  //                                       SizedBox(width: 6.w,),
+                  //
+                  //                                       Container(
+                  //
+                  //                                         width: 110.w,
+                  //                                         child: FittedBox(
+                  //                                           fit: BoxFit.scaleDown,
+                  //                                           child:Text("초코하임프라페한잔주세요", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
+                  //                                         )
+                  //                                       ),
+                  //
+                  //                                       Container(
+                  //                                           width: 50.w,
+                  //                                           child: FittedBox(
+                  //                                             fit: BoxFit.scaleDown,
+                  //                                             child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
+                  //                                           )
+                  //                                       ),
+                  //
+                  //                                       ElevatedButton(
+                  //                                         style: ElevatedButton.styleFrom(
+                  //                                           shape: RoundedRectangleBorder(
+                  //                                               borderRadius: BorderRadius.circular(10)
+                  //                                           ),
+                  //                                           primary: Colors.indigo[600],
+                  //                                           onPrimary: Colors.white,
+                  //                                           minimumSize: Size(18.w, 28.h),
+                  //                                           textStyle: TextStyle(fontSize: 18.sp),
+                  //                                         ),
+                  //
+                  //                                         onPressed: () {},
+                  //                                         child: Row(
+                  //                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //                                           children: [
+                  //                                             Text("초대하기",
+                  //                                                 style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
+                  //                                           ],
+                  //                                         ),
+                  //                                       ),
+                  //
+                  //                                       SizedBox(width: 6.w,),
+                  //
+                  //                                     ],
+                  //                                   ),
+                  //                                 ),
+                  //
+                  //
+                  //                               ],
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //
+                  //
+                  //                 shape: RoundedRectangleBorder(
+                  //                   borderRadius: BorderRadius.circular(10),
+                  //                 ),
+                  //               ),
+                  //             );
+                  //           });
+                  //         },
+                  //         style: TextButton.styleFrom(
+                  //           padding: EdgeInsets.zero,
+                  //         ),
+                  //         //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
+                  //         child: Text('친구와 함께하기',style: TextStyle(color: Colors.grey[700], fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,) )
+                  //     ),
+                  //
+                  //   ],
+                  // ),
 
 
                   SizedBox(height: 10.h,),

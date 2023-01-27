@@ -961,7 +961,7 @@ class _CheckFriendState extends State<CheckFriend> {
             if (FriendCnt!=0)
             Padding(
               padding: EdgeInsets.only(top: 16.h),
-              child: Text("※ 프로필 사진은 추후 업데이트에서 반영됩니다",
+              child: Text("※ 프로필 사진은 추후 업데이트에서 반영할 예정입니다",
                   style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),
             ),
 

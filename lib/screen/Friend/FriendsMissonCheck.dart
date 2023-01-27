@@ -158,37 +158,37 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
                         ],
                       ),
 
-                      //0127 소셜기능
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          primary: Colors.grey[700],
-                          onPrimary: Colors.white,
-                          minimumSize: Size(18.w, 28.h),
-                          textStyle: TextStyle(fontSize: 18.sp),
-                        ),
-
-                        onPressed: () async {
-                          PopPage(
-                            "친구 삭제", context,
-                            Text("삭제하시겠습니까?"),
-                            "예",
-                            "아니요",
-                                () async {
-
-                            }, null,
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("친구 삭제",
-                                style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
-                          ],
-                        ),
-                      ),
+                      //0127 소셜기능 - 친구 삭제
+                      // ElevatedButton(
+                      //   style: ElevatedButton.styleFrom(
+                      //     shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(10)
+                      //     ),
+                      //     primary: Colors.grey[700],
+                      //     onPrimary: Colors.white,
+                      //     minimumSize: Size(18.w, 28.h),
+                      //     textStyle: TextStyle(fontSize: 18.sp),
+                      //   ),
+                      //
+                      //   onPressed: () async {
+                      //     PopPage(
+                      //       "친구 삭제", context,
+                      //       Text("삭제하시겠습니까?"),
+                      //       "예",
+                      //       "아니요",
+                      //           () async {
+                      //
+                      //       }, null,
+                      //     );
+                      //   },
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text("친구 삭제",
+                      //           style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
+                      //     ],
+                      //   ),
+                      // ),
 
                     ],
                   ),
@@ -365,31 +365,31 @@ class FriendMissionButton extends StatelessWidget {
 
 
 
-                          //0127 소셜기능
-                          LikeButton(
-                            onTap: onLikeButtonTapped,
-                            size: 20.w,
-                            likeBuilder: (bool isLiked) {
-                              return Icon(
-                                Icons.favorite,
-                                size: 20.w,
-                                color: isLiked ? Colors.red : Colors.grey,
-                              );
-                            },
-                            likeCount: 10,
-                            countBuilder: (int? count, bool isLiked, String text) {
-                              var color = isLiked? Colors.red : Colors.grey;
-                              Widget result;
-                              if(count == 0) {
-                                result = Text("like", style: TextStyle(color: color),);
-                              }
-                              else {
-                                result = Text(text, style: TextStyle(color: color),);
-                                return result;
-                              }
-                            },
-
-                          ),
+                          //0127 소셜기능 - 좋아요
+                          // LikeButton(
+                          //   onTap: onLikeButtonTapped,
+                          //   size: 20.w,
+                          //   likeBuilder: (bool isLiked) {
+                          //     return Icon(
+                          //       Icons.favorite,
+                          //       size: 20.w,
+                          //       color: isLiked ? Colors.red : Colors.grey,
+                          //     );
+                          //   },
+                          //   likeCount: 10,
+                          //   countBuilder: (int? count, bool isLiked, String text) {
+                          //     var color = isLiked? Colors.red : Colors.grey;
+                          //     Widget result;
+                          //     if(count == 0) {
+                          //       result = Text("like", style: TextStyle(color: color),);
+                          //     }
+                          //     else {
+                          //       result = Text(text, style: TextStyle(color: color),);
+                          //       return result;
+                          //     }
+                          //   },
+                          //
+                          // ),
 
                           SizedBox(height: 4.h,),
 

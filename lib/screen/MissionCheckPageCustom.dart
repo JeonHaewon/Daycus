@@ -64,38 +64,38 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
 
             SizedBox(width: 12.w,),
 
-            //0127 소셜기능
-            Container(
-              padding: EdgeInsets.zero,
-              child: DropdownButton<String>(
-                value: _chosenValue,
-                //elevation: 5,
-                style: TextStyle(color: Colors.black),
-
-                items: <String>[
-                  '일부공개',
-                  '친구공개',
-                  '비공개',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                hint: Text(
-                  "공개범위 선택",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600),
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    _chosenValue = value;
-                  });
-                },
-              ),
-            ),
+            //0127 소셜기능 - 하임 : 설정으로 이동시켜야할 것 같음
+            // Container(
+            //   padding: EdgeInsets.zero,
+            //   child: DropdownButton<String>(
+            //     value: _chosenValue,
+            //     //elevation: 5,
+            //     style: TextStyle(color: Colors.black),
+            //
+            //     items: <String>[
+            //       '일부공개',
+            //       '친구공개',
+            //       '비공개',
+            //     ].map<DropdownMenuItem<String>>((String value) {
+            //       return DropdownMenuItem<String>(
+            //         value: value,
+            //         child: Text(value),
+            //       );
+            //     }).toList(),
+            //     hint: Text(
+            //       "공개범위 선택",
+            //       style: TextStyle(
+            //           color: Colors.black,
+            //           fontSize: 14.sp,
+            //           fontWeight: FontWeight.w600),
+            //     ),
+            //     onChanged: (String? value) {
+            //       setState(() {
+            //         _chosenValue = value;
+            //       });
+            //     },
+            //   ),
+            // ),
 
           ],
         ),
