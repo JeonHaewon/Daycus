@@ -388,8 +388,8 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                               children: [
                                 TextSpan(text: '${widget.title}', style: TextStyle(fontWeight: FontWeight.bold, )),
                                 TextSpan(text: ' 미션에 '),
-                                TextSpan(text: '${rewardCtrl.text=='' ? '0' : double.parse(rewardCtrl.text).toStringAsFixed(1)}', style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.happyblue)),
-                                TextSpan(text: "${rewardName}를 투자하시겠습니까?"),
+                                TextSpan(text: '${rewardCtrl.text=='' ? '0' : double.parse(rewardCtrl.text).toStringAsFixed(1)}${rewardName}', style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.happyblue)),
+                                TextSpan(text: "를 투자하시겠습니까?"),
                               ])
                       ),
                        "미션 시작", "취소",

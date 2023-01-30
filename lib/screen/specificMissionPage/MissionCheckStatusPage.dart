@@ -674,11 +674,18 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                                 
                                 SizedBox(height: 15.h,),
-                                Text("2. 미션에 알맞은 사진을 올려주세요!",
+                                Text(widget.mission_data['notice']==null
+                                    ? "2. 미션에 알맞은 사진을 올려주세요!"
+                                    : "2. " + (widget.mission_data['notice'].split("\n")[0]).toString(),
                                     style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
                                 SizedBox(height: 3.h,),
-                                Text("${widget.mission_data['content']}",
+                                if (widget.mission_data['notice']!=null)
+                                Text("${(widget.mission_data['notice'].split("\n")[1]).toString()}",
                                     style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                if (widget.mission_data['notice']==null)
+                                  Text("${widget.mission_data['content']}",
+                                      style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
                                 if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
                                   Column(
