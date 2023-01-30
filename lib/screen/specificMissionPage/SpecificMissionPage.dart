@@ -88,7 +88,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
   _asyncMethod() async {
 
     rewardPercent = double.parse(widget.rewardPercent);
-    _basicText = "${init_reward*(rewardPercent)/100} ${rewardName}";
+    _basicText = "${init_reward*(rewardPercent)/100+14} ${rewardName}";
     _rewardCalculResert = _basicText;
 
     String now_time = await NowTime("yyyyMMdd");
@@ -129,7 +129,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
 
     double rewardPercent = double.parse(widget.rewardPercent);
 
-    List rules_list = widget.rules.split("\\n");
+    List rules_list = widget.rules.split("/");
     int rules_list_cnt = rules_list.length;
 
 
@@ -303,7 +303,7 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                     ),
                   ),
                   SizedBox(height: 8.h,),
-                  Text('자신이 걸 ${rewardName}를 입력하세요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
+                  Text('자신이 투자할 ${rewardName}를 입력하세요',style: TextStyle(fontSize: 15.sp, fontFamily: 'korean') ),
                   SizedBox(height: 15.h,),
 
                 ],
@@ -388,20 +388,40 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
               padding: EdgeInsets.fromLTRB(228.w, 5.h, 0, 0),
               child: Column(
                 children: [
-                  Text('예상 ${rewardName} 증가율 : 150%',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
+                  Text('※ 투자 ${rewardName}의 150% + 14 (2주) ',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: AppColor.happyblue) ),
                 ],
               ),
             ),
 
 
             Padding(
-              padding: EdgeInsets.fromLTRB(25.w, 6.h, 0, 0),
+              padding: EdgeInsets.fromLTRB(25.w, 10.h, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('※ 한 미션에 걸 수 있는 최대 ${rewardName}는 ${limit_bet_reward}${rewardName}입니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                  RichText(
+                      text: TextSpan(
+                          style: TextStyle(color: Colors.black), //default
+                          children: [
+                            TextSpan(text: '※ 한 미션에 투자할 수 있는 최대 ${rewardName}는 ',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                            TextSpan(text: '\"${limit_bet_reward}${rewardName}\"', style: TextStyle(fontSize: 11.sp, fontFamily: 'korean', color: AppColor.happyblue, ) ),
+                            TextSpan(text: ' 입니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                          ])
+                  ),
+                  //Text('※ 한 미션에 투자할 수 있는 최대 ${rewardName}는 ${limit_bet_reward}${rewardName}입니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
 
-                  Text('※ 미션 성공시 14${rewardName}를 추가로 지급합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                  RichText(
+                      text: TextSpan(
+                          style: TextStyle(color: Colors.black), //default
+                          children: [
+                            TextSpan(text: '※ 미션 실패시 ',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                            TextSpan(text: '\"(투자한 ${rewardName}/2 + 미션 진행률 x 14) ${rewardName}\"', style: TextStyle(fontSize: 11.sp, fontFamily: 'korean', color: AppColor.happyblue, ) ),
+                            TextSpan(text: '를 반환합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                          ])
+                  ),
+
+                  //Text('※ 미션 실패시 (투자한 ${rewardName}/2 + 미션 진행률 x 14) ${rewardName}를 반환합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
+                  //Text('※ 미션 성공시 14${rewardName}를 추가로 지급합니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean') ),
                 ],
               ),
             ),
@@ -486,15 +506,47 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              widget.rules.split("\\n")[index],
-                              style: TextStyle(fontSize: 16.sp, fontFamily: 'korean',) ),
-                          
-                          // 맨 마지막 SizedBox는 빼기
-                          if (index < rules_list_cnt-1)
-                            SizedBox(height: 5.h,),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (rules_list_cnt > 1)
+                              Text('${index+1}.  ', style: TextStyle(fontWeight: FontWeight.bold),),
+                              SizedBox(
+                                width: 330.w,
+                                  child: Text('${rules_list[index]}')),
+                            ],
+                          ),
+
+                          SizedBox(height: 5.h,),
+
+                          // RichText(
+                          //   overflow: TextOverflow.ellipsis,
+                          //   maxLines: 1,
+                          //   text: TextSpan(
+                          //       style: TextStyle(color: Colors.black), //default
+                          //       children: [
+                          //         if (rules_list_cnt >1)
+                          //         TextSpan(text: '${index+1}. '),
+                          //         TextSpan(text: '${rules_list[index]}'),
+                          //       ])
+                          //
+                          // ),
                         ],
                       );
+                      // return Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     Text(
+                      //         widget.rules.split("\\n")[index],
+                      //         style: TextStyle(fontSize: 16.sp, fontFamily: 'korean',) ),
+                      //
+                      //     // 맨 마지막 SizedBox는 빼기
+                      //     if (index < rules_list_cnt-1)
+                      //       SizedBox(height: 5.h,),
+                      //   ],
+                      // );
                     },
 
                   ),
@@ -569,7 +621,7 @@ _rewardCalcul(String? money, double percent, String basicText){
         return "최대를 초과했습니다";
       }
       // 소숫점 몇쨋자리 이런 기준이 필요함.
-      return "${money_int*(percent)/100} ${rewardName}";
+      return "${money_int*(percent)/100+14} ${rewardName}";
     }catch(e){
       print(e);
       return basicText;

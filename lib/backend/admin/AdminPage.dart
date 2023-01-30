@@ -1,6 +1,7 @@
 
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/backend/admin/MissionModify.dart';
 import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/backend/admin/imageDownload.dart';
@@ -738,6 +739,15 @@ class _AdminScreenState extends State<AdminScreen> {
                     await remove_sql_image(changing_idx, item);
                   }
                 }
+              ),
+
+              AdminButton(
+                  title: "미션 수정하기",
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => MissionModify()));
+                  },
               ),
 
 

@@ -25,6 +25,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  // 진행중인 작업창에 띄워놓으면 해당 title로 뜰 수 있다
 
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       designSize: Size(412, 892),
       builder: (context, child) {
         return MaterialApp(
-          title: 'First Method',
+          title: 'DayCus',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,

@@ -9,6 +9,7 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/temHomePage.dart';
+import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,6 +62,66 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // 참여할 때 로딩 되도록 하기
+    participateMission() async {
+      // 꼭 await해야하는거랑 안해야하는거 구분해서 수정하기
+      // 참여자수 늘리는건 굳이 안해도 되므로, 로딩기능이 추가되면 await에서 빼기 !
+
+      // 참여 미션 등록하기
+      bool success2 = false;
+      bool success1 = await missionParticipate(widget.mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
+      //print("gggg");
+      if (success1) {
+        success2 = await minus_reward(
+            rewardCtrl.text.trim() == ''
+                ? '0'
+                : rewardCtrl.text);
+      }
+      // 참여 유저 업데이트
+      // 이건 잘 됨.
+      // await missionUserUpdate(mission_id);
+
+      // 이것도 어플 상에서 UI 업데이트 구현하고, 네트워크는 백그라운드상에서 구현
+      // 로딩 시 네트워크로 구현해도 될듯.
+
+      // 백그라운
+      // 이후에 변경된 미션만 다시 불러오는 것도 좋을듯.
+      // missionImport();
+      // importMissionByCategory();
+      // userDataImport();
+      // doMissionSave();
+      if (success1 && success2)
+      {
+        // 진행중인 미션 목록 불러오기
+        await doMissionImport();
+
+        await userLogin(user_data['user_email'],
+            user_data['password'], true);
+        await afterLogin();
+
+        // 평균 리워드 업로드
+        update_request(
+            "with count_table as (select mission_id as mission_id, avg(bet_reward) as average from do_mission group by mission_id) UPDATE count_table A INNER JOIN missions B ON A.mission_id = B.mission_id SET B.average = A.average;",
+            null);
+
+        update_request("call update_ranking();", null);
+        // 레벨 업데이트
+        update_request(
+            "call update_level5('${user_data['user_email']}');",
+            null);
+
+        // 돌아가면 홈으로 이동.
+        controller.currentBottomNavItemIndex.value = 0;
+
+        // 페이지 다 닫고 이동
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => TemHomePage()),
+                (route) => false);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -315,63 +376,29 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
               height: 70.h,
               width: 412.w,
               child:TextButton(onPressed: ()  async {
-                print("${user_data['reward']} and ${user_data['reward'].runtimeType}");
+                //print("${user_data['reward']} and ${user_data['reward'].runtimeType}");
                 if (_formKey.currentState!.validate()) {
-                  // 꼭 await해야하는거랑 안해야하는거 구분해서 수정하기
-                  // 참여자수 늘리는건 굳이 안해도 되므로, 로딩기능이 추가되면 await에서 빼기 !
 
-                  // 참여 미션 등록하기
-                  bool success2 = false;
-                  bool success1 = await missionParticipate(widget.mission_id, user_data['user_email'], rewardCtrl.text.trim()=='' ? '0' : rewardCtrl.text.trim());
-                  //print("gggg");
-                  if (success1) {
-                        success2 = await minus_reward(
-                            rewardCtrl.text.trim() == ''
-                                ? '0'
-                                : rewardCtrl.text);
-                      }
-                      // 참여 유저 업데이트
-                  // 이건 잘 됨.
-                  // await missionUserUpdate(mission_id);
+                  // 참여할건지 마지막 확인
+                  PopPage(
+                      "미션 참여", context,
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black), //default
+                              children: [
+                                TextSpan(text: '${widget.title}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                                TextSpan(text: ' 미션에 '),
+                                TextSpan(text: '${rewardCtrl.text=='' ? '0' : double.parse(rewardCtrl.text).toStringAsFixed(1)}', style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.happyblue)),
+                                TextSpan(text: "${rewardName}를 투자하시겠습니까?"),
+                              ])
+                      ),
+                       "미션 시작", "취소",
+                      //onPressed
+                        (){
+                          participateMission();
+                        },
+                      null);
 
-                  // 이것도 어플 상에서 UI 업데이트 구현하고, 네트워크는 백그라운드상에서 구현
-                  // 로딩 시 네트워크로 구현해도 될듯.
-
-                  // 백그라운
-                  // 이후에 변경된 미션만 다시 불러오는 것도 좋을듯.
-                  // missionImport();
-                  // importMissionByCategory();
-                  // userDataImport();
-                  // doMissionSave();
-                  if (success1 && success2)
-                      {
-                        // 진행중인 미션 목록 불러오기
-                        await doMissionImport();
-
-                        await userLogin(user_data['user_email'],
-                            user_data['password'], true);
-                        await afterLogin();
-
-                        // 평균 리워드 업로드
-                        update_request(
-                            "with count_table as (select mission_id as mission_id, avg(bet_reward) as average from do_mission group by mission_id) UPDATE count_table A INNER JOIN missions B ON A.mission_id = B.mission_id SET B.average = A.average;",
-                            null);
-
-                        update_request("call update_ranking();", null);
-                        // 레벨 업데이트
-                        update_request(
-                            "call update_level5('${user_data['user_email']}');",
-                            null);
-
-                        // 돌아가면 홈으로 이동.
-                        controller.currentBottomNavItemIndex.value = 0;
-
-                        // 페이지 다 닫고 이동
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (_) => TemHomePage()),
-                            (route) => false);
-                      }
                     }
               }, child: Text('미션 시작하기',style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),

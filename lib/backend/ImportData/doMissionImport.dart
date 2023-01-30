@@ -9,7 +9,7 @@ import 'package:daycus/backend/UpdateRequest.dart';
 doMissionImport() async {
   // 성공적으로 불러와도 하고 있는 미션이 없는 경우 false가 나올 수 있음
   do_mission = await select_request(
-      "SELECT * FROM do_mission WHERE user_email = '${user_data['user_email']}'",
+      "SELECT * FROM do_mission WHERE user_email = '${user_data['user_email']}' order by do_id desc;",
       null, false);
 
   if (do_mission==false){
