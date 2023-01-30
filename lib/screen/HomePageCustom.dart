@@ -153,26 +153,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 }
             ),
 
+            if (user_data != null)
+              Padding(
+                padding: const EdgeInsets.all(9.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => PrivateSettings()),
+                    );
+                  },
 
-            Padding(
-              padding: const EdgeInsets.all(9.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => PrivateSettings()),
-                  );
-                },
+                  child: (profileImage==null)
+                  // 고른 프로필 사진이 없을 때
+                      ? (user_data['profile']==null || downloadProfileImage==null)
+                      ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
+                      : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
+                      : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
 
-                child: (profileImage==null)
-                // 고른 프로필 사진이 없을 때
-                    ? (user_data['profile']==null || downloadProfileImage==null)
-                    ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
-                    : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
-                    : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
-
+                ),
               ),
-            ),
 
 
 

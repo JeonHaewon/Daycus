@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
@@ -13,12 +15,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/startPage/FindPasswordPage.dart';
 import 'package:daycus/screen/startPage/SignupPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../backend/login/login.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'LoadingPage.dart';
 
 
+storing_logincode() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('${user_data['user_email']}_logincode', logincode);
+}
+
+get_logincode_pf() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('${user_data['user_email']}_logincode');
+}
+
+get_logincode_db(String name) async {
+  var login_code = await select_request("select login_ing from user_table where user_email = '$name'", null, true);
+  return login_code[0]['login_ing'];
+}
 
 class LoginPageCustom extends StatefulWidget {
   const LoginPageCustom({ Key? key }) : super(key: key);
@@ -166,19 +184,28 @@ class KeepLoginPage extends State<LoginPageCustom> {
                           passwordCtrl.text.trim(),
                           false,
                       );
+                      var dbcode = await get_logincode_db('${user_data['user_email']}');
+                      dbcode = (dbcode == '3' ? null : dbcode);
+                      var pfcode = await get_logincode_pf();
 
-                      if (user_data['login_ing'] == '1'){
-                        Fluttertoast.showToast(msg: "이미 다른 기기에서 로그인 되어있는 계정입니다.");
+                      print(dbcode);
+                      print(pfcode);
+
+                      if (dbcode != pfcode){
+                        print("로그인 하실?");
                       }
 
                       // - 로그인 성공
-                      else if ((is_login == true)&&(user_data['user_state']!='withdrawing')) {
+                      if ((is_login == true)&&(user_data['user_state']!='withdrawing')) {
                         keepLogin(
                             user_data['user_name'],
                             emailCtrl.text.trim(),
                             passwordCtrl.text.trim(),
                             storage);
                         await afterLogin();
+                        storing_logincode();
+                        update_request("update user_table set login_ing = '$logincode' where user_email = '${emailCtrl.text.trim()}'", null);
+
                         // 다 닫고 감.
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);

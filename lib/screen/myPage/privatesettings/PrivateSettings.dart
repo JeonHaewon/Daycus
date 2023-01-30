@@ -13,6 +13,7 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../backend/Api.dart';
 import '../../../backend/NowTime.dart';
 
@@ -61,9 +62,13 @@ class _PrivateSettingsState extends State<PrivateSettings> {
   @override
   Widget build(BuildContext context) {
 
-    logout() async {
+    logout(bool reload) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       // 유저 정보 삭제 - 어플 내
-      update_request("update user_table set login_ing = 0 where user_email = '${user_data['user_email']}'", null);
+      if (!reload){
+        update_request("update user_table set login_ing = '3' where user_email = '${user_data['user_email']}'", null);
+        prefs.remove('${user_data['user_email']}_logincode');
+      }
       user_data = null;
       all_missions = null;
       do_mission = null;
@@ -203,7 +208,7 @@ class _PrivateSettingsState extends State<PrivateSettings> {
                             Fluttertoast.showToast(msg: "정상적으로 로그아웃 되었습니다.");
                             // 로그인 유지 삭제 및 정보 삭제
                             // 백그라운드에서 진행.
-                            await logout();
+                            await logout(false);
                             checkUserState();
                             profileImage = null; downloadProfileImage = null; profileDegree = 0;
                           }, null,

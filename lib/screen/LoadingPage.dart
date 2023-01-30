@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
@@ -11,8 +13,15 @@ import 'dart:async';
 
 import '../backend/UpdateRequest.dart';
 
+var logincode = '1';
 
-
+making_login_code() {
+  String random_num = '';
+  for (int i = 0; i < 19; i++){
+    random_num += (Random().nextInt(9) + 1).toString();
+  }
+  logincode = random_num;
+}
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({Key? key}) : super(key: key);
@@ -94,6 +103,7 @@ class _LoadingPageState extends State<LoadingPage> {
         showForceUpdateDialog(true);
       },
     );
+    making_login_code();
     LoginAsyncMethod(storage, context, false);
   }
 
@@ -109,18 +119,6 @@ class _LoadingPageState extends State<LoadingPage> {
       print('로그인 중');
     }
   }
-
-  logout() async {
-    // 유저 정보 삭제 - 어플 내
-    update_request("update user_table set login_ing = 0 where user_email = '${user_data['user_email']}'", null);
-    user_data = null;
-    all_missions = null;
-    do_mission = null;
-
-    await storage.delete(key: 'login');
-  }
-
-
 
 
   @override
@@ -157,7 +155,7 @@ class _LoadingPageState extends State<LoadingPage> {
                       Fluttertoast.showToast(msg: "로그아웃 처리하였습니다");
                       // 로그인 유지 삭제 및 정보 삭제
                       // 백그라운드에서 진행.
-                      await logout();
+                      await logout(false);
                       checkUserState();
                       profileImage = null; downloadProfileImage = null; profileDegree = 0;
 

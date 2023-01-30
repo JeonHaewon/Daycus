@@ -34,16 +34,6 @@ class _WithdrawalState extends State<Withdrawal> {
   @override
   Widget build(BuildContext context) {
 
-    logout() async {
-      // 유저 정보 삭제 - 어플 내
-      user_data = null;
-      all_missions = null;
-      do_mission = null;
-      done_mission = null;
-
-      await storage.delete(key: 'login');
-    }
-
     checkUserState() async {
       userInfo = await storage.read(key: 'login');
       if (userInfo == null) {
@@ -69,7 +59,6 @@ class _WithdrawalState extends State<Withdrawal> {
           print("출력 : ${update_res.body}");
           var resLogin = jsonDecode(update_res.body);
           if (resLogin['success'] == true) {
-            logout();
             checkUserState();
             Fluttertoast.showToast(msg: "탈퇴가 완료되었습니다.\nDayCus는 당신의 갓생을 응원합니다.");
           } else {
