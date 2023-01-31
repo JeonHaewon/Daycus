@@ -387,6 +387,8 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
                   }
                 ),
 
+              SizedBox(height: 20.h,),
+
 
             ],
 

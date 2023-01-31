@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -77,7 +78,14 @@ class _RecordingPageState extends State<RecordingPage> {
   var replayList = [];
 
   void _play() async {
+
+    print("길이를 알아봅시다잉 : ${_micChunks.length}");
+
     await _player.start();
+
+
+    //print("${JsonEncoder(_micChunks)}");
+
 
     if (_micChunks.isNotEmpty) {
       for (var chunk in _micChunks) {

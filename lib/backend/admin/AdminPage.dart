@@ -4,6 +4,7 @@ import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/admin/MissionModify.dart';
 import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
+import 'package:daycus/backend/admin/RecordTest.dart';
 import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/backend/admin/importRanking.dart';
 import 'package:daycus/backend/admin/LoginPopup.dart';
@@ -766,6 +767,15 @@ class _AdminScreenState extends State<AdminScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => MissionModify()));
+                  },
+              ),
+
+              AdminButton(
+                  title: "녹음 미션 2",
+                  onPressed: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => RecordTest())
+                    );
                   },
               ),
 
