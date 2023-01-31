@@ -6,6 +6,8 @@ import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/backend/admin/importRanking.dart';
+import 'package:daycus/backend/admin/LoginPopup.dart';
+
 import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/material.dart';
@@ -744,10 +746,21 @@ class _AdminScreenState extends State<AdminScreen> {
               AdminButton(
                   title: "미션 수정하기",
                   onPressed: (){
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => MissionModify()));
                   },
+              ),
+
+              AdminButton(
+                title: "중복 로그인 팝업",
+                onPressed: (){
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoginPopup()));
+                },
               ),
 
 

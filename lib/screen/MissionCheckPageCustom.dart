@@ -62,7 +62,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
               ),
             ),
 
-            SizedBox(width: 12.w,),
+            SizedBox(width: 14.w,),
 
             //0127 소셜기능 - 하임 : 설정으로 이동시켜야할 것 같음
             // Container(
@@ -183,7 +183,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                             child: Column(
                               children: [
                                 Text("미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러야 포인트가 지급됩니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
-                                    style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.black) ),
+                                    style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.black), textAlign: TextAlign.center, ),
                                 SizedBox(height: 5.h,),
 
                                 Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",

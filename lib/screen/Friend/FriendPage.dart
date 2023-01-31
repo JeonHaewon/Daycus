@@ -575,6 +575,7 @@ class _AddFriendState extends State<AddFriend> {
                               ),
                             ),
                           ),
+
                           SizedBox(width: 8.w,),
 
                           IconButton(
