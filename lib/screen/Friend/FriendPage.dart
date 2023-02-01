@@ -634,7 +634,7 @@ class _AddFriendState extends State<AddFriend> {
                               ),
 
                               onPressed: () {
-                                if (FriendList.contains(checkCtrl.text.trim().split('@')[1]) == false) {
+                                if (FriendList == null || FriendList.contains(checkCtrl.text.trim().split('@')[1]) == false) {
                                   add_friend_fromdb(checkCtrl.text.trim().split(
                                       '@')[1]);
                                   requesting_friend(checkCtrl.text.trim().split(

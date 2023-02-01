@@ -16,6 +16,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'dart:convert';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,6 +36,7 @@ import 'package:daycus/screen/specificMissionPage/RecordingPage.dart';
 
 var imageFromDb;
 var admobBannerId = 'ca-app-pub-3339242274230109/7848999030';
+
 
 RewardedAd? _rewardedAd;
 _callRewardScreendAd() async {
@@ -147,6 +149,7 @@ class _AdminScreenState extends State<AdminScreen> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
+
 
 
   @override
@@ -609,6 +612,18 @@ class _AdminScreenState extends State<AdminScreen> {
                 onPressed: (){
                   update_user_count();
                   Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
+                },
+              ),
+              AdminButton(
+                title: "업뎃 확인",
+                onPressed: () async {
+                  final newVersion = NewVersionPlus(
+                    androidId: 'com.happycircuit.daycus',
+                  );
+                  basicStatusCheck(NewVersionPlus newVersion) {
+                    newVersion.showAlertIfNecessary(context: context);
+                  }
+                  basicStatusCheck(newVersion);
                 },
               ),
               // AdminButton(

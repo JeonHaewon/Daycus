@@ -4,6 +4,7 @@ import 'package:daycus/backend/ImportData/doMissionImport.dart';
 import 'package:daycus/backend/ImportData/importMissions.dart';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/backend/admin/LoginPopup.dart';
 import 'package:daycus/core/app_bottom.dart';
 import 'package:daycus/screen/CheckConnection.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
@@ -208,11 +209,7 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
       var pfcode = await get_logincode_pf();
 
       if (dbcode != pfcode){
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => LoginPageCustom()), (
-                route) => false);
-        await logout(true);
-        Fluttertoast.showToast(msg: "다른 기기에서 접속하여 강제 로그아웃됩니다.");
+        showLoginAlertDialog_two(context);
         return;
       }
 

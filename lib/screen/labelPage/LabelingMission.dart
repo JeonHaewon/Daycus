@@ -16,6 +16,9 @@ import 'dart:math';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/app_bottom.dart';
+import '../MyPageCustom.dart';
+
 var fromdb;
 int ccnt = 0;
 int button_clicked = 0;
@@ -112,7 +115,6 @@ class _LabelingMissionState extends State<LabelingMission> {
     else {
       real_cnt_data[widget.folder]!['${imageList[idx]['id']}'] = name;
     }
-    print(jsonEncode(real_cnt_data));
   }
 
   storing_json() async {
@@ -263,7 +265,8 @@ class _LabelingMissionState extends State<LabelingMission> {
             Text("현재 이 라벨링 미션은 불가합니다.\n다른 미션을 선택해주세요 !"),
             "확인", null,
                 (){
-              Navigator.pop(context); Navigator.pop(context);
+              Navigator.pop(context);
+              controller.currentBottomNavItemIndex.value = AppScreen.home;
             }, null
         );}
       else {
@@ -354,7 +357,6 @@ class _LabelingMissionState extends State<LabelingMission> {
                         children: [
                           Text("이번주 라벨링 횟수",style: TextStyle(color: Colors.black, fontSize: 10.sp), textAlign: TextAlign.center,),
                           Text("${ccnt.toString()} / 700",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
-
                         ],
                       )
                   ),
@@ -801,6 +803,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                               button_clicked += 1;
                               if (ccnt % 10 == 0){
                                 Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
+                                update_request("update user_table set reward = reward + 0.1 where user_email = '${user_data['user_email']}'", null);
                               }
                               if (index+1 >= imageListCnt){
                                 Navigator.of(context).pop();

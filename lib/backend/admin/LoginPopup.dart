@@ -3,6 +3,9 @@ import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../screen/LoginPageCustom.dart';
+import '../login/login.dart';
+
 
 class LoginPopup extends StatelessWidget {
   LoginPopup({Key? key}) : super(key: key);
@@ -73,7 +76,9 @@ void showLoginAlertDialog(BuildContext context) async {
               ),
 
               TextButton(
-                  onPressed: (){}, //다른 기기에서 로그아웃하고 로그인
+                  onPressed: (){
+
+                  }, //다른 기기에서 로그아웃하고 로그인
                   child: Text("확인", style: TextStyle(color: Colors.indigo),)
               ),
 
@@ -117,8 +122,11 @@ void showLoginAlertDialog_two(BuildContext context) async {
             children: [
               
               TextButton(
-                  onPressed: (){
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(builder: (_) => LoginPageCustom()), (
+                            route) => false);
+                    await logout(true);
                   }, //로그인페이지로
                   child: Text("확인", style: TextStyle(color: Colors.indigo),)
               ),

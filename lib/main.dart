@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,10 +11,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:http/http.dart' as http;
 
 FlutterLocalNotificationsPlugin fltNotification = FlutterLocalNotificationsPlugin();
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

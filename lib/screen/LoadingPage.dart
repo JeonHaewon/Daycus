@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:daycus/backend/UserDatabase.dart';
@@ -8,12 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:html/parser.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'dart:async';
+import 'package:http/http.dart' as http;
 
 import '../backend/UpdateRequest.dart';
+import '../main.dart';
 
 var logincode = '1';
+
 
 making_login_code() {
   String random_num = '';
@@ -83,7 +89,6 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-
     setState(() {
       Timer(
         const Duration(seconds: 3),

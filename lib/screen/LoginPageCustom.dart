@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:daycus/backend/NowTime.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/backend/admin/LoginPopup.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:daycus/screen/CheckConnection.dart';
 import 'package:daycus/screen/ReConnection.dart';
@@ -184,15 +185,13 @@ class KeepLoginPage extends State<LoginPageCustom> {
                           passwordCtrl.text.trim(),
                           false,
                       );
+
                       var dbcode = await get_logincode_db('${user_data['user_email']}');
                       dbcode = (dbcode == '3' ? null : dbcode);
                       var pfcode = await get_logincode_pf();
 
-                      print(dbcode);
-                      print(pfcode);
-
                       if (dbcode != pfcode){
-                        print("로그인 하실?");
+                        showLoginAlertDialog(context);
                       }
 
                       // - 로그인 성공

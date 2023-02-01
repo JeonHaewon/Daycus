@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:daycus/backend/UpdateRequest.dart';
@@ -162,36 +163,46 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
                         ),
 
                         //0127 소셜기능 - 친구 삭제
-                        // ElevatedButton(
-                        //   style: ElevatedButton.styleFrom(
-                        //     shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10)
-                        //     ),
-                        //     primary: Colors.grey[700],
-                        //     onPrimary: Colors.white,
-                        //     minimumSize: Size(18.w, 28.h),
-                        //     textStyle: TextStyle(fontSize: 18.sp),
-                        //   ),
-                        //
-                        //   onPressed: () async {
-                        //     PopPage(
-                        //       "친구 삭제", context,
-                        //       Text("삭제하시겠습니까?"),
-                        //       "예",
-                        //       "아니요",
-                        //           () async {
-                        //
-                        //       }, null,
-                        //     );
-                        //   },
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       Text("친구 삭제",
-                        //           style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
-                        //     ],
-                        //   ),
-                        // ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            primary: Colors.grey[700],
+                            onPrimary: Colors.white,
+                            minimumSize: Size(18.w, 28.h),
+                            textStyle: TextStyle(fontSize: 18.sp),
+                          ),
+
+                          onPressed: () async {
+                            PopPage(
+                              "친구 삭제", context,
+                              Text("삭제하시겠습니까?"),
+                              "예",
+                              "아니요",
+                                  () async {
+                                var fr = await select_request("select friends from user_table where user_email = '${widget.userData['user_email']}' ", null, true);
+                                var myfr = await select_request("select friends from user_table where user_email = '${user_data['user_email']}'",null,true);
+                                var fr2 = jsonDecode(fr[0]['friends']);
+                                var myfr2 = jsonDecode(myfr[0]['friends']);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                fr2.remove("${user_data['user_id']}");
+                                myfr2.remove("${widget.userData['user_id']}");
+                                await update_request("update user_table set friends = '${jsonEncode(fr2)}' where user_email = '${widget.userData['user_email']}'", null);
+                                await update_request("update user_table set friends = '${jsonEncode(myfr2)}' where user_email = '${user_data['user_email']}'", null);
+                              }, null,
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("친구 삭제",
+                                  style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
+                            ],
+                          ),
+                        ),
 
                       ],
                     ),
