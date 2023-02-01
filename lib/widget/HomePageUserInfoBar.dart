@@ -18,12 +18,13 @@ class HomePageUserInfoBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 360.w,
-      height: 55.h,
+      //height: 55.h,
       decoration: BoxDecoration(
         color: Colors.white60,
         borderRadius: BorderRadius.circular(10),
       ),
       margin: EdgeInsets.symmetric(horizontal: 30.w),
+      padding: EdgeInsets.only(top: 10.h, bottom: 10.h ),
       child: Row(
         children: [
           SizedBox(width: 20.w,),
@@ -31,7 +32,7 @@ class HomePageUserInfoBar extends StatelessWidget {
           // 나의 리워드
           Container(
             width: 80.w,
-            height: 30.h,
+            //height: 30.h,
             decoration: BoxDecoration(
               color: Colors.blueGrey,
               borderRadius: BorderRadius.circular(12),
@@ -41,7 +42,10 @@ class HomePageUserInfoBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
 
+                SizedBox(height: 8.h,),
                 Text(leftContent,style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: 'korean') ),
+                SizedBox(height: 8.h,),
+
               ],
             ),
           ),

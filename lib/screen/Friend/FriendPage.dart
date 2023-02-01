@@ -1024,20 +1024,44 @@ class _CheckFriendState extends State<CheckFriend> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
-                                    width: 70.w,
-                                    height: 25.h,
-                                    child: FittedBox(
-                                      alignment: Alignment.center,
-                                      fit: BoxFit.contain,
-                                      child: Text(MyFriendsData[index]['user_name'],
-                                          style: TextStyle(fontSize: 10.sp,
-                                            fontFamily: 'korean',
-                                            fontWeight: FontWeight.bold,)),
-                                    ),
+
+                                  // SizedBox(
+                                  //   width: 70.w,
+                                  //   height: 25.h,
+                                  //   child: FittedBox(
+                                  //     alignment: Alignment.center,
+                                  //     fit: BoxFit.contain,
+                                  //     child: Text(MyFriendsData[index]['user_name'],
+                                  //         style: TextStyle(fontSize: 10.sp,
+                                  //           fontFamily: 'korean',
+                                  //           fontWeight: FontWeight.bold,)),
+                                  //   ),
+                                  // ),
+
+                                  Container(
+                                    width: 80.w,
+                                    //height: 24.h,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: RichText(
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            text: TextSpan(
+                                              text:
+                                              MyFriendsData[index]['user_name'],
+                                              style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold,color: Colors.black),),
+                                          )
+                                        ),
+                                      ],
+                                    )
                                   ),
 
-                                  SizedBox(height: 3.h,),
+
+
+
+                                  SizedBox(height: 4.h,),
 
                                   SizedBox(
                                     width: 70.w,
@@ -1048,11 +1072,11 @@ class _CheckFriendState extends State<CheckFriend> {
                                       child: Row(
                                         children: [
                                           Icon(Icons.control_point_duplicate,
-                                            size: 14.w,
+                                            size: 12.w,
                                             color: AppColor.happyblue,),
                                           SizedBox(width: 3.w,),
                                           Text((double.parse(MyFriendsData[index]['reward'])).toStringAsFixed(1),
-                                              style: TextStyle(fontSize: 10.sp,
+                                              style: TextStyle(fontSize: 8.sp,
                                                 fontFamily: 'korean',
                                                 fontWeight: FontWeight.bold,
                                                 color: AppColor.happyblue,)),
@@ -1065,7 +1089,7 @@ class _CheckFriendState extends State<CheckFriend> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 4.w,),
+                            SizedBox(width: 1.w,),
                           ] : [],
                         ),
                       ),

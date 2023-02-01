@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(height: 25.h,),
-                                    Text("안녕하세요",style: TextStyle(fontSize: 30.sp, fontFamily: 'korean') ),
+                                    Text("안녕하세요",style: TextStyle(fontSize: 28.sp, fontFamily: 'korean') ),
                                     SizedBox(
                                       width: 170.w,
                                       height: 40.h,
@@ -364,7 +364,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                 padding: EdgeInsets.fromLTRB(0, 5.h, 0, 5.h),
                                 child: Container(
                                   width: 310.w,
-                                  height: 30.h,
+                                  //height: 30.h,
                                   decoration: BoxDecoration(
                                     color: Colors.blueGrey,
                                     borderRadius: BorderRadius.circular(12),
@@ -373,8 +373,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-
+                                      SizedBox(height: 8.h,),
                                       Text("주간랭킹",style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: 'korean') ),
+                                      SizedBox(height: 8.h,),
+
                                     ],
                                   ),
                                 ),
@@ -383,46 +385,49 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                               Container(
                                 width : 300.w,
-                                height: 20.h,
+                                //height: 20.h,
                                 decoration: BoxDecoration(
                                   color: Colors.blueGrey[100],
                                 ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 50.w,
-                                      alignment: Alignment.center,
-                                      child: Text("순위", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, )),
-                                    ),
-
-                                    SizedBox(width: 5.w,),
-
-                                    Container(
-                                      width: 135.w,
-                                      alignment: Alignment.center,
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child:Text("닉네임", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, ),),
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 50.w,
+                                        alignment: Alignment.center,
+                                        child: Text("순위", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, )),
                                       ),
-                                    ),
 
+                                      SizedBox(width: 5.w,),
 
-                                    Container(
-                                      width: 90.w,
-                                      alignment: Alignment.center,
-                                      child: FittedBox(
+                                      Container(
+                                        width: 135.w,
+                                        alignment: Alignment.center,
+                                        child: FittedBox(
                                           fit: BoxFit.scaleDown,
-                                          child:Row(
-                                            children: [
-
-                                              Text("${rewardName}", style: TextStyle( fontWeight: FontWeight.bold, fontSize: 9.sp,),),
-                                            ],
-                                          )
+                                          child:Text("닉네임", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp, ),),
+                                        ),
                                       ),
-                                    ),
 
-                                  ],
 
+                                      Container(
+                                        width: 90.w,
+                                        alignment: Alignment.center,
+                                        child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child:Row(
+                                              children: [
+
+                                                Text("${rewardName}", style: TextStyle( fontWeight: FontWeight.bold, fontSize: 9.sp,),),
+                                              ],
+                                            )
+                                        ),
+                                      ),
+
+                                    ],
+
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 3.h,),

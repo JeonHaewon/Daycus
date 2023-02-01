@@ -60,6 +60,9 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    String misson_cnt = MissionOfFriendCnt.toString();
+
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
@@ -76,143 +79,156 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 25.h, 0, 0),
           child: MissionOfFriendCnt==0
-                ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black), //default
-                            children: [
-                              TextSpan(text: '현재 '),
-                              TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
-                              TextSpan(text: '님이 진행 중인 미션이 없습니다'),
-                            ])
-                    ),
-                    //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
-                  ],
-                )
-                : Column(
-            children: [
-
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white
+            ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(color: Colors.black), //default
+                        children: [
+                          TextSpan(text: '현재 '),
+                          TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                          TextSpan(text: '님이 진행 중인 미션이 없습니다'),
+                        ])
                 ),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(50.w, 15.h, 50.w, 15.h),
+                //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
+              ],
+            )
+            : Column(
+              children: [
 
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(50.w, 15.h, 50.w, 15.h),
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+
+                            Row(
+                              children: [
+
+                                SizedBox(
+                                  width: 40.w,
+                                  height: 20.h,
+                                  child: FittedBox(
+                                    alignment: Alignment.centerLeft,
+                                    fit: BoxFit.contain,
+
+                                    child: Text('${widget.userData['Ranking']}위', style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  width: 160.w,
+                                  height: 24.h,
+                                  child: FittedBox(
+                                    alignment: Alignment.centerLeft,
+                                    fit: BoxFit.contain,
+
+                                    child: Text(widget.userData['user_name'], style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+
+
+
+                              ],
+                            ),
+
+
+                            SizedBox(height: 8.h,),
+
+                            SizedBox(
+                              width: 200.w,
+                              height: 16.h,
+                              child: FittedBox(
+                                alignment: Alignment.topLeft,
+                                fit: BoxFit.contain,
+
+                                child: Text(widget.userData['user_email'], style: TextStyle(color: Colors.black, )),
+                              ),
+                            ),
+
+
+
+                          ],
+                        ),
+
+                        //0127 소셜기능 - 친구 삭제
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(10)
+                        //     ),
+                        //     primary: Colors.grey[700],
+                        //     onPrimary: Colors.white,
+                        //     minimumSize: Size(18.w, 28.h),
+                        //     textStyle: TextStyle(fontSize: 18.sp),
+                        //   ),
+                        //
+                        //   onPressed: () async {
+                        //     PopPage(
+                        //       "친구 삭제", context,
+                        //       Text("삭제하시겠습니까?"),
+                        //       "예",
+                        //       "아니요",
+                        //           () async {
+                        //
+                        //       }, null,
+                        //     );
+                        //   },
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Text("친구 삭제",
+                        //           style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
+                        //     ],
+                        //   ),
+                        // ),
+
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20.h,),
+
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(42.w, 0, 42.w, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Row(
-                            children: [
-
-                              SizedBox(
-                                width: 40.w,
-                                height: 20.h,
-                                child: FittedBox(
-                                  alignment: Alignment.centerLeft,
-                                  fit: BoxFit.contain,
-
-                                  child: Text('${widget.userData['Ranking']}위', style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontWeight: FontWeight.bold)),
-                                ),
-                              ),
-
-                              SizedBox(
-                                width: 160.w,
-                                height: 24.h,
-                                child: FittedBox(
-                                  alignment: Alignment.centerLeft,
-                                  fit: BoxFit.contain,
-
-                                  child: Text(widget.userData['user_name'], style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
-                                ),
-                              ),
-
-
-
-                            ],
-                          ),
-
-
-                          SizedBox(height: 8.h,),
-
-                          SizedBox(
-                            width: 200.w,
-                            height: 16.h,
-                            child: FittedBox(
-                              alignment: Alignment.topLeft,
-                              fit: BoxFit.contain,
-
-                              child: Text(widget.userData['user_email'], style: TextStyle(color: Colors.black, )),
-                            ),
-                          ),
-
-
-
-                        ],
-                      ),
-
-                      //0127 소셜기능 - 친구 삭제
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(10)
-                      //     ),
-                      //     primary: Colors.grey[700],
-                      //     onPrimary: Colors.white,
-                      //     minimumSize: Size(18.w, 28.h),
-                      //     textStyle: TextStyle(fontSize: 18.sp),
-                      //   ),
-                      //
-                      //   onPressed: () async {
-                      //     PopPage(
-                      //       "친구 삭제", context,
-                      //       Text("삭제하시겠습니까?"),
-                      //       "예",
-                      //       "아니요",
-                      //           () async {
-                      //
-                      //       }, null,
-                      //     );
-                      //   },
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       Text("친구 삭제",
-                      //           style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
-                      //     ],
-                      //   ),
-                      // ),
+                      SizedBox(width: 5.w,),
+                      Text("${misson_cnt}개 미션 참여 중",style: TextStyle(color: Colors.grey[700],fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                     ],
                   ),
                 ),
-              ),
 
-              SizedBox(height: 20.h,),
+                SizedBox(height: 8.h,),
 
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount:MissionOfFriendCnt,
+                  itemBuilder: (_, index) {
 
+                    int _index = all_missions.indexWhere((all_data) => all_data['mission_id'] == MissionOfFriend[index]['mission_id']);
 
-              ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount:MissionOfFriendCnt,
-              itemBuilder: (_, index) {
-
-                int _index = all_missions.indexWhere((all_data) => all_data['mission_id'] == MissionOfFriend[index]['mission_id']);
-
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 10.h),
-                  child: FriendMissionButton(userData: widget.userData, doMission: MissionOfFriend[index], allMissionIndex:_index),
-                );
-              }
-              ),
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 10.h),
+                      child: FriendMissionButton(userData: widget.userData, doMission: MissionOfFriend[index], allMissionIndex:_index),
+                    );
+                  }
+                ),
 
 
             ],

@@ -210,7 +210,7 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
 
                                 Container(
                                   width: 385.w,
-                                  height: 20.h,
+                                  //height: 20.h,
                                   decoration: BoxDecoration(
                                     color: Colors.indigo[50],
                                     borderRadius: BorderRadius.circular(3),
@@ -220,7 +220,9 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
 
+                                      SizedBox(height: 4.h,),
                                       Text('미션 종료까지 ${widget.remainDate+1}일 남았습니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean', ) ),
+                                      SizedBox(height: 4.h,),
 
 
                                     ],
@@ -277,27 +279,40 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
 
                             Container(
                               width: 150.w,
-                              height: 25.h,
+                              //height: 25.h,
                               decoration: BoxDecoration(
                                 color: Colors.grey[300],
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: SizedBox(
-                                child:
-                                FittedBox(
-                                    alignment: Alignment.centerLeft,
-                                    fit: BoxFit.contain,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
 
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(width: 5.w,),
-                                        Text("나의 보유 ${rewardName} :  ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', ) ,textAlign: TextAlign.center,),
-                                        Text("${(double.parse(user_data['reward'])).toStringAsFixed(1)} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                                        SizedBox(width:7.w,),
-                                      ],
-                                    )
-                                ),
+                                children: [
+
+                                  SizedBox(height: 4.h,),
+
+                                  SizedBox(
+                                    child: FittedBox(
+                                        alignment: Alignment.centerLeft,
+                                        fit: BoxFit.contain,
+
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(width: 5.w,),
+                                            Text("나의 보유 ${rewardName} :  ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', ) ,textAlign: TextAlign.center,),
+                                            Text("${(double.parse(user_data['reward'])).toStringAsFixed(1)} ${rewardName}", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                                            SizedBox(width:7.w,),
+                                          ],
+                                        )
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 4.h,),
+
+
+                                ],
+
                               ),
                             ),
 
