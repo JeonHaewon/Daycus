@@ -571,7 +571,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                   width: 50.w,
                                                                   child: FittedBox(
                                                                     fit: BoxFit.scaleDown,
-                                                                    child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
+                                                                    child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,), //사용자코드
                                                                   )
                                                               ),
 
