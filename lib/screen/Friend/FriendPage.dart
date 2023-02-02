@@ -660,8 +660,6 @@ class _AddFriendState extends State<AddFriend> {
 
                             SizedBox(width: 4.w,),
 
-
-
                           ] : [Container()],
                         ),
                       ),

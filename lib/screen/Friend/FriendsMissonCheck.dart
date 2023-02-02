@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/PopPage.dart';
+import 'package:daycus/core/app_text.dart';
+
 import 'package:like_button/like_button.dart';
 
 
@@ -80,20 +82,29 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 25.h, 0, 0),
           child: MissionOfFriendCnt==0
-            ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RichText(
-                    text: TextSpan(
-                        style: TextStyle(color: Colors.black), //default
-                        children: [
-                          TextSpan(text: '현재 '),
-                          TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
-                          TextSpan(text: '님이 진행 중인 미션이 없습니다'),
-                        ])
-                ),
-                //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
-              ],
+            ? Column(
+                children: [
+
+
+
+
+                  SizedBox(height: 25.h,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black), //default
+                              children: [
+                                TextSpan(text: '현재 '),
+                                TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                                TextSpan(text: '님이 진행 중인 미션이 없습니다'),
+                              ])
+                      ),
+                      //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
+                    ],
+                  ),
+                ],
             )
             : Column(
               children: [
@@ -146,18 +157,31 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
 
                             SizedBox(height: 8.h,),
 
-                            SizedBox(
-                              width: 200.w,
-                              height: 16.h,
-                              child: FittedBox(
-                                alignment: Alignment.topLeft,
-                                fit: BoxFit.contain,
 
-                                child: Text(widget.userData['user_email'], style: TextStyle(color: Colors.black, )),
-                              ),
+                            Row(
+                              children: [
+
+                                SizedBox(width: 40.w,),
+
+                                Icon(Icons.control_point_duplicate,
+                                  size: 16.w,),
+
+                                SizedBox(width: 3.w,),
+
+
+                                SizedBox(
+                                  width: 160.w,
+                                  height: 18.h,
+                                  child: FittedBox(
+                                    alignment: Alignment.topLeft,
+                                    fit: BoxFit.contain,
+                                    child: Text((double.parse(widget.userData['reward'])).toStringAsFixed(1), style: TextStyle(color: Colors.black, )),
+                                  ),
+                                ),
+
+
+                              ],
                             ),
-
-
 
                           ],
                         ),
@@ -366,26 +390,73 @@ class FriendMissionButton extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
 
+                          Row(
+                            children: [
 
-                          Container(
-                              width: 240.w,
-                              //height: 28.h,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                      child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        text: TextSpan(
-                                          //text: title,
-                                            text: "${all_missions[allMissionIndex]['title']}",
-                                            style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                                      )
-                                  ),
-                                ],
-                              )
+                              Container(
+                                  width: 240.w,
+                                  //height: 28.h,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+
+                                      Container(
+                                          width: 190.w,
+                                          //height: 28.h,
+
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                  child: RichText(
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    text: TextSpan(
+                                                      //text: title,
+                                                        text: "${all_missions[allMissionIndex]['title']}",
+                                                        style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                                  )
+                                              ),
+
+
+                                            ],
+                                          )
+                                      ),
+
+
+                                      LikeButton(
+                                        onTap: onLikeButtonTapped,
+                                        size: 20.w,
+                                        likeBuilder: (bool isLiked) {
+                                          return Icon(
+                                            Icons.favorite,
+                                            size: 20.w,
+                                            color: isLiked ? Colors.red : Colors.grey,
+                                          );
+                                        },
+                                        //likeCount: 10,
+                                        countBuilder: (int? count, bool isLiked, String text) {
+                                          var color = isLiked? Colors.red : Colors.grey;
+                                          Widget result;
+                                          if(count == 0) {
+                                            result = Text("like", style: TextStyle(color: color),);
+                                          }
+                                          else {
+                                            result = Text(text, style: TextStyle(color: color),);
+                                            return result;
+                                          }
+                                        },
+                                      ),
+
+                                      SizedBox(width: 5.w,)
+
+                                    ],
+                                  )
+                              ),
+
+                            ],
                           ),
+
 
 
                           SizedBox(height: 3.h),
@@ -415,7 +486,6 @@ class FriendMissionButton extends StatelessWidget {
                           //       return result;
                           //     }
                           //   },
-                          //
                           // ),
 
                           SizedBox(height: 4.h,),
