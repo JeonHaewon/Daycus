@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -293,6 +292,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
   bool active = true;
   String exTitle = "접기";
+
   @override
   Widget build(BuildContext context) {
 
@@ -500,7 +500,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                               ),
                               onChanged: (String? value) {
                                 setState(() {
-                                  _chosenValue = value ;
+                                  _chosenValue = value;
                                 });
                               },
                             ),
@@ -763,16 +763,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
 
 
-
-
-
-
-
                   SizedBox(height: 10.h,),
 
-                  // 하임 : height 175.h > 155.w
-                  // 이거 휴대폰마다 다른지 확인 필요
-                  // 아마 가로길이로 다 설정했기 때문에 거의 맞을 것으로 예상 !
+
                   Container(
                     width: 500.w,
                     height: _height * 2 + 95.w,
