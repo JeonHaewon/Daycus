@@ -7,16 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/PopPage.dart';
-import 'package:daycus/core/app_text.dart';
-
 import 'package:like_button/like_button.dart';
 
 
-Future<bool> onLikeButtonTapped(bool isLiked) async{
-  //0127 소셜 기능
-
-  return !isLiked;
-}
+var LikeCount;
 
 class FriendMissionCheckPage extends StatefulWidget {
   FriendMissionCheckPage({
@@ -49,9 +43,10 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
     });
   }
 
+
   importFriendMissions(String userEmail) async {
     MissionOfFriend = await select_request(
-        "SELECT * FROM do_mission WHERE user_email = '${userEmail}'",
+        "SELECT * FROM do_mission WHERE user_email = '${userEmail}' and how = '친구공개'",
         null,
         false);
 
@@ -82,29 +77,20 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 25.h, 0, 0),
           child: MissionOfFriendCnt==0
-            ? Column(
-                children: [
-
-
-
-
-                  SizedBox(height: 25.h,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black), //default
-                              children: [
-                                TextSpan(text: '현재 '),
-                                TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
-                                TextSpan(text: '님이 진행 중인 미션이 없습니다'),
-                              ])
-                      ),
-                      //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
-                    ],
-                  ),
-                ],
+            ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(color: Colors.black), //default
+                        children: [
+                          TextSpan(text: '현재 '),
+                          TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                          TextSpan(text: '님이 진행 중인 미션이 없습니다'),
+                        ])
+                ),
+                //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
+              ],
             )
             : Column(
               children: [
@@ -280,7 +266,7 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
 
 
 
-class FriendMissionButton extends StatelessWidget {
+class FriendMissionButton extends StatefulWidget {
 
   FriendMissionButton({
     Key? key,
@@ -294,9 +280,67 @@ class FriendMissionButton extends StatelessWidget {
   final int allMissionIndex;
 
   @override
+  State<FriendMissionButton> createState() => _FriendMissionButtonState();
+}
+
+bool ImLiked = false;
+
+class _FriendMissionButtonState extends State<FriendMissionButton> {
+  var HowManyHeart = 0;
+
+  ImportHowManyHeart () {
+    HowManyHeart = (widget.doMission['heart']==null ? 0 : int.parse(widget.doMission['heart']));
+  }
+
+  ImportIfILiked () {
+    var chh = jsonDecode(widget.doMission['who_heart'] ?? {}.toString());
+    ImLiked = (chh['${user_data['user_id']}']!=null ? true : false);
+  }
+
+  void initState() {
+    super.initState();
+    ImportHowManyHeart();
+    ImportIfILiked();
+  }
+
+  void dispose() {
+    super.dispose();
+    if (int.parse(widget.doMission['heart'] ?? '0') != HowManyHeart) {
+      update_request(
+          "update do_mission set heart = '$HowManyHeart' where user_email = '${widget
+              .doMission['user_email']}' and mission_id = '${widget
+              .doMission['mission_id']}'", null);
+      var ChangeOnWhoHeart = jsonDecode(widget.doMission['who_heart'] ?? {}.toString());
+      if (ChangeOnWhoHeart['${user_data['user_id']}'] == null){
+        ChangeOnWhoHeart['${user_data['user_id']}'] = '1';
+      }
+      else{
+        ChangeOnWhoHeart.remove('${user_data['user_id']}');
+      }
+      update_request(
+          "update do_mission set who_heart = '${jsonEncode(ChangeOnWhoHeart)}' where user_email = '${widget
+              .doMission['user_email']}' and mission_id = '${widget
+              .doMission['mission_id']}'", null);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
 
-    String thumbnailImage = all_missions[allMissionIndex]['thumbnail'] ?? 'topimage1.png';
+    String thumbnailImage = all_missions[widget.allMissionIndex]['thumbnail'] ?? 'topimage1.png';
+
+    Future<bool> onLikeButtonTapped(bool isLiked) async {
+      //0127 소셜 기능
+      if (!isLiked){
+        HowManyHeart += 1;
+        print(HowManyHeart);
+      }
+      else{
+        HowManyHeart -= 1;
+        print(HowManyHeart);
+      }
+      return !isLiked;
+    }
 
     return InkWell(
       onTap: () {
@@ -413,7 +457,7 @@ class FriendMissionButton extends StatelessWidget {
                                                     maxLines: 1,
                                                     text: TextSpan(
                                                       //text: title,
-                                                        text: "${all_missions[allMissionIndex]['title']}",
+                                                        text: "${all_missions[widget.allMissionIndex]['title']}",
                                                         style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
                                                   )
                                               ),
@@ -464,29 +508,30 @@ class FriendMissionButton extends StatelessWidget {
 
 
                           //0127 소셜기능 - 좋아요
-                          // LikeButton(
-                          //   onTap: onLikeButtonTapped,
-                          //   size: 20.w,
-                          //   likeBuilder: (bool isLiked) {
-                          //     return Icon(
-                          //       Icons.favorite,
-                          //       size: 20.w,
-                          //       color: isLiked ? Colors.red : Colors.grey,
-                          //     );
-                          //   },
-                          //   likeCount: 10,
-                          //   countBuilder: (int? count, bool isLiked, String text) {
-                          //     var color = isLiked? Colors.red : Colors.grey;
-                          //     Widget result;
-                          //     if(count == 0) {
-                          //       result = Text("like", style: TextStyle(color: color),);
-                          //     }
-                          //     else {
-                          //       result = Text(text, style: TextStyle(color: color),);
-                          //       return result;
-                          //     }
-                          //   },
-                          // ),
+                          LikeButton(
+                            onTap: onLikeButtonTapped,
+                            size: 20.w,
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                Icons.favorite,
+                                size: 20.w,
+                                color: isLiked ? Colors.red : Colors.grey,
+                              );
+                            },
+                            likeCount: (widget.doMission['heart']==null ? 0 : int.parse(widget.doMission['heart'])),
+                            countBuilder: (int? count, bool isLiked, String text) {
+                              var color = isLiked? Colors.red : Colors.grey;
+                              Widget result;
+                              if(count == 0) {
+                                result = Text("like", style: TextStyle(color: color),);
+                              }
+                              else {
+                                result = Text(text, style: TextStyle(color: color),);
+                                return result;
+                              }
+                            },
+
+                          ),
 
                           SizedBox(height: 4.h,),
 
@@ -507,7 +552,7 @@ class FriendMissionButton extends StatelessWidget {
                                   ),
 
                                 Container(
-                                  width: (double.parse(doMission['percent']).w)*1.45,
+                                  width: (double.parse(widget.doMission['percent']).w)*1.45,
                                   //width: (100.w)*1.45,
                                   height: 8.h,
                                   decoration: BoxDecoration(
@@ -528,7 +573,7 @@ class FriendMissionButton extends StatelessWidget {
                                     children: [
                                       //Text(duration,style: TextStyle(color: AppColor.happyblue, fontSize: 12.sp, fontFamily: 'korean'), textAlign: TextAlign.end,),
                                       Text("진행률 ",style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
-                                      Text("${doMission['percent']}",style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
+                                      Text("${widget.doMission['percent']}",style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
                                       //Text(percent.toStringAsFixed(1),style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
                                       Text(" %    ",style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
                                     ],

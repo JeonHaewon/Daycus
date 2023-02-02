@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/nowingmission.dart';
-import 'package:daycus/screen/NoticePage.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/widget/NowNoMission.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
-import 'package:daycus/core/app_bottom.dart';
+
+import '../backend/UpdateRequest.dart';
 
 
 
@@ -31,6 +31,23 @@ class MissionCheckPage extends StatefulWidget {
 class _MissionCheckPageState extends State<MissionCheckPage> {
 
   String? _chosenValue;
+
+  ImportPublic() async {
+    var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
+    _chosenValue = chh[0]['public'] ?? "일부공개";
+  }
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ImportPublic();
+    });
+  }
+
+  void dispose() {
+    super.dispose();
+    update_request("update user_table set public = '$_chosenValue' where user_email = '${user_data['user_email']}'", null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,37 +82,37 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
             SizedBox(width: 14.w,),
 
             //0127 소셜기능 - 하임 : 설정으로 이동시켜야할 것 같음
-            // Container(
-            //   padding: EdgeInsets.zero,
-            //   child: DropdownButton<String>(
-            //     value: _chosenValue,
-            //     //elevation: 5,
-            //     style: TextStyle(color: Colors.black),
-            //
-            //     items: <String>[
-            //       '일부공개',
-            //       '친구공개',
-            //       '비공개',
-            //     ].map<DropdownMenuItem<String>>((String value) {
-            //       return DropdownMenuItem<String>(
-            //         value: value,
-            //         child: Text(value),
-            //       );
-            //     }).toList(),
-            //     hint: Text(
-            //       "공개범위 선택",
-            //       style: TextStyle(
-            //           color: Colors.black,
-            //           fontSize: 14.sp,
-            //           fontWeight: FontWeight.w600),
-            //     ),
-            //     onChanged: (String? value) {
-            //       setState(() {
-            //         _chosenValue = value;
-            //       });
-            //     },
-            //   ),
-            // ),
+            Container(
+              padding: EdgeInsets.zero,
+              child: DropdownButton<String>(
+                value: _chosenValue,
+                //elevation: 5,
+                style: TextStyle(color: Colors.black),
+
+                items: <String>[
+                  '일부공개',
+                  '친구공개',
+                  '비공개',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                hint: Text(
+                  "공개범위 선택",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600),
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    _chosenValue = value;
+                  });
+                },
+              ),
+            ),
 
           ],
         ),

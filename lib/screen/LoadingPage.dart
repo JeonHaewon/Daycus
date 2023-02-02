@@ -103,11 +103,13 @@ class _LoadingPageState extends State<LoadingPage> {
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // 페이지 빌드 후에 비동기로 콜백함수를 호출 : 처음에 위젯을 하나 생성후에 애니메이션을 재생
     //Fluttertoast.showToast(msg: "init");
-    WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-        showForceUpdateDialog(true);
-      },
-    );
+
+
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //       (_) {
+    //     showForceUpdateDialog(true);
+    //   },
+    // );
     making_login_code();
     LoginAsyncMethod(storage, context, false);
   }

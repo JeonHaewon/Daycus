@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -51,7 +52,22 @@ class MissionCheckStatusPage extends StatefulWidget {
 class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with WidgetsBindingObserver {
 
 
-  String? _chosenValue;
+  String? _chosenValue = "친구공개";
+  var _heart = 0;
+
+  importHowAndHeartMission() async {
+    var chh = await select_request("select how from do_mission where user_email = '${user_data['user_email']}' and mission_id = '${widget.mission_data['mission_id']}'", null, true);
+    _chosenValue = chh[0]['how'] ?? "친구공개";
+    var chh2 = await select_request("select heart from do_mission where user_email = '${user_data['user_email']}' and mission_id = '${widget.mission_data['mission_id']}'", null, true);
+    _heart = (chh2[0]['heart']==null ? 0 : int.parse(chh2[0]['heart']));
+  }
+
+  var isPublic;
+
+  ImportPublic() async {
+    var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
+    isPublic = chh[0]['public'] ?? "일부공개";
+  }
 
   // @override
   // void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -172,6 +188,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   void initState () {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
+      ImportPublic();
+      importHowAndHeartMission();
       _asyncMethod();
     });
     // 하임 0121 : 이거 뭐에요??
@@ -252,7 +270,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     update_request(
         "UPDATE do_mission SET percent='${(return_reward*100).toStringAsFixed(2)}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
         null);
-
+    update_request("update do_mission set how = '$_chosenValue' where mission_id = '${widget.mission_data['mission_id']}' and user_email = '${user_data['user_email']}'", null);
+    update_request("update do_mission set heart = '${_heart.toString()}' where mission_id = '${widget.mission_data['mission_id']}' and user_email = '${user_data['user_email']}'", null);
     // +0원 계산하기
     // if (widget.do_mission_data['bet_reward']=='0' && (15-mission_result >= toCertify-doneCnt)){
     //   return_reward = double.parse(mission_result.toString());}
@@ -274,7 +293,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
   bool active = true;
   String exTitle = "접기";
-
   @override
   Widget build(BuildContext context) {
 
@@ -454,9 +472,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                       Row(
                         children: [
-
                           SizedBox(width: 10.w,),
 
+                          if (isPublic != "비공개")
                           Container(
                             padding: EdgeInsets.zero,
                             child: DropdownButton<String>(
@@ -482,7 +500,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                               ),
                               onChanged: (String? value) {
                                 setState(() {
-                                  _chosenValue = value;
+                                  _chosenValue = value ;
                                 });
                               },
                             ),
@@ -492,8 +510,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                           Icon(Icons.favorite_sharp, color: Colors.red, size: 18.w,),
                           SizedBox(width: 2.w,),
-                          Text("21",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.red) ),
-
+                          Text(_heart.toString(),style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.red) ),
                         ],
                       ),
 
@@ -575,24 +592,28 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                   )
                                                               ),
 
-                                                              ElevatedButton(
-                                                                style: ElevatedButton.styleFrom(
-                                                                  shape: RoundedRectangleBorder(
-                                                                      borderRadius: BorderRadius.circular(10)
+                                                              SizedBox(
+                                                                width: 50.h,
+                                                                height: 30.w,
+                                                                child: ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(10)
+                                                                    ),
+                                                                    primary: Colors.indigo[600],
+                                                                    onPrimary: Colors.white,
+                                                                    //minimumSize: Size(18.w, 28.h),
+                                                                    textStyle: TextStyle(fontSize: 18.sp),
                                                                   ),
-                                                                  primary: Colors.indigo[600],
-                                                                  onPrimary: Colors.white,
-                                                                  minimumSize: Size(18.w, 28.h),
-                                                                  textStyle: TextStyle(fontSize: 18.sp),
-                                                                ),
 
-                                                                onPressed: () {},
-                                                                child: Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                  children: [
-                                                                    Text("초대하기",
-                                                                        style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
-                                                                  ],
+                                                                  onPressed: () {},
+                                                                  child: Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    children: [
+                                                                      Text("초대하기",
+                                                                          style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                               ),
 
@@ -639,93 +660,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                   SizedBox(height: 10.h,),
 
-                  // Container(
-                  //   width: 500.w,
-                  //   //height: 20.h,
-                  //   padding: EdgeInsets.fromLTRB(14.w, 0, 14.w,0),
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.white,
-                  //     borderRadius: BorderRadius.circular(10),
-                  //     boxShadow: [
-                  //       BoxShadow(
-                  //         color: Colors.grey.withOpacity(0.3),
-                  //         spreadRadius: 2,
-                  //         blurRadius: 5,
-                  //       ),
-                  //     ],
-                  //   ),
-                  //   child: Padding(
-                  //     padding: EdgeInsets.fromLTRB(14.w, 20.h, 14.w, 20.h),
-                  //     child: Column(
-                  //       children: [
-                  //
-                  //         //Text("주의사항",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                  //         Text("미션 안내",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                  //
-                  //         SizedBox(height: 15.h,),
-                  //
-                  //         Container(
-                  //           child: Column(
-                  //             crossAxisAlignment: CrossAxisAlignment.start,
-                  //             children: [
-                  //
-                  //               // Text("1. 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러주세요!",
-                  //               //     style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                  //               // SizedBox(height: 3.h,),
-                  //               // Text("15일차에 '정산하기' 버튼을 눌러 포인트를 지급받을 수 있습니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
-                  //               //     style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                  //               // SizedBox(height: 2.h,),
-                  //               // Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
-                  //               //     style: TextStyle(fontSize: 8.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                  //
-                  //
-                  //               //SizedBox(height: 15.h,),
-                  //               Text("1. 주 ${widget.mission_data['frequency']}회, ${widget.mission_data['term']}주간, 총 ${toCertify}회!",
-                  //                   style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                  //               SizedBox(height: 3.h,),
-                  //               Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
-                  //                   style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                  //
-                  //
-                  //               SizedBox(height: 15.h,),
-                  //               Text(widget.mission_data['notice']==null
-                  //                   ? "2. 미션에 알맞은 사진을 올려주세요!"
-                  //                   : "2. " + (widget.mission_data['notice'].split("\n")[0]).toString(),
-                  //                   style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                  //               SizedBox(height: 3.h,),
-                  //               if (widget.mission_data['notice']!=null)
-                  //               Text("${(widget.mission_data['notice'].split("\n")[1]).toString()}",
-                  //                   style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                  //
-                  //               if (widget.mission_data['notice']==null)
-                  //                 Text("${widget.mission_data['content']}",
-                  //                     style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                  //
-                  //               if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
-                  //                 Column(
-                  //                   crossAxisAlignment: CrossAxisAlignment.start,
-                  //                   children: [
-                  //                     SizedBox(height: 15.h,),
-                  //                     Text("3. 미션 인증 시 사람이 나오지 않게 주의해주세요!",
-                  //                         style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                  //                     SizedBox(height: 3.h,),
-                  //                     Text("개인정보 보호를 위해 본인을 포함하여 특정 인물을 나타낼 수 있는 모습이 사진에 나타나지 않도록 주의해주세요.",
-                  //                         style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                  //                   ],
-                  //                 ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-
-
-
-
                   Container(
+                    width: 500.w,
+                    //height: 20.h,
                     padding: EdgeInsets.fromLTRB(14.w, 0, 14.w,0),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -766,6 +703,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
 
+                                // Text("1. 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러주세요!",
+                                //     style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                // SizedBox(height: 3.h,),
+                                // Text("15일차에 '정산하기' 버튼을 눌러 포인트를 지급받을 수 있습니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
+                                //     style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                // SizedBox(height: 2.h,),
+                                // Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
+                                //     style: TextStyle(fontSize: 8.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
                                     Text("1. 주 ${widget.mission_data['frequency']}회, ${widget.mission_data['term']}주간, 총 ${toCertify}회!",
                                         style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
@@ -817,8 +762,17 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                   Text("미션기간",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: Colors.grey) ),
 
+
+
+
+
+
+
                   SizedBox(height: 10.h,),
 
+                  // 하임 : height 175.h > 155.w
+                  // 이거 휴대폰마다 다른지 확인 필요
+                  // 아마 가로길이로 다 설정했기 때문에 거의 맞을 것으로 예상 !
                   Container(
                     width: 500.w,
                     height: _height * 2 + 95.w,
@@ -939,9 +893,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                           ),
                                       ],
                                     );
+
                                   },
+
                                 ),
+
                               ),
+
 
                             ],
                           ),
@@ -1493,6 +1451,7 @@ class YetMissionBlock extends StatelessWidget {
             : Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
 }
+
 
 
 

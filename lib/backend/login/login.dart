@@ -14,8 +14,10 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/Api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../screen/Friend/FriendPage.dart';
 import '../../screen/LoadingPage.dart';
 import '../../screen/myPage/privatesettings/PrivateSettings.dart';
+import '../../widget/PopPage.dart';
 import 'KeepLogin.dart';
 import 'dart:convert';
 import 'package:daycus/backend/UserDatabase.dart';
@@ -215,15 +217,30 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
 
       // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
       await afterLogin();
+
       // 다 닫고 ㄱㄱ
 
       if (context != null && reload == false) {
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (_) => TemHomePage()), (
                 route) => false);
+        // PopPage(
+        //     "미션에 초대되었습니다!", context,
+        //     Column(
+        //       children: [
+        //         Text("초코하임님이 미션에 초대하셨습니다! 자세한 미션을 확인해보시겠습니까?")
+        //       ],
+        //     ), "미션 초대 받기!", "취소",
+        //     // 확인을 눌렀을 때
+        //         () async {
+        //     },
+        //     // 취소를 눌렀을 때
+        //     null,
+        // );
 
         // 홈페이지가 기본 !
         controller.currentBottomNavItemIndex.value = AppScreen.home;
+
       }
     }
      // 자동로그인이 필요하지 않은 경우
