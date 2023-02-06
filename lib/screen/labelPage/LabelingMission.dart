@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/app_bottom.dart';
 import '../MyPageCustom.dart';
+import 'LabelingEnd.dart';
 
 var fromdb;
 int ccnt = 0;
@@ -803,9 +804,10 @@ class _LabelingMissionState extends State<LabelingMission> {
                                 Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
                                 update_request("update user_table set reward = reward + 0.1 where user_email = '${user_data['user_email']}'", null);
                               }
-                              if (index+1 > imageListCnt){
-                                Navigator.of(context).pop();
-                                Fluttertoast.showToast(msg: "모든 이미지 라벨링이 끝이 났습니다 !");
+                              if (index+1 >= imageListCnt){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => LabelingEnd()));
                               }
                             },
                             child: Text(label_category_list[extraindex]),
@@ -832,8 +834,9 @@ class _LabelingMissionState extends State<LabelingMission> {
                                   Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
                                 }
                                 if (index+1 >= imageListCnt){
-                                  Navigator.of(context).pop();
-                                  Fluttertoast.showToast(msg: "모든 이미지 라벨링이 끝이 났습니다 !");
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => LabelingEnd()));
                                 }
                               },
                               child: Text(label_category_list[extraindex+1]),
