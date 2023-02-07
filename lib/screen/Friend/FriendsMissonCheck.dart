@@ -442,10 +442,12 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
     ImLiked = (chh['${user_data['user_id']}']!=null ? true : false);
   }
 
+
   void initState() {
     super.initState();
     ImportHowManyHeart();
     ImportIfILiked();
+
   }
 
   void dispose() {
@@ -472,7 +474,6 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
   @override
   Widget build(BuildContext context) {
 
-    int index_i = -1; int index_j = -1;
 
     String thumbnailImage = all_missions[widget.allMissionIndex]['thumbnail'] ?? 'topimage1.png';
 
@@ -489,6 +490,9 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
       return !isLiked;
     }
 
+    int index_i = -1; int index_j = -1;
+
+
     return InkWell(
       onTap: () {
         // 친구의 진행상황을 볼 수 있는 페이지 (추후 추가 예정)
@@ -503,7 +507,10 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
                 children: [
                   Text("${widget.userData['user_name']}님의 미션",style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
                   InkWell(
-                    onTap:(){Navigator.of(context).pop();},
+                    onTap:(){
+                      index_i = -1; index_j = -1;
+                      Navigator.of(context).pop();
+                      },
                     child: Icon(Icons.clear),
                   )
                 ],
