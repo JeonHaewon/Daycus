@@ -224,7 +224,6 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                                       Text('미션 종료까지 ${widget.remainDate+1}일 남았습니다',style: TextStyle(fontSize: 11.sp, fontFamily: 'korean', ) ),
                                       SizedBox(height: 4.h,),
 
-
                                     ],
                                   ),
                                 ),
@@ -310,15 +309,10 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
 
                                   SizedBox(height: 4.h,),
 
-
                                 ],
 
                               ),
                             ),
-
-
-
-
 
                           ],
                         ),
@@ -398,14 +392,14 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                   PopPage(
                       "미션 참여", context,
                       RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black), //default
-                              children: [
-                                TextSpan(text: '${widget.title}', style: TextStyle(fontWeight: FontWeight.bold, )),
-                                TextSpan(text: ' 미션에 '),
-                                TextSpan(text: '${rewardCtrl.text=='' ? '0' : double.parse(rewardCtrl.text).toStringAsFixed(1)}${rewardName}', style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.happyblue)),
-                                TextSpan(text: "를 투자하시겠습니까?"),
-                              ])
+                        text: TextSpan(
+                          style: TextStyle(color: Colors.black), //default
+                          children: [
+                            TextSpan(text: '${widget.title}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                            TextSpan(text: ' 미션에 '),
+                            TextSpan(text: '${rewardCtrl.text=='' ? '0' : double.parse(rewardCtrl.text).toStringAsFixed(1)}${rewardName}', style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.happyblue)),
+                            TextSpan(text: "를 투자하시겠습니까?"),
+                          ])
                       ),
                        "미션 시작", "취소",
                       //onPressed

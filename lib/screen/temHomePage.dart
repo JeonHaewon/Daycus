@@ -61,6 +61,8 @@ class _TemHomePageState extends State<TemHomePage> {
   // init state 넣으면 왠지 더 빨라짐.
   // 하지만 UI는 뜨지 않음.
 
+  final _pageViewController = PageController();
+
   final List<Widget> screens = const [
     HomePage(),
 
@@ -71,6 +73,12 @@ class _TemHomePageState extends State<TemHomePage> {
     LabelPage(),
     MyPage(),
   ];
+
+  @override
+  void dispose() {
+    _pageViewController.dispose();
+    super.dispose();
+  }
 
   // 항상 첫 화면 홈페이지가 되도록 바꾸어야할 듯
   @override

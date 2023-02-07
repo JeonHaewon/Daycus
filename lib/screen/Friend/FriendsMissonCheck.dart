@@ -8,6 +8,7 @@ import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/PopPage.dart';
 import 'package:like_button/like_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 var LikeCount;
@@ -30,6 +31,7 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
 
   var MissionOfFriend = null;
   int MissionOfFriendCnt = 0;
+
 
   @override
   void initState() {
@@ -77,20 +79,151 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 25.h, 0, 0),
           child: MissionOfFriendCnt==0
-            ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RichText(
-                    text: TextSpan(
-                        style: TextStyle(color: Colors.black), //default
+            ? Column(
+                children: [
+
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(50.w, 15.h, 50.w, 15.h),
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextSpan(text: '현재 '),
-                          TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
-                          TextSpan(text: '님이 진행 중인 미션이 없습니다'),
-                        ])
-                ),
-                //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
-              ],
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              Row(
+                                children: [
+
+                                  SizedBox(
+                                    width: 40.w,
+                                    height: 20.h,
+                                    child: FittedBox(
+                                      alignment: Alignment.centerLeft,
+                                      fit: BoxFit.contain,
+
+                                      child: Text('${widget.userData['Ranking']}위', style: TextStyle(color: AppColor.happyblue, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                                    ),
+                                  ),
+
+                                  SizedBox(
+                                    width: 160.w,
+                                    height: 24.h,
+                                    child: FittedBox(
+                                      alignment: Alignment.centerLeft,
+                                      fit: BoxFit.contain,
+
+                                      child: Text(widget.userData['user_name'], style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                                    ),
+                                  ),
+
+
+
+                                ],
+                              ),
+
+
+                              SizedBox(height: 8.h,),
+
+
+                              Row(
+                                children: [
+
+                                  SizedBox(width: 40.w,),
+
+                                  Icon(Icons.control_point_duplicate,
+                                    size: 16.w,),
+
+                                  SizedBox(width: 3.w,),
+
+
+                                  SizedBox(
+                                    width: 160.w,
+                                    height: 18.h,
+                                    child: FittedBox(
+                                      alignment: Alignment.topLeft,
+                                      fit: BoxFit.contain,
+                                      child: Text((double.parse(widget.userData['reward'])).toStringAsFixed(1), style: TextStyle(color: Colors.black, )),
+                                    ),
+                                  ),
+
+
+                                ],
+                              ),
+
+                            ],
+                          ),
+
+                          //0127 소셜기능 - 친구 삭제
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              primary: Colors.grey[700],
+                              onPrimary: Colors.white,
+                              minimumSize: Size(18.w, 28.h),
+                              textStyle: TextStyle(fontSize: 18.sp),
+                            ),
+
+                            onPressed: () async {
+                              PopPage(
+                                "친구 삭제", context,
+                                Text("삭제하시겠습니까?"),
+                                "예",
+                                "아니요",
+                                    () async {
+                                  var fr = await select_request("select friends from user_table where user_email = '${widget.userData['user_email']}' ", null, true);
+                                  var myfr = await select_request("select friends from user_table where user_email = '${user_data['user_email']}'",null,true);
+                                  var fr2 = jsonDecode(fr[0]['friends']);
+                                  var myfr2 = jsonDecode(myfr[0]['friends']);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  fr2.remove("${user_data['user_id']}");
+                                  myfr2.remove("${widget.userData['user_id']}");
+                                  await update_request("update user_table set friends = '${jsonEncode(fr2)}' where user_email = '${widget.userData['user_email']}'", null);
+                                  await update_request("update user_table set friends = '${jsonEncode(myfr2)}' where user_email = '${user_data['user_email']}'", null);
+                                }, null,
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("친구 삭제",
+                                    style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 25.h,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black), //default
+                              children: [
+                                TextSpan(text: '현재 '),
+                                TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                                TextSpan(text: '님이 진행 중인 미션이 없습니다'),
+                              ])
+                      ),
+                      //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
+                    ],
+                  ),
+                ],
+
             )
             : Column(
               children: [
@@ -288,6 +421,18 @@ bool ImLiked = false;
 class _FriendMissionButtonState extends State<FriendMissionButton> {
   var HowManyHeart = 0;
 
+  int doneCnt = 0;
+  int todayBlockCnt = 0;
+  bool is_load = false;
+
+  double _height = 35.w;
+  double _sp = 12.w;
+  double _width = 35.w;
+
+  double _betweenWidth = 3.w;
+
+
+
   ImportHowManyHeart () {
     HowManyHeart = (widget.doMission['heart']==null ? 0 : int.parse(widget.doMission['heart']));
   }
@@ -327,6 +472,8 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
   @override
   Widget build(BuildContext context) {
 
+    int index_i = -1; int index_j = -1;
+
     String thumbnailImage = all_missions[widget.allMissionIndex]['thumbnail'] ?? 'topimage1.png';
 
     Future<bool> onLikeButtonTapped(bool isLiked) async {
@@ -346,36 +493,100 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
       onTap: () {
         // 친구의 진행상황을 볼 수 있는 페이지 (추후 추가 예정)
         
-        // showDialog(context: context, builder: (BuildContext context) {
-        //
-        //   return BackdropFilter(
-        //     filter: ImageFilter.blur(sigmaY: 6, sigmaX: 6),
-        //     child: AlertDialog(
-        //       title: Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: [
-        //           Text("${userData['user_name']}님의 미션",style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-        //           InkWell(
-        //             onTap:(){Navigator.of(context).pop();},
-        //             child: Icon(Icons.clear),
-        //           )
-        //         ],
-        //       ),
-        //       content: Container(
-        //         height: 30.h,
-        //         width: 10.w,
-        //         decoration: BoxDecoration(
-        //             color: Colors.grey
-        //         ),
-        //
-        //       ),
-        //
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(10),
-        //       ),
-        //     ),
-        //   );
-        // });
+        showDialog(context: context, builder: (BuildContext context) {
+
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaY: 6, sigmaX: 6),
+            child: AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${widget.userData['user_name']}님의 미션",style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                  InkWell(
+                    onTap:(){Navigator.of(context).pop();},
+                    child: Icon(Icons.clear),
+                  )
+                ],
+              ),
+              content: Container(
+                height: _height * 2 + _betweenWidth,
+                width: _width * 7 + _betweenWidth * 7 + 30.w,
+                child: ListView.builder(
+                  itemCount: 2,
+                  itemBuilder: (_, ___){
+                    index_i += 1; index_j = -1;
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width:_width * 7 + _betweenWidth * (7-1),
+                              height: _height,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+
+                                  itemCount : 7,
+                                  itemBuilder: (_,__) {
+                                    index_j += 1;
+                                    int date = (index_i*7)+(index_j+1);
+
+                                    if (all_missions[widget.allMissionIndex]['d${date}']!=null){
+                                      doneCnt += 1 ;
+                                    }
+
+                                    return Row(
+                                      children: [
+                                        SizedBox(
+                                            height: _height,
+                                            width: _width,
+                                            child: all_missions[widget.allMissionIndex]['d${date}']==null
+
+                                            // 아직 인증하지 않은 날짜 블럭, date+1 = 오늘 카운트
+                                                ? (todayBlockCnt <= date ?
+                                            // 날짜가 지나지 않았으면
+                                            YetMissionBlock(i: index_i, j: index_j, sp: _sp,
+                                              )
+                                                : FailMissionBlock(sp: _sp)
+                                            )
+                                            // 인증 완료된 날짜 블럭
+                                                : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
+                                            )
+                                        ),
+                                        if(index_j != 7-1)
+                                          SizedBox(
+                                            width: _betweenWidth,
+                                          ),
+                                      ],
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
+
+                        if (index_i == 0)
+                          SizedBox(
+                            height: 3.w,
+
+                          ),
+                      ],
+                    );
+
+                  },
+
+                ),
+
+              ),
+
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          );
+        });
+
+
+
+
 
 
       },
@@ -604,3 +815,83 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
     );
   }
 }
+
+
+
+class FailMissionBlock extends StatelessWidget {
+  const FailMissionBlock({
+    Key? key,
+    required this.sp,
+    this.onTap,
+  }) : super(key: key);
+
+  final double sp;
+  final onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: (){},
+        // 원래 pink[40], red 이었음.
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[300])),
+        child: Text('X',style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+    );
+  }
+}
+
+class DoneMissionBlock extends StatelessWidget {
+  DoneMissionBlock({
+    Key? key,
+    required this.i,
+    required this.j,
+    required this.sp,
+    required this.date,
+
+  }) : super(key: key);
+
+  final int i;
+  final int j;
+  final double sp;
+  final int date;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () async {
+
+        },
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
+        child: Text(date.toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+    );
+  }
+}
+
+class YetMissionBlock extends StatelessWidget {
+  const YetMissionBlock({
+    Key? key,
+    required this.i,
+    required this.j,
+    required this.sp,
+
+  }) : super(key: key);
+
+  final int i;
+  final int j;
+  final double sp;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () async {
+
+        },
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[400])),
+        child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
+  }
+}
+
+
+
+

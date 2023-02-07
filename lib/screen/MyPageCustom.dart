@@ -293,8 +293,6 @@ class _MyPageState extends State<MyPage> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
 
-
-
                                             Container(
                                               alignment: Alignment.center,
                                               width: 42.w,
@@ -302,12 +300,10 @@ class _MyPageState extends State<MyPage> {
                                               child: FittedBox(
                                                 fit: BoxFit.scaleDown,
                                                 child: Text("갓생", style: TextStyle(fontFamily: 'korean', color: AppColor.happyblue,),),
-
                                               ),
                                             ),
 
                                             Container(
-
                                               alignment: Alignment.center,
                                               width: 42.w,
                                               height: 16.h,
@@ -328,7 +324,7 @@ class _MyPageState extends State<MyPage> {
                                   ),
 
 
-                                  SizedBox(width: 15.w,)
+                                  SizedBox(width: 15.w,),
                                 ],
                               ),
 
@@ -383,68 +379,69 @@ class _MyPageState extends State<MyPage> {
                                   onTap: () {
                                     controller.currentBottomNavItemIndex.value = AppScreen.missionCertify;
                                   },
-                                child : Container(
-                                  width: 170.w,
-                                  //height:200.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  margin: EdgeInsets.symmetric(horizontal: 2.w),
-                                  padding: EdgeInsets.only(left: 20.w, right: 5.w),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 10.h,),
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
+                                  child : Container(
+                                    width: 170.w,
+                                    //height:200.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    margin: EdgeInsets.symmetric(horizontal: 2.w),
+                                    padding: EdgeInsets.only(left: 20.w, right: 5.w),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 10.h,),
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
 
-                                            SizedBox(
-                                              width: 110.w,
-                                              height: 40.h,
-                                              child: FittedBox(
-                                                alignment: Alignment.centerLeft,
-                                                fit: BoxFit.contain,
-                                                child: Text("현재 미션 현황",
-                                                    style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)  ),
+                                              SizedBox(
+                                                width: 110.w,
+                                                height: 40.h,
+                                                child: FittedBox(
+                                                  alignment: Alignment.centerLeft,
+                                                  fit: BoxFit.contain,
+                                                  child: Text("현재 미션 현황",
+                                                      style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold)  ),
+                                                ),
                                               ),
-                                            ),
 
-                                            //Text("현재 미션 참여현황",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                              //Text("현재 미션 참여현황",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
-                                            // 회원가입 날짜로부터
-                                            //Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 13.sp, fontFamily: 'korean') ),
+                                              // 회원가입 날짜로부터
+                                              //Text("최근 ${print_during()}",style: TextStyle(color: Colors.grey,fontSize: 13.sp, fontFamily: 'korean') ),
 
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
 
-                                      SizedBox(height: 12.h,),
+                                        SizedBox(height: 12.h,),
 
-                                      ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0], initialValue: _isInitialValue,),
+                                        ParticipateBar( title: "건강", cnt: cnt2, graphWidth: GraphWidth[0], initialValue: _isInitialValue,),
 
-                                      SizedBox(height: 8.h,),
+                                        SizedBox(height: 8.h,),
 
-                                      ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1], initialValue: _isInitialValue,),
+                                        ParticipateBar( title: "공부", cnt: cnt2, graphWidth: GraphWidth[1], initialValue: _isInitialValue,),
 
-                                      SizedBox(height: 8.h,),
+                                        SizedBox(height: 8.h,),
 
-                                      ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2], initialValue: _isInitialValue,),
+                                        ParticipateBar( title: "운동", cnt: cnt2, graphWidth: GraphWidth[2], initialValue: _isInitialValue,),
 
-                                      SizedBox(height: 8.h,),
+                                        SizedBox(height: 8.h,),
 
-                                      ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3], initialValue: _isInitialValue,),
+                                        ParticipateBar( title: "생활", cnt: cnt2, graphWidth: GraphWidth[3], initialValue: _isInitialValue,),
 
-                                      SizedBox(height: 8.h,),
+                                        SizedBox(height: 8.h,),
 
-                                      ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4], initialValue: _isInitialValue,),
+                                        ParticipateBar( title: "취미", cnt: cnt2, graphWidth: GraphWidth[4], initialValue: _isInitialValue,),
 
-                                      SizedBox(height: 20.h,),
+                                        SizedBox(height: 20.h,),
 
-                                    ],
-                                  ),
-                                )), // 현재 참여
+                                      ],
+                                    ),
+                                  )
+                                ), // 현재 참여
 
                               Container(
                                 width: 170.w,
@@ -503,8 +500,6 @@ class _MyPageState extends State<MyPage> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-
-
 
                                               //Text("갓생", style: TextStyle(fontSize: 10, fontFamily: 'korean', color: AppColor.happyblue,),),
 
@@ -605,7 +600,6 @@ class _MyPageState extends State<MyPage> {
                           SizedBox(height: 15.h,),
 
 
-
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -661,6 +655,8 @@ class _MyPageState extends State<MyPage> {
                           ),
 
                           SizedBox(height: 25.h,),
+
+
 
                           Container(
                             width: 400.w,
@@ -754,15 +750,12 @@ class _MyPageState extends State<MyPage> {
                                         ),
                                       ),
 
-
                                     ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-
-
 
                         ],
                       ),
@@ -808,25 +801,28 @@ class MyPageInformation extends StatelessWidget {
 
           SizedBox(width: 20.w,),
 
-          Container(
-            width: 90.w,
-            height: 30.h,
-            decoration: BoxDecoration(
-              color: AppColor.grey1,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(title,style: TextStyle(color: Colors.blue, fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-              ],
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 12.h, 0, 12.h),
+            child: Container(
+              width: 90.w,
+              //height: 30.h,
+              decoration: BoxDecoration(
+                color: AppColor.grey1,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(title,style: TextStyle(color: Colors.blue, fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                ],
+              ),
             ),
           ),
 
 
           SizedBox(width: 30.w,),
           // 가운데 정렬?
-          Text(content,style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),  ),
+          Text(content,style: TextStyle(color: AppColor.happyblue, fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold),),
         ],
       ),
     );

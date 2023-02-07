@@ -124,7 +124,6 @@ class _WithdrawalState extends State<Withdrawal2> {
 
                               Container(
                                 padding: EdgeInsets.fromLTRB(8.w, 10.h, 7.w, 15.h),
-
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
 
@@ -136,7 +135,6 @@ class _WithdrawalState extends State<Withdrawal2> {
 
                                 ),
                               ),
-
 
                             ],
                           ),
@@ -178,13 +176,6 @@ class _WithdrawalState extends State<Withdrawal2> {
                             ],
                           ),
                         ),
-
-
-
-
-    
-
-
                       ],
                     ),
                   ),
@@ -215,7 +206,6 @@ class _WithdrawalState extends State<Withdrawal2> {
                               },);
                           }
                           // 탈퇴와 취소 반대로
-
                         },
 
                         child: Container(
@@ -230,8 +220,7 @@ class _WithdrawalState extends State<Withdrawal2> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text("회원탈퇴",
-                                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )
-                              ),
+                                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )),
                             ],
                           ),
                         ),
@@ -253,8 +242,7 @@ class _WithdrawalState extends State<Withdrawal2> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text("취소",
-                                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )
-                              ),
+                                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'korean', )),
                             ],
                           ),
                         ),

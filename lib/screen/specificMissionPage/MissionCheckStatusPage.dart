@@ -431,8 +431,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                     ],
                   ),
-                  //SizedBox(height: 15.h,),
-
 
 
                   //해원 0109_원래 안내 페이지
@@ -475,38 +473,44 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                           SizedBox(width: 10.w,),
 
                           if (isPublic != "비공개")
-                          Container(
-                            padding: EdgeInsets.zero,
-                            child: DropdownButton<String>(
-                              value: _chosenValue,
-                              //elevation: 5,
-                              style: TextStyle(color: Colors.black),
+                          Row(
+                            children: [
+                              Container(
 
-                              items: <String>[
-                                '친구공개',
-                                '비공개',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              hint: Text(
-                                "공개범위 선택",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w600),
+                                padding: EdgeInsets.zero,
+                                child: DropdownButton<String>(
+                                  value: _chosenValue,
+                                  //elevation: 5,
+                                  style: TextStyle(color: Colors.black),
+
+                                  items: <String>[
+                                    '친구공개',
+                                    '비공개',
+                                  ].map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  hint: Text(
+                                    "공개범위 선택",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _chosenValue = value;
+                                    });
+                                  },
+                                ),
                               ),
-                              onChanged: (String? value) {
-                                setState(() {
-                                  _chosenValue = value;
-                                });
-                              },
-                            ),
+
+                              SizedBox(width: 15.w,),
+                            ],
                           ),
 
-                          SizedBox(width: 15.w,),
 
                           Icon(Icons.favorite_sharp, color: Colors.red, size: 18.w,),
                           SizedBox(width: 2.w,),
@@ -593,27 +597,21 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                               ),
 
                                                               SizedBox(
-                                                                width: 50.h,
-                                                                height: 30.w,
+                                                                width: 65.h,
+                                                                height: 25.w,
                                                                 child: ElevatedButton(
                                                                   style: ElevatedButton.styleFrom(
+                                                                    padding: EdgeInsets.zero,
                                                                     shape: RoundedRectangleBorder(
                                                                         borderRadius: BorderRadius.circular(10)
                                                                     ),
                                                                     primary: Colors.indigo[600],
                                                                     onPrimary: Colors.white,
                                                                     //minimumSize: Size(18.w, 28.h),
-                                                                    textStyle: TextStyle(fontSize: 18.sp),
                                                                   ),
 
                                                                   onPressed: () {},
-                                                                  child: Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                    children: [
-                                                                      Text("초대하기",
-                                                                          style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
-                                                                    ],
-                                                                  ),
+                                                                  child: Text("초대하기", style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
                                                                 ),
                                                               ),
 

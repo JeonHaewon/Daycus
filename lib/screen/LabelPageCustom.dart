@@ -50,4 +50,3 @@ class _LabelPageState extends State<LabelPage> {
   }
 }
 
-

@@ -78,7 +78,7 @@ Future<dynamic> NotSeeWeek(BuildContext context, do_mission_data, mission_data, 
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: Colors.white,
-
+                        borderRadius: BorderRadius.only(bottomLeft:Radius.circular(4))
                         //borderRadius: BorderRadius.circular(4),
                       ),
                       child:  Text("일주일간 보지 않기",
@@ -103,6 +103,7 @@ Future<dynamic> NotSeeWeek(BuildContext context, do_mission_data, mission_data, 
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: Colors.white,
+                        borderRadius: BorderRadius.only(bottomRight:Radius.circular(4))
 
                         //borderRadius: BorderRadius.circular(4),
                       ),
