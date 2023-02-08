@@ -71,6 +71,7 @@ dependencies:
   package_info_plus:
   new_version_plus:
   html:
+  provider:
 
 
 dev_dependencies:
