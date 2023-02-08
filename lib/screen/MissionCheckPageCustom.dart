@@ -16,6 +16,8 @@ import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import '../backend/UpdateRequest.dart';
 
 
+bool waiting = false;
+
 
 
 class MissionCheckPage extends StatefulWidget {
@@ -37,13 +39,24 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
     _chosenValue = chh[0]['public'] ?? "일부공개";
   }
 
+  in_one_init() async {
+
+    await ImportPublic();
+    setState(() { waiting = true; });
+
+  }
+
+  @override
   void initState() {
     super.initState();
+    waiting = false;
     WidgetsBinding.instance.addPostFrameCallback((_){
       ImportPublic();
+      in_one_init();
     });
   }
 
+  @override
   void dispose() {
     super.dispose();
     update_request("update user_table set public = '$_chosenValue' where user_email = '${user_data['user_email']}'", null);
@@ -99,12 +112,23 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                     child: Text(value),
                   );
                 }).toList(),
-                hint: Text(
-                  "공개범위 선택",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600),
+                hint: (_chosenValue == null)
+                  ? Text(
+                    "",
+                  style: TextStyle(color: Colors.black)
+                  )
+                :Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: waiting ? [
+                      Text(
+                          _chosenValue.toString(),
+                          style: TextStyle(color: Colors.black)
+                      ),
+                    ]: [],
+                  )
+
                 ),
                 onChanged: (String? value) {
                   setState(() {
@@ -178,6 +202,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                 child: Column(
 
                   children: [
+
 
                     SizedBox(height: 30.h,),
 

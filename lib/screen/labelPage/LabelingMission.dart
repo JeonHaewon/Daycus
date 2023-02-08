@@ -329,10 +329,10 @@ class _LabelingMissionState extends State<LabelingMission> {
     return Scaffold(
       backgroundColor: AppColor.background,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back, color: Colors.black),
+        //   onPressed: () => Navigator.of(context).pop(),
+        // ),
         backgroundColor: Colors.white,
         title: Text('라벨링 미션',
             style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
@@ -346,9 +346,9 @@ class _LabelingMissionState extends State<LabelingMission> {
                 children: [
                   Container(
                       width: 110.w,
-                      height: 40.h,
+                      //height: 40.h,
                       decoration: BoxDecoration(
-                        color: Colors.indigo[100],
+                          color: Colors.indigo[100],
 
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -356,8 +356,11 @@ class _LabelingMissionState extends State<LabelingMission> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          SizedBox(height: 2.h,),
                           Text("이번주 라벨링 횟수",style: TextStyle(color: Colors.black, fontSize: 10.sp), textAlign: TextAlign.center,),
                           Text("${ccnt.toString()} / 700",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
+                          SizedBox(height: 2.h,),
+
                         ],
                       )
                   ),
@@ -392,149 +395,159 @@ class _LabelingMissionState extends State<LabelingMission> {
                 },
                 children: <ExpansionPanel>[
                   ExpansionPanel(
-                      headerBuilder: (context, isExpanded) {
-                        return Container(
-                            child : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                    headerBuilder: (context, isExpanded) {
+                      return Container(
+                        child : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
 
-                                SizedBox(width: 60.w,),
+                            SizedBox(width: 60.w,),
 
-                                SizedBox(
-                                  width: 210.w,
-                                  height: 32.h,
-                                  child: FittedBox(
-                                    alignment: Alignment.center,
-                                    fit: BoxFit.contain,
-                                    child: Text(widget.title ,style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                  ),
-                                ),
-
-                              ],
-                            )
-                        );
-                      },
-                      body: Column(
-                        children: [
-                          Padding(
-
-                            padding: EdgeInsets.fromLTRB(40.w, 0, 40.w, 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-
-                                // 하임 > 해원 : 미션 정책 위에 미션 설명도 예쁘게 넣어주면 좋을듯?
-
-                                Container(
-                                  width: 290.w,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 78.w,
-                                        height: 28.h,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[300],
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text("인증 방법",style: TextStyle(color: Colors.indigoAccent, fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 10.h,),
-
-                                      Text("${widget.content}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
-                                    ],
-                                  ),
-                                ),
-
-                                _sizedBox,
-
-                              ],
+                            SizedBox(
+                              width: 210.w,
+                              height: 32.h,
+                              child: FittedBox(
+                                alignment: Alignment.center,
+                                fit: BoxFit.contain,
+                                child: Text(widget.title ,style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                              ),
                             ),
+
+                          ],
+                        )
+                      );
+                    },
+                    body: Column(
+                      children: [
+                        Padding(
+
+                          padding: EdgeInsets.fromLTRB(40.w, 0, 40.w, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              // 하임 > 해원 : 미션 정책 위에 미션 설명도 예쁘게 넣어주면 좋을듯?
+
+                              Container(
+                                width: 290.w,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+
+                                    Container(
+                                      width: 78.w,
+                                      //height: 28.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(height: 2.h,),
+                                          Text("인증 방법",style: TextStyle(color: Colors.indigoAccent, fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                          SizedBox(height: 2.h,),
+
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.h,),
+
+                                    Text("${widget.content}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
+                                  ],
+                                ),
+                              ),
+
+                              _sizedBox,
+
+                            ],
                           ),
+                        ),
 
 
 
 
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 5.h, 0,10.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 5.h, 0,10.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
 
-                                Container(
-                                  width: 280.w,
-                                  height: 28.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.deepOrange[100],
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
+                              Container(
+                                width: 280.w,
+                                //height: 28.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.deepOrange[100],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
 
+                                    SizedBox(height: 6.h,),
 
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 18.w,
-                                              height: 18.h,
-                                              decoration: BoxDecoration(
-                                                color: Colors.deepOrange,
-                                                borderRadius: BorderRadius.circular(20),
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text("!",style: TextStyle(color: Colors.white, fontSize: 8.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                                ],
-                                              ),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 18.w,
+                                            //height: 18.h,
+                                            decoration: BoxDecoration(
+                                              color: Colors.deepOrange,
+                                              borderRadius: BorderRadius.circular(20),
                                             ),
-                                            SizedBox(width: 6.w,),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                SizedBox(height: 2.h,),
+                                                Text("!",style: TextStyle(color: Colors.white, fontSize: 8.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                                SizedBox(height: 2.h,),
 
-                                            Text(canLabelingString,style: TextStyle( fontSize: 9.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                          ],
-                                        ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 6.w,),
+
+                                          Text(canLabelingString,style: TextStyle( fontSize: 9.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                        ],
                                       ),
+                                    ),
+                                    SizedBox(height: 6.h,),
 
 
 
-                                    ],
-                                  ),
+
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
+                        ),
 
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 30.h),
-                            child: Column(
-                              children: [
-                                Text("※ 모든 사진에는 사람이 나오지 않아야 합니다.",
-                                    style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 30.h),
+                          child: Column(
+                            children: [
+                              Text("※ 모든 사진에는 사람이 나오지 않아야 합니다.",
+                                  style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
 
-                                Text("사람이 나오는 사진은 인증불가를 선택해주세요.",
-                                    style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
-                              ],
-                            ),
+                              Text("사람이 나오는 사진은 인증불가를 선택해주세요.",
+                                  style: TextStyle(fontSize: 11.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                            ],
                           ),
+                        ),
 
 
-                        ],
-                      ),
-                      isExpanded: active,
-                      canTapOnHeader: true
+                      ],
+                    ),
+                    isExpanded: active,
+                    canTapOnHeader: true
                   )
                 ],
               ),
@@ -834,6 +847,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                                   Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
                                 }
                                 if (index+1 >= imageListCnt){
+
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (_) => LabelingEnd()));
@@ -928,3 +942,4 @@ class _LabelingMissionState extends State<LabelingMission> {
     );
   }
 }
+

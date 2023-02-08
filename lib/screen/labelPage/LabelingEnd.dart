@@ -77,7 +77,7 @@ class _LabelingEndState extends State<LabelingEnd> {
                   ),
 
                   onPressed: () {
-                    Navigator.pop(context, true);
+                    Navigator.pop(context);
                     //controller.currentBottomNavItemIndex.value = AppScreen.labeling;
                   },
 
