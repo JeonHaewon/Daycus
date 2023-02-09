@@ -10,6 +10,7 @@ import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/backend/admin/importRanking.dart';
 import 'package:daycus/backend/admin/LoginPopup.dart';
 import 'package:daycus/screen/labelPage/LabelingEnd.dart';
+import 'package:daycus/backend/admin/AlertDialogPage.dart';
 
 import 'package:daycus/core/notification.dart';
 import 'package:daycus/screen/LoadingPage.dart';
@@ -807,6 +808,16 @@ class _AdminScreenState extends State<AdminScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => LabelingEnd()));
+                },
+              ),
+
+              AdminButton(
+                title: "알림 팝업",
+                onPressed: (){
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => AlertDialogPage()));
                 },
               ),
 

@@ -34,11 +34,6 @@ class _LabelPageState extends State<LabelPage> {
   @override
   Widget build(BuildContext context) {
 
-    Future<void> refresh() async {
-      await afterLogin();
-      setState(() { });
-    };
-
     int extraindex = -2;
     return LabelingMission(
       content: all_missions[i]['content'],
