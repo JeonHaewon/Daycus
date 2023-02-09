@@ -5,6 +5,7 @@ import 'package:daycus/backend/admin/MissionModify.dart';
 import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/backend/admin/RecordTest.dart';
+import 'package:daycus/backend/admin/RecordTest2.dart';
 import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/backend/admin/importRanking.dart';
 import 'package:daycus/backend/admin/LoginPopup.dart';
@@ -635,14 +636,14 @@ class _AdminScreenState extends State<AdminScreen> {
               //     remove_sql_image(changing_idx);
               //   },
               // ),
-              AdminButton(
-                title: "녹음을 한 번 해봅시다 !",
-                onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => RecordingPage()));
-                },
-              ),
+              // AdminButton(
+              //   title: "녹음을 한 번 해봅시다 !",
+              //   onPressed: (){
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(builder: (_) => RecordingPage()));
+              //   },
+              // ),
               AdminButton(
                 title: "php로 이메일을 보내봅시당 !",
                 onPressed: (){
@@ -679,10 +680,11 @@ class _AdminScreenState extends State<AdminScreen> {
               AdminButton(
                 title: "녹음 미션",
                 onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => RecordingPage()),
-                  );
+                  Fluttertoast.showToast(msg: "녹음 미션은 일시적으로 막아두었습니다 - 이하임");
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (_) => RecordingPage()),
+                  // );
                 },
               ),
               AdminButton(
@@ -770,13 +772,22 @@ class _AdminScreenState extends State<AdminScreen> {
                   },
               ),
 
+              // AdminButton(
+              //     title: "녹음 미션 2",
+              //     onPressed: (){
+              //       Navigator.push(context,
+              //           MaterialPageRoute(builder: (_) => RecordTest())
+              //       );
+              //     },
+              // ),
+
               AdminButton(
-                  title: "녹음 미션 2",
-                  onPressed: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => RecordTest())
-                    );
-                  },
+                title: "녹음 미션 3",
+                onPressed: (){
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (_) => StreamingExample())
+                  // );
+                },
               ),
 
               AdminButton(

@@ -14,6 +14,7 @@ import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
 import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
+import 'package:daycus/widget/certifyTool/record/recordWidget.dart';
 import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -208,7 +209,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   cnt_done(){
     mission_result = 0;
     for (int i = 1; i <= mission_week; i++) {
-      if (widget.do_mission_data['d${i}'] != null)
+      if ((widget.do_mission_data['d${i}']!=null) && (widget.do_mission_data['d${i}']!='0'))
         mission_result++;
     } print(mission_result);
   }
@@ -851,7 +852,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                             ));
                                                                       } else if(widget.mission_data['certify_tool'] == 'pedometer'){
                                                                         Fluttertoast.showToast(msg: "아직 미션이 완료되지 않았습니다");
-                                                                      } 
+                                                                      }
+                                                                      if (widget.mission_data['certify_tool'] == 'recorder'){
+
+                                                                        Fluttertoast.showToast(msg: "녹음 버튼을 눌러 미션을 수행해보세요 !");
+                                                                        // showModalBottomSheet(context: context,
+                                                                        //     builder: ((builder) => cameraOrGallery
+                                                                        //     ));
+                                                                      }
                                                                       else {
                                                                         todayMissionCertify(do_i, "camera");
                                                                       }
@@ -862,10 +870,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                               : FailMissionBlock(sp: _sp)
                                                           )
                                                           // 인증 완료된 날짜 블럭
-                                                              : DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
+                                                              : (widget.do_mission_data['d${date}']!='0' ?
+                                                          DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
                                                             is_today: (todayBlockCnt==date), isLoad : is_load,
 
                                                             folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
+                                                          : RejectedMissionBlock(sp: _sp)
+                                                          )
                                                         ),
                                                         if(index_j != _oneWeek-1)
                                                           SizedBox(
@@ -900,6 +911,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     ),
                   ),
 
+                  // 만보기 위젯
                   if (widget.mission_data['certify_tool']=='pedometer')
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -929,7 +941,36 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                       ],
                     ),
 
+                  if (widget.mission_data['certify_tool']=='recorder')
+                    Padding(
+                      padding: EdgeInsets.only(top: 30.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("녹음 미션 수행",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
+                          SizedBox(height: 5.h,),
+
+                          Row(
+                            children: [
+                              Text("※ ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                              Text("${widget.mission_data['condition']}초 이상 ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                              Text("녹음한 후 ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                              Text("오늘 미션 인증하기",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
+                              Text(" 버튼을 눌러주세요.",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+
+                            ],
+                          ),
+                          //SizedBox(height: 25.h,),
+                          RecordWidget(),
+
+                          //Text("record mission"),
+                        ],
+                      ),
+                    ),
+
+
+                  if (widget.mission_data['certify_tool']!='recorder')
                   SizedBox(height: 40.h,),
 
 
@@ -1153,7 +1194,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                 // print("미션 성공한 갯수 :  : ${mission_result}");
 
                 // 미션 끝 : 정산하기
-                if (todayBlockCnt > missionDate|| (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) {
+                if (todayBlockCnt > missionDate || (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) {
                   mission_complete(
                       todayBlockCnt,
                       widget.do_mission_data,
@@ -1189,7 +1230,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                     // 만보기
                   } else if (widget.mission_data['certify_tool']=='pedometer'){
-                    print("만보기");
+                    //print("만보기");
                     print("$PedometerSteps ${widget.mission_data['condition']}");
                     if((int.parse(PedometerSteps) >= int.parse(widget.mission_data['condition']))){
                       // 미션 인증
@@ -1212,6 +1253,51 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                       Fluttertoast.showToast(msg: "${(int.parse(widget.mission_data['condition'])-int.parse(PedometerSteps))} 걸음 남았습니다");
                     }
 
+                  }
+                  // 녹음하기 미션
+                  else if (widget.mission_data['certify_tool']=='recorder'){
+                    // 7이 아닌 경우 이상한 값이 들어갔을 가능성이 있으므로 에러 처리
+                    if (temTimer.length == 7){
+                      if (temTimer=="00 : 00"){
+                        // 녹음 버튼을 누르지도 않았을 때
+                        Fluttertoast.showToast(msg: "녹음하기 버튼을 눌러 녹음을 진행해주세요 !");
+                      }
+                      else {
+                        List splitTime = temTimer.split(" : ");
+                        int totalRecordTime = int.parse(splitTime[0])*60 + int.parse(splitTime[1]);
+
+                        if (totalRecordTime >= int.parse(widget.mission_data['condition'])){
+                          print("녹음된 파일 초 : ${totalRecordTime}");
+                          Fluttertoast.showToast(msg: "미션을 인증할 수 있습니다 !");
+
+                          uploadAudio("test", widget.mission_data['image_location']);
+
+                          // 이름으로 하면 좋지만, 임시방편으로 녹음한 시간만 넣음.
+                          bool success = await update_request(
+                              "UPDATE do_mission SET d${todayBlockCnt}='${temTimer}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
+                              null);
+                          if (success){
+                            setState(() {
+                              do_mission[do_i]["d$todayBlockCnt"] = temTimer;
+                            });
+                            // result 개수 다시 업데이트
+                            cnt_done();
+                            return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
+                            Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
+                          }
+                        } else{
+                          // 녹음 시간이 부족할때
+                          Fluttertoast.showToast(msg: "${widget.mission_data['condition']}초 이상 녹음을 완료야합니다.");
+
+                        }
+                      }
+
+                    }
+                    else {
+                      Fluttertoast.showToast(msg: "알 수 없는 문제가 발생했습니다.\n앱을 완전히 종료한 후 다시 시도해수제요.");
+                    }
+
+                    //Fluttertoast.showToast(msg: "녹음미션");
                   }
                   else {
                     todayMissionCertify(do_i, "camera");
@@ -1360,7 +1446,7 @@ class FailMissionBlock extends StatelessWidget {
         onPressed: (){},
         // 원래 pink[40], red 이었음.
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey[300])),
-        child: Text('X',style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        child: Text('x',style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
     );
   }
 }
@@ -1442,6 +1528,31 @@ class YetMissionBlock extends StatelessWidget {
             : Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) ) );
   }
 }
+
+class RejectedMissionBlock extends StatelessWidget {
+  const RejectedMissionBlock({
+    Key? key,
+    required this.sp,
+    this.onTap,
+  }) : super(key: key);
+
+  final double sp;
+  final onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: (){
+          // 팝업창으로 바꾸어도 괜찮고.
+          Fluttertoast.showToast(msg: "미션 인증이 반려되었습니다.\n이의 신청 시 \'개발에게 문의하기\' 페이지를 이용하시기 바랍니다.");
+        },
+        // 원래 pink[40], red 이었음.
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red[300])),
+        child: Text('X',style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+    );
+  }
+}
+
 
 
 

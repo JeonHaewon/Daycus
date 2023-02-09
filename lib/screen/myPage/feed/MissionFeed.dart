@@ -98,6 +98,7 @@ class MissionFeed extends StatelessWidget {
                                       ],
                                     ),
 
+                                  // 몇개의 미션을 안그려주는 것 같음
                                   if (doneMissionCnt>0)
                                   Container(
                                     width: 400.w,
@@ -151,6 +152,7 @@ class MissionFeed extends StatelessWidget {
                                             SizedBox(height: 12.h,),
                                           ],
                                         );
+
 
 
                                       }
