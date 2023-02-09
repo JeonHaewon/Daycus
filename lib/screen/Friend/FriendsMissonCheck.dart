@@ -54,8 +54,12 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
         "SELECT * FROM do_mission WHERE user_email = '${userEmail}' and how = '친구공개'",
         null,
         false);
+    var isBigonggae = await select_request(
+        "SELECT public FROM user_table WHERE user_email = '${userEmail}'",
+        null,
+        false);
 
-    MissionOfFriendCnt = (MissionOfFriend==null || MissionOfFriendCnt==false) ? 0 : MissionOfFriend.length;
+    MissionOfFriendCnt = (isBigonggae[0]['public']=="비공개" || MissionOfFriend==null || MissionOfFriendCnt==false) ? 0 : MissionOfFriend.length;
 
     setState(() {});
 
@@ -464,11 +468,8 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
   }
 
-
   onHeartTap() async {
     await initHeart();
-    print(isHeart);
-    print(whoPressHeart);
     if (isHeart){
       whoPressHeart.remove(user_data['user_id']);
     }
@@ -478,8 +479,6 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
     await update_request("update do_mission set who_heart = '${jsonEncode(whoPressHeart)}' where user_email = '${widget
         .doMission['user_email']}' and mission_id = '${widget
         .doMission['mission_id']}'", null);
-    isHeart = !isHeart;
-    print(isHeart);
   }
 
 
@@ -508,7 +507,6 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
   void initState() {
     super.initState();
     ImportHowManyHeart();
-    waitingg = false;
     WidgetsBinding.instance.addPostFrameCallback((_){
       inn_one_init();
     });
@@ -517,23 +515,6 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
   void dispose() {
     super.dispose();
-    if (int.parse(widget.doMission['heart'] ?? '0') != HowManyHeart) {
-      update_request(
-          "update do_mission set heart = '$HowManyHeart' where user_email = '${widget
-              .doMission['user_email']}' and mission_id = '${widget
-              .doMission['mission_id']}'", null);
-      var ChangeOnWhoHeart = jsonDecode(widget.doMission['who_heart'] ?? {}.toString());
-      if (ChangeOnWhoHeart['${user_data['user_id']}'] == null){
-        ChangeOnWhoHeart['${user_data['user_id']}'] = '1';
-      }
-      else{
-        ChangeOnWhoHeart.remove('${user_data['user_id']}');
-      }
-      update_request(
-          "update do_mission set who_heart = '${jsonEncode(ChangeOnWhoHeart)}' where user_email = '${widget
-              .doMission['user_email']}' and mission_id = '${widget
-              .doMission['mission_id']}'", null);
-    }
   }
 
   @override
@@ -542,18 +523,6 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
     String thumbnailImage = all_missions[widget.allMissionIndex]['thumbnail'] ?? 'topimage1.png';
 
-    Future<bool> onLikeButtonTapped(bool isLiked) async {
-      //0127 소셜 기능
-      if (!isLiked){
-        HowManyHeart += 1;
-        print(HowManyHeart);
-      }
-      else{
-        HowManyHeart -= 1;
-        print(HowManyHeart);
-      }
-      return !isLiked;
-    }
 
     int index_i = -1; int index_j = -1;
 
@@ -811,6 +780,7 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
                           GestureDetector(
                             onTap: () {
                               onHeartTap();
+                              isHeart = !isHeart;
                               setState(() {
                               });
                             },

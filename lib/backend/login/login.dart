@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../screen/Friend/FriendPage.dart';
 import '../../screen/LoadingPage.dart';
 import '../../screen/myPage/privatesettings/PrivateSettings.dart';
+import '../../screen/specificMissionPage/MissionCheckStatusPage.dart';
 import '../../widget/PopPage.dart';
 import 'KeepLogin.dart';
 import 'dart:convert';
@@ -209,10 +210,43 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
       //userLogin(userInfo['userName'], userInfo['password'], userInfo['user_email']);
       var dbcode = await get_logincode_db(user_data['user_email']);
       var pfcode = await get_logincode_pf();
+      var invitationss = await select_request("select invitation from user_table where user_email = '${user_data['user_email']}'", null, true);
+      var invitations = invitationss[0]['invitation'] ?? "{}";
+      var invitation = jsonDecode(invitations);
 
       if (dbcode != pfcode){
         showLoginAlertDialog_two(context);
         return;
+      }
+
+      if (invitation.isNotEmpty){
+        for (var item in invitation.keys()) {
+          PopPage(
+            "미션에 초대되었습니다!",
+            context,
+            Column(
+              children: [
+                Text("'${item}님이 미션에 초대하셨습니다! 자세한 미션을 확인해보시겠습니까?")
+              ],
+            ),
+            "미션 초대 받기!",
+            "취소",
+            // 확인을 눌렀을 때
+                () async {
+              invitation.remove(item);
+              await update_request("update user_table set invitation = '${jsonEncode(invitation)}' where user_email = '${user_data['user_email']}'", null);
+              Navigator.pop(context);
+              // 하임님 요거 all_missions[index] 에서 mission_id랑 Index가 안맞아서 mission 상세 페이지로 이동이 안되요 ㅠㅠ
+              // return MissionCheckStatusPage(
+              //   mission_index: _index,
+              //   mission_data: all_missions[_index],
+              //   do_mission_data: do_mission[index],
+              // ),
+                },
+            // 취소를 눌렀을 때
+            null,
+          );
+        }
       }
 
       // 느린걸 좀 고쳐야겠다. 이걸 그 콜백함수 써서 구현하면? : 안되더라
@@ -224,19 +258,6 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (_) => TemHomePage()), (
                 route) => false);
-        // PopPage(
-        //     "미션에 초대되었습니다!", context,
-        //     Column(
-        //       children: [
-        //         Text("초코하임님이 미션에 초대하셨습니다! 자세한 미션을 확인해보시겠습니까?")
-        //       ],
-        //     ), "미션 초대 받기!", "취소",
-        //     // 확인을 눌렀을 때
-        //         () async {
-        //     },
-        //     // 취소를 눌렀을 때
-        //     null,
-        // );
 
         // 홈페이지가 기본 !
         controller.currentBottomNavItemIndex.value = AppScreen.home;

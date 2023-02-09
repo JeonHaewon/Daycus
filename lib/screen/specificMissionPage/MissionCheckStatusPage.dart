@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:daycus/screen/specificMissionPage/notSeeForWeek.dart';
 import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
@@ -13,20 +11,16 @@ import 'package:daycus/backend/missionComplete/MissionComplete.dart';
 import 'package:daycus/core/app_text.dart';
 import 'package:daycus/core/constant.dart';
 import 'package:daycus/screen/specificMissionPage/SpecificMissionPage.dart';
-import 'package:daycus/widget/certifyTool/pedometerWidget.dart';
 import 'package:daycus/widget/certifyTool/record/recordWidget.dart';
 import 'package:daycus/widget/popWidget/bottomPopWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
-import 'package:daycus/backend/Api.dart';
-import 'package:daycus/screen/specificMissionPage/WalkCountPage.dart';
 
 
 late ScrollController _scrollController = ScrollController();
@@ -63,6 +57,19 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   }
 
   var isPublic;
+
+  var friendsList;
+
+  ImportFriend() async {
+    friendsList = [];
+    var friendsdb = await select_request("select friends from user_table where user_email = '${user_data['user_email']}'", null, true);
+    var friends = friendsdb[0]['friends'] ?? "{}";
+    var friend = jsonDecode(friends);
+    for (var item in friend.keys){
+      var ff = await select_request("select user_name from user_table where user_id = '$item'", null, true);
+      friendsList.add(ff[0]['user_name']);
+    }
+  }
 
   ImportPublic() async {
     var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
@@ -188,6 +195,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   void initState () {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
+      ImportFriend();
       ImportPublic();
       importHowAndHeartMission();
       _asyncMethod();
@@ -563,7 +571,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                   ListView.builder(
                                                     shrinkWrap: true,
                                                     physics: NeverScrollableScrollPhysics(),
-                                                    itemCount: 3, //친구수
+                                                    itemCount: friendsList.length, //친구수
                                                     itemBuilder: (_, index) {
                                                       return Padding(
                                                         padding: EdgeInsets.only(bottom: 5.h),
@@ -585,17 +593,17 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                   width: 110.w,
                                                                   child: FittedBox(
                                                                     fit: BoxFit.scaleDown,
-                                                                    child:Text("초코하임프라페한잔주세요", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
+                                                                    child:Text("${friendsList[index]}", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
                                                                   )
                                                               ),
 
-                                                              Container(
-                                                                  width: 50.w,
-                                                                  child: FittedBox(
-                                                                    fit: BoxFit.scaleDown,
-                                                                    child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,), //사용자코드
-                                                                  )
-                                                              ),
+                                                              // Container(
+                                                              //     width: 50.w,
+                                                              //     child: FittedBox(
+                                                              //       fit: BoxFit.scaleDown,
+                                                              //       child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,), //사용자코드
+                                                              //     )
+                                                              // ),
 
                                                               SizedBox(
                                                                 width: 65.h,
@@ -611,7 +619,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                     //minimumSize: Size(18.w, 28.h),
                                                                   ),
 
-                                                                  onPressed: () {},
+                                                                  onPressed: () async {
+                                                                    var invitationss = await select_request("select invitation from user_table where user_name = '${friendsList[index]}'", null, true);
+                                                                    var invitations = invitationss[0]['invitation'] ?? "{}";
+                                                                    var invitation = jsonDecode(invitations);
+                                                                    invitation[user_data['user_name']] = widget.mission_data['mission_id'];
+                                                                    await update_request("update user_table set invitation = '${jsonEncode(invitation)}' where user_name = '${friendsList[index]}'", null);
+                                                                    Fluttertoast.showToast(msg: "친구 초대가 완료되었습니다!");
+                                                                  },
                                                                   child: Text("초대하기", style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
                                                                 ),
                                                               ),
