@@ -63,35 +63,35 @@ class _LabelingEndState extends State<LabelingEnd> {
 
               SizedBox(height: 120.h,),
 
-              Padding(
-                padding: EdgeInsets.only(left: 100.w, right: 100.w),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.white,
-                    onPrimary: AppColor.happyblue,
-                    minimumSize: Size(80.w, 60.h),
-                    textStyle: TextStyle(fontSize: 18.sp),
-                  ),
-
-                  onPressed: () {
-                    Navigator.pop(context);
-                    //controller.currentBottomNavItemIndex.value = AppScreen.labeling;
-                  },
-
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("라벨링 계속하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 16.sp, color: AppColor.happyblue,) ),
-                      Image.asset('assets/image/arrow-right1.png', color: AppColor.happyblue,)
-                    ],
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 30.h,),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 100.w, right: 100.w),
+              //   child: ElevatedButton(
+              //     style: ElevatedButton.styleFrom(
+              //       shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(10)
+              //       ),
+              //       primary: Colors.white,
+              //       onPrimary: AppColor.happyblue,
+              //       minimumSize: Size(80.w, 60.h),
+              //       textStyle: TextStyle(fontSize: 18.sp),
+              //     ),
+              //
+              //     onPressed: () {
+              //       Navigator.pop(context);
+              //       //controller.currentBottomNavItemIndex.value = AppScreen.labeling;
+              //     },
+              //
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Text("라벨링 계속하기",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold, fontSize: 16.sp, color: AppColor.happyblue,) ),
+              //         Image.asset('assets/image/arrow-right1.png', color: AppColor.happyblue,)
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              //
+              // SizedBox(height: 30.h,),
 
               Padding(
                 padding: EdgeInsets.only(left: 100.w, right: 100.w),
