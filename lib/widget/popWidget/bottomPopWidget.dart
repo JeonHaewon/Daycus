@@ -10,13 +10,14 @@ Widget bottomPopWidget(
     IconData icon1, icon2,
     ) {
   return Container(
-      height: 55.h,
+     // height: 55.h,
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 20
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

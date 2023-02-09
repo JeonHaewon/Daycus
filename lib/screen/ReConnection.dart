@@ -78,7 +78,7 @@ class _ReConnectionState extends State<ReConnection> {
           Center(
             child: Column(
               children: [
-                SizedBox(height: 720.h,),
+                SizedBox(height: 700.h,),
                 Text("인터넷 연결을 확인해주세요"),
                 SizedBox(height: 20.h,),
                 //Center(child: Text('Connection Status: $_connectionStatus')),

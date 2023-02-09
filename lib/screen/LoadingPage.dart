@@ -143,7 +143,7 @@ class _LoadingPageState extends State<LoadingPage> {
           Center(
             child: Column(
               children: [
-                SizedBox(height: 710.h,),
+                SizedBox(height: 700.h,),
                 Text("로딩이 1분 이상 지속될 경우\n앱을 완전히 종료한 후 재부팅 해주세요", textAlign: TextAlign.center,),
                 SizedBox(height: 30.h,),
                 SizedBox(

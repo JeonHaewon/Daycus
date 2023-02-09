@@ -689,84 +689,90 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                         ),
                       ],
                     ),
-                    child: ExpansionTile(
-                      initiallyExpanded: true,
-                      //leading: Icon(Icons.file_copy_rounded, size: 20.w, color: Colors.grey[400],),
-                      title: Container(
-                          child : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(width: 15.w,),
-
-                              Text("미션 안내",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-
-
-                            ],
-                          )
+                    child: Theme(
+                      data: ThemeData(
+                        dividerColor: Colors.transparent,
                       ),
-                      //subtitle: Text('미션 관련 안내 사항을 확인해보세요',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: Colors.black)),
-                      children: <Widget>[
+                      child: ExpansionTile(
+                        iconColor: AppColor.happyblue,
+                        initiallyExpanded: true,
+                        //leading: Icon(Icons.file_copy_rounded, size: 20.w, color: Colors.grey[400],),
+                        title: Container(
+                            child : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 15.w,),
 
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(14.w, 5.h, 14.w, 20.h),
-                          child: Column(
-                            children: [
-
-                              Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-
-                                // Text("1. 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러주세요!",
-                                //     style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                                // SizedBox(height: 3.h,),
-                                // Text("15일차에 '정산하기' 버튼을 눌러 포인트를 지급받을 수 있습니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
-                                //     style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                                // SizedBox(height: 2.h,),
-                                // Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
-                                //     style: TextStyle(fontSize: 8.sp, fontFamily: 'korean',  color: Colors.grey) ),
-
-                                    Text("1. 주 ${widget.mission_data['frequency']}회, ${widget.mission_data['term']}주간, 총 ${toCertify}회!",
-                                        style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                                    SizedBox(height: 3.h,),
-                                    Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
-                                        style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                Text("미션 안내",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
 
 
-                                    SizedBox(height: 15.h,),
-                                    Text(widget.mission_data['notice']==null
-                                        ? "2. 미션에 알맞은 사진을 올려주세요!"
-                                        : "2. " + (widget.mission_data['notice'].split("\n")[0]).toString(),
-                                        style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                                    SizedBox(height: 3.h,),
-                                    if (widget.mission_data['notice']!=null)
-                                      Text("${(widget.mission_data['notice'].split("\n")[1]).toString()}",
-                                          style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-
-                                    if (widget.mission_data['notice']==null)
-                                      Text("${widget.mission_data['content']}",
-                                          style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-
-                                    if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 15.h,),
-                                          Text("3. 미션 인증 시 사람이 나오지 않게 주의해주세요!",
-                                              style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                                          SizedBox(height: 3.h,),
-                                          Text("개인정보 보호를 위해 본인을 포함하여 특정 인물을 나타낼 수 있는 모습이 사진에 나타나지 않도록 주의해주세요.",
-                                              style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
-                                        ],
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            )
                         ),
+                        //subtitle: Text('미션 관련 안내 사항을 확인해보세요',style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', color: Colors.black)),
+                        children: <Widget>[
 
-                      ],
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(14.w, 5.h, 14.w, 20.h),
+                            child: Column(
+                              children: [
+
+                                Container(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+
+                                  // Text("1. 미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러주세요!",
+                                  //     style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                  // SizedBox(height: 3.h,),
+                                  // Text("15일차에 '정산하기' 버튼을 눌러 포인트를 지급받을 수 있습니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
+                                  //     style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                  // SizedBox(height: 2.h,),
+                                  // Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
+                                  //     style: TextStyle(fontSize: 8.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                      Text("1. 주 ${widget.mission_data['frequency']}회, ${widget.mission_data['term']}주간, 총 ${toCertify}회!",
+                                          style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                      SizedBox(height: 3.h,),
+                                      Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                                          style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+
+                                      SizedBox(height: 15.h,),
+                                      Text(widget.mission_data['notice']==null
+                                          ? "2. 미션에 알맞은 사진을 올려주세요!"
+                                          : "2. " + (widget.mission_data['notice'].split("\n")[0]).toString(),
+                                          style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                      SizedBox(height: 3.h,),
+                                      if (widget.mission_data['notice']!=null)
+                                        Text("${(widget.mission_data['notice'].split("\n")[1]).toString()}",
+                                            style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                      if (widget.mission_data['notice']==null)
+                                        Text("${widget.mission_data['content']}",
+                                            style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+
+                                      if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: 15.h,),
+                                            Text("3. 미션 인증 시 사람이 나오지 않게 주의해주세요!",
+                                                style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                                            SizedBox(height: 3.h,),
+                                            Text("개인정보 보호를 위해 본인을 포함하여 특정 인물을 나타낼 수 있는 모습이 사진에 나타나지 않도록 주의해주세요.",
+                                                style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      ),
                     ),
                   ),
 

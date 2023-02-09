@@ -68,34 +68,39 @@ void showSoundMissionAlertDialog(BuildContext context, int date, int min, int se
               )
             ],
           ),
-          content: Container(
-            height: 80.h,
-            child: min != null
-                ? Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-
-                  Column(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                child: min != null
+                    ? Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.volume_down_alt, size: 60.w, color: AppColor.happyblue,),
 
-                      Container(
-                        alignment: Alignment.center,
-                        child: Text("${min}분 ${sec}초 ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      Column(
+                        children: [
+                          Icon(Icons.volume_down_alt, size: 60.w, color: AppColor.happyblue,),
+
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text("${min}분 ${sec}초 ", style: TextStyle(fontSize: 10.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                          ),
+                        ],
                       ),
+
+                      SizedBox(width: 15.w,),
+
+                      Text("갓생에\n성공하셨군요!",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', color: AppColor.happyblue, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+
+                      //SizedBox(width: 15.w,),
                     ],
                   ),
-
-                  SizedBox(width: 8.w,),
-
-                  Text("갓생에\n성공하셨군요!",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', color: AppColor.happyblue, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-
-                  SizedBox(width: 15.w,),
-                ],
+                )
+                    : Text("데이터를 불러올 수 없습니다", style: TextStyle(fontSize: 28.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
               ),
-            )
-                : Text("데이터를 불러올 수 없습니다", style: TextStyle(fontSize: 28.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+            ],
+
           ),
 
           shape: RoundedRectangleBorder(
