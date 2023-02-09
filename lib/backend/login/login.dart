@@ -220,7 +220,7 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
       }
 
       if (invitation.isNotEmpty){
-        for (var item in invitation.keys()) {
+        for (var item in invitation.keys) {
           PopPage(
             "미션에 초대되었습니다!",
             context,
