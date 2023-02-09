@@ -32,7 +32,7 @@ class MissionCheckPage extends StatefulWidget {
 
 class _MissionCheckPageState extends State<MissionCheckPage> {
 
-  String? _chosenValue;
+  String? _chosenValue = "친구공개";
 
   ImportPublic() async {
     var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
@@ -106,28 +106,28 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                   '일부공개',
                   '친구공개',
                   '비공개',
-                ].map<DropdownMenuItem<String>>((String value) {
+                ].map<DropdownMenuItem<String>>((String valuee) {
                   return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+                    value: valuee,
+                    child: Text(valuee),
                   );
                 }).toList(),
                 hint: (_chosenValue == null)
-                  ? Text(
+                    ? Text(
                     "",
-                  style: TextStyle(color: Colors.black)
-                  )
-                :Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: waiting ? [
-                      Text(
-                          _chosenValue.toString(),
-                          style: TextStyle(color: Colors.black)
-                      ),
-                    ]: [],
-                  )
+                    style: TextStyle(color: Colors.black)
+                )
+                    :Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: waiting ? [
+                        Text(
+                            _chosenValue.toString(),
+                            style: TextStyle(color: Colors.black)
+                        ),
+                      ]: [],
+                    )
 
                 ),
                 onChanged: (String? value) {
@@ -221,18 +221,18 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                         // ],
                       ),
                       child: Padding(
-                            padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 15.h),
-                            child: Column(
-                              children: [
-                                Text("미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러야 포인트가 지급됩니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
-                                    style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.black), textAlign: TextAlign.center, ),
-                                SizedBox(height: 5.h,),
+                        padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 15.h),
+                        child: Column(
+                          children: [
+                            Text("미션 종료 후(15일차)에 반드시 '정산하기' 버튼을 눌러야 포인트가 지급됩니다. 단, 14일차에 인증을 하는 경우 인증 이후 바로 정산이 가능합니다.",
+                              style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', color: Colors.black), textAlign: TextAlign.center, ),
+                            SizedBox(height: 5.h,),
 
-                                Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
-                                    style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),
-                              ],
-                            ),
-                          ),
+                            Text("※ 미션 종료 후 2주 내에 정산을 받지 않을 경우 리워드를 지급받지 못합니다.",
+                                style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),
+                          ],
+                        ),
+                      ),
 
                     ),
 
