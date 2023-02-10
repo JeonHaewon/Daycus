@@ -688,7 +688,7 @@ _rewardCalcul(String? money, double percent, String basicText){
       //   return "최대입니다";
       // }
       if (money_int > limit_bet_reward){
-        return "${limit_bet_reward} 이상 투자할 수 없습니다";
+        return "${limit_bet_reward} 이상 불가";
       }
       // 소숫점 몇쨋자리 이런 기준이 필요함.
       return "${money_int*(percent)/100+14} ${rewardName}";

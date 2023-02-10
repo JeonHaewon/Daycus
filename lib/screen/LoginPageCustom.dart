@@ -86,6 +86,68 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
   @override
   Widget build(BuildContext context) {
+
+    loginProcess(is_login) async {
+      // - 로그인 성공
+      if ((is_login == true)&&(user_data['user_state']!='withdrawing')) {
+
+        Fluttertoast.showToast(msg: "안녕하세요, ${user_data['user_name']}님 !");
+
+        keepLogin(
+            user_data['user_name'],
+            emailCtrl.text.trim(),
+            passwordCtrl.text.trim(),
+            storage);
+        await afterLogin();
+        storing_logincode();
+        update_request("update user_table set login_ing = '$logincode' where user_email = '${emailCtrl.text.trim()}'", null);
+
+        // 다 닫고 감.
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
+      }
+      // 탈퇴중인 경우
+      else if (is_login==true && user_data['user_state']=='withdrawing'){
+
+        passwordCtrl.clear();
+        DateTime today = await NowTime(null);
+
+        PopPage(
+            "계정 복구하기", context,
+            Column(
+              children: [
+                Text("이 계정은 탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays}일이 지난 계정입니다. 복구하기를 누르면 탈퇴 전의 정보들은 모두 복구되며 탈퇴한 기간 동안은 미션에 참여하지 않은 것으로 간주됩니다. 복구하시겠습니까?"),
+                //Text("탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일째"),
+              ],
+            ), "복구하기", "취소",
+
+            // 확인을 눌렀을 때
+                () async {
+              bool success = await update_request("UPDATE user_table SET user_state=null, state_changed_time='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
+              if (success) {
+                Fluttertoast.showToast(msg: "다시 한 번 ${user_data['user_name']}님의 갓생을 응원합니다.\n다시 로그인해주세요.");
+                Navigator.pop(context);
+              }
+              // 다시 로그인 해달라고 하기 ㅋㅋㅋ
+            },
+
+            // 취소를 눌렀을 때
+            null
+        );
+      }
+
+      //  - 로그인 실패
+      else if (is_login == false) {
+        // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용
+        passwordCtrl.clear();
+      }
+
+      else{
+        print("로그인 에러 발생");
+      }
+    }
+
+
     return Scaffold(
       //resizeToAvoidBottomInset: false,
 
@@ -191,63 +253,61 @@ class KeepLoginPage extends State<LoginPageCustom> {
                       var pfcode = await get_logincode_pf();
 
                       if (dbcode != pfcode){
-                        showLoginAlertDialog(context);
-                      }
+                        await showDialog(
+                          barrierDismissible: false,
+                          context: context, // user must tap button!
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              // 하임 : 내가 인증한 사진 > n일째 인증 사진으로 변경
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("중복 로그인 확인",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
-                      // - 로그인 성공
-                      if ((is_login == true)&&(user_data['user_state']!='withdrawing')) {
-                        keepLogin(
-                            user_data['user_name'],
-                            emailCtrl.text.trim(),
-                            passwordCtrl.text.trim(),
-                            storage);
-                        await afterLogin();
-                        storing_logincode();
-                        update_request("update user_table set login_ing = '$logincode' where user_email = '${emailCtrl.text.trim()}'", null);
+                                ],
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text("기존에 로그인된 계정입니다.\n다른 기기에서 로그아웃하시겠습니까?",style: TextStyle(fontSize: 16.sp, fontFamily: 'korean',) ),
+                                ],
+                              ),
 
-                        // 다 닫고 감.
-                        Navigator.pushAndRemoveUntil(context,
-                            MaterialPageRoute(builder: (_) => TemHomePage()), (route) => false);
-                      }
-                       // 탈퇴중인 경우
-                      else if (is_login==true && user_data['user_state']=='withdrawing'){
+                              actions: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
 
-                        passwordCtrl.clear();
-                        DateTime today = await NowTime(null);
+                                    TextButton(
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(msg: "다른 계정으로 로그인해주세요");
+                                        },
+                                        child: Text("취소", style: TextStyle(color: Colors.grey[600]),)
+                                    ),
 
-                        PopPage(
-                            "계정 복구하기", context,
-                            Column(
-                              children: [
-                                Text("이 계정은 탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays}일이 지난 계정입니다. 복구하기를 누르면 탈퇴 전의 정보들은 모두 복구되며 탈퇴한 기간 동안은 미션에 참여하지 않은 것으로 간주됩니다. 복구하시겠습니까?"),
-                                //Text("탈퇴한지 ${(today.difference(DateTime.parse(user_data['state_changed_time']))).inDays+1}일째"),
+                                    TextButton(
+                                        onPressed: () async {
+                                          loginProcess(is_login);
+
+                                        }, //다른 기기에서 로그아웃하고 로그인
+                                        child: Text("확인", style: TextStyle(color: Colors.indigo),)
+                                    ),
+
+                                  ],
+                                ),
                               ],
-                            ), "복구하기", "취소",
-
-                            // 확인을 눌렀을 때
-                            () async {
-                              bool success = await update_request("UPDATE user_table SET user_state=null, state_changed_time='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
-                              if (success) {
-                                Fluttertoast.showToast(msg: "다시 한 번 ${user_data['user_name']}님의 갓생을 응원합니다.\n다시 로그인해주세요.");
-                                Navigator.pop(context);
-                              }
-                        // 다시 로그인 해달라고 하기 ㅋㅋㅋ
-                            },
-
-                            // 취소를 눌렀을 때
-                            null
-                          );
-                            }
-
-                      //  - 로그인 실패
-                      else if (is_login == false) {
-                        // 비밀번호 틀리면 초기화 되는 익숙한 UX를 적용
-                        passwordCtrl.clear();
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        loginProcess(is_login);
                       }
 
-                      else{
-                        print("로그인 에러 발생");
-                      }
+
 
                     }
 

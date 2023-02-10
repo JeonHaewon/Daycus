@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
+import 'package:daycus/core/app_color.dart';
 import 'package:daycus/screen/LoginPageCustom.dart';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +149,7 @@ class _LoadingPageState extends State<LoadingPage> {
                 SizedBox(height: 30.h,),
                 SizedBox(
                   width: 30.w, height: 30.h,
-                  child: CircularProgressIndicator(), ),
+                  child: CircularProgressIndicator(color: AppColor.happyblue,), ),
 
                 AnimatedOpacity(
                   // If the widget is visible, animate to 0.0 (invisible).

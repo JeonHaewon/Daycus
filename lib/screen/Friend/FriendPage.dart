@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/core/notification.dart';
+import 'package:daycus/screen/MissionCheckPageCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -98,11 +99,6 @@ class _FriendPageState extends State<FriendPage>
 
 
   all_in_one_init() async {
-
-    // 변수 초기화
-    MyFriendsData = null;RequestedList = null;FriendList = null;RequestFriend = null;
-    who_are_friends_string = '';who_requested_string = '';friendIndexes = null;
-    
     await select_friends_information();
     setState(() { waitingsuccess = true; });
     // await check_friend();
@@ -119,6 +115,11 @@ class _FriendPageState extends State<FriendPage>
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
     waitingsuccess = false;
+
+    // 변수 초기화
+    MyFriendsData = null;RequestedList = null;FriendList = null;RequestFriend = null;
+    who_are_friends_string = '';who_requested_string = '';friendIndexes = null;
+
     WidgetsBinding.instance.addPostFrameCallback((_){
       all_in_one_init();
     });
@@ -478,7 +479,9 @@ class _AddFriendState extends State<AddFriend> {
     return Scaffold(
       backgroundColor: AppColor.background,
       body: SingleChildScrollView(
-        child: Container(
+        child: waitingsuccess==false
+            ?  CircularProgressIndicator()
+            :  Container(
           alignment: Alignment.center,
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, 30.h, 0, 0),

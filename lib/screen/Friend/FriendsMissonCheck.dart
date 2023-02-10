@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/widget/PopPage.dart';
-import 'package:like_button/like_button.dart';
+//import 'package:like_button/like_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -449,12 +449,12 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
     var whoheart = jsonDecode(prewhoheart[0]['who_heart'] ?? "{}");
     if (whoheart.keys.contains(user_data['user_id'])){
       isHeart = true;
-      return whoheart;
     }
     else {
       isHeart = false;
-      return whoheart;
     }
+
+    return whoheart;
   }
 
   initHeart() async {

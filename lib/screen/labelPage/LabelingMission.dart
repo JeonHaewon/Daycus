@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:daycus/backend/Api.dart';
+import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/core/app_text.dart';
@@ -62,52 +63,52 @@ class _LabelingMissionState extends State<LabelingMission> {
   var label_category_list = null;
   int label_cnt = 0;
 
-  image_download(String folder, String imageName) async {
-    setState(() { is_load = false; });
-    try{
-      var update_res = await http.post(Uri.parse(API.imageDownload),
-          body: {
-            "folder" : folder,
-            "imageName" : imageName,
-          });
-
-      if (update_res.statusCode == 200) {
-        print("이미지를 불러왔습니다 : ");
-        var res = jsonDecode(update_res.body);
-        Uint8List bytes = Base64Decoder().convert(res['image']);
-        print("${res['size1'].toStringAsFixed(2)} kb > ${res['size2'].toStringAsFixed(2)} kb, ${res['exif']}");
-        //print(bytes.isEmpty);
-
-        setState(() {
-          if (res['exif']==3){degree = 180;}
-          else if (res['exif']==6){degree = 90;}
-          else if (res['exif']==8){degree = 270;}
-          else{degree = 0;}
-
-          if (bytes.isEmpty){downloadImage = null;
-          } else{
-            setState(() {
-              downloadImage = Image.memory(bytes);
-            });
-          }
-        });
-
-        return true;
-
-      } else {
-        setState(() {
-          downloadImage = null;
-        });
-        print("<error : > ${update_res.body}");
-        return false;
-      }
-    }
-    catch (e) {
-      print(e.toString());
-      //Fluttertoast.showToast(msg: e.toString());
-      return false;
-    }
-  }
+  // image_download(String folder, String imageName) async {
+  //   setState(() { is_load = false; });
+  //   try{
+  //     var update_res = await http.post(Uri.parse(API.imageDownload),
+  //         body: {
+  //           "folder" : folder,
+  //           "imageName" : imageName,
+  //         });
+  //
+  //     if (update_res.statusCode == 200) {
+  //       print("이미지를 불러왔습니다 : ");
+  //       var res = jsonDecode(update_res.body);
+  //       Uint8List bytes = Base64Decoder().convert(res['image']);
+  //       print("${res['size1'].toStringAsFixed(2)} kb > ${res['size2'].toStringAsFixed(2)} kb, ${res['exif']}");
+  //       //print(bytes.isEmpty);
+  //
+  //       setState(() {
+  //         if (res['exif']==3){degree = 180;}
+  //         else if (res['exif']==6){degree = 90;}
+  //         else if (res['exif']==8){degree = 270;}
+  //         else{degree = 0;}
+  //
+  //         if (bytes.isEmpty){downloadImage = null;
+  //         } else{
+  //           setState(() {
+  //             downloadImage = Image.memory(bytes);
+  //           });
+  //         }
+  //       });
+  //
+  //       return true;
+  //
+  //     } else {
+  //       setState(() {
+  //         downloadImage = null;
+  //       });
+  //       print("<error : > ${update_res.body}");
+  //       return false;
+  //     }
+  //   }
+  //   catch (e) {
+  //     print(e.toString());
+  //     //Fluttertoast.showToast(msg: e.toString());
+  //     return false;
+  //   }
+  // }
 
   update_map(int idx, String name) {
     if (real_cnt_data[widget.folder]==null){
@@ -141,6 +142,7 @@ class _LabelingMissionState extends State<LabelingMission> {
       }
     }
   }
+
   getjson_fromdb() async {
     try {
       var select_res = await http.post(Uri.parse(API.select), body: {

@@ -73,7 +73,7 @@ userLogin(String email, String password, bool reload, {bool auto = false}) async
               "UPDATE user_table SET last_login='${today.toString().substring(0,22)}' where user_email = '${user_data['user_email']}'", null);
 
 
-          Fluttertoast.showToast(msg: "안녕하세요, ${resLogin['userData']['user_name']}님 !");
+
           controller.currentBottomNavItemIndex.value = AppScreen.home;
         }
 

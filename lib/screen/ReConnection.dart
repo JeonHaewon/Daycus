@@ -1,4 +1,5 @@
 import 'package:daycus/backend/login/login.dart';
+import 'package:daycus/core/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -84,7 +85,7 @@ class _ReConnectionState extends State<ReConnection> {
                 //Center(child: Text('Connection Status: $_connectionStatus')),
                 SizedBox(
                   width: 30.w, height: 30.h,
-                  child: CircularProgressIndicator(), ),
+                  child: CircularProgressIndicator(color: AppColor.happyblue,), ),
               ],
             ),
 

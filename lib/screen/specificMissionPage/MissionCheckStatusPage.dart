@@ -868,7 +868,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                   onPressed: () async {
                                                                     if (date == todayBlockCnt){
                                                                       if (widget.mission_data['certify_tool'] == 'gallery'){
-                                                                        showModalBottomSheet(context: context,
+                                                                        await showModalBottomSheet(context: context,
                                                                             builder: ((builder) => cameraOrGallery
                                                                             ));
                                                                       } else if(widget.mission_data['certify_tool'] == 'pedometer'){
@@ -1247,7 +1247,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                 // 14일이 넘어가지 않았을 경우 : 미션 인증
                  else{
                   if (widget.mission_data['certify_tool'] == 'gallery'){
-                    showModalBottomSheet(context: context, builder: ((builder) => cameraOrGallery));
+                    await showModalBottomSheet(context: context, builder: ((builder) => cameraOrGallery));
 
                     // 만보기
                   } else if (widget.mission_data['certify_tool']=='pedometer'){
@@ -1289,7 +1289,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                         if (totalRecordTime >= int.parse(widget.mission_data['condition'])){
                           print("녹음된 파일 초 : ${totalRecordTime}");
-                          Fluttertoast.showToast(msg: "미션을 인증할 수 있습니다 !");
+                          //Fluttertoast.showToast(msg: "미션을 인증할 수 있습니다 !");
 
                           uploadAudio("test", widget.mission_data['image_location']);
 
