@@ -1097,6 +1097,8 @@ class _CheckFriendState extends State<CheckFriend> {
                     ),
                   );
 
+
+
                   // InkWell(
                   //   onTap: () {},
                   //   child: Container(

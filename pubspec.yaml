@@ -69,7 +69,7 @@ dependencies:
   connectivity:
   store_redirect:
   google_mobile_ads: ^0.13.6
-  like_button:
+#  like_button:
   package_info_plus:
   new_version_plus:
   html:
