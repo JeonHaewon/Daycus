@@ -778,8 +778,8 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
                           //0127 소셜기능 - 좋아요
                           GestureDetector(
-                            onTap: () {
-                              onHeartTap();
+                            onTap: () async {
+                              await onHeartTap();
                               isHeart = !isHeart;
                               setState(() {
                               });

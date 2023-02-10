@@ -750,7 +750,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
               AdminButton(
-                title: "불러와봐",
+                title: "사진 데이터 0으로 만드는 버튼",
                 onPressed: () async {
                   await get_no_data();
                   for (var item in imageFromDb!) {
