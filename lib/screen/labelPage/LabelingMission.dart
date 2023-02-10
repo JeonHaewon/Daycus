@@ -5,7 +5,10 @@ import 'package:daycus/backend/Api.dart';
 import 'package:daycus/backend/ImportData/imageDownload.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/backend/admin/imageDownload.dart';
 import 'package:daycus/core/app_text.dart';
+import 'package:daycus/screen/LabelPageCustom.dart';
+import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
@@ -18,7 +21,7 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/app_bottom.dart';
-import '../MyPageCustom.dart';
+// import '../MyPageCustom.dart';
 import 'LabelingEnd.dart';
 
 var fromdb;
@@ -63,6 +66,7 @@ class _LabelingMissionState extends State<LabelingMission> {
   var label_category_list = null;
   int label_cnt = 0;
 
+  // 다른 파일에 있는 똑같은 image_download 함수를 사용
   // image_download(String folder, String imageName) async {
   //   setState(() { is_load = false; });
   //   try{
@@ -144,45 +148,69 @@ class _LabelingMissionState extends State<LabelingMission> {
   }
 
   getjson_fromdb() async {
-    try {
-      var select_res = await http.post(Uri.parse(API.select), body: {
-        'update_sql': "select jsondata from user_table where user_email = '${user_data['user_email']}'"
-      });
-      if (select_res.statusCode == 200 ) {
-        var resUser = jsonDecode(select_res.body);
-        fromdb = resUser['data'][0]['jsondata'];
-        if (fromdb == null){
-          fromdb = {};
-        }
-        return fromdb;
-      }
-    } on Exception catch (e) {
-      print("에러발생 : ${e}");
-      return false;
-      //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+
+    fromdb = user_data['jsondata'];
+
+    if (fromdb == null){
+      fromdb = {};
     }
+    return fromdb;
+
+    // try {
+    //   var select_res = await http.post(Uri.parse(API.select), body: {
+    //     'update_sql': "select jsondata from user_table where user_email = '${user_data['user_email']}'"
+    //   });
+    //   if (select_res.statusCode == 200 ) {
+    //     var resUser = jsonDecode(select_res.body);
+    //     fromdb = resUser['data'][0]['jsondata'];
+    //     if (fromdb == null){
+    //       fromdb = {};
+    //     }
+    //     return fromdb;
+    //   }
+    // } on Exception catch (e) {
+    //   print("에러발생 : ${e}");
+    //   return false;
+    //   //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+    // }
   }
 
   update_json() async {
-    try {
-      var select_res = await http.post(Uri.parse(API.update), body: {
-        'update_sql': "update user_table set jsondata = '${jsonEncode(real_cnt_data)}' where user_email = '${user_data['user_email']}'"
-      });
-      print(jsonDecode(fromdb));
-      print(real_cnt_data);
-      if (select_res.statusCode == 200 ) {
-        if (button_clicked != 0) {
-          // 0121 하임 : 토스트 너무 많이 나오는 것 같아서 지웠어요
-          print("라벨링 업데이트가 완료되었습니다");
-          //Fluttertoast.showToast(msg: "라벨링 업데이트가 완료되었습니다 !");
-        }
-        else return print("변함 없음");
+
+    bool success = await update_request(
+        "update user_table set jsondata = '${jsonEncode(real_cnt_data)}' where user_email = '${user_data['user_email']}'",
+        null);
+
+    if (success){
+      if (button_clicked != 0) {
+        user_data['jsondata'] = real_cnt_data;
+        // 0121 하임 : 토스트 너무 많이 나오는 것 같아서 지웠어요
+        print("라벨링 업데이트가 완료되었습니다");
+        //Fluttertoast.showToast(msg: "라벨링 업데이트가 완료되었습니다 !");
       }
-    } on Exception catch (e) {
-      print("에러발생 : ${e}");
-      return false;
-      //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+      else return print("변함 없음");
     }
+
+
+    // try {
+    //   var select_res = await http.post(Uri.parse(API.update), body: {
+    //     'update_sql': "update user_table set jsondata = '${jsonEncode(real_cnt_data)}' where user_email = '${user_data['user_email']}'"
+    //   });
+    //   // print(jsonDecode(fromdb));
+    //   // print(real_cnt_data);
+    //   if (select_res.statusCode == 200 ) {
+    //     if (button_clicked != 0) {
+    //       // 0121 하임 : 토스트 너무 많이 나오는 것 같아서 지웠어요
+    //       print("라벨링 업데이트가 완료되었습니다");
+    //       //Fluttertoast.showToast(msg: "라벨링 업데이트가 완료되었습니다 !");
+    //     }
+    //     else return print("변함 없음");
+    //   }
+    // } on Exception catch (e) {
+    //   print("에러발생 : ${e}");
+    //   return false;
+    //   //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
+    // }
   }
 
   // 라벨링 한거는 제외하기
@@ -216,6 +244,7 @@ class _LabelingMissionState extends State<LabelingMission> {
       //Fluttertoast.showToast(msg: "미션을 신청하는 도중 문제가 발생했습니다.");
     }
   }
+  
   from_db_label_cnt() async {
     try {
       var select_res = await http.post(Uri.parse(API.select), body: {
@@ -248,6 +277,7 @@ class _LabelingMissionState extends State<LabelingMission> {
     real_cnt_data = await from_jsondata();
   }
 
+
   @override
   void initState() {
     super.initState();
@@ -262,18 +292,30 @@ class _LabelingMissionState extends State<LabelingMission> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bool success = await importImageList(widget.folder);
       if (success==false) {
-        PopPage(
-            "라벨링 할 데이터가 없습니다.",
-            context,
-            Text("현재 이 라벨링 미션은 불가합니다.\n다른 미션을 선택해주세요 !"),
-            "확인", null,
-                (){
-              Navigator.pop(context);
-              controller.currentBottomNavItemIndex.value = AppScreen.home;
-            }, null
-        );}
+        // 다른 미션을 불러온다.
+        controller.currentBottomNavItemIndex.value = AppScreen.labeling;
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => TemHomePage()), (
+                route) => false);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (_) => LabelPage()),
+        // );
+        // PopPage(
+        //     "라벨링 할 데이터가 없습니다.",
+        //     context,
+        //     Text("현재 이 라벨링 미션은 불가합니다.\n다른 미션을 선택해주세요 !"),
+        //     "확인", null,
+        //         (){
+        //       Navigator.pop(context);
+        //       controller.currentBottomNavItemIndex.value = AppScreen.home;
+        //     }, null
+        // );
+      }
       else {
-        await image_download(widget.folder, imageList![index]['image']);
+        setState(() { is_load = false; });
+        var resImage = await image_download(widget.folder, imageList![index]['image']);
+        downloadImage = resImage[0] ; degree = resImage[1];
         setState(() { is_load = true; });
       }
     });
@@ -299,16 +341,19 @@ class _LabelingMissionState extends State<LabelingMission> {
 
 
     List<String> rule_list = widget.rule.split("\\n");
-    int rules_list_cnt = rule_list!=null ? rule_list.length : 0;
+    // int rules_list_cnt = rule_list!=null ? rule_list.length : 0;
 
     int extraindex = -2;
 
     increase_index() async {
       if (index+1 >= imageListCnt){
-        Fluttertoast.showToast(msg: "마지막입니다");}
+        // Fluttertoast.showToast(msg: "마지막입니다");
+        }
       else{
         index += 1;
-        await image_download(widget.folder, imageList[index]['image']);
+        setState(() { is_load = false; });
+        var resImage = await image_download(widget.folder, imageList[index]['image']);
+        downloadImage = resImage[0] ; degree = resImage[1];
         setState(() { is_load = true; });// 혹 안뜨는 경우를 대비, 2번 set state 해준다
       }
     }
@@ -330,52 +375,7 @@ class _LabelingMissionState extends State<LabelingMission> {
 
     return Scaffold(
       backgroundColor: AppColor.background,
-      appBar: AppBar(
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back, color: Colors.black),
-        //   onPressed: () => Navigator.of(context).pop(),
-        // ),
-        backgroundColor: Colors.white,
-        title: Text('라벨링 미션',
-            style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold)),
-        actions: [
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Container(
-                      width: 110.w,
-                      //height: 40.h,
-                      decoration: BoxDecoration(
-                          color: Colors.indigo[100],
-
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 2.h,),
-                          Text("이번주 라벨링 횟수",style: TextStyle(color: Colors.black, fontSize: 10.sp), textAlign: TextAlign.center,),
-                          Text("${ccnt.toString()} / 700",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
-                          SizedBox(height: 2.h,),
-
-                        ],
-                      )
-                  ),
-
-                  SizedBox(width: 10.w,)
-                ],
-              )
-
-            ],
-          )
-
-        ],
-      ),
 
       body: SingleChildScrollView(
         child: Column(
@@ -820,9 +820,14 @@ class _LabelingMissionState extends State<LabelingMission> {
                                 update_request("update user_table set reward = reward + 0.1 where user_email = '${user_data['user_email']}'", null);
                               }
                               if (index+1 >= imageListCnt){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => LabelingEnd()));
+                                LabelState = "end";
+                                controller.currentBottomNavItemIndex.value = AppScreen.labeling;
+                                Navigator.pushAndRemoveUntil(context,
+                                    MaterialPageRoute(builder: (_) => TemHomePage()), (
+                                        route) => false);
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(builder: (_) => LabelingEnd()));
                               }
                             },
                             child: Text(label_category_list[extraindex]),
@@ -849,10 +854,14 @@ class _LabelingMissionState extends State<LabelingMission> {
                                   Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
                                 }
                                 if (index+1 >= imageListCnt){
-
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => LabelingEnd()));
+                                  LabelState = "end";
+                                  controller.currentBottomNavItemIndex.value = AppScreen.labeling;
+                                  Navigator.pushAndRemoveUntil(context,
+                                      MaterialPageRoute(builder: (_) => TemHomePage()), (
+                                          route) => false);
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(builder: (_) => LabelingEnd()));
                                 }
                               },
                               child: Text(label_category_list[extraindex+1]),

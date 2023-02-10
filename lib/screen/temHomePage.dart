@@ -70,6 +70,7 @@ class _TemHomePageState extends State<TemHomePage> {
     MissionCheckPage(),
     // HomePage(),
 
+    // end를 넣으면 라벨링 종료
     LabelPage(),
     MyPage(),
   ];
