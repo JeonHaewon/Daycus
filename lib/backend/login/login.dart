@@ -14,10 +14,12 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/backend/Api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/app_text.dart';
 import '../../screen/Friend/FriendPage.dart';
 import '../../screen/LoadingPage.dart';
 import '../../screen/myPage/privatesettings/PrivateSettings.dart';
 import '../../screen/specificMissionPage/MissionCheckStatusPage.dart';
+import '../../screen/specificMissionPage/SpecificMissionPage.dart';
 import '../../widget/PopPage.dart';
 import 'KeepLogin.dart';
 import 'dart:convert';
@@ -173,8 +175,6 @@ logout(bool reload) async {
 }
 
 
-
-
 // keep login - 유저 정보 들고오기
 LoginAsyncMethod(storage, BuildContext context, bool reload) async {
   //Fluttertoast.showToast(msg: "LoginAsyncMethod");
@@ -233,18 +233,42 @@ LoginAsyncMethod(storage, BuildContext context, bool reload) async {
             "취소",
             // 확인을 눌렀을 때
                 () async {
+              var i;
+              for (int j = 0; j<all_missions.length; j++){
+                if (all_missions[j]['mission_id'] == invitation[item]){
+                  i = j;
+                  break;
+                }
+              }
               invitation.remove(item);
               await update_request("update user_table set invitation = '${jsonEncode(invitation)}' where user_email = '${user_data['user_email']}'", null);
               Navigator.pop(context);
               // 하임님 요거 all_missions[index] 에서 mission_id랑 Index가 안맞아서 mission 상세 페이지로 이동이 안되요 ㅠㅠ
-              // return MissionCheckStatusPage(
-              //   mission_index: _index,
-              //   mission_data: all_missions[_index],
-              //   do_mission_data: do_mission[index],
-              // ),
+              Navigator.push(context, MaterialPageRoute(builder: (_)=> SpecificMissionPage(
+                  mission_data: all_missions[i],
+                  startDate: all_missions[i]['start_date'],
+                  mission_id: all_missions[i]['mission_id'],
+                  topimage: all_missions[i]['thumbnail'] ?? 'topimage1.png',
+
+                  progress:all_missions[i]['start_date']==null
+                      ? (all_missions[i]['next_start_date']==null
+                      ? "willbutton" : "comeonbutton") : "ingbutton",
+
+                  title : all_missions[i]['title'],
+
+                  duration: all_missions[i]['start_date']==null
+                      ? comingSoonString : all_missions[i]['start_date']+" ~ "+all_missions[i]['end_date'],
+
+                  totaluser: int.parse(all_missions[i]['total_user']),
+                  certifi_user: int.parse(all_missions[i]['certifi_user']),
+                  downimage: 'downimage1',
+                  content: all_missions[i]['content'],
+                  rules: all_missions[i]['rules'],
+                  rewardPercent: all_missions[i]['reward_percent'])),
+              );
                 },
             // 취소를 눌렀을 때
-            null,
+              null,
           );
         }
       }

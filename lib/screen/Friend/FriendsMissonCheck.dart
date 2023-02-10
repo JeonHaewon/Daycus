@@ -35,12 +35,14 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
   var MissionOfFriend = null;
   int MissionOfFriendCnt = 0;
 
+  var isBigonggae;
 
   @override
   void initState() {
 
     //print("친구의 미션 import");
     super.initState();
+    isBigonggae = false;
 
     WidgetsBinding.instance.addPostFrameCallback((_){
       print("불러올 친구 : ${widget.userData}");
@@ -54,7 +56,7 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
         "SELECT * FROM do_mission WHERE user_email = '${userEmail}' and how = '친구공개'",
         null,
         false);
-    var isBigonggae = await select_request(
+    isBigonggae = await select_request(
         "SELECT public FROM user_table WHERE user_email = '${userEmail}'",
         null,
         false);
@@ -515,6 +517,9 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
   void dispose() {
     super.dispose();
+    update_request("update do_mission set heart = '$HowManyHeart' where user_email = '${widget
+        .doMission['user_email']}' and mission_id = '${widget
+        .doMission['mission_id']}'", null);
   }
 
   @override
@@ -782,6 +787,9 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
                               await onHeartTap();
                               isHeart = !isHeart;
                               setState(() {
+                                if (isHeart){
+                                  HowManyHeart += 1;
+                                } else{HowManyHeart -= 1;}
                               });
                             },
                             child: AnimatedSwitcher(
@@ -792,8 +800,8 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
                                   child: child,
                                 );
                               }),
-                              child: waitingg && !isHeart
-                                  ? const Icon(
+                              child: waitingg
+                                  ? (!isHeart ? const Icon(
                                 key: ValueKey('UN_FAVORITE'),
                                 Icons.favorite_border_outlined,
                                 size: 30,
@@ -802,8 +810,18 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
                                   key: ValueKey('FAVORITE'),
                                   Icons.favorite_outlined,
                                   color: Colors.red,
-                                  size: 30),
+                                  size: 30)) : const Icon(
+                                key: ValueKey('UN_FAVORITE'),
+                                Icons.favorite_border_outlined,
+                                size: 30,
+                              )
                             ),
+                          ),
+
+                          SizedBox(width: 9.w),
+
+                          Container(
+                            child: Text(HowManyHeart.toString(),style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
                           ),
 
                           SizedBox(height: 4.h,),

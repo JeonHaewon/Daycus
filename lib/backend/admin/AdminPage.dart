@@ -291,6 +291,11 @@ class _AdminScreenState extends State<AdminScreen> {
       }
     }
 
+    move_to_past_missions () async {
+      await update_request("insert into past_missions ( select * from missions where datediff(current_date, end_date) >= 28 );", null);
+      await update_request("delete from missions where datediff(current_date, end_date) >= 28;", null);
+    }
+
     update_level() async {
       try {
         var update_res = await http.post(Uri.parse(API.update), body: {
@@ -508,6 +513,11 @@ class _AdminScreenState extends State<AdminScreen> {
         print("에러발생");
         Fluttertoast.showToast(msg: "삭제를 진행하는 도중 문제가 발생했습니다.");
       }
+    }
+
+    move_to_image_labeled_data() async {
+      await update_request("insert into image_labeled_data ( select * from image_data where label_done = 'done' );", null);
+      await update_request("delete from image_data where label_done = 'done';", null);
     }
 
     update_avg_reward() async{
@@ -818,6 +828,18 @@ class _AdminScreenState extends State<AdminScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => AlertDialogPage()));
+                },
+              ),
+              AdminButton(
+                title: "past_missions으로 이동하기",
+                onPressed: (){
+                  move_to_past_missions();
+                },
+              ),
+              AdminButton(
+                title: "image_labeled_data로 옮기기",
+                onPressed: (){
+                  move_to_image_labeled_data();
                 },
               ),
 
