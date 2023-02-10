@@ -560,12 +560,31 @@ class _AdminScreenState extends State<AdminScreen> {
               SizedBox(height: 15.h,),
 
               AdminButton(
-                title: "푸시 알림 보내기",
+                title: "미션 수정하기",
                 onPressed: (){
-                  // time_showNotification();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => MissionModify()));
                 },
               ),
-
+              // AdminButton(
+              //   title: "푸시 알림 보내기",
+              //   onPressed: (){
+              //     // time_showNotification();
+              //   },
+              // ),
+              AdminButton(
+                title: "past_missions으로 이동하기",
+                onPressed: (){
+                  move_to_past_missions();
+                },
+              ),
+              AdminButton(
+                title: "image_labeled_data로 옮기기",
+                onPressed: (){
+                  move_to_image_labeled_data();
+                },
+              ),
               AdminButton(
                 title: "랭킹 업데이트",
                 onPressed: (){
@@ -579,27 +598,6 @@ class _AdminScreenState extends State<AdminScreen> {
                   update_avg_reward();
                 },
               ),
-
-              AdminButton(
-                title: "리워드 더하기 버튼",
-                onPressed: (){
-                  update_plus_reward();
-                },
-              ),
-              AdminButton(
-                title: "카메라 권한 주기 버튼",
-                onPressed: (){
-                  _scan();
-                },
-              ),
-              AdminButton(
-                title: "만보기를 한번 해봅시다 !",
-                onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => PedometerPage()));
-                },
-              ),
               AdminButton(
                 title: "유저 레벨 업데이트 !",
                 onPressed: (){
@@ -608,10 +606,58 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
               AdminButton(
-                title: "지문 인식 슛 ~",
+                title: "앱 버전 업데이트 확인",
+                onPressed: () async {
+                  final newVersion = NewVersionPlus(
+                    androidId: 'com.happycircuit.daycus',
+                  );
+                  basicStatusCheck(NewVersionPlus newVersion) {
+                    newVersion.showAlertIfNecessary(context: context);
+                  }
+                  basicStatusCheck(newVersion);
+                },
+              ),
+              AdminButton(
+                  title: "사진 데이터 0으로 데이터베이스 업데이트",
+                  onPressed: () async {
+                    await get_no_data();
+                    for (var item in imageFromDb!) {
+                      item = item.toString();
+                      item = item.substring(1,item.length-1);
+                      print(item);
+                      await from_sql_d(item);
+                      await remove_sql_image(changing_idx, item);
+                    }
+                  }
+              ),
+              AdminButton(
+                title: "image_labeling_cnt 다 0으로 업데이트",
+                onPressed: () async {
+                  await update_request("update user_table set this_week_label_cnt = 0;", null);
+                },
+              ),
+              AdminButton(
+                title: "중복 로그인 팝업",
                 onPressed: (){
-                  _authenticateWithBiometrics();
-                  Fluttertoast.showToast(msg: "지문 인식 성공했습니다 !");
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoginPopup()));
+                },
+              ),
+              AdminButton(
+                title: "알림 팝업",
+                onPressed: (){
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => AlertDialogPage()));
+                },
+              ),
+              AdminButton(
+                title: "네이버 링크 이동 슛 ~",
+                onPressed: (){
+                  _launchURL();
                 },
               ),
               AdminButton(
@@ -629,15 +675,22 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
               AdminButton(
-                title: "업뎃 확인",
+                title: "리뷰 슛 ~",
                 onPressed: () async {
-                  final newVersion = NewVersionPlus(
-                    androidId: 'com.happycircuit.daycus',
-                  );
-                  basicStatusCheck(NewVersionPlus newVersion) {
-                    newVersion.showAlertIfNecessary(context: context);
-                  }
-                  basicStatusCheck(newVersion);
+                  final InAppReview inAppReview = InAppReview.instance;
+
+                  if (await inAppReview.isAvailable()) {
+                    inAppReview.requestReview();
+                  }},
+              ),
+
+              AdminButton(
+                title: "굿 라벨링",
+                onPressed: (){
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => LabelingEnd()));
                 },
               ),
               // AdminButton(
@@ -656,15 +709,9 @@ class _AdminScreenState extends State<AdminScreen> {
               //   },
               // ),
               AdminButton(
-                title: "php로 이메일을 보내봅시당 !",
+                title: "php로 이메일 보내기 버튼",
                 onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (_)=> PhpMail()));
-                },
-              ),
-              AdminButton(
-                title: "한 유저만 레벨 업데이트 !",
-                onPressed: (){
-                  update_level_individual();
                 },
               ),
               AdminButton(
@@ -673,114 +720,50 @@ class _AdminScreenState extends State<AdminScreen> {
                   change_to_done();
                 },
               ),
+              // AdminButton(
+              //   title: "jsondata 빼고 부르기",
+              //   onPressed: (){
+              //     without_json();
+              //   },
+              // ),
+              // AdminButton(
+              //   title: "녹음 미션",
+              //   onPressed: (){
+              //     Fluttertoast.showToast(msg: "녹음 미션은 일시적으로 막아두었습니다 - 이하임");
+              //     // Navigator.push(
+              //     //   context,
+              //     //   MaterialPageRoute(builder: (_) => RecordingPage()),
+              //     // );
+              //   },
+              // ),
+              // AdminButton(
+              //   title: "랭킹 가져오기",
+              //   onPressed: () async {
+              //     int userRanking = int.parse(user_data['Ranking']);
+              //     rankingList = await select_request(
+              //         "select user_name, reward, Ranking, user_id From user_table WHERE (${userRanking-2}<=Ranking) AND (Ranking<=${userRanking+2}) ORDER BY Ranking;",
+              //         "위 아래 2위를 불러왔습니다",
+              //         true);
+              //     print(rankingList);
+              //   },
+              // ),
+              //
+              // AdminButton(
+              //     title: "이미지 다운로드",
+              //     onPressed: (){
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(builder: (_) => ImageDownload()));
+              //     },
+              // ),
               AdminButton(
-                title: "jsondata 빼고 부르기",
-                onPressed: (){
-                  without_json();
-                },
-              ),
-              AdminButton(
-                title: "리뷰 슛 ~",
-                onPressed: () async {
-                  final InAppReview inAppReview = InAppReview.instance;
-
-                  if (await inAppReview.isAvailable()) {
-                  inAppReview.requestReview();
-                  }},
-              ),
-              AdminButton(
-                title: "녹음 미션",
-                onPressed: (){
-                  Fluttertoast.showToast(msg: "녹음 미션은 일시적으로 막아두었습니다 - 이하임");
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => RecordingPage()),
-                  // );
-                },
-              ),
-              AdminButton(
-                title: "링크 이동 슛 ~",
-                onPressed: (){
-                  _launchURL();
-                },
-              ),
-              AdminButton(
-                title: "랭킹 가져오기",
-                onPressed: () async {
-                  int userRanking = int.parse(user_data['Ranking']);
-                  rankingList = await select_request(
-                      "select user_name, reward, Ranking, user_id From user_table WHERE (${userRanking-2}<=Ranking) AND (Ranking<=${userRanking+2}) ORDER BY Ranking;",
-                      "위 아래 2위를 불러왔습니다",
-                      true);
-
-                  print(rankingList);
-
-                },
-              ),
-
-              AdminButton(
-                title: "로딩페이지",
-                onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => LoadingPage()));
-                },
-              ),
-              
-              AdminButton(
-                  title: "이미지 다운로드",
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => ImageDownload()));
-                  },
-              ),
-              AdminButton(
-                title: "123등 불러오기",
-                onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => ImportRanking()));
-                },
-              ),
-
-              AdminButton(
-                  title: "친구가 하고 있는 미션 다 불러오기",
-                  onPressed: (){
-                    
-                  },
-              ),
-              AdminButton(
-                title: "리워드 광고 슛 !",
+                title: "리워드 광고 나타내주기",
                 onPressed: () async {
                   var dbcode = await get_logincode_db(user_data['user_email']);
                   var pfcode = await get_logincode_pf();
                   print(dbcode);
                   print(pfcode);
                 },
-              ),
-              AdminButton(
-                title: "사진 데이터 0으로 만드는 버튼",
-                onPressed: () async {
-                  await get_no_data();
-                  for (var item in imageFromDb!) {
-                    item = item.toString();
-                    item = item.substring(1,item.length-1);
-                    print(item);
-                    await from_sql_d(item);
-                    await remove_sql_image(changing_idx, item);
-                  }
-                }
-              ),
-
-              AdminButton(
-                  title: "미션 수정하기",
-                  onPressed: (){
-
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => MissionModify()));
-                  },
               ),
 
               // AdminButton(
@@ -791,58 +774,15 @@ class _AdminScreenState extends State<AdminScreen> {
               //       );
               //     },
               // ),
-
-              AdminButton(
-                title: "녹음 미션 3",
-                onPressed: (){
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (_) => StreamingExample())
-                  // );
-                },
-              ),
-
-              AdminButton(
-                title: "중복 로그인 팝업",
-                onPressed: (){
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => LoginPopup()));
-                },
-              ),
-
-              AdminButton(
-                title: "굿 라벨링",
-                onPressed: (){
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => LabelingEnd()));
-                },
-              ),
-
-              AdminButton(
-                title: "알림 팝업",
-                onPressed: (){
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => AlertDialogPage()));
-                },
-              ),
-              AdminButton(
-                title: "past_missions으로 이동하기",
-                onPressed: (){
-                  move_to_past_missions();
-                },
-              ),
-              AdminButton(
-                title: "image_labeled_data로 옮기기",
-                onPressed: (){
-                  move_to_image_labeled_data();
-                },
-              ),
-
+              //
+              // AdminButton(
+              //   title: "녹음 미션 3",
+              //   onPressed: (){
+              //     // Navigator.push(context,
+              //     //     MaterialPageRoute(builder: (_) => StreamingExample())
+              //     // );
+              //   },
+              // ),
 
               // Center(
               //   child: Container(
