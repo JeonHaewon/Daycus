@@ -245,33 +245,33 @@ class _LabelingMissionState extends State<LabelingMission> {
     }
   }
   
-  from_db_label_cnt() async {
-    try {
-      var select_res = await http.post(Uri.parse(API.select), body: {
-        'update_sql': "select this_week_label_cnt from user_table where user_email = '${user_data['user_email']}'",
-      });
-
-      if (select_res.statusCode == 200 ) {
-        var resMission = jsonDecode(select_res.body);
-        print(resMission);
-        if (resMission['success'] == true) {
-          if (resMission['data'][0]['this_week_label_cnt'] == null){
-            ccnt = 0;
-          }
-          else{
-            ccnt = int.parse(resMission['data'][0]['this_week_label_cnt']);
-          }
-          print("잘 불러옴");
-        } else {
-          print("못 불러옴");
-        }
-
-      }
-    } on Exception catch (e) {
-      print("에러발생 : ${e}");
-      return false;
-    }
-  }
+  // from_db_label_cnt() async {
+  //   try {
+  //     var select_res = await http.post(Uri.parse(API.select), body: {
+  //       'update_sql': "select this_week_label_cnt from user_table where user_email = '${user_data['user_email']}'",
+  //     });
+  //
+  //     if (select_res.statusCode == 200 ) {
+  //       var resMission = jsonDecode(select_res.body);
+  //       print(resMission);
+  //       if (resMission['success'] == true) {
+  //         if (resMission['data'][0]['this_week_label_cnt'] == null){
+  //           ccnt = 0;
+  //         }
+  //         else{
+  //           ccnt = int.parse(resMission['data'][0]['this_week_label_cnt']);
+  //         }
+  //         print("잘 불러옴");
+  //       } else {
+  //         print("못 불러옴");
+  //       }
+  //
+  //     }
+  //   } on Exception catch (e) {
+  //     print("에러발생 : ${e}");
+  //     return false;
+  //   }
+  // }
 
   get_data() async {
     real_cnt_data = await from_jsondata();
@@ -282,7 +282,7 @@ class _LabelingMissionState extends State<LabelingMission> {
   void initState() {
     super.initState();
     get_data();
-    from_db_label_cnt();
+    ccnt = int.parse(user_data['this_week_label_cnt']);
 
     label_category_list = widget.label_category.split(", ");
     label_cnt = label_category_list!.length;
@@ -813,8 +813,12 @@ class _LabelingMissionState extends State<LabelingMission> {
                             onPressed: () {
                               update_map(index, label_category_list[i*2]);
                               do_label(label_category_list[i*2]);
-                              ccnt += 1;
-                              button_clicked += 1;
+
+                              setState(() {
+                                button_clicked += 1;
+                                ccnt += 1;
+                              });
+
                               if (ccnt % 10 == 0){
                                 Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
                                 update_request("update user_table set reward = reward + 0.1 where user_email = '${user_data['user_email']}'", null);
@@ -848,8 +852,11 @@ class _LabelingMissionState extends State<LabelingMission> {
                                 // 로딩이 다 됐을 때만 라벨링 가능
                                 update_map(index, label_category_list[2*i+1]);
                                 do_label(label_category_list[2*i+1]);
-                                ccnt += 1;
-                                button_clicked += 1;
+
+                                setState(() {
+                                  ccnt += 1;
+                                  button_clicked += 1;
+                                });
                                 if (ccnt % 10 == 0){
                                   Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");
                                 }

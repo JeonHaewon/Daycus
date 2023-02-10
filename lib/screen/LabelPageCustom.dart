@@ -71,7 +71,7 @@ class _LabelPageState extends State<LabelPage> {
                       children: [
                         SizedBox(height: 2.h,),
                         Text("이번주 라벨링 횟수",style: TextStyle(color: Colors.black, fontSize: 10.sp), textAlign: TextAlign.center,),
-                        Text("${ccnt.toString()} / 700",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
+                        Text("${ccnt.toString()} 회",style: TextStyle(color: Colors.black, fontSize: 11.sp), textAlign: TextAlign.center,),
                         SizedBox(height: 2.h,),
 
                       ],

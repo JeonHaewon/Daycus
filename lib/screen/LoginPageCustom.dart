@@ -288,6 +288,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
                                     TextButton(
                                         onPressed: () async {
+                                          Navigator.pop(context);
                                           loginProcess(is_login);
 
                                         }, //다른 기기에서 로그아웃하고 로그인

@@ -98,6 +98,8 @@ class MissionFeed extends StatelessWidget {
                                       ],
                                     ),
 
+
+
                                   // 몇개의 미션을 안그려주는 것 같음
                                   if (doneMissionCnt>0)
                                   Container(
@@ -111,6 +113,7 @@ class MissionFeed extends StatelessWidget {
                                         }
 
                                         //int mission_id = int.parse(done_mission[index]['mission_id']);
+                                        // past_missions에서도 불러오기
                                         int _index = all_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id']);
                                         month = done_mission[index]['mission_start'].substring(0,7);
 
@@ -138,6 +141,7 @@ class MissionFeed extends StatelessWidget {
                                             //   image: "${all_missions[_index]['thumbnail']}" ,
                                             //   percent: int.parse(done_mission[index]['get_reward']),
                                             //   reward: 1200,),
+                                            if (_index!=-1)
                                             FeedButton(
                                                 title: "${all_missions[_index]['title']}",
 
@@ -163,6 +167,24 @@ class MissionFeed extends StatelessWidget {
                                 ],
                               ),
                             ),
+
+                            // past_missions와 연계하여 뜨도록 할 예정
+                            Padding(
+                              padding: EdgeInsets.only(left: 10.w, bottom: 10.h, top: 20.h),
+                              child: Container(
+                                  // padding: EdgeInsets.only(left: 30.w, ),
+                                  width: 250.w,
+                                  height: 35.h,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Align(
+                                      alignment: Alignment.center,
+                                    child: Text("※ 미션 종료 후 48일이 지난 미션은 뜨지 않습니다",
+                                        style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),)), )
+
+
                           ],
                         ),
                       ),
