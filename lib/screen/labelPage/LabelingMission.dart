@@ -33,6 +33,7 @@ Map <String, dynamic> real_cnt_data={};
 class LabelingMission extends StatefulWidget {
   LabelingMission({
     Key? key,
+    // required this.callback,
     required this.folder,
     required this.title,
     required this.rule,
@@ -42,6 +43,7 @@ class LabelingMission extends StatefulWidget {
 
   }) : super(key: key);
 
+  // Function callback;
   final String folder;
   final String title;
   final String rule;
@@ -817,6 +819,11 @@ class _LabelingMissionState extends State<LabelingMission> {
                               setState(() {
                                 button_clicked += 1;
                                 ccnt += 1;
+
+                                // final state = LabelPageState.of<LabelPage>();
+                                // state?.se
+
+                                // this.widget.callback();
                               });
 
                               if (ccnt % 10 == 0){
@@ -856,6 +863,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                                 setState(() {
                                   ccnt += 1;
                                   button_clicked += 1;
+                                  // this.widget.callback();
                                 });
                                 if (ccnt % 10 == 0){
                                   Fluttertoast.showToast(msg: "축하합니다! 추가 리워드를 획득하셨습니다!");

@@ -90,6 +90,7 @@ class _LabelPageState extends State<LabelPage> {
       body: LabelState=="end"
           ? LabelingEnd()
           : LabelingMission(
+
         content: all_missions[i]['content'],
         label_category: all_missions[i]['label_category'],
         folder: all_missions[i]['image_locate'],
