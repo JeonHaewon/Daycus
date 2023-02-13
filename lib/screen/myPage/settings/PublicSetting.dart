@@ -1,7 +1,10 @@
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:daycus/screen/myPage/settings/NoticeSetting.dart';
+
+import '../../../backend/UserDatabase.dart';
 
 class PublicSetting extends StatefulWidget {
   const PublicSetting({Key? key}) : super(key: key);
@@ -13,6 +16,12 @@ class PublicSetting extends StatefulWidget {
 List<bool> _isChecked = [true];
 
 class _PublicSettingState extends State<PublicSetting> {
+
+  void dispose() {
+    super.dispose();
+    update_request("update user_table set Nickname_public = '${_isChecked[0] ? 1 : 0}' where user_email = '${user_data['user_email']}'", null);
+  }
+
   @override
   Widget build(BuildContext context) {
 

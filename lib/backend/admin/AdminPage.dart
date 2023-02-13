@@ -599,6 +599,12 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
               AdminButton(
+                title: "maxed_lv 업데이트",
+                onPressed: () async {
+                  await update_request("update user_table set maxed_lv = '${int.parse(user_data['maxed_lv']) >= int.parse(user_data['user_lv']) ? user_data['maxed_lv'] : user_data['user_lv']}' where user_email = '${user_data['user_email']}'", null);
+                },
+              ),
+              AdminButton(
                 title: "유저 레벨 업데이트 !",
                 onPressed: (){
                   update_level();

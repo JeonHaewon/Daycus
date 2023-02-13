@@ -132,9 +132,9 @@ class _LabelingMissionState extends State<LabelingMission> {
 
   from_jsondata() async {
     fromdb = await getjson_fromdb();
-    print(jsonDecode(fromdb));
+    print(fromdb);
     if (fromdb != null){
-      return jsonDecode(fromdb);
+      return fromdb;
     }
     else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -154,7 +154,8 @@ class _LabelingMissionState extends State<LabelingMission> {
     fromdb = user_data['jsondata'];
 
     if (fromdb == null){
-      fromdb = {};
+      fromdb = "{}";
+
     }
     return fromdb;
 

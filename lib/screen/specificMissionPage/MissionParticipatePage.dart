@@ -13,9 +13,11 @@ import 'package:daycus/widget/PopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import '../../backend/ImportData/userDataImport.dart';
 
+bool isPartici = false;
 
 class MissionParticipatePage extends StatefulWidget {
   MissionParticipatePage({
@@ -37,7 +39,7 @@ class MissionParticipatePage extends StatefulWidget {
   final String title;
   final String duration;
   final int totaluser;
-  final int avgreward;
+  final double avgreward;
   final int remainDate;
 
   final onTap;
@@ -404,7 +406,11 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                        "미션 시작", "취소",
                       //onPressed
                         (){
-                          participateMission();
+                          if (!isPartici) {
+                            isPartici = true;
+                            participateMission();
+                          }
+                          else{Fluttertoast.showToast(msg: "두 번 미션 참여는 안됩니다!");}
                         },
                       null);
 

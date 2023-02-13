@@ -641,25 +641,33 @@ class _SpecificMissionPageState extends State<SpecificMissionPage> {
             SizedBox(
               height: 70.h,
               width: 412.w,
-              child: TextButton(onPressed: widget.onTap ?? (){
-                if (timeDiffer>14){
+              child: TextButton(onPressed: widget.onTap ?? () {
+                if (timeDiffer > 14) {
                   Fluttertoast.showToast(msg: "미션 모집기간이 아닙니다.");
                 }
-                else if (int.parse(widget.mission_data['frequency'])*int.parse(widget.mission_data['term']) > 15-timeDiffer){
+                else if (int.parse(widget.mission_data['frequency']) *
+                    int.parse(widget.mission_data['term']) >
+                    15 - timeDiffer) {
                   Fluttertoast.showToast(msg: cantParticipateString);
                 }
                 else {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => MissionParticipatePage(
-                        remainDate: 14-timeDiffer,
-                        topimage: widget.topimage,
-                        //average reward도 데이터베이스에서 끌고오기
-                        mission_id: widget.mission_id,
-                        title: widget.title, duration: widget.duration, totaluser: widget.totaluser, avgreward: int.parse(widget.mission_data['average']))),
+                    MaterialPageRoute(builder: (_) =>
+                        MissionParticipatePage(
+                            remainDate: 14 - timeDiffer,
+                            topimage: widget.topimage,
+                            //average reward도 데이터베이스에서 끌고오기
+                            mission_id: widget.mission_id,
+                            title: widget.title,
+                            duration: widget.duration,
+                            totaluser: widget.totaluser,
+                            avgreward: double.parse(
+                                widget.mission_data['average']))),
                   );
                 }
-              }, child: Text("미션 참여하기",
+              },
+               child: Text("미션 참여하기",
                 style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
             ),
           ],
