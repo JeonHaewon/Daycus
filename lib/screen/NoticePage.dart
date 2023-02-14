@@ -33,11 +33,11 @@ class NoticePage extends StatelessWidget {
             Container(
               width : double.infinity,
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(20.w, 0, 0, 0),
+                  padding: EdgeInsets.fromLTRB(35.w, 0, 0, 0),
                   child: Text("미션 초대 알림",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.w500),)),
 
             ),
-            SizedBox(height: 5.h,),
+            SizedBox(height: 10.h,),
 
             Container(
               alignment: Alignment.center,
@@ -88,11 +88,11 @@ class NoticePage extends StatelessWidget {
             Container(
               width : double.infinity,
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(20.w, 0, 0, 0),
+                  padding: EdgeInsets.fromLTRB(35.w, 0, 0, 0),
                   child: Text("친구 요청 알림",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.w500),)),
 
             ),
-            SizedBox(height: 5.h,),
+            SizedBox(height: 10.h,),
 
             Container(
               alignment: Alignment.center,
