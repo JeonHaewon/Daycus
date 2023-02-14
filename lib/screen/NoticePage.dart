@@ -23,75 +23,159 @@ class NoticePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+
+
+
+            SizedBox(height: 10.h,),
+
             Container(
-              padding: EdgeInsets.only(top: 20.h),
-              alignment: Alignment.center,
-              child: Text("도착한 알람이 없습니다."),
-            ),
-            
-            // 알람 예시 - 나중에 알림 기능을 추가하면 될듯.
-            /*
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 85.h,
-                width: 412.w,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(30.w, 20.h, 0, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 5,
+                itemBuilder: (_, index) {
+                  return Column(
+                    children: [
 
-                          Text("오늘의 미션 수행" ,style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', ) ),
-                          SizedBox(height: 7.h,),
-                          Text("2021.08.19" ,style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',color: Colors.grey ) ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                      Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()),
+                      Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "친구요청을 보냈습니다", onTap: NoticePage()),
+
+                    ],
+                  );
+                },
               ),
             ),
-            Container(height: 1,color: Colors.grey[300]),
-            
-            
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 85.h,
-                width: 412.w,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(30.w, 20.h, 0, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
 
-                          Text("오늘의 미션 수행" ,style: TextStyle(fontSize: 20.sp, fontFamily: 'korean', ) ),
-                          SizedBox(height: 7.h,),
-                          Text("2021.08.19" ,style: TextStyle(fontSize: 15.sp, fontFamily: 'korean',color: Colors.grey ) ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(height: 1,color: Colors.grey[300]),
-            */
+            SizedBox(height: 10.h,),
+
+
 
 
 
           ],
         ),
+
+
+
+
+
+
       ),
 
 
     );
   }
 }
+
+
+
+class Notice extends StatelessWidget {
+  Notice({
+    Key? key,
+    required this.profileimage,
+    required this.freindName,
+    required this.content,
+    required this.check,
+    this.onTap,
+  }) : super(key: key);
+
+  final String profileimage;
+  final String freindName;
+  final String content;
+  final bool check;
+  final onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => onTap),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(30.w, 10.h, 30.w, 10.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+              CircleAvatar(
+                radius: 16.w,
+                backgroundImage : profileimage!=null
+                  ? AssetImage("assets/image/non_profile.png",)
+                  : AssetImage("assets/image/non_profile.png"),
+              ),
+
+              SizedBox(width: 6.w,),
+
+              Container(
+                width: 290.w,
+                //height: 10.h,
+                child: Text("${freindName} 님이 ${content}",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',)),
+              ),
+
+              Container(
+                width: 8.w,
+                height: 8.h,
+                decoration: BoxDecoration(
+                    color: check==false ? Colors.red : AppColor.background,
+                    shape: BoxShape.circle
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+
+    );
+  }
+}
+
+
+
+
+
+// InkWell(
+//   onTap: () {
+//
+//   },
+//   child: Container(
+//     width: double.infinity,
+//     child: Padding(
+//       padding: EdgeInsets.fromLTRB(30.w, 10.h, 30.w, 10.h),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//
+//
+//
+//           CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 16.w,),
+//
+//           SizedBox(width: 6.w,),
+//
+//           Container(
+//             width: 290.w,
+//             //height: 10.h,
+//             child: Text("퇴근퇴근 님이 하루 물 3잔 마시기 미션에 초대하셨습니다",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',)),
+//           ),
+//
+//           Container(
+//             width: 8.w,
+//             height: 8.h,
+//             decoration: BoxDecoration(
+//               color: Colors.red,
+//               shape: BoxShape.circle
+//
+//             ),
+//           ),
+//
+//         ],
+//       ),
+//     ),
+//   ),
+//
+// ),

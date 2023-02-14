@@ -409,7 +409,7 @@ class _LabelingMissionState extends State<LabelingMission> {
                             SizedBox(width: 60.w,),
 
                             SizedBox(
-                              width: 210.w,
+                              width: 205.w,
                               height: 32.h,
                               child: FittedBox(
                                 alignment: Alignment.center,

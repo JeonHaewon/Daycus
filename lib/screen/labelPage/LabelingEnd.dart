@@ -53,25 +53,47 @@ class _LabelingEndState extends State<LabelingEnd> {
           ),
 
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 150.h,),
+              //SizedBox(height: 150.h,),
 
-              CircleAvatar(
-                radius: 90.h,
-                backgroundColor: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/image/daycus_logo.gif', scale: 5.w,),
-                    SizedBox(height: 5.h,),
-                    Text("라벨링이\n완료되었습니다",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black), textAlign: TextAlign.center,),
+              // CircleAvatar(
+              //   radius: 90.w,
+              //   backgroundColor: Colors.white,
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: [
+              //       Image.asset('assets/image/daycus_logo.gif', scale: 6.w,),
+              //       SizedBox(height: 5.h,),
+              //       Text("라벨링이\n완료되었습니다",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black), textAlign: TextAlign.center,),
+              //
+              //     ],
+              //   ),
+              // ),
 
-                  ],
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white
+                ),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 25.h, 0,  25.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/image/daycus_logo.gif', scale: 5.w,),
+                      SizedBox(height: 8.h,),
+                      Text("라벨링이\n완료되었습니다",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black), textAlign: TextAlign.center,),
+
+                    ],
+                  ),
                 ),
               ),
 
-              SizedBox(height: 120.h,),
+              SizedBox(height: 100.h,),
 
               Padding(
                 padding: EdgeInsets.only(left: 100.w, right: 100.w),
