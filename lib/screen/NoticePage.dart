@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+late ScrollController _scrollController = ScrollController();
+late ScrollController _scrollController2 = ScrollController();
+
 
 class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);
@@ -22,47 +25,125 @@ class NoticePage extends StatelessWidget {
 
       body: SingleChildScrollView(
         child: Column(
+       
           children: [
 
-
-
-            SizedBox(height: 10.h,),
+            SizedBox(height: 20.h,),
 
             Container(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 5,
-                itemBuilder: (_, index) {
-                  return Column(
-                    children: [
+              width : double.infinity,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(20.w, 0, 0, 0),
+                  child: Text("미션 초대 알림",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.w500),)),
 
-                      Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()),
-                      Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "친구요청을 보냈습니다", onTap: NoticePage()),
+            ),
+            SizedBox(height: 5.h,),
 
-                    ],
-                  );
-                },
+            Container(
+              alignment: Alignment.center,
+              width : 400.w,
+              height: 320.h,
+              // decoration: BoxDecoration(
+              //   color: Colors.black
+              // ),
+              child: Scrollbar(
+                controller: _scrollController,
+                isAlwaysShown: true,
+                thickness: 8,
+                radius: Radius.circular(10),
+                //scrollbarOrientation: ScrollbarOrientation.right,
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (OverscrollIndicatorNotification overScroll) {
+                    overScroll.disallowGlow();
+                    return false;
+                  },
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      children: [
+
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: 5,
+                          itemBuilder: (_, index) {
+                            return Column(
+                              children: [
+                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()),
+                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "친구요청을 보냈습니다", onTap: NoticePage()),
+                              ],
+                            );
+                          },
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
 
-            SizedBox(height: 10.h,),
+            SizedBox(height: 25.h,),
 
+            Container(
+              width : double.infinity,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(20.w, 0, 0, 0),
+                  child: Text("친구 요청 알림",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.w500),)),
 
+            ),
+            SizedBox(height: 5.h,),
 
+            Container(
+              alignment: Alignment.center,
+              width : 400.w,
+              height: 320.h,
+              // decoration: BoxDecoration(
+              //   color: Colors.black
+              // ),
+              child: Scrollbar(
+                controller: _scrollController2,
+                isAlwaysShown: true,
+                thickness: 8,
+                radius: Radius.circular(10),
+                //scrollbarOrientation: ScrollbarOrientation.right,
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (OverscrollIndicatorNotification overScroll) {
+                    overScroll.disallowGlow();
+                    return false;
+                  },
+                  child: SingleChildScrollView(
+                    controller: _scrollController2,
+                    child: Column(
+                      children: [
+
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: 5,
+                          itemBuilder: (_, index) {
+                            return Column(
+                              children: [
+                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()),
+                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "친구요청을 보냈습니다", onTap: NoticePage()),
+                              ],
+                            );
+                          },
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20.h,),
 
 
           ],
         ),
-
-
-
-
-
-
       ),
-
-
     );
   }
 }
