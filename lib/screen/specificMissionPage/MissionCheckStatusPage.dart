@@ -66,6 +66,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     var friends = friendsdb[0]['friends'] ?? "{}";
     var friend = jsonDecode(friends);
     for (var item in friend.keys){
+      if (friend[item]!='1'){
+        continue;
+      }
+      // 하임님~ 여기에요 !!
       var ff = await select_request("select user_name from user_table where user_id = '$item'", null, true);
       friendsList.add(ff[0]['user_name']);
     }
