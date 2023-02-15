@@ -1435,7 +1435,7 @@ void showAlertDialog(BuildContext context, int date, Image? downloadImage, int d
             height: 300.h,
             child: downloadImage!=null
                 ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
-                : Text("이미지를 불러올 수 없습니다 :(", textAlign: TextAlign.center,),
+                : Text("이미지를 불러올 수 없습니다 :( \n이미지 데이터가 손실되었거나 정상적으로 인증이 확정된 이미지일 수 있습니다.", textAlign: TextAlign.center,),
           ),
 
           shape: RoundedRectangleBorder(

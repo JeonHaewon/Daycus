@@ -470,6 +470,9 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
   }
 
+
+  // 최적화가 필연적으로 필요
+
   onHeartTap() async {
     await initHeart();
     if (isHeart){
@@ -594,6 +597,7 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
                                     if (all_missions[widget.allMissionIndex]['d${date}']!=null){
                                       doneCnt += 1 ;
                                     }
+                                    // 최적화가 필요
 
                                     return Row(
                                       children: [
@@ -782,47 +786,52 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
 
                           //0127 소셜기능 - 좋아요
-                          GestureDetector(
-                            onTap: () async {
-                              await onHeartTap();
-                              isHeart = !isHeart;
-                              setState(() {
-                                if (isHeart){
-                                  HowManyHeart += 1;
-                                } else{HowManyHeart -= 1;}
-                              });
-                            },
-                            child: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 300),
-                              transitionBuilder: ((child, animation) {
-                                return ScaleTransition(
-                                  scale: animation,
-                                  child: child,
-                                );
-                              }),
-                              child: waitingg
-                                  ? (!isHeart ? const Icon(
-                                key: ValueKey('UN_FAVORITE'),
-                                Icons.favorite_border_outlined,
-                                size: 30,
-                              )
-                                  : const Icon(
-                                  key: ValueKey('FAVORITE'),
-                                  Icons.favorite_outlined,
-                                  color: Colors.red,
-                                  size: 30)) : const Icon(
-                                key: ValueKey('UN_FAVORITE'),
-                                Icons.favorite_border_outlined,
-                                size: 30,
-                              )
-                            ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  await onHeartTap();
+                                  isHeart = !isHeart;
+                                  setState(() {
+                                    if (isHeart){
+                                      HowManyHeart += 1;
+                                    } else{HowManyHeart -= 1;}
+                                  });
+                                },
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  transitionBuilder: ((child, animation) {
+                                    return ScaleTransition(
+                                      scale: animation,
+                                      child: child,
+                                    );
+                                  }),
+                                  child: waitingg
+                                      ? (!isHeart ? Icon(
+                                    key: ValueKey('UN_FAVORITE'),
+                                    Icons.favorite_border_outlined,
+                                    size: 18.sp,
+                                  )
+                                      : Icon(
+                                      key: ValueKey('FAVORITE'),
+                                      Icons.favorite_outlined,
+                                      color: Colors.red,
+                                      size: 18.sp)) : Icon(
+                                    key: ValueKey('UN_FAVORITE'),
+                                    Icons.favorite_border_outlined,
+                                    size: 18.sp,
+                                  )
+                                ),
+                              ),
+
+                              SizedBox(width: 5.w,),
+
+                              Text(HowManyHeart.toString(),style: TextStyle(color: Colors.black, fontSize: 13.sp, fontFamily: 'korean') ),
+                            ],
                           ),
 
                           SizedBox(width: 9.w),
 
-                          Container(
-                            child: Text(HowManyHeart.toString(),style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
-                          ),
 
                           SizedBox(height: 4.h,),
 

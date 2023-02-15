@@ -195,6 +195,7 @@ Future uploadAudio
     request.fields['folder'] = folderName;
     //request.fields['source'] = "audio"; //source;
 
+    // 이름 구해서 넣는거까지 해야함
     print("오디오 데이터 FilePath : ${FilePath}");
     print("오디오 데이터 이름 : ${uploadAudioPath}");
     //Map<String, String> headers = {"Authorization" : "daycus", "ClientID" : "daycus"};
