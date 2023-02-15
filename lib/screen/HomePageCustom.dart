@@ -1,11 +1,8 @@
 import 'package:daycus/backend/ImportData/imageDownload.dart';
-import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/backend/login/login.dart';
 import 'package:daycus/core/app_bottom.dart';
 import 'package:daycus/core/app_text.dart';
-import 'package:daycus/core/notification.dart';
-import 'package:daycus/screen/CheckConnection.dart';
 import 'package:daycus/screen/specificMissionPage/MissionCheckStatusPage.dart';
 import 'package:daycus/screen/temHomePage.dart';
 import 'package:daycus/widget/HomePageUserInfoBar.dart';
@@ -21,13 +18,11 @@ import 'package:daycus/screen/NoticePage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:daycus/widget/RankingBar.dart';
 import 'dart:math';
 import 'package:daycus/screen/myPage/privatesettings/PrivateSettings.dart';
 import 'package:daycus/screen/MissionAddPage.dart';
 import 'package:daycus/screen/Friend/FriendPage.dart';
-import 'package:daycus/core/app_data.dart';
 
 
 late ScrollController _scrollController = ScrollController();

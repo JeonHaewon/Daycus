@@ -2,20 +2,13 @@
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/admin/MissionModify.dart';
-import 'package:daycus/backend/admin/PedometerPage.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
-import 'package:daycus/backend/admin/RecordTest.dart';
-import 'package:daycus/backend/admin/RecordTest2.dart';
-import 'package:daycus/backend/admin/imageDownload.dart';
-import 'package:daycus/backend/admin/importRanking.dart';
 import 'package:daycus/backend/admin/LoginPopup.dart';
 import 'package:daycus/screen/labelPage/LabelingEnd.dart';
 import 'package:daycus/backend/admin/AlertDialogPage.dart';
-
-import 'package:daycus/core/notification.dart';
-import 'package:daycus/screen/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:daycus/backend/Api.dart';
@@ -36,50 +29,43 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../screen/LoginPageCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:daycus/core/app_text.dart';
-import 'package:daycus/screen/specificMissionPage/RecordingPage.dart';
+
 
 var imageFromDb;
 var admobBannerId = 'ca-app-pub-3339242274230109/7848999030';
 
+void rreett(){
+  print("광고구현성공");
+}
 
-RewardedAd? _rewardedAd;
-_callRewardScreendAd() async {
+void showRewardFullBanner(Function callback) async {
   await RewardedAd.load(
-      adUnitId: 'ca-app-pub-3940256099942544/5354046379',
-      request: AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (RewardedAd ad) {
-          print('$ad loaded.');
-          print("여긴 됐는데?");
-          // Keep a reference to the ad so you can show it later.
-          _rewardedAd = ad;
+    // adUnitId 는 "광고 단위 ID" 를 입력하도록 한다.
+    adUnitId: "ca-app-pub-3940256099942544/5354046379",
+    request: const AdRequest(),
+    rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          // 기본 이벤트에 대한 정의부분
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (RewardedAd ad) {
+              ad.dispose();
+            },
+            onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+              ad.dispose();
+            },
+          );
+          // 광고를 바로 보여주도록 하고
+          // 광고조건 만족시 리워드에 대한 부분(callback 함수)을 실행한다.
+          ad.show(onUserEarnedReward: (ad, reward) {
+            callback();
+          });
         },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('RewardedAd failed to load: $error');
-        },
-      )
+        // 광고를 로드 실패하는 오류가 발생 서비스에 영향이 없도록 실행하도록 처리 했다.
+        onAdFailedToLoad: (_) {
+          callback();
+        }
+    ),
   );
-
-  if (_rewardedAd == null){
-    print("엄...");
-  }
-
-  _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
-    onAdShowedFullScreenContent: (RewardedAd ad) =>
-        print('$ad onAdShowedFullScreenContent.'),
-    onAdDismissedFullScreenContent: (RewardedAd ad) {
-      print('$ad onAdDismissedFullScreenContent.');
-      ad.dispose();
-    },
-    onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-      print('$ad onAdFailedToShowFullScreenContent: $error');
-      ad.dispose();
-    },
-    onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
-  );
-  _rewardedAd?.show(onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
-    update_request("update user_table set reward = reward + 1 where user_email = '${user_data['user_email']}'", null);
-  });
 }
 
 _launchURL() async {
@@ -153,8 +139,6 @@ class _AdminScreenState extends State<AdminScreen> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -769,6 +753,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   var pfcode = await get_logincode_pf();
                   print(dbcode);
                   print(pfcode);
+                },
+              ),
+              AdminButton(
+                title: "리워드 광고 슛",
+                onPressed: (){
+                  showRewardFullBanner(rreett);
                 },
               ),
 

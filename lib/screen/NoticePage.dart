@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/backend/UserDatabase.dart';
+import 'package:daycus/screen/Friend/FriendPage.dart';
 import 'package:flutter/material.dart';
 import 'package:daycus/core/app_color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,8 +11,60 @@ late ScrollController _scrollController = ScrollController();
 late ScrollController _scrollController2 = ScrollController();
 
 
-class NoticePage extends StatelessWidget {
+class NoticePage extends StatefulWidget {
   const NoticePage({Key? key}) : super(key: key);
+
+  @override
+  State<NoticePage> createState() => _NoticePageState();
+}
+
+class _NoticePageState extends State<NoticePage> {
+
+  var invite = [];
+  var friend = [];
+  var friends = [];
+  from_invitation () async {
+    invite = [];
+    var invites = await select_request("select invitation from user_table where user_email = '${user_data['user_email']}'", null, true);
+    var invitess = invites[0]['invitation'];
+    var invitesss = jsonDecode(invitess);
+    if (invitesss.keys!=null){
+      for (var item in invitesss.keys){
+        invite.add(item);
+      }
+    }
+    setState(() {
+
+    });
+  }
+  from_friend () async {
+    friend = [];
+    friends = [];
+    var invites = await select_request("select friends from user_table where user_email = '${user_data['user_email']}'", null, true);
+    var invitess = invites[0]['friends'];
+    var invitesss = jsonDecode(invitess);
+    for (var item in invitesss.keys){
+      if (invitesss[item]=='-1'){
+        friend.add(item);
+      }
+    }
+    print(friend);
+    for (var item in friend){
+      var username = await select_request("select user_name from user_table where user_id = '$item'", null, true);
+      friends.add(username[0]['user_name']);
+    }
+    print(friends);
+    setState(() {
+
+    });
+  }
+
+  void initState(){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      from_invitation();
+      from_friend();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +122,12 @@ class NoticePage extends StatelessWidget {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: 5,
+                          itemCount: invite.length,
                           itemBuilder: (_, index) {
                             return Column(
                               children: [
-                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()),
+                                !invite.isEmpty ?
+                                Notice(profileimage: "d", freindName: "${invite[index]}", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()) :
                                 Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "친구요청을 보냈습니다", onTap: NoticePage()),
                               ],
                             );
@@ -120,12 +178,13 @@ class NoticePage extends StatelessWidget {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: 5,
+                          itemCount: friend.length,
                           itemBuilder: (_, index) {
                             return Column(
                               children: [
-                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()),
-                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "친구요청을 보냈습니다", onTap: NoticePage()),
+                                friend.isNotEmpty ?
+                                Notice(profileimage: "d", freindName: "${friends[index]}", check: true, content: "친구 요청을 보냈습니다", onTap: FriendPage()) :
+                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "슛", onTap: NoticePage()),
                               ],
                             );
                           },
@@ -165,6 +224,7 @@ class Notice extends StatelessWidget {
   final String content;
   final bool check;
   final onTap;
+
 
   @override
   Widget build(BuildContext context) {

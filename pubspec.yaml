@@ -68,7 +68,7 @@ dependencies:
   url_launcher:
   connectivity:
   store_redirect:
-  google_mobile_ads: ^0.13.6
+  google_mobile_ads:
 #  like_button:
   package_info_plus:
   new_version_plus:
