@@ -127,6 +127,9 @@ class _NoticePageState extends State<NoticePage> {
                     child: Column(
                       children: [
 
+                        if(invite.isEmpty)
+                          Text("새로운 미션 초대 알림이 없습니다", style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',)),
+                        
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -136,7 +139,7 @@ class _NoticePageState extends State<NoticePage> {
                               children: [
                                 !invite.isEmpty ?
                                 Notice(profileimage: "d", freindName: "${invite[index]}", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()) :
-                                Text("ddgdg"),
+                                Text("새로운 미션 초대 알림이 없습니다"),
                               ],
                             );
                           },
@@ -179,6 +182,9 @@ class _NoticePageState extends State<NoticePage> {
                     child: Column(
                       children: [
 
+                        if(friend.isEmpty)
+                          Text("새로운 친구 요청이 없습니다", style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',)),
+
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -188,7 +194,7 @@ class _NoticePageState extends State<NoticePage> {
                               children: notice_waiting ? [
                                 friend.isNotEmpty ?
                                 Notice(profileimage: "d", freindName: "${friends[index]}", check: true, content: "친구 요청을 보냈습니다", onTap: FriendPage()) :
-                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "슛", onTap: NoticePage()),
+                                Text("새로운 친구 요청이 없습니다"),
                               ]:[],
                             );
                           },
