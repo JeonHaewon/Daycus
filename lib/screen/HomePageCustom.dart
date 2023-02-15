@@ -128,14 +128,35 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           //IconButton(icon: Icon(Icons.search), onPressed: null),
 
             //알림 확인
-            IconButton(icon: Icon(Icons.notifications),color: Colors.grey,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => NoticePage()),
-                  );
-                }
+            Stack(
+              alignment: Alignment.center,
+              children: [
+
+                IconButton(
+                    icon: Icon(Icons.notifications), color: Colors.grey,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => NoticePage()),
+                      );
+                    }
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(11.w, 0, 0, 10.h),
+                  child: Container(
+                    width: 7.w,
+                    height: 7.h,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle
+                    ),
+                  ),
+                ),
+
+              ],
             ),
+
 
             //친구 추가
             // 0121 하임 : 친구추가 프로세스가 더 확실해지면 그 때 추가하는걸로 합시다 ! (28 업데이트 시에는 보류)

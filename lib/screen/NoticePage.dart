@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 late ScrollController _scrollController = ScrollController();
 late ScrollController _scrollController2 = ScrollController();
 
+bool notice_waiting = false;
 
 class NoticePage extends StatefulWidget {
   const NoticePage({Key? key}) : super(key: key);
@@ -59,10 +60,18 @@ class _NoticePageState extends State<NoticePage> {
     });
   }
 
+  allin_one_init() async {
+    await from_friend ();
+    setState(() { notice_waiting = true; });
+  }
+
   void initState(){
+    super.initState();
+    notice_waiting = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       from_invitation();
-      from_friend();
+      //from_friend();
+      allin_one_init();
     });
   }
 
@@ -97,7 +106,6 @@ class _NoticePageState extends State<NoticePage> {
             SizedBox(height: 10.h,),
 
             Container(
-              alignment: Alignment.center,
               width : 400.w,
               height: 320.h,
               // decoration: BoxDecoration(
@@ -128,7 +136,7 @@ class _NoticePageState extends State<NoticePage> {
                               children: [
                                 !invite.isEmpty ?
                                 Notice(profileimage: "d", freindName: "${invite[index]}", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()) :
-                                Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "친구요청을 보냈습니다", onTap: NoticePage()),
+                                Text("ddgdg"),
                               ],
                             );
                           },
@@ -146,19 +154,15 @@ class _NoticePageState extends State<NoticePage> {
             Container(
               width : double.infinity,
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(35.w, 0, 0, 0),
-                  child: Text("친구 요청 알림",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.w500),)),
-
+                padding: EdgeInsets.fromLTRB(35.w, 0, 0, 0),
+                child: Text("친구 요청 알림",style: TextStyle(fontSize: 18.sp, fontFamily: 'korean', fontWeight: FontWeight.w500),)),
             ),
             SizedBox(height: 10.h,),
 
             Container(
-              alignment: Alignment.center,
               width : 400.w,
               height: 320.h,
-              // decoration: BoxDecoration(
-              //   color: Colors.black
-              // ),
+
               child: Scrollbar(
                 controller: _scrollController2,
                 isAlwaysShown: true,
@@ -181,11 +185,11 @@ class _NoticePageState extends State<NoticePage> {
                           itemCount: friend.length,
                           itemBuilder: (_, index) {
                             return Column(
-                              children: [
+                              children: notice_waiting ? [
                                 friend.isNotEmpty ?
                                 Notice(profileimage: "d", freindName: "${friends[index]}", check: true, content: "친구 요청을 보냈습니다", onTap: FriendPage()) :
                                 Notice(profileimage: "d", freindName: "퇴근퇴근", check: false, content: "슛", onTap: NoticePage()),
-                              ],
+                              ]:[],
                             );
                           },
                         ),

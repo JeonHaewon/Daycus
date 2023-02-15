@@ -832,6 +832,9 @@ class _FriendMissionButtonState extends State<FriendMissionButton> {
 
                           SizedBox(width: 9.w),
 
+                          Container(
+                            child: Text(HowManyHeart.toString(),style: TextStyle(color: AppColor.happyblue, fontSize: 11.sp, fontFamily: 'korean') ),
+                          ),
 
                           SizedBox(height: 4.h,),
 
