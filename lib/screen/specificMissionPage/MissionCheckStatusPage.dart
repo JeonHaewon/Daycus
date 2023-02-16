@@ -22,6 +22,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 
+bool heart_waiting = false;
 
 late ScrollController _scrollController = ScrollController();
 
@@ -54,6 +55,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     _chosenValue = chh[0]['how'] ?? "친구공개";
     var chh2 = await select_request("select heart from do_mission where user_email = '${user_data['user_email']}' and mission_id = '${widget.mission_data['mission_id']}'", null, true);
     _heart = (chh2[0]['heart']==null ? 0 : int.parse(chh2[0]['heart']));
+  }
+
+  heart_init() async {
+    await importHowAndHeartMission();
+    setState(() { heart_waiting = true; });
+
   }
 
   var isPublic;
@@ -198,10 +205,12 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   @override
   void initState () {
     super.initState();
+    heart_waiting = false;
     WidgetsBinding.instance.addPostFrameCallback((_){
       ImportFriend();
       ImportPublic();
-      importHowAndHeartMission();
+      //importHowAndHeartMission();
+      heart_init();
       _asyncMethod();
     });
     // 하임 0121 : 이거 뭐에요??
@@ -371,7 +380,6 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-
             Container(
               padding: EdgeInsets.fromLTRB(30.w, 15.h, 30.w, 0),
               child: Column(
@@ -382,23 +390,33 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
 
-                      Container(
-                          width: 240.w,
+                      // Container(
+                      //     width: 240.w,
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.start,
+                      //       children: [
+                      //         Flexible(
+                      //             child: RichText(
+                      //               overflow: TextOverflow.clip,
+                      //               maxLines: 3,
+                      //               text: TextSpan(
+                      //                   text: title,
+                      //                   style: TextStyle(fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                      //             )
+                      //         ),
+                      //       ],
+                      //     )
+                      // ),
 
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                  child: RichText(
-                                    overflow: TextOverflow.clip,
-                                    maxLines: 3,
-                                    text: TextSpan(
-                                        text: title,
-                                        style: TextStyle(fontSize: 24.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
-                                  )
-                              ),
-                            ],
-                          )
+                      SizedBox(
+                        width: 240.w,
+                        height: 35.h,
+                        child: FittedBox(
+                          alignment: Alignment.topLeft,
+                          fit: BoxFit.contain,
+                          child: Text(title,
+                              style: TextStyle(fontSize: 22.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
+                        ),
                       ),
 
                       //Text(title,style: TextStyle(fontSize: 25.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
@@ -1312,7 +1330,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                           }
                         } else{
                           // 녹음 시간이 부족할때
-                          Fluttertoast.showToast(msg: "${widget.mission_data['condition']}초 이상 녹음을 완료야합니다.");
+                          Fluttertoast.showToast(msg: "${widget.mission_data['condition']}초 이상 녹음을 완료해야합니다.");
 
                         }
                       }

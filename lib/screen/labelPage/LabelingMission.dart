@@ -297,9 +297,13 @@ class _LabelingMissionState extends State<LabelingMission> {
       if (success==false) {
         // 다른 미션을 불러온다.
         controller.currentBottomNavItemIndex.value = AppScreen.labeling;
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => TemHomePage()), (
-                route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => TemHomePage(),
+              transitionDuration: Duration(seconds: 0),
+            ),
+            (route) => false);
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(builder: (_) => LabelPage()),
@@ -378,7 +382,6 @@ class _LabelingMissionState extends State<LabelingMission> {
 
     return Scaffold(
       backgroundColor: AppColor.background,
-
 
       body: SingleChildScrollView(
         child: Column(

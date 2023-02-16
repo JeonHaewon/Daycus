@@ -14,7 +14,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-bool isPartici = false;
 
 class MissionParticipatePage extends StatefulWidget {
   MissionParticipatePage({
@@ -49,6 +48,8 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
   final TextEditingController rewardCtrl = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isPartici = false;
+
 
   var f = NumberFormat('###,###,###,###');
 
@@ -407,7 +408,7 @@ class _MissionParticipatePageState extends State<MissionParticipatePage> {
                             isPartici = true;
                             participateMission();
                           }
-                          else{Fluttertoast.showToast(msg: "두 번 미션 참여는 안됩니다!");}
+                          else{Fluttertoast.showToast(msg: "같은 미션에 두 번 참여할 수 없습니다!");}
                         },
                       null);
 
