@@ -24,27 +24,48 @@ class _NoticePageState extends State<NoticePage> {
   var invite = [];
   var friend = [];
   var friends = [];
+  var invitesss;
   from_invitation () async {
     invite = [];
+    invitekey = [];
     var invites = await select_request("select invitation from user_table where user_email = '${user_data['user_email']}'", null, true);
     var invitess = invites[0]['invitation'];
-    var invitesss = jsonDecode(invitess);
-    if (invitesss.keys!=null){
-      for (var item in invitesss.keys){
-        invite.add(item);
-      }
+    invitesss = jsonDecode(invitess);
+    for (var item in invitesss.keys){
+      var username = await select_request("select user_name from user_table where user_id = '$item'", null, true);
+      invite.add(username[0]['user_name']);
+      invitekey.add(item);
     }
     setState(() {
 
     });
   }
+  var i;
+  var invitekey;
+  finding_index(String name) async {
+    for (int j = 0; j < all_missions.length; j++) {
+      if (all_missions[j]['mission_id'] == invitesss[name]) {
+        i = j;
+        break;
+      }
+    }
+    invitesss.remove(name);
+    // 하임님 요거 all_missions[index] 에서 mission_id랑 Index가 안맞아서 mission 상세 페이지로 이동이 안되요 ㅠㅠ
+    setState(() {
+
+    });
+  }
+
+
   from_friend () async {
     friend = [];
     friends = [];
+    invitekey = [];
     var invites = await select_request("select friends from user_table where user_email = '${user_data['user_email']}'", null, true);
     var invitess = invites[0]['friends'];
     var invitesss = jsonDecode(invitess);
     for (var item in invitesss.keys){
+      invitekey.add(item);
       if (invitesss[item]=='-1'){
         friend.add(item);
       }
@@ -62,6 +83,7 @@ class _NoticePageState extends State<NoticePage> {
 
   allin_one_init() async {
     await from_friend ();
+    await from_invitation();
     setState(() { notice_waiting = true; });
   }
 
@@ -69,10 +91,39 @@ class _NoticePageState extends State<NoticePage> {
     super.initState();
     notice_waiting = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      from_invitation();
+      // from_invitation();
       //from_friend();
       allin_one_init();
     });
+  }
+
+  SpecificMissionPage onfunc() {
+    update_request("update user_table set invitation = '${jsonEncode(invitesss)}' where user_email = '${user_data['user_email']}'", null);
+    return SpecificMissionPage(
+            mission_data: all_missions[i],
+            startDate: all_missions[i]['start_date'],
+            mission_id: all_missions[i]['mission_id'],
+            topimage: all_missions[i]['thumbnail'] ?? 'topimage1.png',
+
+            progress:all_missions[i]['start_date']==null
+                ? (all_missions[i]['next_start_date']==null
+                ? "willbutton" : "comeonbutton") : "ingbutton",
+
+            title : all_missions[i]['title'],
+
+            duration: all_missions[i]['start_date']==null
+                ? comingSoonString : all_missions[i]['start_date']+" ~ "+all_missions[i]['end_date'],
+
+            totaluser: int.parse(all_missions[i]['total_user']),
+            certifi_user: int.parse(all_missions[i]['certifi_user']),
+            downimage: 'downimage1',
+            content: all_missions[i]['content'],
+            rules: all_missions[i]['rules'],
+            rewardPercent: all_missions[i]['reward_percent']);
+  }
+
+  void dispose (){
+    super.dispose();
   }
 
   @override
@@ -129,18 +180,21 @@ class _NoticePageState extends State<NoticePage> {
 
                         if(invite.isEmpty)
                           Text("새로운 미션 초대 알림이 없습니다", style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',)),
-                        
+
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: invite.length,
                           itemBuilder: (_, index) {
+                            finding_index(invitekey[index]);
+                            print(invite.isEmpty);
                             return Column(
-                              children: [
-                                !invite.isEmpty ?
-                                Notice(profileimage: "d", freindName: "${invite[index]}", check: true, content: "하루 물 3잔 마시기 미션에 초대하셨습니다", onTap: NoticePage()) :
-                                Text("새로운 미션 초대 알림이 없습니다"),
-                              ],
+                              children: !(invite.isEmpty) ? [
+                                Notice(profileimage: "d", freindName: "${invite[index]}", check: true, content: "${all_missions[i]['title']} 미션에 초대하셨습니다", onTap:
+
+                                onfunc())
+
+                              ] : [Text("ddgee")],
                             );
                           },
                         ),
@@ -240,10 +294,7 @@ class Notice extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => onTap),
-        );
+        onTap;
       },
       child: Container(
         width: double.infinity,

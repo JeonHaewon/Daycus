@@ -53,8 +53,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   importHowAndHeartMission() async {
     var chh = await select_request("select how from do_mission where user_email = '${user_data['user_email']}' and mission_id = '${widget.mission_data['mission_id']}'", null, true);
     _chosenValue = chh[0]['how'] ?? "친구공개";
-    var chh2 = await select_request("select heart from do_mission where user_email = '${user_data['user_email']}' and mission_id = '${widget.mission_data['mission_id']}'", null, true);
-    _heart = (chh2[0]['heart']==null ? 0 : int.parse(chh2[0]['heart']));
+    var chh2 = await select_request("select who_heart from do_mission where user_email = '${user_data['user_email']}'", null, true);
+    var lit = chh2[0]['who_heart'] ?? "{}";
+    var litt = jsonDecode(lit);
+    _heart = litt.keys.length;
   }
 
   heart_init() async {
