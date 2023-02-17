@@ -148,31 +148,37 @@ class Settings extends StatelessWidget {
 
                   
                   // 개발자 페이지
-                  if (user_data['user_state']=='admin')
-                  SizedBox(height: 20.h,),
+                  //if (user_data['user_state']=='admin')
 
-                  if (user_data['user_state']=='admin')
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
+
+                  if (user_data['user_state']=='admin' || user_data['user_state']=='exadmin')
+                  Column(
+                    children: [
+                      SizedBox(height: 20.h,),
+
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          primary: Colors.white,
+                          onPrimary: Colors.black,
+                          minimumSize: Size(365.w, 50.h),
+                          textStyle: TextStyle(fontSize: 18.sp),
+                        ),
+
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminScreen()));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("개발자 페이지",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                            Image.asset('assets/image/arrow-right1.png' )
+                          ],
+                        ),
                       ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(365.w, 50.h),
-                      textStyle: TextStyle(fontSize: 18.sp),
-                    ),
-
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminScreen()));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("개발자 페이지",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                        Image.asset('assets/image/arrow-right1.png' )
-                      ],
-                    ),
+                    ],
                   ),
 
 

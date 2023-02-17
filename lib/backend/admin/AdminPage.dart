@@ -534,12 +534,18 @@ class _AdminScreenState extends State<AdminScreen> {
         padding: EdgeInsets.all(20.w),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-            Text("개발자"),
-            Text("Front & BackEnd / 202111152 이하임 CTO : 2022.03.01 ~"),
-            Text("Design & FrontEnd / 202111152 전해원 COO : 2022.03.01 ~"),
-            Text("BackEnd / 202011140 이기범 CUOP : 2022.12.20 ~"),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Shoutout to HappyCircuit Developers\n",),
+                Text("Front & BackEnd\n202111152 이하임 CTO : 2022.03.01 ~\n"),
+                Text("Design & FrontEnd\n202111152 전해원 COO : 2022.03.01 ~\n"),
+                Text("BackEnd\n202011140 이기범 CUOP : 2022.12.20 ~ 2023.02.15 \n"),
+              ],
+            ),
 
               SizedBox(height: 15.h,),
 
@@ -850,7 +856,11 @@ class AdminButton extends StatelessWidget {
             minimumSize: Size(365.w, 50.h),
             textStyle: TextStyle(fontSize: 18.sp),
           ),
-          onPressed: onPressed,
+          onPressed: user_data['user_state']!='exadmin' ?
+              onPressed
+              : (){
+            Fluttertoast.showToast(msg: "DayCus 개발에 힘써주셔서 감사합니다.\n현재에는 실행 권한이 없습니다");
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -49,40 +49,41 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
   String? _chosenValue = "친구공개";
   var _heart = 0;
+  late Map heart_json;
 
-  importHowAndHeartMission() async {
-    var chh = await select_request("select how from do_mission where user_email = '${user_data['user_email']}' and mission_id = '${widget.mission_data['mission_id']}'", null, true);
-    _chosenValue = chh[0]['how'] ?? "친구공개";
-    var chh2 = await select_request("select who_heart from do_mission where user_email = '${user_data['user_email']}'", null, true);
-    var lit = chh2[0]['who_heart'] ?? "{}";
-    var litt = jsonDecode(lit);
-    _heart = litt.keys.length;
-  }
+  // importHowAndHeartMission() async {
+  //   var chh = await select_request("select how from do_mission where user_email = '${user_data['user_email']}' and mission_id = '${widget.mission_data['mission_id']}'", null, true);
+  //   _chosenValue = chh[0]['how'] ?? "친구공개";
+  //   var chh2 = await select_request("select who_heart from do_mission where user_email = '${user_data['user_email']}'", null, true);
+  //   var lit = chh2[0]['who_heart'] ?? "{}";
+  //   var litt = jsonDecode(lit);
+  //   _heart = litt.keys.length;
+  // }
 
-  heart_init() async {
-    await importHowAndHeartMission();
-    setState(() { heart_waiting = true; });
-
-  }
+  // heart_init() async {
+  //   await importHowAndHeartMission();
+  //   setState(() { heart_waiting = true; });
+  //
+  // }
 
   var isPublic;
 
   var friendsList;
 
-  ImportFriend() async {
-    friendsList = [];
-    var friendsdb = await select_request("select friends from user_table where user_email = '${user_data['user_email']}'", null, true);
-    var friends = friendsdb[0]['friends'] ?? "{}";
-    var friend = jsonDecode(friends);
-    for (var item in friend.keys){
-      if (friend[item]!='1'){
-        continue;
-      }
-      // 하임님~ 여기에요 !!
-      var ff = await select_request("select user_name from user_table where user_id = '$item'", null, true);
-      friendsList.add(ff[0]['user_name']);
-    }
-  }
+  // ImportFriend() async {
+  //   friendsList = [];
+  //   var friendsdb = await select_request("select friends from user_table where user_email = '${user_data['user_email']}'", null, true);
+  //   var friends = friendsdb[0]['friends'] ?? "{}";
+  //   var friend = jsonDecode(friends);
+  //   for (var item in friend.keys){
+  //     if (friend[item]!='1'){
+  //       continue;
+  //     }
+  //     // 하임님~ 여기에요 !!
+  //     var ff = await select_request("select user_name from user_table where user_id = '$item'", null, true);
+  //     friendsList.add(ff[0]['user_name']);
+  //   }
+  // }
 
   ImportPublic() async {
     // var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
@@ -209,10 +210,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     super.initState();
     heart_waiting = false;
     WidgetsBinding.instance.addPostFrameCallback((_){
-      ImportFriend();
+      // ImportFriend();
       ImportPublic();
+      heart_json = jsonDecode(widget.do_mission_data['who_heart'] ?? "{}") ;
+      _heart = heart_json!.keys.length;
       //importHowAndHeartMission();
-      heart_init();
+      // heart_init();
+
       _asyncMethod();
     });
     // 하임 0121 : 이거 뭐에요??
@@ -294,7 +298,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
         "UPDATE do_mission SET percent='${(return_reward*100).toStringAsFixed(2)}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
         null);
     update_request("update do_mission set how = '$_chosenValue' where mission_id = '${widget.mission_data['mission_id']}' and user_email = '${user_data['user_email']}'", null);
-    update_request("update do_mission set heart = '${_heart.toString()}' where mission_id = '${widget.mission_data['mission_id']}' and user_email = '${user_data['user_email']}'", null);
+    update_request("update do_mission set heart = '${_heart}' where mission_id = '${widget.mission_data['mission_id']}' and user_email = '${user_data['user_email']}'", null);
     // +0원 계산하기
     // if (widget.do_mission_data['bet_reward']=='0' && (15-mission_result >= toCertify-doneCnt)){
     //   return_reward = double.parse(mission_result.toString());}
@@ -551,146 +555,147 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                         ],
                       ),
 
-                      TextButton(
-                          onPressed: (){
-
-                            showDialog(context: context, builder: (BuildContext context) {
-                              return BackdropFilter(
-                                filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
-                                child: AlertDialog(
-                                  title: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("친구를 미션에 초대할 수 있습니다",style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                                      InkWell(
-                                        onTap:(){Navigator.of(context).pop();},
-                                        child: Icon(Icons.clear),
-                                      )
-                                    ],
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-
-                                    children: [
-                                      Container(
-                                        width : 300.w,
-                                        height: 200.h,
-                                        child: Scrollbar(
-                                          controller: _scrollController,
-                                          isAlwaysShown: true,
-                                          thickness: 8,
-                                          radius: Radius.circular(10),
-                                          //scrollbarOrientation: ScrollbarOrientation.right,
-                                          child: NotificationListener<OverscrollIndicatorNotification>(
-                                            onNotification: (OverscrollIndicatorNotification overScroll) {
-                                              overScroll.disallowGlow();
-                                              return false;
-                                            },
-                                            child: SingleChildScrollView(
-                                              controller: _scrollController,
-                                              child: Column(
-                                                children: [
-
-
-                                                  ListView.builder(
-                                                    shrinkWrap: true,
-                                                    physics: NeverScrollableScrollPhysics(),
-                                                    itemCount: friendsList.length, //친구수
-                                                    itemBuilder: (_, index) {
-                                                      return Padding(
-                                                        padding: EdgeInsets.only(bottom: 5.h),
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.indigo[50],
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          width : 300.w,
-                                                          height: 45.h,
-                                                          child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-
-                                                              SizedBox(width: 6.w,),
-
-                                                              Container(
-
-                                                                  width: 110.w,
-                                                                  child: FittedBox(
-                                                                    fit: BoxFit.scaleDown,
-                                                                    child:Text("${friendsList[index]}", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
-                                                                  )
-                                                              ),
-
-                                                              // Container(
-                                                              //     width: 50.w,
-                                                              //     child: FittedBox(
-                                                              //       fit: BoxFit.scaleDown,
-                                                              //       child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,), //사용자코드
-                                                              //     )
-                                                              // ),
-
-                                                              SizedBox(
-                                                                width: 65.h,
-                                                                height: 25.w,
-                                                                child: ElevatedButton(
-                                                                  style: ElevatedButton.styleFrom(
-                                                                    padding: EdgeInsets.zero,
-                                                                    shape: RoundedRectangleBorder(
-                                                                        borderRadius: BorderRadius.circular(10)
-                                                                    ),
-                                                                    primary: Colors.indigo[600],
-                                                                    onPrimary: Colors.white,
-                                                                    //minimumSize: Size(18.w, 28.h),
-                                                                  ),
-
-                                                                  onPressed: () async {
-                                                                    var invitationss = await select_request("select invitation from user_table where user_name = '${friendsList[index]}'", null, true);
-                                                                    var invitations = invitationss[0]['invitation'] ?? "{}";
-                                                                    var invitation = jsonDecode(invitations);
-                                                                    invitation[user_data['user_name']] = widget.mission_data['mission_id'];
-                                                                    await update_request("update user_table set invitation = '${jsonEncode(invitation)}' where user_name = '${friendsList[index]}'", null);
-                                                                    Fluttertoast.showToast(msg: "친구 초대가 완료되었습니다!");
-                                                                  },
-                                                                  child: Text("초대하기", style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
-                                                                ),
-                                                              ),
-
-                                                              SizedBox(width: 6.w,),
-
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-
-
-
-
-
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              );
-                            });
-                          },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                          ),
-                          //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
-                          child: Text('친구와 함께하기',style: TextStyle(color: Colors.grey[700], fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,) )
-                      ),
+                      // 친구와 함께 하기
+                      // TextButton(
+                      //     onPressed: (){
+                      //
+                      //       showDialog(context: context, builder: (BuildContext context) {
+                      //         return BackdropFilter(
+                      //           filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                      //           child: AlertDialog(
+                      //             title: Row(
+                      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //               children: [
+                      //                 Text("친구를 미션에 초대할 수 있습니다",style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                      //                 InkWell(
+                      //                   onTap:(){Navigator.of(context).pop();},
+                      //                   child: Icon(Icons.clear),
+                      //                 )
+                      //               ],
+                      //             ),
+                      //             content: Column(
+                      //               mainAxisSize: MainAxisSize.min,
+                      //
+                      //               children: [
+                      //                 Container(
+                      //                   width : 300.w,
+                      //                   height: 200.h,
+                      //                   child: Scrollbar(
+                      //                     controller: _scrollController,
+                      //                     isAlwaysShown: true,
+                      //                     thickness: 8,
+                      //                     radius: Radius.circular(10),
+                      //                     //scrollbarOrientation: ScrollbarOrientation.right,
+                      //                     child: NotificationListener<OverscrollIndicatorNotification>(
+                      //                       onNotification: (OverscrollIndicatorNotification overScroll) {
+                      //                         overScroll.disallowGlow();
+                      //                         return false;
+                      //                       },
+                      //                       child: SingleChildScrollView(
+                      //                         controller: _scrollController,
+                      //                         child: Column(
+                      //                           children: [
+                      //
+                      //
+                      //                             ListView.builder(
+                      //                               shrinkWrap: true,
+                      //                               physics: NeverScrollableScrollPhysics(),
+                      //                               itemCount: friendsList.length, //친구수
+                      //                               itemBuilder: (_, index) {
+                      //                                 return Padding(
+                      //                                   padding: EdgeInsets.only(bottom: 5.h),
+                      //                                   child: Container(
+                      //                                     decoration: BoxDecoration(
+                      //                                       color: Colors.indigo[50],
+                      //                                       borderRadius: BorderRadius.circular(10),
+                      //                                     ),
+                      //                                     width : 300.w,
+                      //                                     height: 45.h,
+                      //                                     child: Row(
+                      //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //                                       children: [
+                      //
+                      //                                         SizedBox(width: 6.w,),
+                      //
+                      //                                         Container(
+                      //
+                      //                                             width: 110.w,
+                      //                                             child: FittedBox(
+                      //                                               fit: BoxFit.scaleDown,
+                      //                                               child:Text("${friendsList[index]}", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,),
+                      //                                             )
+                      //                                         ),
+                      //
+                      //                                         // Container(
+                      //                                         //     width: 50.w,
+                      //                                         //     child: FittedBox(
+                      //                                         //       fit: BoxFit.scaleDown,
+                      //                                         //       child:Text("20", style: TextStyle(fontWeight: FontWeight.bold, ),textAlign: TextAlign.center,), //사용자코드
+                      //                                         //     )
+                      //                                         // ),
+                      //
+                      //                                         SizedBox(
+                      //                                           width: 65.h,
+                      //                                           height: 25.w,
+                      //                                           child: ElevatedButton(
+                      //                                             style: ElevatedButton.styleFrom(
+                      //                                               padding: EdgeInsets.zero,
+                      //                                               shape: RoundedRectangleBorder(
+                      //                                                   borderRadius: BorderRadius.circular(10)
+                      //                                               ),
+                      //                                               primary: Colors.indigo[600],
+                      //                                               onPrimary: Colors.white,
+                      //                                               //minimumSize: Size(18.w, 28.h),
+                      //                                             ),
+                      //
+                      //                                             onPressed: () async {
+                      //                                               var invitationss = await select_request("select invitation from user_table where user_name = '${friendsList[index]}'", null, true);
+                      //                                               var invitations = invitationss[0]['invitation'] ?? "{}";
+                      //                                               var invitation = jsonDecode(invitations);
+                      //                                               invitation[user_data['user_name']] = widget.mission_data['mission_id'];
+                      //                                               await update_request("update user_table set invitation = '${jsonEncode(invitation)}' where user_name = '${friendsList[index]}'", null);
+                      //                                               Fluttertoast.showToast(msg: "친구 초대가 완료되었습니다!");
+                      //                                             },
+                      //                                             child: Text("초대하기", style: TextStyle(fontFamily: 'korean', fontSize: 10.sp)),
+                      //                                           ),
+                      //                                         ),
+                      //
+                      //                                         SizedBox(width: 6.w,),
+                      //
+                      //                                       ],
+                      //                                     ),
+                      //                                   ),
+                      //                                 );
+                      //                               },
+                      //                             ),
+                      //
+                      //
+                      //
+                      //
+                      //
+                      //                           ],
+                      //                         ),
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //
+                      //
+                      //             shape: RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.circular(10),
+                      //             ),
+                      //           ),
+                      //         );
+                      //       });
+                      //     },
+                      //     style: TextButton.styleFrom(
+                      //       padding: EdgeInsets.zero,
+                      //     ),
+                      //     //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue)),
+                      //     child: Text('친구와 함께하기',style: TextStyle(color: Colors.grey[700], fontSize: 12.sp, fontFamily: 'korean', decoration: TextDecoration.underline,) )
+                      // ),
 
                     ],
                   ),
