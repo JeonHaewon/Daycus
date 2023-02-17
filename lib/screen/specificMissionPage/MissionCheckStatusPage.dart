@@ -85,8 +85,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   }
 
   ImportPublic() async {
-    var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
-    isPublic = chh[0]['public'] ?? "일부공개";
+    // var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
+    isPublic = user_data['public'] ?? "친구공개";
   }
 
   // @override
@@ -758,7 +758,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                       Text("1. 주 ${widget.mission_data['frequency']}회, ${widget.mission_data['term']}주간, 총 ${toCertify}회!",
                                           style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
                                       SizedBox(height: 3.h,),
-                                      Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                                      Text("미션 기간 ${widget.mission_data['term']}주 동안 주 ${widget.mission_data['frequency']}일, 하루 1번 인증하셔야 합니다.",
                                           style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
 
@@ -895,16 +895,20 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                         await showModalBottomSheet(context: context,
                                                                             builder: ((builder) => cameraOrGallery
                                                                             ));
-                                                                      } else if(widget.mission_data['certify_tool'] == 'pedometer'){
+                                                                      }
+                                                                      else if(widget.mission_data['certify_tool'] == 'pedometer'){
                                                                         Fluttertoast.showToast(msg: "아직 미션이 완료되지 않았습니다");
                                                                       }
-                                                                      if (widget.mission_data['certify_tool'] == 'recorder'){
+                                                                      else if (widget.mission_data['certify_tool'] == 'recorder'){
 
                                                                         Fluttertoast.showToast(msg: "녹음 버튼을 눌러 미션을 수행해보세요 !");
                                                                         // showModalBottomSheet(context: context,
                                                                         //     builder: ((builder) => cameraOrGallery
                                                                         //     ));
                                                                       }
+                                                                      // else if (widget.mission_data['certify_tool'] == 'pedometer'){
+                                                                      //   Fluttertoast.showToast(msg: "만보기 미션을 완료하면 \'미션인증\' 버튼을 눌러주세요.");
+                                                                      // }
                                                                       else {
                                                                         todayMissionCertify(do_i, "camera");
                                                                       }

@@ -32,7 +32,7 @@ Future<dynamic> NotSeeWeek(BuildContext context, do_mission_data, mission_data, 
                           Text("1. 인증빈도",
                               style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
                           SizedBox(height: 3.h,),
-                          Text("미션 기간 ${mission_data['term']}주 동안 주 ${mission_data['frequency']}일, 하루 1번 인증 사진을 올리셔야 합니다.",
+                          Text("미션 기간 ${mission_data['term']}주 동안 주 ${mission_data['frequency']}일, 하루 1번 인증하셔야 합니다.",
                               style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
                           SizedBox(height: 15.h,),

@@ -32,16 +32,18 @@ class MissionCheckPage extends StatefulWidget {
 
 class _MissionCheckPageState extends State<MissionCheckPage> {
 
-  String? _chosenValue;
 
-  ImportPublic() async {
-    var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
-    _chosenValue = chh[0]['public'] ?? "일부공개";
-  }
+  String _chosenValue = user_data['public'] ?? "일부공개";
+
+  // ImportPublic() async {
+  //   //var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
+  //   //_chosenValue
+  //   // _chosenValue = chh[0]['public'] ?? "일부공개";
+  // }
 
   in_one_init() async {
 
-    await ImportPublic();
+    // await ImportPublic();
     setState(() { waiting = true; });
 
   }
@@ -51,7 +53,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
     super.initState();
     waiting = false;
     WidgetsBinding.instance.addPostFrameCallback((_){
-      ImportPublic();
+      // ImportPublic();
       in_one_init();
     });
   }
@@ -59,7 +61,9 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
   @override
   void dispose() {
     super.dispose();
-    update_request("update user_table set public = '$_chosenValue' where user_email = '${user_data['user_email']}'", null);
+    // 이거 위치 바꾸기
+    // user_data['public'] = _chosenValue;
+    // update_request("update user_table set public = '$_chosenValue' where user_email = '${user_data['user_email']}'", null);
   }
 
   @override
@@ -95,48 +99,46 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
             SizedBox(width: 14.w,),
 
             //0127 소셜기능 - 하임 : 설정으로 이동시켜야할 것 같음
-            // Container(
-            //   padding: EdgeInsets.zero,
-            //   child: DropdownButton<String>(
-            //     value: _chosenValue,
-            //     //elevation: 5,
-            //     style: TextStyle(color: Colors.black),
-            //
-            //     items: <String>[
-            //       '일부공개',
-            //       '친구공개',
-            //       '비공개',
-            //     ].map<DropdownMenuItem<String>>((String value) {
-            //       return DropdownMenuItem<String>(
-            //         value: value,
-            //         child: Text(value),
-            //       );
-            //     }).toList(),
-            //     hint: (_chosenValue == null)
-            //         ? Text(
-            //         "",
-            //         style: TextStyle(color: Colors.black)
-            //     )
-            //         :Container(
-            //         child: Column(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           crossAxisAlignment: CrossAxisAlignment.center,
-            //           children: waiting ? [
-            //             Text(
-            //                 _chosenValue.toString(),
-            //                 style: TextStyle(color: Colors.black)
-            //             ),
-            //           ]: [],
-            //         )
-            //
-            //     ),
-            //     onChanged: (String? value) {
-            //       setState(() {
-            //         _chosenValue = value!;
-            //       });
-            //     },
-            //   ),
-            // ),
+            Container(
+              padding: EdgeInsets.zero,
+              child: DropdownButton<String>(
+                value: _chosenValue,
+                //elevation: 5,
+                style: TextStyle(color: Colors.black),
+
+                items: <String>[
+                  '일부공개',
+                  '친구공개',
+                  '비공개',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                hint: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: waiting ? [
+                        Text(
+                            _chosenValue.toString(),
+                            style: TextStyle(color: Colors.black)
+                        ),
+                      ]: [],
+                    )
+
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    _chosenValue = value!;
+                    user_data['public'] = _chosenValue;
+                    update_request("update user_table set public = '$_chosenValue' where user_email = '${user_data['user_email']}'", null);
+
+                  });
+                },
+              ),
+            ),
 
           ],
         ),

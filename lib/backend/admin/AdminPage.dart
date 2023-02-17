@@ -762,6 +762,11 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
 
+              AdminButton(title: "테스트", onPressed: (){
+
+              },),
+
+
               // AdminButton(
               //     title: "녹음 미션 2",
               //     onPressed: (){
@@ -817,6 +822,10 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 }
 
+
+
+
+
 class AdminButton extends StatelessWidget {
   const AdminButton({
     Key? key,
@@ -824,7 +833,7 @@ class AdminButton extends StatelessWidget {
     this.onPressed,
   }) : super(key: key);
 
-  final onPressed;
+  final  onPressed;
   final String title;
 
   @override

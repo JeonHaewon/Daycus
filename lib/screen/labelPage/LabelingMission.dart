@@ -220,7 +220,8 @@ class _LabelingMissionState extends State<LabelingMission> {
   importImageList(String folder) async {
     try {
       var select_res = await http.post(Uri.parse(API.select), body: {
-        'update_sql': "SELECT * FROM image_data WHERE image_locate='${folder}'",
+        // 한꺼번에 너무 많은 걸 불러오지 않도록 하기 위해서
+        'update_sql': "SELECT * FROM image_data WHERE image_locate='${folder}' limit 30",
       });
 
       if (select_res.statusCode == 200 ) {
@@ -368,14 +369,15 @@ class _LabelingMissionState extends State<LabelingMission> {
     do_label(String label_category){
       // 로딩이 다 됐을 때만 라벨링 가능
       if(is_load){
-        update_request(
-            "UPDATE image_data SET total_labelled=total_labelled+1 where image='${imageList[index]['image']}'",
-            null);
-        if (label_category=="아니오" || label_category=="인증불가") {
-          update_request(
-              "UPDATE image_data SET no_data=no_data+1 where image='${imageList[index]['image']}'",
-              null);
-        }
+        // 1.0.4 + 33 이후 버전부터 라벨링 카운팅 하지 않음.
+        // update_request(
+        //     "UPDATE image_data SET total_labelled=total_labelled+1 where image='${imageList[index]['image']}'",
+        //     null);
+        // if (label_category=="아니오" || label_category=="인증불가") {
+        //   update_request(
+        //       "UPDATE image_data SET no_data=no_data+1 where image='${imageList[index]['image']}'",
+        //       null);
+        // }
         increase_index();
       }
     }
