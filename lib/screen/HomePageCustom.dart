@@ -101,6 +101,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     // 데이터 리로드
     Future<void> refresh() async {
+      // reload == true로 돼있다
       await LoginAsyncMethod(HomePage.storage, context, true);
       setState(() { });
     };
@@ -127,35 +128,35 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           actions: [
           //IconButton(icon: Icon(Icons.search), onPressed: null),
 
-            //알림 확인
-            Stack(
-              alignment: Alignment.center,
-              children: [
-
-                IconButton(
-                    icon: Icon(Icons.notifications), color: Colors.grey,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => NoticePage()),
-                      );
-                    }
-                ),
-
-                Padding(
-                  padding: EdgeInsets.fromLTRB(11.w, 0, 0, 10.h),
-                  child: Container(
-                    width: 7.w,
-                    height: 7.h,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
+            //알림 확인 - 기능이 불안정하므로 업데이트에서 제외 (02 22 하임)
+            // Stack(
+            //   alignment: Alignment.center,
+            //   children: [
+            //
+            //     IconButton(
+            //         icon: Icon(Icons.notifications), color: Colors.grey,
+            //         onPressed: () {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(builder: (_) => NoticePage()),
+            //           );
+            //         }
+            //     ),
+            //
+            //     Padding(
+            //       padding: EdgeInsets.fromLTRB(11.w, 0, 0, 10.h),
+            //       child: Container(
+            //         width: 7.w,
+            //         height: 7.h,
+            //         decoration: BoxDecoration(
+            //           color: Colors.red,
+            //           shape: BoxShape.circle
+            //         ),
+            //       ),
+            //     ),
+            //
+            //   ],
+            // ),
 
 
             //친구 추가
@@ -201,8 +202,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [
+            // 새로고침
             RefreshIndicator(
               color: AppColor.happyblue,
+              // 새로고침 행동을 할 때 refresh라는 함수가 실행된다.
               onRefresh: refresh,
               child: SingleChildScrollView(
                 primary: true,

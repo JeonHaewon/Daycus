@@ -34,6 +34,7 @@ class SignupPage extends StatefulWidget {
 
 class _signupPage extends State<SignupPage> {
 
+  // 휴대폰 내부 저장소에 접근
   static final storage = FlutterSecureStorage();
 
   checkUserEmail() async {
@@ -44,31 +45,34 @@ class _signupPage extends State<SignupPage> {
           });
 
 
+      // 연결 성공은 200
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
 
         if (responseBody["existEmail"] == true) {
           Fluttertoast.showToast(msg: "이미 사용하고 있는 이메일입니다.");
-          // 데이터들 삭제
+
+          // clear : UI 상에서 데이터들 삭제
           passwordCtrl.clear();
           emailCtrl.clear();
           passwordCheckCtrl.clear();
 
           // 이용약관 초기화
         } else{
+          // 회원가입을 할 수 있는 상태 / 있는 계정이 아니므로
           await saveInfo();
         }
       }
     }catch(e){
       print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: "다시 시도해주세요");
     }
   }
 
-  saveInfo() async{
+  saveInfo() async {
     Userr userModel = Userr(
       1,
-      emailCtrl.text.trim(),
+      emailCtrl.text.trim(), // trim : 끝에 공백 없애기
       passwordCtrl.text.trim(),
       
       agree['이용약관'],
@@ -77,16 +81,18 @@ class _signupPage extends State<SignupPage> {
     );
 
     try {
+      // 해당 주소에 post 형식으로 연결
       var res = await http.post(
-          Uri.parse(API.signup),
+          Uri.parse(API.signup), // 연결주소 (실행시킬 php)
           body: userModel.toJson()
       );
 
+      // 200이면 성공
       if (res.statusCode == 200) {
-        print("출력 : ${res.body}");
+        //print("출력 : ${res.body}");
         var resSignUp = jsonDecode(res.body);
         if (resSignUp['success'] == true) {
-          print("$agree");
+          //print("$agree");
           Fluttertoast.showToast(msg: "성공적으로 가입 되었습니다.");
 
           // 랭킹 업그레이드
@@ -136,7 +142,7 @@ class _signupPage extends State<SignupPage> {
     }
     catch (e) {
       print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: "다시 시도해주세요");
 
     }
   }
@@ -156,6 +162,7 @@ class _signupPage extends State<SignupPage> {
 
 
 
+  // 페이지가 사라질때
   @override
   void dispose() {
     super.dispose();
@@ -292,6 +299,7 @@ class _signupPage extends State<SignupPage> {
                           Row(
                             children: [
 
+                              // 전체 동의
                               TextButton.icon(onPressed: (){
                                 setState(() {
                                   if(agree_all==Icons.check_box_outline_blank){

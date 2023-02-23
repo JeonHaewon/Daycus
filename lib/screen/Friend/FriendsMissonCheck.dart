@@ -219,14 +219,18 @@ class _FriendMissionCheckPageState extends State<FriendMissionCheckPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black), //default
-                              children: [
-                                TextSpan(text: '현재 '),
-                                TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
-                                TextSpan(text: '님이 진행 중인 공개된 미션이 없습니다'),
-                              ])
+                      SizedBox(
+                        width: 350.w,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                            text: TextSpan(
+                                style: TextStyle(color: Colors.black), //default
+                                children: [
+                                  TextSpan(text: '현재 '),
+                                  TextSpan(text: '${widget.userData['user_name']}', style: TextStyle(fontWeight: FontWeight.bold, )),
+                                  TextSpan(text: '님이 진행 중인 공개된 미션이 없습니다'),
+                                ])
+                        ),
                       ),
                       //Text("현재 ${widget.userData['user_name']}님이 진행 중인 미션이 없습니다"),
                     ],

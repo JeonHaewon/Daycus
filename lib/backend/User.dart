@@ -29,6 +29,7 @@ class Userr{
     'user_name' : user_email.split("@")[0],
     'user_id' : user_id.toString(),
     'user_email' : user_email,
+    // php에서 md5 형식으로 데이터베이스에 저장
     'user_password' : user_password,
 
     'terms_service' : (terms_service ? 1 : 0).toString(),

@@ -547,7 +547,11 @@ class _AdminScreenState extends State<AdminScreen> {
               ],
             ),
 
-              SizedBox(height: 15.h,),
+
+
+
+
+              AdminTitle(title:"원격 데이터베이스 수정"),
 
               AdminButton(
                 title: "미션 수정하기",
@@ -557,24 +561,59 @@ class _AdminScreenState extends State<AdminScreen> {
                       MaterialPageRoute(builder: (_) => MissionModify()));
                 },
               ),
+
+              Text("미션을 원격으로 수정합니다. 전체 이용자의 미션 내용이 바뀌므로 주의합니다. 리로드 전에는 변경 결과를 확인할 수 없으나 변경된 상태이니 주의 바랍니다. "),
+
               // AdminButton(
               //   title: "푸시 알림 보내기",
               //   onPressed: (){
               //     // time_showNotification();
               //   },
               // ),
+
+              AdminTitle(title:"원격 데이터베이스 수정 - 지속적 클릭 필요"),
+
+              AdminButton(
+                title: "기한 된거 done으로 표시하기",
+                onPressed: (){
+                  change_to_done();
+                },
+              ),
+
+              Text("시작한지 2주가 지난 미션을 done 상태로 만들어 추천 미션 등 화면에 뜨지 않도록 합니다."),
+
+              AdminButton(
+                title: "total user 수 변경 버튼",
+                onPressed: (){
+                  update_total_user_count();
+                  Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
+                },
+              ),
+
+              Text("total user 수를 변경합니다. 정산한 사람까지 포함합니다. "),
+
+              AdminButton(
+                title: "now user 수 변경 버튼",
+                onPressed: (){
+                  update_user_count();
+                  Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
+                },
+              ),
+
+              Text("now user 수를 변경합니다. 정산한 사람이 포함되지 않습니다. "),
+              
               AdminButton(
                 title: "past_missions으로 이동하기",
                 onPressed: (){
                   move_to_past_missions();
                 },
               ),
-              AdminButton(
-                title: "image_labeled_data로 옮기기",
-                onPressed: (){
-                  move_to_image_labeled_data();
-                },
-              ),
+
+              Text("끝난지 2주가 지난 미션을 past_missions로 옮깁니다. past_missions에 옮겨진 미션들만 피드에서 확인할 수 있습니다. (1.0.4 + 33 버전) "),
+
+
+              AdminTitle(title:"원격 데이터베이스 수정 - 기능 내 구현 완료"),
+              
               AdminButton(
                 title: "랭킹 업데이트",
                 onPressed: (){
@@ -582,18 +621,26 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
 
+              Text("랭킹을 업데이트 합니다. 기본적으로 기능 내에 다 표함되어 있기 때문에 따로 작동시키지 않아도 됩니다."),
+
               AdminButton(
                 title: "평균 리워드 업데이트",
                 onPressed: (){
                   update_avg_reward();
                 },
               ),
-              AdminButton(
-                title: "maxed_lv 업데이트",
-                onPressed: () async {
-                  await update_request("update user_table set maxed_lv = '${int.parse(user_data['maxed_lv']) >= int.parse(user_data['user_lv']) ? user_data['maxed_lv'] : user_data['user_lv']}' where user_email = '${user_data['user_email']}'", null);
-                },
-              ),
+
+              Text("사용자가 걸었던 평균 리워드를 업데이트 합니다. 기능 내에 포함되어있기 때문에 따로 작동시키지 않아도 됩니다. "),
+
+              // AdminButton(
+              //   title: "maxed_lv 업데이트",
+              //   onPressed: () async {
+              //     await update_request("update user_table set maxed_lv = '${int.parse(user_data['maxed_lv']) >= int.parse(user_data['user_lv']) ? user_data['maxed_lv'] : user_data['user_lv']}' where user_email = '${user_data['user_email']}'", null);
+              //   },
+              // ),
+              //
+              // Text("최고로 도달한 레벨 정보를 업데이트 합니다 - 정상적으로 작동하지 않음. "),
+
               AdminButton(
                 title: "유저 레벨 업데이트 !",
                 onPressed: (){
@@ -601,18 +648,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   Fluttertoast.showToast(msg: "유저 레벨 업데이트가 완료되었습니다 !");
                 },
               ),
-              AdminButton(
-                title: "앱 버전 업데이트 확인",
-                onPressed: () async {
-                  final newVersion = NewVersionPlus(
-                    androidId: 'com.happycircuit.daycus',
-                  );
-                  basicStatusCheck(NewVersionPlus newVersion) {
-                    newVersion.showAlertIfNecessary(context: context);
-                  }
-                  basicStatusCheck(newVersion);
-                },
-              ),
+
+              Text("유저 레벨을 레벨 정책에 맞게 업데이트 합니다. 리워드에 따라 레벨이 내려갔다가 올라갈 수 있습니다. 기능 내에 있기 때문에 따로 작동시키지 않아도 됩니다. "),
+
+              
+              AdminTitle(title:"라벨링 프로세스"),
+
               AdminButton(
                   title: "사진 데이터 0으로 데이터베이스 업데이트",
                   onPressed: () async {
@@ -626,12 +667,48 @@ class _AdminScreenState extends State<AdminScreen> {
                     }
                   }
               ),
+
+              Text("라벨링이 '아니오' 또는 '인증불가'로 된 이미지에 대하여 0으로 변환합니다. 그리하여 라벨링 불가한 사진이 빨간색 사각형으로 뜨게 됩니다. "),
+
               AdminButton(
                 title: "image_labeling_cnt 다 0으로 업데이트",
                 onPressed: () async {
                   await update_request("update user_table set this_week_label_cnt = 0;", null);
                 },
               ),
+
+              Text("유저들의 라벨링 횟수를 모두 0으로 만듭니다. "),
+
+              AdminButton(
+                title: "image_labeled_data로 옮기기",
+                onPressed: (){
+                  move_to_image_labeled_data();
+                },
+              ),
+
+              Text("done으로 표시된 이미지들을 image_labeled_data로 옮깁니다. 이후 라벨링 페이지에서 이 이미지가 다시 뜨지 않습니다. "),
+
+
+
+              AdminTitle(title:"추가한 기능들 테스트 버전"),
+              
+              AdminButton(
+                title: "앱 버전 업데이트 확인",
+                onPressed: () async {
+                  final newVersion = NewVersionPlus(
+                    androidId: 'com.happycircuit.daycus',
+                  );
+                  basicStatusCheck(NewVersionPlus newVersion) {
+                    newVersion.showAlertIfNecessary(context: context);
+                  }
+                  basicStatusCheck(newVersion);
+                },
+              ),
+
+              Text("구글에 상위버전이 있을 경우 업데이트를 하라는 문구가 뜹니다. 잘 작동하는지 추가적인 검토가 필요합니다. "),
+
+
+
               AdminButton(
                 title: "중복 로그인 팝업",
                 onPressed: (){
@@ -641,6 +718,9 @@ class _AdminScreenState extends State<AdminScreen> {
                       MaterialPageRoute(builder: (_) => LoginPopup()));
                 },
               ),
+
+              Text("중복로그인 팝업 페이지 테스트 입니다. "),
+
               AdminButton(
                 title: "알림 팝업",
                 onPressed: (){
@@ -650,26 +730,20 @@ class _AdminScreenState extends State<AdminScreen> {
                       MaterialPageRoute(builder: (_) => AlertDialogPage()));
                 },
               ),
+
+              Text("알림 테스트 입니다. "),
+
               AdminButton(
                 title: "네이버 링크 이동 슛 ~",
                 onPressed: (){
                   _launchURL();
                 },
               ),
-              AdminButton(
-                title: "total user 수 변경 버튼",
-                onPressed: (){
-                  update_total_user_count();
-                  Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
-                },
-              ),
-              AdminButton(
-                title: "now user 수 변경 버튼",
-                onPressed: (){
-                  update_user_count();
-                  Fluttertoast.showToast(msg: "유저 수 업데이트 성공했습니다 !");
-                },
-              ),
+
+              Text("네이버 링크로 이동하는 테스트 페이지입니다. 이후 네이버 블로그로 바로 가는 UI와 결합하여 앱 내에 적용시킬 수 있습니다. "),
+
+
+
               AdminButton(
                 title: "리뷰 슛 ~",
                 onPressed: () async {
@@ -680,6 +754,8 @@ class _AdminScreenState extends State<AdminScreen> {
                   }},
               ),
 
+              Text("리뷰 작성하는 페이지입니다. "),
+
               AdminButton(
                 title: "굿 라벨링",
                 onPressed: (){
@@ -689,6 +765,8 @@ class _AdminScreenState extends State<AdminScreen> {
                       MaterialPageRoute(builder: (_) => LabelingEnd()));
                 },
               ),
+
+              Text("라벨링이 종료되었을 때 뜨는 페이지입니다. "),
               // AdminButton(
               //   title: "가져와봐 버튼",
               //   onPressed: (){
@@ -710,12 +788,10 @@ class _AdminScreenState extends State<AdminScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (_)=> PhpMail()));
                 },
               ),
-              AdminButton(
-                title: "기한 된거 done으로 표시하기",
-                onPressed: (){
-                  change_to_done();
-                },
-              ),
+
+              Text("이메일을 보낼 수 있는 기능입니다. "),
+
+
               // AdminButton(
               //   title: "jsondata 빼고 부르기",
               //   onPressed: (){
@@ -753,14 +829,17 @@ class _AdminScreenState extends State<AdminScreen> {
               //     },
               // ),
               AdminButton(
-                title: "리워드 광고 나타내주기",
+                title: "현재 로그인 기기 정보 들고오기",
                 onPressed: () async {
-                  var dbcode = await get_logincode_db(user_data['user_email']);
+                  var dbcode = user_data['login_ing'];
                   var pfcode = await get_logincode_pf();
                   print(dbcode);
                   print(pfcode);
                 },
               ),
+
+              Text("현재 로그인 정보를 들고옵니다. 내부저장소에 있는 로그인 정보와 데이터베이스에 있는 정보를 둘 다 출력합니다. 같으면 자동 로그아웃이 되지 않습니다.  "),
+
               AdminButton(
                 title: "리워드 광고 슛",
                 onPressed: (){
@@ -768,9 +847,9 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
 
-              AdminButton(title: "테스트", onPressed: (){
+              Text("잘 작동하지 않는 기능입니다. "),
 
-              },),
+
 
 
               // AdminButton(
@@ -846,6 +925,7 @@ class AdminButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 20.h,),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -869,11 +949,35 @@ class AdminButton extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 15.h,),
+        SizedBox(height: 10.h,),
       ],
     );
   }
 }
+
+class AdminTitle extends StatelessWidget {
+  AdminTitle({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.only(top: 80.h, bottom: 20.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("※ $title", style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),),
+            SizedBox(height: 10.h,),
+            Container(width: 200.w, height: 1.h, color: Colors.grey,),
+          ],
+        ));
+  }
+}
+
 
 
 

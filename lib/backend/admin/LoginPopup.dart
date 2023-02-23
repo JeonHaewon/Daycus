@@ -174,6 +174,7 @@ void showLoginAlertDialog_two(BuildContext context) async {
                     Navigator.pushAndRemoveUntil(context,
                         MaterialPageRoute(builder: (_) => LoginPageCustom()), (
                             route) => false);
+                    // 로그아웃처리한다.
                     await logout(true);
                   }, //로그인페이지로
                   child: Text("확인", style: TextStyle(color: Colors.indigo),)

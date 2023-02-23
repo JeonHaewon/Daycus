@@ -23,7 +23,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'LoadingPage.dart';
 
-
+// 코드 바꾸기 - 기범
 storing_logincode() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('${user_data['user_email']}_logincode', logincode);
@@ -34,10 +34,10 @@ get_logincode_pf() async {
   return prefs.getString('${user_data['user_email']}_logincode');
 }
 
-get_logincode_db(String name) async {
-  var login_code = await select_request("select login_ing from user_table where user_email = '$name'", null, true);
-  return login_code[0]['login_ing'];
-}
+// get_logincode_db(String name) async {
+//   var login_code = await select_request("select login_ing from user_table where user_email = '$name'", null, true);
+//   return login_code[0]['login_ing'];
+// }
 
 class LoginPageCustom extends StatefulWidget {
   const LoginPageCustom({ Key? key }) : super(key: key);
@@ -79,10 +79,6 @@ class KeepLoginPage extends State<LoginPageCustom> {
     passwordCtrl.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,11 +89,14 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
         Fluttertoast.showToast(msg: "안녕하세요, ${user_data['user_name']}님 !");
 
+        // 로그인 유지
         keepLogin(
             user_data['user_name'],
             emailCtrl.text.trim(),
             passwordCtrl.text.trim(),
             storage);
+
+        // 각종 데이터를 불러오기
         await afterLogin();
         storing_logincode();
         update_request("update user_table set login_ing = '$logincode' where user_email = '${emailCtrl.text.trim()}'", null);
@@ -235,6 +234,7 @@ class KeepLoginPage extends State<LoginPageCustom> {
 
               ElevatedButton(
                   onPressed: () async {
+                    // 인터넷 연결을 먼저 확인
                     String connection = await checkConnectionStatus(context);
                     if (connection=="ConnectivityResult.none"){
                       Navigator.push(context, MaterialPageRoute(builder: (_) => ReConnection()));
@@ -242,16 +242,19 @@ class KeepLoginPage extends State<LoginPageCustom> {
                     // 로그인 버튼 눌렀을 때
                     if (_formKey.currentState!.validate()){
 
+                      // 성공여부를 TRUE나 FALSE로 넣는다
                       bool? is_login = await userLogin(
                           emailCtrl.text.trim(),
                           passwordCtrl.text.trim(),
                           false,
                       );
 
-                      var dbcode = await get_logincode_db('${user_data['user_email']}');
+                      // 로그인 중복 방지를 위한 랜덤코드 형성
+                      var dbcode = user_data['login_ing'];
                       dbcode = (dbcode == '3' ? null : dbcode);
                       var pfcode = await get_logincode_pf();
 
+                      // 코드가 다르면, 이 폰에서 로그인을 새로 시도하는 것. (기존에 로그인된 계정임)
                       if (dbcode != pfcode){
                         await showDialog(
                           barrierDismissible: false,

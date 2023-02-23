@@ -81,8 +81,10 @@ class FindPasswordPage extends StatelessWidget {
         if (select_res.statusCode == 200 ) {
           var resMission = jsonDecode(select_res.body);
           // print(resMission);
+          // 이메일이 존재할때 랜덤코드가 형성
           if (resMission['success'] == true) {
             print(resMission);
+            // 이메일에 랜덤코드가 갔음
             Fluttertoast.showToast(msg: "이메일을 확인해주세요 !");
             return true;
           } else {

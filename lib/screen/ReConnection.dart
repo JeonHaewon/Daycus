@@ -26,25 +26,29 @@ class _ReConnectionState extends State<ReConnection> {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
-  static final storage = FlutterSecureStorage();
+  //static final storage = FlutterSecureStorage();
 
   @override
   void initState() {
     super.initState();
     initConnectivity();
+    // 인터넷 연결을 계속 트래킹
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   @override
   void dispose() {
+    // 트래킹을 끊어줌
     _connectivitySubscription.cancel();
     super.dispose();
   }
 
+  // 인터넷 상태를 리턴
   Future<void> initConnectivity() async {
     ConnectivityResult result = ConnectivityResult.none;
     try {
+      // 처음 인터넷 상태를 확인
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
       print(e.toString());
@@ -85,6 +89,7 @@ class _ReConnectionState extends State<ReConnection> {
                 //Center(child: Text('Connection Status: $_connectionStatus')),
                 SizedBox(
                   width: 30.w, height: 30.h,
+                  // 로딩하는 ui : CircularProgressIndicator
                   child: CircularProgressIndicator(color: AppColor.happyblue,), ),
               ],
             ),
@@ -107,8 +112,9 @@ class _ReConnectionState extends State<ReConnection> {
         setState(() => _connectionStatus = 'Fail');
         break;
     }
+    // 인터넷이 연결됐을 때
     if (_connectionStatus!="ConnectivityResult.none"&&_connectionStatus!="Unknown"){
-      print("인터넷 연결 : ${_connectionStatus}");
+      // print("인터넷 연결 : ${_connectionStatus}");
       Fluttertoast.showToast(msg: "재연결 되었습니다");
       //LoginAsyncMethod(storage, context, true);
       Navigator.pop(context);
