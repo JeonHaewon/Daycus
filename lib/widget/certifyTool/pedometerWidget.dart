@@ -45,8 +45,11 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
 
   updating_info(StepCount event) async {
     if (ismanbogi == true) {
+      // SharedPreferences : 휴대폰 내의 내부저장소
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      // user_data['user_email']가 만보기 정보의 key이다.
       if (prefs.getStringList('${user_data['user_email']}') == null) {
+        // 만보기 값을 리스트로 넣는다.
         await prefs.setStringList(
             '${user_data['user_email']}', [event.steps.toString()]);
       }
@@ -67,6 +70,8 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
       //Fluttertoast.showToast(msg: "만보기 시작");
       isupgrade = true;
     }
+    // really : 휴대폰에 저장돼있는 실제 만보기값
+    // event.steps : really + 더 걸은값
     setState(() {
       PedometerSteps = (event.steps - int.parse(really)).toString();
       // _steps = pedometer_count.toString();
@@ -88,6 +93,8 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
     if (await Permission.activityRecognition.request().isGranted) {
 
       _stepCountStream = Pedometer.stepCountStream;
+      // 만보기가 없으면 onStepCountError를 띄움
+      // listen : 얘를 계속 감지
       _stepCountStream.listen(onStepCount).onError(onStepCountError);
     }
     if (!mounted) return;
@@ -152,8 +159,11 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
                         ),
                         SizedBox(height: 60.h,),
 
+                        // 다 걸었는지 덜 걸었는지
                         (widget.walkNumber-int.parse(PedometerSteps) > 0)
-                            ? Row(
+                            ? 
+                            // 덜 걸었을 때
+                        Row(
                           children: [
                             Text("미션 성공까지 ",
                                 style: TextStyle(fontSize: 12.sp, fontFamily: 'korean', )
@@ -166,6 +176,7 @@ class _WalkCountWidgetState extends State<WalkCountWidget> {
                             ),
                           ],
                         )
+                        // 다 걸었을 때
                             : Row(
                           children: [
                             Text("${widget.walkNumber}걸음 걷기 ",

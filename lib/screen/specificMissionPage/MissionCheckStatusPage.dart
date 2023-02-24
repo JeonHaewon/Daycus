@@ -125,47 +125,46 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
 
   todayMissionCertify(int do_i, String source) async {
-
+    //시간정보 20230224144203
     String todayString = await NowTime('yyyyMMddHHmmss');
+    // 미션 아이디_날짜_시간_유저아이디_domissionID
     String imageName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
 
 
+    // 휴대폰에서 사진을 찍거나 불러올 수 있다.
+    // 갤러리도 열 수 있다.
     if (source=='gallery'){
       await getImage(imageName, ImageSource.gallery);
     }
+    // 카메라만 열 수 있다.
     else if (source == 'camera'){
       await getImage(imageName, ImageSource.camera);
     }
 
+    // 작은 박스 내 로딩이 시작됨
     setState(() {
       is_load = true;
     });
 
 
-    // 갤러리로 찍을 경우 다시 보여준다
-    // if (source==ImageSource.gallery){
-    //   Navigator.push(context, MaterialPageRoute(builder: (_) => Scaffold(
-    //     body: Column(
-    //       children: [
-    //         Image.file(File(image!.path)),
-    //       ],
-    //     ),
-    //   )));
-    // }
-
-    print("${widget.mission_data['image_locate']}");
+    // 찍힌 이미지를 실제로 업로드함
     await uploadImage(
           imageName,
+        // 서버에 폴더명
         "${widget.mission_data['image_locate']}",
+        // 갤러리 / 카메라 등
         source,
-      widget.do_mission_data['do_id'],
-      todayBlockCnt,
+        widget.do_mission_data['do_id'],
+        // 오늘 몇번째 날인지
+        todayBlockCnt,
     );
 
     do_mission[do_i]["d$todayBlockCnt"] = imageReNamed;
+    // 다 올라감 - 로딩이 풀림
     setState(() { is_load = false; });
     // result 개수 다시 업데이트
     cnt_done();
+    // 최대 100퍼센트를 보장하는 코드
     return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
 
 
@@ -252,23 +251,27 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     //print("mission_data : ${widget.mission_data}");
     //print("end date : "+widget.mission_data['end_date']);
 
-    print("날짜 --  : ${DateTime.parse(now_time).difference((DateTime.parse(widget.mission_data['start_date']))).inDays + 1}");
+    //print("날짜 --  : ${DateTime.parse(now_time).difference((DateTime.parse(widget.mission_data['start_date']))).inDays + 1}");
 
       setState(() {
+        // 오늘 몇번째 날인가 / 오늘날짜 - 시작날짜
         todayBlockCnt = DateTime.parse(now_time)
             .difference((DateTime.parse(widget.mission_data['start_date']))).inDays + 1;
         //print("time_diff : $time_diff");
 
+        // 14
         missionDate = int.parse(widget.mission_data['term'])*_oneWeek;
+        // 인증해야하는 횟수 / frequency 일주일 당 미션 횟수
         toCertify = int.parse(widget.mission_data['frequency']) * int.parse(widget.mission_data['term']);
+        // 완료한 퍼센트 :  mission_result/toCertify = 인증한횟수/인증해야하는횟수
         return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
 
-        print("todayBlockCnt : ${todayBlockCnt}");
+
 
       });
 
     var now = DateTime.now();
-    // 일주일간 보기 기록이 없거나, not_see로부터 일주일이 넘었으면
+    // 일주일간 보기 기록이 없거나, not_see로부터 일주일이 넘었으면 - 검토확인
     if (widget.do_mission_data['not_see']==null){
       NotSeeWeek(context, widget.do_mission_data, widget.mission_data, now);
       // 일주일이 넘었으면은 null이 아닌 경우이기 때문에, else if로 해주어야 Datetime.parse에서 에러가 나지 않는다
@@ -292,11 +295,13 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     super.dispose();
     WidgetsBinding.instance?.removeObserver(this);
 
-    print("return_reward : $return_reward");
+    //print("return_reward : $return_reward");
 
     update_request(
         "UPDATE do_mission SET percent='${(return_reward*100).toStringAsFixed(2)}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
         null);
+
+    // 공개여부, 좋아요 업데이트 - 검토
     update_request("update do_mission set how = '$_chosenValue' where mission_id = '${widget.mission_data['mission_id']}' and user_email = '${user_data['user_email']}'", null);
     update_request("update do_mission set heart = '${_heart}' where mission_id = '${widget.mission_data['mission_id']}' and user_email = '${user_data['user_email']}'", null);
     // +0원 계산하기
@@ -347,6 +352,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
     int i = widget.mission_index;
     int do_i = all_missions[i]['now_user_do'];
 
+    // 갤러리 사용이 가능할때
     Widget cameraOrGallery = bottomPopWidget(
         context,
 
@@ -437,6 +443,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                     SpecificMissionPage(
                                       mission_data: widget.mission_data,
                                         startDate: widget.mission_data['start_date'],
+                                        // 디폴트 이미지가 존재. thumbnail = null일경우
                                         topimage: widget.mission_data['thumbnail'] ?? 'topimage1.png',
                                         progress: widget.mission_data['start_date']==null
                                             ? (widget.mission_data['next_start_date']==null
@@ -446,8 +453,10 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                             ? (widget.mission_data['next_start_date']==null
                                             ? comingSoonString : '${widget.mission_data['next_start_date']} ~ ${widget.mission_data['next_end_date']}') : '${widget.mission_data['start_date']} ~ ${widget.mission_data['end_date']}',
 
+                                        // 자료형 잘 보고 넘기기 !
                                         totaluser: int.parse(widget.mission_data['total_user']),
                                         certifi_user: int.parse(widget.mission_data['certifi_user']),
+                                        // 미션 내용에 있는 이미지
                                         downimage: 'downimage1',
                                         content: widget.mission_data['content'],
                                         rules: widget.mission_data['rules'],
@@ -773,6 +782,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                           : "2. " + (widget.mission_data['notice'].split("\n")[0]).toString(),
                                           style: TextStyle(fontSize: 11.5.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
                                       SizedBox(height: 3.h,),
+                                      // 추가 안내사항이 있는 경우 - 엔터로 구분
                                       if (widget.mission_data['notice']!=null)
                                         Text("${(widget.mission_data['notice'].split("\n")[1]).toString()}",
                                             style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
@@ -781,6 +791,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                         Text("${widget.mission_data['content']}",
                                             style: TextStyle(fontSize: 10.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
+                                      // 사진만 이렇게 뜸.
                                       if (widget.mission_data['certify_tool']=='camera' || widget.mission_data['certify_tool']=='gallery')
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -841,9 +852,9 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                               Text("인증 현황",style: TextStyle( color: AppColor.happyblue, fontSize: 14.w, fontFamily: 'korean') ),
                               // SizedBox(height: 3.w,),
 
-                              // 미션 기간 이전
+                              // 미션 기간 이전 - 검토 필요
                               if (0>=todayBlockCnt)
-                                Text("좋은 습관에 도전하기까지 ${todayBlockCnt+1}일 전",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                                Text("좋은 습관에 도전하기까지 ${-(todayBlockCnt+1)}일 전",style: TextStyle(  fontSize: 16.w, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
                               // 미션 기간 동안
                               if (0<todayBlockCnt && todayBlockCnt<mission_week+1)
@@ -858,8 +869,11 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                 height: _height * 2 + _betweenWidth,
                                 width: _width * _oneWeek + _betweenWidth * _oneWeek + 30.w,
                                 child: ListView.builder(
+                                  // 두줄
                                   itemCount: 2,
                                   itemBuilder: (_, ___){
+                                    // index_i : 겉 for문 , index_j : 안 for문
+                                    // 디폴트값은 -1임. 처음 포문 들어갈때 1 추가하고 들어가기 때문
                                     index_i += 1; index_j = -1;
                                     return Column(
                                       children: [
@@ -868,17 +882,16 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                             Container(
                                               width:_width * _oneWeek + _betweenWidth * (_oneWeek-1),
                                               height: _height,
-
-                                              // 하임 : 정렬 어떻게 하면 완벽한 가운데 정렬이나 완벽하게 좌우가 맞을 수 있을까
-                                              // 이거 숫자 잘 계산해야할듯. ListView.builder은 그 부모가 꼭 사이즈를 가져야하는 것 같아서.
                                               child: ListView.builder(
                                                   scrollDirection: Axis.horizontal,
 
                                                   itemCount : _oneWeek,
                                                   itemBuilder: (_,__) {
                                                     index_j += 1;
+                                                    // 날짜를 그려준다 : 1 ~ 14
                                                     int date = (index_i*7)+(index_j+1);
 
+                                                    // UI를 그리면서 몇번 인증했는지 세어줌
                                                     if (widget.do_mission_data['d${date}']!=null){
                                                       doneCnt += 1 ;
                                                     }
@@ -890,13 +903,16 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                           child: widget.do_mission_data['d${date}']==null
 
                                                           // 아직 인증하지 않은 날짜 블럭, date+1 = 오늘 카운트
+                                                          // todayBlockCnt : 오늘이 몇번째 날인가
                                                               ? (todayBlockCnt <= date ?
                                                                   // 날짜가 지나지 않았으면
                                                                   YetMissionBlock(i: index_i, j: index_j, sp: _sp,
                                                                     isLoad: is_load, is_today: (todayBlockCnt==date),
                                                                   onPressed: () async {
+                                                                    // 오늘 아직 인증을 안했을때
                                                                     if (date == todayBlockCnt){
                                                                       if (widget.mission_data['certify_tool'] == 'gallery'){
+                                                                        // 갤러리나 카메라를 고를 수 있다
                                                                         await showModalBottomSheet(context: context,
                                                                             builder: ((builder) => cameraOrGallery
                                                                             ));
@@ -907,31 +923,33 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                                       else if (widget.mission_data['certify_tool'] == 'recorder'){
 
                                                                         Fluttertoast.showToast(msg: "녹음 버튼을 눌러 미션을 수행해보세요 !");
-                                                                        // showModalBottomSheet(context: context,
-                                                                        //     builder: ((builder) => cameraOrGallery
-                                                                        //     ));
                                                                       }
-                                                                      // else if (widget.mission_data['certify_tool'] == 'pedometer'){
-                                                                      //   Fluttertoast.showToast(msg: "만보기 미션을 완료하면 \'미션인증\' 버튼을 눌러주세요.");
-                                                                      // }
+
                                                                       else {
                                                                         todayMissionCertify(do_i, "camera");
                                                                       }
-                                                                    } else {
+                                                                    }
+                                                                    // 아직 날짜가 안된 블럭에 대해서는
+                                                                    else {
                                                                       Fluttertoast.showToast(msg: "해당 날짜에 인증할 수 있습니다");
                                                                     }
                                                                         },)
+                                                                // 미션이 인증되지 않아서 null인데 이미 날짜가 지남
                                                               : FailMissionBlock(sp: _sp)
                                                           )
                                                           // 인증 완료된 날짜 블럭
                                                               : (widget.do_mission_data['d${date}']!='0' ?
                                                           DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
-                                                            is_today: (todayBlockCnt==date), isLoad : is_load,
-
+                                                            is_today: (todayBlockCnt==date), 
+                                                            // loading UI를 스택으로 그려줌
+                                                            isLoad : is_load,
                                                             folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
-                                                          : RejectedMissionBlock(sp: _sp)
+                                                          // 반려된 블럭 - null은 아니지만 0이다.
+                                                        : RejectedMissionBlock(sp: _sp)
                                                           )
                                                         ),
+
+                                                        // 끝에는 SizedBox를 안그려주는
                                                         if(index_j != _oneWeek-1)
                                                           SizedBox(
                                                             width: _betweenWidth,
@@ -943,6 +961,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                           ],
                                         ),
 
+                                        // SizedBox를 그려주는
                                         if (index_i == 0)
                                           SizedBox(
                                             height: _betweenWidth,
@@ -995,6 +1014,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                       ],
                     ),
 
+                  // 녹음
                   if (widget.mission_data['certify_tool']=='recorder')
                     Padding(
                       padding: EdgeInsets.only(top: 30.h),
@@ -1008,6 +1028,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                           Row(
                             children: [
                               Text("※ ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
+                              // condition : 만보기값, 녹음값 / 초 단위
                               Text("${widget.mission_data['condition']}초 이상 ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
                               Text("녹음한 후 ",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',) ),
                               Text("오늘 미션 인증하기",style: TextStyle(fontSize: 12.sp, fontFamily: 'korean',fontWeight: FontWeight.bold) ),
@@ -1015,7 +1036,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                             ],
                           ),
-                          //SizedBox(height: 25.h,),
+
+                          // player랑 recorder 두개의 위젯이 있다.
                           RecordWidget(),
 
                           //Text("record mission"),
@@ -1137,6 +1159,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                         SizedBox(height: 5.h,),
 
+                        // 리워드를 건 경우와 걸지 않은 경우 UI와 계산방법이 다름,
                         if (widget.do_mission_data['bet_reward']!='0')
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1163,11 +1186,14 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                         if (widget.do_mission_data['bet_reward']!='0')
                           SizedBox(height: 5.h,),
 
+                        // toStringAsFixed(1) : 소숫점 1의자리까지 반올림
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("예상 환급 ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean') ),
                             // 건 리워드가 없을 경우
+                            // todayBlockCnt = 15 : 정산이가능
+                            // mission_result : 미션 인증을 한 횟수
                             if (widget.do_mission_data['bet_reward']=='0' && (15-todayBlockCnt >= toCertify-mission_result))
                               Text("+ ${(return_reward*14).toStringAsFixed(1)} ${rewardName}",style: TextStyle(fontSize: 14.sp, fontFamily: 'korean', fontWeight: FontWeight.bold) ),
 
@@ -1248,6 +1274,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                 // print("미션 성공한 갯수 :  : ${mission_result}");
 
                 // 미션 끝 : 정산하기
+                // missionDate = 14
+                // 정산이 가능하거나 오늘 14일째인데, 미션을 한 경우
                 if (todayBlockCnt > missionDate || (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) {
                   mission_complete(
                       todayBlockCnt,
@@ -1260,6 +1288,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                 }
 
                 // 미션 포기가 가능할 때
+                // 위에가 아닌 경우
                 else if (((15-todayBlockCnt >= toCertify-mission_result) || (widget.do_mission_data['bet_reward']!='0'))==false){
                   mission_complete(
                       todayBlockCnt,
@@ -1285,18 +1314,23 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     // 만보기
                   } else if (widget.mission_data['certify_tool']=='pedometer'){
                     //print("만보기");
-                    print("$PedometerSteps ${widget.mission_data['condition']}");
+                    //print("$PedometerSteps ${widget.mission_data['condition']}");
+                    
+                    // PedometerSteps : 전역변수
+                    // 만보기가 다 찼을때
                     if((int.parse(PedometerSteps) >= int.parse(widget.mission_data['condition']))){
-                      // 미션 인증
+                      // 미션 인증 : 만보기 횟수를 업데이트
                       bool success = await update_request(
                           "UPDATE do_mission SET d${todayBlockCnt}='${PedometerSteps}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
                           null);
+                      // 휴대폰 내의 데이터도 인증으로 바꿔줌
                       if (success){
                         setState(() {
                           do_mission[do_i]["d$todayBlockCnt"] = PedometerSteps;
                         });
                         // result 개수 다시 업데이트
                         cnt_done();
+                        // 최대 100%만 가능
                         return_reward = mission_result/toCertify>1 ? 1 : mission_result/toCertify;
                         Fluttertoast.showToast(msg: "오늘 미션이 인증되었습니다");
                       }
@@ -1308,6 +1342,8 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                     }
 
                   }
+                  
+                  
                   // 녹음하기 미션
                   else if (widget.mission_data['certify_tool']=='recorder'){
                     // 7이 아닌 경우 이상한 값이 들어갔을 가능성이 있으므로 에러 처리
@@ -1318,18 +1354,22 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                       }
                       else {
                         List splitTime = temTimer.split(" : ");
+                        // 총 녹음 초
                         int totalRecordTime = int.parse(splitTime[0])*60 + int.parse(splitTime[1]);
 
+                        // 녹음을 해당 초 이상만큼 잘 함
                         if (totalRecordTime >= int.parse(widget.mission_data['condition'])){
                           print("녹음된 파일 초 : ${totalRecordTime}");
                           //Fluttertoast.showToast(msg: "미션을 인증할 수 있습니다 !");
 
                           // 오디오 이름 바꾸기
+                          // ex) 34_20230119_021416_58_249
                           String todayString = await NowTime('yyyyMMddHHmmss');
                           String audioName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
+                          // 오디오 파일을 업로드하는 함수 - 성공여부 판단 필요
                           uploadAudio(audioName, widget.mission_data['image_locate']);
 
-                          // 이름으로 하면 좋지만, 임시방편으로 녹음한 시간만 넣음.
+                          // 확장자도 추가해야함.
                           bool success1 = await update_request(
                               "UPDATE do_mission SET d${todayBlockCnt}='${audioName}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
                               null);
@@ -1339,7 +1379,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                           if (success1 && success2){
                             setState(() {
-                              do_mission[do_i]["d$todayBlockCnt"] = temTimer;
+                              do_mission[do_i]["d$todayBlockCnt"] = audioName;
                             });
                             // result 개수 다시 업데이트
                             cnt_done();
@@ -1360,14 +1400,15 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
 
                     //Fluttertoast.showToast(msg: "녹음미션");
                   }
+                  // 거의 대부분의 경우
                   else {
                     todayMissionCertify(do_i, "camera");
                   }
                 }
 
-                // 시작 날짜의 14일보다 넘어가면 미션 정산하기로 바뀐다.
+                // 시작 날짜의 14일보다 넘어가면 미션 정산하기로 바뀐다. / 14일째인데 인증했을경우
               }, child: Text( (todayBlockCnt>missionDate || (todayBlockCnt==missionDate&&do_mission[do_i]["d$todayBlockCnt"]!=null)) ? '미션 정산하기'
-                // 남은 날 다 인증해도 미션을 수행할 수 있을 때 (좌) : 없을 때 (우)
+                // 남은 날 다 인증해도 미션을 수행할 수 있을 때 (좌) - 거의 이상태 : 없을 때 (우) / 리워드를 걸었으면 무조건 미션 인증이 가능
                   : ((15-todayBlockCnt >= toCertify-mission_result) || (widget.do_mission_data['bet_reward']!='0'))
                     ? '오늘 미션 인증하기' : '미션 포기하기',
                   style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: 'korean', ) ) ),
@@ -1380,6 +1421,7 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
   }
 }
 
+// 만보기 걸음 팝업페이지
 void showPedometerAlertDialog(BuildContext context, int date, String? pedometerNum) async {
   var f = NumberFormat('###,###,###,###');
   String result = await showDialog(
@@ -1453,6 +1495,7 @@ void showPedometerAlertDialog(BuildContext context, int date, String? pedometerN
   );
 }
 
+// 인증사진
 void showAlertDialog(BuildContext context, int date, Image? downloadImage, int degree) async {
 
   String result = await showDialog(
@@ -1475,7 +1518,7 @@ void showAlertDialog(BuildContext context, int date, Image? downloadImage, int d
             height: 300.h,
             child: downloadImage!=null
                 ? Transform.rotate(angle: degree * pi/180, child: downloadImage,)
-                : Text("이미지를 불러올 수 없습니다 :( \n이미지 데이터가 손실되었거나 정상적으로 인증이 확정된 이미지일 수 있습니다.", textAlign: TextAlign.center,),
+                : Text("이미지를 불러올 수 없습니다 :(", textAlign: TextAlign.center,),
           ),
 
           shape: RoundedRectangleBorder(
@@ -1540,14 +1583,20 @@ class DoneMissionBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: () async {
+          // 이미지인 경우
           if (tool=="camera" || tool=='gallery') {
+            // 이미지를 다운받아서 창을 띄워줌
+            // 리스트, [이미지, 각도]
             var image_data = await image_download(folder, do_mission_data["d${date}"]);
 
+            // 돌아간거를 보정까지
             Image? downloadImage = image_data[0];
             int degree = image_data[1];
 
     showAlertDialog(context, date, downloadImage, degree);
-  } else if (tool=="pedometer"){
+  } 
+          // 만보기인경우
+    else if (tool=="pedometer"){
   showPedometerAlertDialog(context, date, do_mission_data["d${date}"]);
   }
 },
@@ -1609,7 +1658,7 @@ class RejectedMissionBlock extends StatelessWidget {
         },
         // 원래 pink[40], red 이었음.
         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red[300])),
-        child: Text('X',style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        child: Text('X',style: TextStyle(color: Colors.white, fontSize : sp, fontFamily: 'korean', ) )
     );
   }
 }

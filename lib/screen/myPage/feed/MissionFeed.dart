@@ -179,9 +179,10 @@ class MissionFeed extends StatelessWidget {
                                     color: Colors.grey[100],
                                     borderRadius: BorderRadius.circular(15),
                                   ),
+                                  // 검토 필요
                                   child: Align(
                                       alignment: Alignment.center,
-                                    child: Text("※ 미션 종료 후 48일이 지난 미션은 뜨지 않습니다",
+                                    child: Text("※ 미션 종료 후 48일이 지나지 않은 미션은 뜨지 않습니다",
                                         style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),)), )
 
 

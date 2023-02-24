@@ -14,25 +14,27 @@ import 'dart:io';
 File? image;
 String? imageReNamed;
 
-// 사진을 찍을 수 있도록
+// 사진을 얻는 함수
 Future getImage(String todayString, source) async {
+  
+  // 이미지를 얻을 수 있는 라이브러리
   final ImagePicker picker = ImagePicker();
-  // 갤러리 열기 : 성공
-  //var pickedFile = await picker.pickImage(source: ImageSource.gallery);
   var pickedFile = await picker.getImage(source: source);
 
-  print('Original path: ${pickedFile!.path}');
+  //print('Original path: ${pickedFile!.path}');
 
-  String image_path = pickedFile!.path;
-  String dir = path.dirname(pickedFile!.path);
+  String image_path = pickedFile!.path; // 캐시파일 내 이미지
+  String dir = path.dirname(pickedFile!.path); // 캐시파일 폴더
 
   // jpg나 png파일만 업로드 가능.
   if (image_path.endsWith(".jpg")){
+    // ex ) 53_20230216_155702_29_341
     imageReNamed = todayString+".jpg";
     String newPath = path.join(dir, imageReNamed);
-    print('NewPath: ${newPath}');
+    //print('NewPath: ${newPath}');
+    // 새로운 주소로 이미지를 복사
     image = await File(pickedFile.path).copy(newPath);
-    //
+    // 제언 : 이미지를 삭제하여 트래픽을 줄이는 것이 좋을듯.
 
   } else if (image_path.endsWith(".png")){
     imageReNamed = todayString+".jpg";
@@ -44,22 +46,30 @@ Future getImage(String todayString, source) async {
   return image;
 }
 
-// 사진 업로드
+// 사진 업로드 : 미션 인증할때, 개발자에게 문의할때
 Future uploadImage
     (String pictureName, String folderName, String source, String? do_id, int? todayBlockCnt) async {
 
   //이미지 업로드
   try{
     bool success = false;
+
     var uri = Uri.parse(API.imageUpload);
+
+    // 파일 여러개를 보낸다 - 파일을 전송하는 / .fields : 같이 전송할 정보
     var request = http.MultipartRequest('POST', uri);
     request.fields['image_folder'] = folderName;
+    // 갤러리인지 카메라인지
     request.fields['source'] = source;
+    
+    // 휴대폰 내 주소로 어떤 이미지를 보낼건지 알려주는 코드
     var pic = await http.MultipartFile.fromPath("image", image!.path);
-    print("이미지 업로드 runtime type : ${image!.path.runtimeType}");
+    //print("이미지 업로드 runtime type : ${image!.path.runtimeType}");
+    // 그 파일을 실질적으로 업로드
     request.files.add(pic);
     var response = await request.send();
 
+    // 결과를 받음
     final result = await response.stream.bytesToString();
 
     // 이미지 업로드에 대한 테스트
@@ -78,6 +88,7 @@ Future uploadImage
       }
     }
 
+    // 미션을 인증할때
     if (do_id != null && todayBlockCnt != null) {
       // do_mission에 기록
       var update_res = await http.post(Uri.parse(API.update), body: {
@@ -87,7 +98,7 @@ Future uploadImage
 
       // do_mission 반영에 대한 테스트
       if (update_res.statusCode == 200) {
-        print("출력 : ${update_res.body}");
+        //print("출력 : ${update_res.body}");
         var res_update = jsonDecode(update_res.body);
         if (res_update['success'] == true && success == true) {
           print("이미지 정보가 데이터 베이스에 저장되었습니다.");
@@ -207,18 +218,20 @@ Future uploadAudio
     //  print("맞음");
     // }
 
+    // m4a만 들어감
     if (FilePath!.endsWith(".m4a")){
-      print("확장자 맞음 ");
+      //print("확장자 맞음 ");
       // print(FilePath!.split("."));
       String dir = path.dirname(FilePath!);
-      print("파일 이름 : ${dir}");
+      //print("파일 이름 : ${dir}");
       String NewPath = path.join(dir, audioName+".m4a");
-      print(NewPath);
+      //print(NewPath);
 
+      // 새로운 이름으로 파일 복사
       var audio_copy = await File(FilePath!).copy(NewPath);
 
       var audio = await http.MultipartFile.fromPath("audio", NewPath!, contentType: MediaType("audio", "m4a"));
-      print(audio.runtimeType);
+      //print(audio.runtimeType);
       request.files.add(audio);
 
       var response = await request.send();

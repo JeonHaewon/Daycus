@@ -14,6 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // void main() => runApp(const MyApp());
 
+// 녹음 화면
 class AudioRecorder extends StatefulWidget {
   final void Function(String path) onStop;
 
@@ -140,6 +141,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
 
           SizedBox(height: 15.h,),
 
+          // 밑에 회색 바, 위에 파랑 바
           if (_amplitude != null) ...[
             // Stack(
             //   alignment: Alignment.center,
@@ -172,6 +174,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
                         ),
                       ),height: 20,)
                         :
+                        // 소리 값이 아예 없을때
                     Container(
                       padding: EdgeInsets.only(top: 2.h),
                       alignment: Alignment.center,
@@ -340,6 +343,7 @@ class _RecordWidgetState extends State<RecordWidget> {
             padding: EdgeInsets.only(top: 30.h, bottom: 20.h, left: 20.w),
             width:190.w, height: 150.h,
             child: showPlayer
+            // 재생하는 위젯
                 ? AudioPlayer(
               timer: "${_formatNumber(_recordDuration ~/ 60)} : ${_formatNumber(_recordDuration % 60)}",
               source: audioPath!,
@@ -347,6 +351,7 @@ class _RecordWidgetState extends State<RecordWidget> {
                 setState(() => showPlayer = false);
               },
             )
+            // 녹음하는 위젯
                 : AudioRecorder(
               onStop: (path) {
                 if (kDebugMode) print('Recorded file path: $path');

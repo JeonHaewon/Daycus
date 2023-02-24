@@ -40,6 +40,7 @@ Future<dynamic> NotSeeWeek(BuildContext context, do_mission_data, mission_data, 
                           Text("2. 인증방법",
                               style: TextStyle(fontSize: 15.sp, fontFamily: 'korean', fontWeight: FontWeight.bold, color: Colors.black) ),
                           SizedBox(height: 3.h,),
+                          // 짧은 소개
                           Text("${mission_data['content']}",
                               style: TextStyle(fontSize: 13.sp, fontFamily: 'korean',  color: Colors.grey) ),
 
@@ -66,6 +67,7 @@ Future<dynamic> NotSeeWeek(BuildContext context, do_mission_data, mission_data, 
 
                 children: [
                   InkWell(
+                    // 일주일간 보지않기를 눌렀을 때
                     onTap:(){
                       update_request("update do_mission set not_see = '${DateTime.now()}' where do_id = '${do_mission_data['do_id']}'", null);
                       do_mission_data['not_see'] = now;

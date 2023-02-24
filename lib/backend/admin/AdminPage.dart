@@ -556,6 +556,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
               AdminTitle(title:"원격 데이터베이스 수정"),
 
+
               AdminButton(
                 title: "미션 수정하기",
                 onPressed: (){
@@ -565,7 +566,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
 
-              Text("미션을 원격으로 수정합니다. 전체 이용자의 미션 내용이 바뀌므로 주의합니다. 리로드 전에는 변경 결과를 확인할 수 없으나 변경된 상태이니 주의 바랍니다. "),
+              Text("미션을 원격으로 수정합니다. 바로 모든 유저에게 반영이 되니 주의하세요. 전체 이용자의 미션 내용이 바뀌므로 주의합니다. 리로드 전에는 변경 결과를 확인할 수 없으나 변경된 상태이니 주의 바랍니다. "),
 
               // AdminButton(
               //   title: "푸시 알림 보내기",
@@ -585,6 +586,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
               Text("시작한지 2주가 지난 미션을 done 상태로 만들어 추천 미션 등 화면에 뜨지 않도록 합니다."),
 
+              // 검토필요
               AdminButton(
                 title: "total user 수 변경 버튼",
                 onPressed: (){
@@ -604,7 +606,8 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
 
               Text("now user 수를 변경합니다. 정산한 사람이 포함되지 않습니다. "),
-              
+
+              // 검토 필요
               AdminButton(
                 title: "past_missions으로 이동하기",
                 onPressed: (){
@@ -657,6 +660,7 @@ class _AdminScreenState extends State<AdminScreen> {
               
               AdminTitle(title:"라벨링 프로세스"),
 
+              // 검토
               AdminButton(
                   title: "사진 데이터 0으로 데이터베이스 업데이트",
                   onPressed: () async {

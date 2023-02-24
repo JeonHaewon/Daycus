@@ -26,8 +26,8 @@ class _CategoryMissionState extends State<CategoryMission> {
   @override
   Widget build(BuildContext context) {
 
-    int extraindex = -2;
-    int _build_cnt = widget.page_category.length;
+    // int extraindex = -2;
+    // int _build_cnt = widget.page_category.length;
 
     Size m = MediaQuery.of(context).size;
 
@@ -50,6 +50,7 @@ class _CategoryMissionState extends State<CategoryMission> {
               minWidth: m.width,
             ),
 
+            // all_missions[missions_cnt-index-1]['category']==widget.page_category 조건문으로 해당 카테고리만 볼 수 있음
             padding: EdgeInsets.only(left: 18.w, top: 25.h, bottom: 25.h),
             child: Wrap(
               children: List.generate(missions_cnt, (index) {

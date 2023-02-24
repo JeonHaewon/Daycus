@@ -32,30 +32,26 @@ class MissionCheckPage extends StatefulWidget {
 
 class _MissionCheckPageState extends State<MissionCheckPage> {
 
-
   String _chosenValue = user_data['public'] ?? "일부공개";
-
   // ImportPublic() async {
   //   //var chh = await select_request("select public from user_table where user_email = '${user_data['user_email']}'", null, true);
   //   //_chosenValue
   //   // _chosenValue = chh[0]['public'] ?? "일부공개";
   // }
 
-  in_one_init() async {
-
-    // await ImportPublic();
-    setState(() { waiting = true; });
-
-  }
+  // in_one_init() async {
+  //   // await ImportPublic();
+  //   // setState(() { waiting = true; });
+  // }
 
   @override
   void initState() {
     super.initState();
-    waiting = false;
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      // ImportPublic();
-      in_one_init();
-    });
+    // waiting = false;
+    // WidgetsBinding.instance.addPostFrameCallback((_){
+    //   // ImportPublic();
+    //   // in_one_init();
+    // });
   }
 
   @override
@@ -69,12 +65,16 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
   @override
   Widget build(BuildContext context) {
 
+    // 몇개의 미션을 하는가
     int? do_mission_cnt = do_mission==null ? 0 : do_mission.length;
+    // 화면 사이즈
     Size m = MediaQuery.of(context).size;
     String misson_cnt = do_mission_cnt.toString();
 
+    // 새로고침
     Future<void> refresh() async {
       await LoginAsyncMethod(MissionCheckPage.storage, context, true);
+      // 새로고침한 결과를 화면에 그려서 반영
       setState(() { });
     };
 
@@ -107,9 +107,9 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                 style: TextStyle(color: Colors.black),
 
                 items: <String>[
-                  '일부공개',
-                  '친구공개',
-                  '비공개',
+                  // '일부공개', // 에러가능성있음
+                  '친구공개', 
+                  '비공개', //전체비공개로 바꾸기
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -129,6 +129,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                     )
 
                 ),
+                // 설정 변경
                 onChanged: (String? value) {
                   setState(() {
                     _chosenValue = value!;
@@ -178,7 +179,9 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                 child: (profileImage==null)
                 // 고른 프로필 사진이 없을 때
                     ? (user_data['profile']==null || downloadProfileImage==null)
+                    // 기본이미지
                     ? CircleAvatar( backgroundImage : AssetImage("assets/image/non_profile.png",), radius: 13.sp,)
+                    // 사용자가 설정한 이미지
                     : Transform.rotate(angle: profileDegree* pi/180, child: CircleAvatar( backgroundColor : Colors.grey[200],  backgroundImage: downloadProfileImage!.image, radius: 13.sp), )
                     : CircleAvatar( backgroundImage : FileImage(profileImage!), radius: 13.sp,)
 
@@ -192,6 +195,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
+          // 새로고침을 할 수 있는 widget
           RefreshIndicator(
             onRefresh: refresh,
             color: AppColor.happyblue,
@@ -281,13 +285,10 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
+                          // itemCount 몇개 그려줄건지
                           itemCount: do_mission_cnt,
                           itemBuilder: (_, index) {
-                            //id가 1부터 시작한다.
-                            //print("do_mission : ${do_mission[index]['mission_index']}");
-                            int _index = do_mission[index]['mission_index'];
-                            //print("${_index}, ${_index.runtimeType}");
-                            //print(all_missions[_index]);
+                            int _index = do_mission[index]['mission_index']; // 코드 상의 index이고, 미션 id와 다르다는 것을 고려한 코드.
                             return Column(
                               children: [
                                 NowMissionButton(
@@ -299,6 +300,7 @@ class _MissionCheckPageState extends State<MissionCheckPage> {
                                   currentUser: int.parse(all_missions[_index]['now_user']),
                                   rank: 1,
                                   percent: double.parse(do_mission[index]['percent']),
+                                  // 얘를 눌렀을 때
                                   onTap: MissionCheckStatusPage(
                                     mission_index: _index,
                                     mission_data: all_missions[_index],

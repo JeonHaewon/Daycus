@@ -253,6 +253,7 @@ class AudioPlayerState extends State<AudioPlayer> {
           onChanged: (v) {
             if (duration != null) {
 
+              // 애니메이션?
               final position = v * duration.inMilliseconds;
               _audioPlayer.seek(Duration(milliseconds: position.round()));
 
