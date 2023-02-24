@@ -1324,13 +1324,20 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                           print("녹음된 파일 초 : ${totalRecordTime}");
                           //Fluttertoast.showToast(msg: "미션을 인증할 수 있습니다 !");
 
-                          uploadAudio("test", widget.mission_data['image_location']);
+                          // 오디오 이름 바꾸기
+                          String todayString = await NowTime('yyyyMMddHHmmss');
+                          String audioName = "${widget.mission_data['mission_id']}_${todayString.substring(0,8)}_${todayString.substring(8,14)}_${user_data['user_id']}_${widget.do_mission_data['do_id']}";
+                          uploadAudio(audioName, widget.mission_data['image_locate']);
 
                           // 이름으로 하면 좋지만, 임시방편으로 녹음한 시간만 넣음.
-                          bool success = await update_request(
-                              "UPDATE do_mission SET d${todayBlockCnt}='${temTimer}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
+                          bool success1 = await update_request(
+                              "UPDATE do_mission SET d${todayBlockCnt}='${audioName}' WHERE do_id = '${widget.do_mission_data['do_id']}'",
                               null);
-                          if (success){
+                          bool success2 = await update_request(
+                              "INSERT INTO audio_data (audio, audio_locate, certify_tool) VALUES ('${audioName}', '${widget.mission_data['image_locate']}', 'recorder');",
+                              null);
+
+                          if (success1 && success2){
                             setState(() {
                               do_mission[do_i]["d$todayBlockCnt"] = temTimer;
                             });

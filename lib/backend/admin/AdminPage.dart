@@ -500,8 +500,11 @@ class _AdminScreenState extends State<AdminScreen> {
     }
 
     move_to_image_labeled_data() async {
-      await update_request("insert into image_labeled_data ( select * from image_data where label_done = 'done' );", null);
-      await update_request("delete from image_data where label_done = 'done';", null);
+      bool success1 = await update_request("insert into image_labeled_data ( select * from image_data where label_done = 'done' );", null);
+      bool success2 = await update_request("delete from image_data where label_done = 'done';", null);
+
+      if (success1 && success2)
+        Fluttertoast.showToast(msg: "성공적으로 옮겨짐 !");
     }
 
     update_avg_reward() async{

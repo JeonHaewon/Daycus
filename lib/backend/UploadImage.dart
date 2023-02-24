@@ -3,6 +3,7 @@ import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/widget/certifyTool/record/audio_player.dart';
 import 'package:daycus/widget/certifyTool/record/recordWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -81,7 +82,7 @@ Future uploadImage
       // do_mission에 기록
       var update_res = await http.post(Uri.parse(API.update), body: {
         'update_sql':
-            "UPDATE DayCus.do_mission SET d${todayBlockCnt} = '${imageReNamed}' WHERE (do_id = '${do_id}')",
+        "UPDATE DayCus.do_mission SET d${todayBlockCnt} = '${imageReNamed}' WHERE (do_id = '${do_id}')",
       });
 
       // do_mission 반영에 대한 테스트
@@ -186,42 +187,65 @@ Future justUploadImage
 
 // 오디오 파일 업로드
 Future uploadAudio
-    (String pictureName, String folderName, {String? do_id = null, int? todayBlockCnt=null}) async {
+    (String audioName, String folderName, {String? do_id = null, int? todayBlockCnt=null}) async {
 
   try{
     bool success = false;
     var uri = Uri.parse(API.justAudioUpload);
     var request = http.MultipartRequest('POST', uri);
     request.fields['folder'] = folderName;
+
     //request.fields['source'] = "audio"; //source;
+
 
     // 이름 구해서 넣는거까지 해야함
     print("오디오 데이터 FilePath : ${FilePath}");
     print("오디오 데이터 이름 : ${uploadAudioPath}");
-    //Map<String, String> headers = {"Authorization" : "daycus", "ClientID" : "daycus"};
-    //request.headers.addAll(headers);
-    var audio = await http.MultipartFile.fromPath("audio", FilePath!, contentType: MediaType("audio", "m4a"));
-    print(audio.runtimeType);
-    request.files.add(audio);
 
-    var response = await request.send();
-    final result = await response.stream.bytesToString();
+    // 확장자 찾는건데 아래 코드로는 작동이 안되는 것 같다.
+    // if (FilePath!.isAudioFileName){
+    //  print("맞음");
+    // }
 
-    // 이미지 업로드에 대한 테스트
-    if (response.statusCode == 200 &&
-        jsonDecode(result)['connection'] == true) {
-      success = true;
-      print("오디오가 업로드 되었습니다.");
-      if ((do_id == null && todayBlockCnt == null)) {
-        return true;
+    if (FilePath!.endsWith(".m4a")){
+      print("확장자 맞음 ");
+      // print(FilePath!.split("."));
+      String dir = path.dirname(FilePath!);
+      print("파일 이름 : ${dir}");
+      String NewPath = path.join(dir, audioName+".m4a");
+      print(NewPath);
+
+      var audio_copy = await File(FilePath!).copy(NewPath);
+
+      var audio = await http.MultipartFile.fromPath("audio", NewPath!, contentType: MediaType("audio", "m4a"));
+      print(audio.runtimeType);
+      request.files.add(audio);
+
+      var response = await request.send();
+      final result = await response.stream.bytesToString();
+
+      // 이미지 업로드에 대한 테스트
+      if (response.statusCode == 200 &&
+          jsonDecode(result)['connection'] == true) {
+        success = true;
+        print("오디오가 업로드 되었습니다.");
+        if ((do_id == null && todayBlockCnt == null)) {
+          return true;
+        }
+      } else {
+        print(result);
+        print("audio not upload");
+        if ((do_id != null && todayBlockCnt != null)) {
+          return false;
+        }
       }
-    } else {
-      print(result);
-      print("audio not upload");
-      if ((do_id != null && todayBlockCnt != null)) {
-        return false;
-      }
+
     }
+     else {
+       Fluttertoast.showToast(msg: "m4a 확장자만 업로드 가능합니다.\n개발자에게 문의하세요.");
+    }
+
+
 
     // if (do_id != null && todayBlockCnt != null) {
     //   // do_mission에 기록
