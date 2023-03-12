@@ -159,6 +159,12 @@ class _LoadingPageState extends State<LoadingPage> {
                   // The green box must be a child of the AnimatedOpacity widget.
                   child: TextButton(
                     onPressed: () async {
+
+                      //0313 수정 : 페이지가 안나가지는 에러가 있어서, 일단 나가고 본다
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
+                          LoginPageCustom()),
+                              (route) => false);
+                      
                       // 기획에서 어떻게 인사할건지 정하기
                       Fluttertoast.showToast(msg: "로그아웃 처리하였습니다");
                       // 로그인 유지 삭제 및 정보 삭제
@@ -167,9 +173,7 @@ class _LoadingPageState extends State<LoadingPage> {
                       checkUserState();
                       profileImage = null; downloadProfileImage = null; profileDegree = 0;
 
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) =>
-                          LoginPageCustom()),
-                              (route) => false);
+                      
 
                     },
                     child: Text("로그인 페이지로"),
