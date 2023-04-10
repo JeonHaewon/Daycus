@@ -4,6 +4,7 @@ import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/admin/MissionModify.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/backend/admin/LoginPopup.dart';
+import 'package:daycus/backend/admin/importRanking.dart';
 import 'package:daycus/screen/labelPage/LabelingEnd.dart';
 import 'package:daycus/backend/admin/AlertDialogPage.dart';
 import 'package:flutter/material.dart';
@@ -699,6 +700,16 @@ class _AdminScreenState extends State<AdminScreen> {
 
 
               AdminTitle(title:"추가한 기능들 테스트 버전"),
+
+              // 4.11 추가함. 테스트 후 바로 반영 예정
+              AdminButton(
+                title: "친구들 프로필 불러오기",
+                onPressed: () async {
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> ImportRanking()));
+                },
+              ),
+
+              Text("해당 친구들의 프로필을 차례로 불러옵니다."),
               
               AdminButton(
                 title: "앱 버전 업데이트 확인",
