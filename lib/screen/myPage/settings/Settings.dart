@@ -94,32 +94,34 @@ class Settings extends StatelessWidget {
                   //   ),
                   // ),
 
-                  // SizedBox(height: 20.h,),
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(10)
-                  //     ),
-                  //     primary: Colors.white,
-                  //     onPrimary: Colors.black,
-                  //     minimumSize: Size(365.w, 50.h),
-                  //     textStyle: TextStyle(fontSize: 18.sp),
-                  //   ),
-                  //
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (_) => PublicSetting()),
-                  //     );
-                  //   },
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Text(" 공개범위",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
-                  //       Image.asset('assets/image/arrow-right1.png' )
-                  //     ],
-                  //   ),
-                  // ),
+                  // 04.11 공개범위 주석 풀고, 작동 확인.
+
+                  SizedBox(height: 20.h,),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                      minimumSize: Size(365.w, 50.h),
+                      textStyle: TextStyle(fontSize: 18.sp),
+                    ),
+
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => PublicSetting()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(" 공개범위",style: TextStyle(fontFamily: 'korean', fontWeight: FontWeight.bold) ),
+                        Image.asset('assets/image/arrow-right1.png' )
+                      ],
+                    ),
+                  ),
 
 
                   SizedBox(height: 20.h,),

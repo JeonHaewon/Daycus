@@ -17,8 +17,10 @@ List<bool> _isChecked = [true];
 
 class _PublicSettingState extends State<PublicSetting> {
 
+  // 창을 닫을 때 변경된 공개 범위가 반영됨.
   void dispose() {
     super.dispose();
+    // 변경되었는지 안되었는지 먼저 확인하고 이 문구를 돌리면 더 효율적으로 작동 가능.
     update_request("update user_table set Nickname_public = '${_isChecked[0] ? 1 : 0}' where user_email = '${user_data['user_email']}'", null);
   }
 
