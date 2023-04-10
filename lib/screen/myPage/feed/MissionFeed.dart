@@ -26,12 +26,14 @@ class _MissionFeedState extends State<MissionFeed> {
 
   }
 
-  // 28이 지난 미션을 불러옴.
+  // 28이 지난 미션을 불러옴
+  // - 잠깐 에러가 깜빡일 수 있다. 그것은 불러오기 전에 UI를 그리기 때문
   importPastMission() async {
     past_missions = await select_request(
         "SELECT mission_id, title, start_date, end_date, thumbnail FROM DayCus.past_missions",
         null, false);
-    print("past_missions : $past_missions");
+    setState(() { });
+    //print("past_missions : $past_missions");
   }
 
   Widget build(BuildContext context) {
@@ -148,7 +150,7 @@ class _MissionFeedState extends State<MissionFeed> {
                                       alignment: WrapAlignment.start,
                                       children: List.generate(doneMissionCnt, (index) {
 
-                                        if (month != temMonth){
+                                        if (month!=temMonth && past_missions!=null){
                                           temMonth = month;
                                         }
 

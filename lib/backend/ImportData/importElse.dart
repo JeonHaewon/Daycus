@@ -3,6 +3,7 @@
 import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 
+// 랭킹 리스트를 불러오는 것.
 import_ranking() async {
   // 지금 내 랭킹
   int userRanking = int.parse(user_data['Ranking']);
