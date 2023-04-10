@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // var : 한번 자료형이 결정되면 바뀌지 않으나, 처음에는 어떤 자료형이든 넣을 수 있다
 var user_data = null;
 var all_missions = null;
+var past_missions = null;
 int missions_cnt = 0;
 var minused_reward;
 // 카테고리 바꿀 때는 아주 주의가 필요함.
