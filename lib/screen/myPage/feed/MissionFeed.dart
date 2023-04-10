@@ -1,3 +1,4 @@
+import 'package:daycus/backend/UpdateRequest.dart';
 import 'package:daycus/backend/UserDatabase.dart';
 import 'package:daycus/widget/feedpage/feedButton.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,32 @@ import 'package:daycus/widget/missionfeedbutton.dart';
 
 
 
-class MissionFeed extends StatelessWidget {
+class MissionFeed extends StatefulWidget {
   const MissionFeed({Key? key}) : super(key: key);
 
   @override
+  State<MissionFeed> createState() => _MissionFeedState();
+}
+
+class _MissionFeedState extends State<MissionFeed> {
+  @override
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      importPastMission();
+    });
+
+  }
+
+  // 28이 지난 미션을 불러옴.
+  importPastMission() async {
+    past_missions = await select_request(
+        "SELECT mission_id, title, start_date, end_date, thumbnail FROM DayCus.past_missions",
+        null, false);
+    print("past_missions : $past_missions");
+  }
+
   Widget build(BuildContext context) {
 
     int doneMissionCnt = done_mission==null ? 0 : done_mission.length;
@@ -35,6 +58,23 @@ class MissionFeed extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
+
+                Padding(
+                  padding: EdgeInsets.only(left: 10.w,
+                      // bottom: 10.h,
+                      top: 40.h),
+                  child: Container(
+                    // padding: EdgeInsets.only(left: 30.w, ),
+                      width: 250.w,
+                      height: 20.h,
+                      // decoration: BoxDecoration(
+                      //   color: Colors.grey[100],
+                      //   borderRadius: BorderRadius.circular(15),
+                      // ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text("※ 미션 종료 후 48일이 경과되지 않은 미션은 뜨지 않습니다",
+                            style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),)), ),
 
                 // ListView.builder(
                 //   shrinkWrap: true,
@@ -113,8 +153,8 @@ class MissionFeed extends StatelessWidget {
                                         }
 
                                         //int mission_id = int.parse(done_mission[index]['mission_id']);
-                                        // past_missions에서도 불러오기
-                                        int _index = all_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id']);
+                                        // past_mission에서도 불러오기 - 수정 요함. (4/8)
+                                        int _index = past_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id']);
                                         month = done_mission[index]['mission_start'].substring(0,7);
 
                                         //int mission_index = int.parse(source)
@@ -143,12 +183,12 @@ class MissionFeed extends StatelessWidget {
                                             //   reward: 1200,),
                                             if (_index!=-1)
                                             FeedButton(
-                                                title: "${all_missions[_index]['title']}",
+                                                title: "${past_missions[_index]['title']}",
 
                                                 // duration 안씀
-                                                duration: "${all_missions[_index]['start_date'].substring(5)} ~ ${all_missions[_index]['end_date'].substring(5)}",
-                                                endTime : all_missions[_index]['end_date'].substring(5),
-                                                image: "${all_missions[_index]['thumbnail']}",
+                                                duration: "${past_missions[_index]['start_date'].substring(5)} ~ ${past_missions[_index]['end_date'].substring(5)}",
+                                                endTime : past_missions[_index]['end_date'].substring(5),
+                                                image: "${past_missions[_index]['thumbnail']}",
                                                 percent: double.parse(done_mission[index]['percent']),
                                                 startTime: done_mission[index]['mission_start'].substring(5,10),
                                             ),
@@ -169,21 +209,7 @@ class MissionFeed extends StatelessWidget {
                             ),
 
                             // past_missions와 연계하여 뜨도록 할 예정
-                            Padding(
-                              padding: EdgeInsets.only(left: 10.w, bottom: 10.h, top: 20.h),
-                              child: Container(
-                                  // padding: EdgeInsets.only(left: 30.w, ),
-                                  width: 250.w,
-                                  height: 35.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[100],
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  // 검토 필요
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                    child: Text("※ 미션 종료 후 48일이 지나지 않은 미션은 뜨지 않습니다",
-                                        style: TextStyle(fontSize: 9.sp, fontFamily: 'korean',  color: Colors.red) ),)), )
+
 
 
                           ],

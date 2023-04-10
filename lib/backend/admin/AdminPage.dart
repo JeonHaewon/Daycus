@@ -261,7 +261,7 @@ class _AdminScreenState extends State<AdminScreen> {
           var resMission = jsonDecode(update_res.body);
           // print(resMission);
           if (resMission['success'] == true) {
-            Fluttertoast.showToast(msg: "done으로 옮겨짐 !");
+            Fluttertoast.showToast(msg: "done으로 변경됨 !");
 
           } else {
             print("에러발생");
@@ -615,7 +615,8 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
 
-              Text("끝난지 2주가 지난 미션을 past_missions로 옮깁니다. past_missions에 옮겨진 미션들만 피드에서 확인할 수 있습니다. (1.0.4 + 33 버전) "),
+              // 23.04.08 오류 수정 완료 - 하임
+              Text("오류가 발생할 경우, pass_mission과 missions 데이터베이스의 구조 차이일 가능성이 높습니다. missions 데이터베이스 백업 후 테스트 요함. / 끝난지 2주가 지난 미션을 past_missions로 옮깁니다. past_missions에 옮겨진 미션들만 피드에서 확인할 수 있습니다."),
 
 
               AdminTitle(title:"원격 데이터베이스 수정 - 기능 내 구현 완료"),
