@@ -1,6 +1,7 @@
 
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:daycus/backend/UpdateRequest.dart';
+import 'package:daycus/backend/admin/ExemtionGiving.dart';
 import 'package:daycus/backend/admin/MissionModify.dart';
 import 'package:daycus/backend/admin/PhpMail.dart';
 import 'package:daycus/backend/admin/LoginPopup.dart';
@@ -700,6 +701,15 @@ class _AdminScreenState extends State<AdminScreen> {
 
 
               AdminTitle(title:"추가한 기능들 테스트 버전"),
+
+              AdminButton(
+                title: "면제권 부여/사용",
+                onPressed: () async {
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> ExemptionGiving()));
+                },
+              ),
+
+              Text("면제권 부여 및 사용이 가능합니다. 현재 면제권 수를 알 수 있고, 면제권 사용 버튼을 누르면 면제권이 1 감소, 부여를 누르면 1 추가 됩니다.\n해당 함수를 적절한 곳에 넣으면 바로 사용 가능합니다. 디자인이 추가로 나오면 적용하시면 되겠습니다. "),
 
               // 4.11 추가함. 테스트 후 바로 반영 예정
               AdminButton(

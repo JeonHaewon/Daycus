@@ -1015,6 +1015,7 @@ class _CheckFriendState extends State<CheckFriend> {
                             CircleAvatar(
                               radius: 25.h,
                               //backgroundColor: Colors.grey,
+
                               backgroundImage: AssetImage("assets/image/non_profile.png",) ,
 
                             ),

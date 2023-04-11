@@ -939,11 +939,16 @@ class _MissionCheckStatusPageState extends State<MissionCheckStatusPage> with Wi
                                                           )
                                                           // 인증 완료된 날짜 블럭
                                                               : (widget.do_mission_data['d${date}']!='0' ?
-                                                          DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
+                                                              // -1은 면제권을 사용한 것임.
+                                                          (widget.do_mission_data['d${date}']!='-1')
+                                                          // 0 또는 -1이 아니면 정상적인 완료 블럭
+                                                              ? DoneMissionBlock(i: index_j, j: index_j, sp: _sp, date: date,
                                                             is_today: (todayBlockCnt==date), 
                                                             // loading UI를 스택으로 그려줌
                                                             isLoad : is_load,
                                                             folder: widget.mission_data['image_locate'], do_mission_data: widget.do_mission_data, tool: widget.mission_data['certify_tool'],)
+                                                          // -1 : 면제 블럭 (조금 더 연한 색)
+                                                              : ExemptionBlock(i: index_i, j: index_j, sp: _sp, date: date)
                                                           // 반려된 블럭 - null은 아니지만 0이다.
                                                         : RejectedMissionBlock(sp: _sp)
                                                           )
@@ -1608,6 +1613,37 @@ style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.happyblue
     );
   }
 }
+
+// 면제 블럭
+class ExemptionBlock extends StatelessWidget {
+  ExemptionBlock({
+    Key? key,
+    required this.i,
+    required this.j,
+    required this.sp,
+    required this.date,
+
+  }) : super(key: key);
+
+  final int i;
+  final int j;
+  final double sp;
+  final int date;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () async {
+          Fluttertoast.showToast(msg: "$date일째에 면제권을 사용했습니다.");
+        },
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueGrey)),
+        // child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+        child: Text(((i*7)+(j+1)).toString(),style: TextStyle(color: Colors.white, fontSize: sp, fontFamily: 'korean', ) )
+    );
+  }
+}
+
 
 class YetMissionBlock extends StatelessWidget {
   const YetMissionBlock({

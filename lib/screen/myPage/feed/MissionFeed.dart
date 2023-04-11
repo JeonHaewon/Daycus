@@ -150,13 +150,14 @@ class _MissionFeedState extends State<MissionFeed> {
                                       alignment: WrapAlignment.start,
                                       children: List.generate(doneMissionCnt, (index) {
 
-                                        if (month!=temMonth && past_missions!=null){
+                                        if (month!=temMonth ){
                                           temMonth = month;
                                         }
 
-                                        //int mission_id = int.parse(done_mission[index]['mission_id']);
-                                        // past_mission에서도 불러오기 - 수정 요함. (4/8)
-                                        int _index = past_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id']);
+                                        // indexWhere에서 오류가 생겨서 null인 경우 무조건 index -1을 반환.
+                                        int _index = past_missions!=null
+                                            ? past_missions.indexWhere((all_data) => all_data['mission_id'] == done_mission[index]['mission_id'])
+                                            : -1;
                                         month = done_mission[index]['mission_start'].substring(0,7);
 
                                         //int mission_index = int.parse(source)

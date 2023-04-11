@@ -172,6 +172,8 @@ logout(bool reload) async {
   user_data = null;
   all_missions = null;
   do_mission = null;
+  // 4.11 추가
+  past_missions = null;
 
   await PrivateSettings.storage.delete(key: 'login');
 }
